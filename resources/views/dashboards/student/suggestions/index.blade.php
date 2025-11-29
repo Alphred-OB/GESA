@@ -3,7 +3,7 @@
 
     <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
         <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8" role="status" aria-live="polite">
-            <section class="overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="hidden md:block overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
                         <div class="skeleton h-3 w-32 rounded-full bg-white/25"></div>
@@ -47,7 +47,7 @@
                                 <div class="skeleton h-4 w-3/4 rounded-full bg-slate-100"></div>
                                 <div class="skeleton h-9 w-32 rounded-full bg-slate-100"></div>
                             </div>
-                            <div class="flex justify_end">
+                            <div class="flex justify-end">
                                 <div class="skeleton h-11 w-40 rounded-full bg-[#16136a]/20"></div>
                             </div>
                         </div>
@@ -106,33 +106,33 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
-                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-100/80">Feedback</span>
+                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-blue-100">Feedback</span>
                         <div class="space-y-2">
                             <h1 class="text-3xl font-semibold md:text-4xl">Suggestion box</h1>
-                            <p class="max-w-2xl text-sm text-slate-100/85">
-                                Share ideas, highlight concerns, or request improvements. The GESA support team reviews every submission and will follow up when required.
+                            <p class="max-w-2xl text-sm text-blue-100/85">
+                                Share ideas, highlight concerns, or request improvements. The ACSES support team reviews every submission and will follow up when required.
                             </p>
                         </div>
                     </div>
-                    <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-4 text-sm text-slate-100/90 shadow-inner">
-                        <p class="font-semibold uppercase tracking-[0.25em] text-slate-100/80">Response window</p>
+                    <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-4 text-sm text-blue-50 shadow-inner">
+                        <p class="font-semibold uppercase tracking-[0.25em] text-blue-200">Response window</p>
                         <p class="mt-2 leading-6">Team replies typically arrive within <span class="font-semibold">2 business days</span>. Remember to include as many details as possible for faster resolution.</p>
                     </div>
                 </div>
             </section>
 
             @if (session('status'))
-                <div class="animate-fade-slide rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900 shadow-lg shadow-emerald-100/60">
+                <div class="animate-fade-slide rounded-3xl border border-blue-200 bg-blue-50 p-4 text-blue-900 shadow-lg shadow-blue-100/60">
                     <div class="flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                             <path d="m5 12 4 4L19 6" />
                         </svg>
                         <div>
                             <p class="text-sm font-semibold">Submission received</p>
-                            <p class="text-sm text-emerald-800">{{ session('status') }}</p>
+                            <p class="text-sm text-blue-800">{{ session('status') }}</p>
                         </div>
                     </div>
                 </div>
@@ -260,11 +260,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#16136a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                     <path d="M22 16.92a4 4 0 0 1-4 4 12 12 0 0 1-10.65-6A12 12 0 0 1 1.08 6a4 4 0 0 1 4-4h1.26a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .7 2.7 2 2 0 0 1-.45 2.11L7.91 9.91a10 10 0 0 0 6.18 6.18l1.39-1.39a2 2 0 0 1 2.11-.45 12.05 12.05 0 0 0 2.7.7 2 2 0 0 1 1.72 2Z" />
                                 </svg>
-                                Call the student services hotline on
-                                <span class="font-semibold">055 318 5125 – President</span>
-                                or
-                                <span class="font-semibold">059 787 0027 – Financial Secretary</span>
-                                (08:00–20:00 GMT)
+                                Call the student services hotline on <span class="font-semibold">055 935 9824</span> (08:00–20:00 GMT)
                             </p>
                             <p class="flex items-center gap-2 text-slate-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#16136a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -274,7 +270,7 @@
                                     <path d="M2 16h20" />
                                     <path d="M2 20h20" />
                                 </svg>
-                                Email <a href="mailto:gesaumat24@gmail.com" class="font-semibold text-[#16136a] underline-offset-4 hover:underline">gesaumat24@gmail.com</a>
+                                Email <a href="mailto:acsesrepos@gmail.com" class="font-semibold text-[#16136a] underline-offset-4 hover:underline">acsesrepos@gmail.com</a>
                             </p>
                         </div>
                     </article>
@@ -329,7 +325,7 @@
                                                     $statusStyles = [
                                                         'pending' => 'bg-amber-50 text-amber-700 border-amber-200',
                                                         'in review' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                                        'resolved' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                                        'resolved' => 'bg-blue-50 text-blue-700 border-blue-200',
                                                     ];
                                                     $badgeClass = $statusStyles[strtolower($status)] ?? 'bg-slate-100 text-slate-600 border-slate-200';
                                                 @endphp
@@ -371,7 +367,7 @@
                                             $statusStyles = [
                                                 'pending' => 'bg-amber-50 text-amber-700 border-amber-200',
                                                 'in review' => 'bg-blue-50 text-blue-700 border-blue-200',
-                                                'resolved' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                                'resolved' => 'bg-blue-50 text-blue-700 border-blue-200',
                                             ];
                                             $badgeClass = $statusStyles[strtolower($status)] ?? 'bg-slate-100 text-slate-600 border-slate-200';
                                         @endphp

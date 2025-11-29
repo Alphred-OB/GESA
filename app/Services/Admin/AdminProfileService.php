@@ -62,6 +62,7 @@ class AdminProfileService
             'phone_number' => $data['phone_number'] ?? null,
             'password' => Hash::make($data['password']),
             'role' => 'admin',
+            'admin_role' => $data['admin_role'] ?? 'president',
             'email_verified_at' => now(),
         ]);
     }

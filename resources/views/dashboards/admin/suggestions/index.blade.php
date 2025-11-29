@@ -147,62 +147,67 @@
 	                </article>
 	            </div>
 
-                <div class="flex w-full flex-col gap-2 md:w-64">
-                    <label for="filter_search" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
-                    <div class="relative">
-                        <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Subject, message, student" class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
-                    </div>
-                </div>
+	            <form method="GET" class="mt-6 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end">
+	                @foreach (request()->except(['search', 'category', 'status', 'page']) as $key => $value)
+	                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+	                @endforeach
 
-                <div class="flex w-full flex-col gap-2 md:w-52">
-                    <label for="filter_category" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Category</label>
-                    <div class="relative">
-                        <select id="filter_category" name="category" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All</option>
-                            @foreach ($categories as $value => $label)
-                                <option value="{{ $value }}" @selected(($filters['category'] ?? '') === $value)>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    </div>
-                </div>
+	                <div class="flex w-full flex-col gap-2 md:flex-1 md:max-w-xs">
+	                    <label for="filter_search" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
+	                    <div class="relative">
+	                        <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+	                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Subject, message, student" class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
+	                    </div>
+	                </div>
 
-                <div class="flex w-full flex-col gap-2 md:w-40">
-                    <label for="filter_status" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
-                    <div class="relative">
-                        <select id="filter_status" name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All</option>
-                            @foreach ($statuses as $value => $label)
-                                <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    </div>
-                </div>
+	                <div class="flex w-full flex-col gap-2 md:w-52">
+	                    <label for="filter_category" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Category</label>
+	                    <div class="relative">
+	                        <select id="filter_category" name="category" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+	                            <option value="">All</option>
+	                            @foreach ($categories as $value => $label)
+	                                <option value="{{ $value }}" @selected(($filters['category'] ?? '') === $value)>{{ $label }}</option>
+	                            @endforeach
+	                        </select>
+	                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+	                    </div>
+	                </div>
 
-                <div class="flex items-end md:ml-auto md:w-auto">
-                    <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                        <i class="ri-equalizer-line text-base"></i>
-                        Apply
-                    </button>
-                </div>
-            </form>
+	                <div class="flex w-full flex-col gap-2 md:w-40">
+	                    <label for="filter_status" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
+	                    <div class="relative">
+	                        <select id="filter_status" name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+	                            <option value="">All</option>
+	                            @foreach ($statuses as $value => $label)
+	                                <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
+	                            @endforeach
+	                        </select>
+	                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+	                    </div>
+	                </div>
 
-            <div class="flex flex-col gap-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-                <p class="font-semibold">Showing {{ $suggestions->firstItem() ?? 0 }}–{{ $suggestions->lastItem() ?? 0 }} of {{ $suggestions->total() }} suggestions</p>
-                <form method="GET" class="flex items-center gap-2">
-                    @foreach (request()->except(['per_page', 'page']) as $key => $value)
-                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                    @endforeach
-                    <label for="suggestions_per_page" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Rows per page</label>
-                    <select id="suggestions_per_page" name="per_page" class="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a]" onchange="this.form.submit()">
-                        @foreach ($perPageOptions as $option)
-                            <option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }}</option>
-                        @endforeach
-                    </select>
-                </form>
-            </div>
+	                <div class="flex w-full items-end md:w-auto md:ml-auto">
+	                    <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
+	                        <i class="ri-equalizer-line text-base"></i>
+	                        Apply
+	                    </button>
+	                </div>
+	            </form>
+
+	            <div class="mt-4 flex flex-col gap-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
+	                <p class="font-semibold">Showing {{ $suggestions->firstItem() ?? 0 }}–{{ $suggestions->lastItem() ?? 0 }} of {{ $suggestions->total() }} suggestions</p>
+	                <form method="GET" class="flex items-center gap-2">
+	                    @foreach (request()->except(['per_page', 'page']) as $key => $value)
+	                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+	                    @endforeach
+	                    <label for="suggestions_per_page" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Rows per page</label>
+	                    <select id="suggestions_per_page" name="per_page" class="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a]" onchange="this.form.submit()">
+	                        @foreach ($perPageOptions as $option)
+	                            <option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }}</option>
+	                        @endforeach
+	                    </select>
+	                </form>
+	            </div>
 
             <section class="space-y-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4" x-data="adminSuggestionBulk()" x-init="initialize(@js($suggestions->pluck('id')))" x-cloak>
                 <form method="POST" action="{{ route('admin.suggestions.bulk') }}" x-ref="bulkForm">

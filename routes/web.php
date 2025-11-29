@@ -151,14 +151,33 @@ Route::get('/admin/dashboard', \App\Http\Controllers\Admin\AdminDashboardControl
     ->name('admin.dashboard');
 
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('events', \App\Http\Controllers\Admin\AdminEventController::class)->except(['show']);
-    Route::resource('resources', \App\Http\Controllers\Admin\AdminResourceController::class)->except(['show']);
-    Route::resource('announcements', AdminAnnouncementController::class)->except(['show']);
-    Route::resource('timeline', AdminAcademicTimelineController::class)->except(['show']);
-    Route::get('dues/export', [AdminDueController::class, 'export'])->name('dues.export');
+    Route::resource('events', \App\Http\Controllers\Admin\AdminEventController::class)
+        ->except(['show'])
+        ->middleware('admin.role:general_secretary');
+
+    Route::resource('resources', \App\Http\Controllers\Admin\AdminResourceController::class)
+        ->except(['show'])
+        ->middleware('admin.role:general_secretary');
+
+    Route::resource('announcements', AdminAnnouncementController::class)
+        ->except(['show'])
+        ->middleware('admin.role:general_secretary');
+
+    Route::resource('timeline', AdminAcademicTimelineController::class)
+        ->except(['show'])
+        ->middleware('admin.role:general_secretary');
+
+    Route::get('dues/export', [AdminDueController::class, 'export'])
+        ->name('dues.export')
+        ->middleware('admin.role:financial_secretary');
     Route::post('students/promote-years', [\App\Http\Controllers\Admin\AdminStudentAccountController::class, 'promoteYears'])->name('students.promote-years');
-    Route::get('dues/statistics', [AdminDueController::class, 'statistics'])->name('dues.statistics');
-    Route::resource('dues', AdminDueController::class)->except(['show']);
+    Route::get('dues/statistics', [AdminDueController::class, 'statistics'])
+        ->name('dues.statistics')
+        ->middleware('admin.role:financial_secretary');
+
+    Route::resource('dues', AdminDueController::class)
+        ->except(['show'])
+        ->middleware('admin.role:financial_secretary');
     Route::post('course-registrations/bulk', [AdminCourseRegistrationController::class, 'bulk'])->name('course-registrations.bulk');
     Route::resource('course-registrations', AdminCourseRegistrationController::class)->only(['index', 'show', 'update']);
     Route::post('suggestions/bulk', [AdminSuggestionController::class, 'bulk'])->name('suggestions.bulk');

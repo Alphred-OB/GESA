@@ -28,7 +28,7 @@
             </div>
         </div>
         <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8" role="status" aria-live="polite">
-            <section class="overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="hidden md:block overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
                         <div class="skeleton h-3 w-32 rounded-full bg-white/30"></div>
@@ -138,7 +138,7 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
             <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div class="space-y-4">
                     <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-100">Profile</span>

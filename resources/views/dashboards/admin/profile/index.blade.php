@@ -138,6 +138,15 @@
                             <label for="invite_phone" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Phone number</label>
                             <input id="invite_phone" name="phone_number" type="text" value="{{ old('phone_number') }}" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
                         </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="invite_admin_role" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Position</label>
+                            <select id="invite_admin_role" name="admin_role" required class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+                                <option value="" disabled {{ old('admin_role') ? '' : 'selected' }}>Select position</option>
+                                <option value="president" @selected(old('admin_role') === 'president')>President</option>
+                                <option value="financial_secretary" @selected(old('admin_role') === 'financial_secretary')>Financial Secretary</option>
+                                <option value="general_secretary" @selected(old('admin_role') === 'general_secretary')>General Secretary</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-2">

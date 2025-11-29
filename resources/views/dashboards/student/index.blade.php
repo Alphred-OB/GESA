@@ -3,7 +3,7 @@
 
     <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl px-5 py-12 sm:px-6 lg:px-8">
         <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-12" role="status" aria-live="polite">
-            <section class="overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-[#16136a] p-10 shadow-[0_24px_60px_-30px_rgba(22,19,106,0.45)]">
+            <section class="hidden md:block overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-[#16136a] p-10 shadow-[0_24px_60px_-30px_rgba(22,19,106,0.45)]">
                 <div class="space-y-5">
                     <div class="skeleton h-3 w-48 rounded-full bg-white/25"></div>
                     <div class="skeleton h-9 w-3/4 rounded-2xl bg-white/20"></div>
@@ -75,23 +75,23 @@
         @php($duesAction = collect($quickActions ?? [])->firstWhere('label', 'Outstanding dues'))
         @php($nextEvent = ($events ?? collect())->first())
 
-        <section class="relative animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-[#16136a] bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-10 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)]">
-            <div class="pointer-events-none absolute -inset-20 opacity-40">
+        <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/20 bg-[#16136a] bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-10 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)]">
+            <div class="pointer-events-none absolute -inset-20 opacity-10">
                 <div class="h-full w-full animate-spin duration-[48000ms] ease-linear motion-reduce:animate-none">
-                    <div class="h-full w-full rounded-[56px] bg-[conic-gradient(from_120deg_at_50%_50%,rgba(255,255,255,0.35),rgba(255,255,255,0)_70%)] blur-3xl"></div>
+                    <div class="h-full w-full rounded-[56px] bg-[conic-gradient(from_120deg_at_50%_50%,rgba(255,255,255,0.25),rgba(255,255,255,0)_70%)] blur-xl"></div>
                 </div>
             </div>
-            <div class="relative flex flex-col gap-6">
-                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-100/80">GESA Student Portal</p>
+            <div class="relative z-10 flex flex-col gap-6">
+                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-50/90">GESA Student Portal</p>
                 <div class="space-y-4">
                     <h1 class="text-3xl font-semibold md:text-4xl">{{ $hero['greeting'] ?? 'Welcome back' }}, {{ $hero['first_name'] ?? 'Student' }}!</h1>
-                    <p class="max-w-2xl text-sm text-slate-100/85">
+                    <p class="max-w-2xl text-sm text-emerald-50">
                         {{ $hero['message'] ?? 'Stay on top of your academic tasks, dues, and campus life in one place.' }}
                     </p>
                 </div>
-                <div class="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-100/80">
+                <div class="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-50/90">
                     @foreach ($hero['chips'] ?? [] as $chip)
-                        <span class="rounded-full bg-white/10 px-3 py-1">{{ $chip }}</span>
+                        <span class="rounded-full bg-white/15 px-3 py-1">{{ $chip }}</span>
                     @endforeach
                 </div>
                 @if ($duesAction || $nextEvent)

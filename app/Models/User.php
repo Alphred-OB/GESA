@@ -36,6 +36,7 @@ class User extends Authenticatable
         'is_graduated',
         'department',
         'role',
+        'admin_role',
         'profile_picture',
         'latitude',
         'longitude',

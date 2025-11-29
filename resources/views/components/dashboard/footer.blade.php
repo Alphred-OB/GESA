@@ -63,12 +63,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('student.course-registration.show') }}" class="inline-flex items-center gap-3 transition hover:text-[#16136a]">
-                                <i class="ri-file-list-3-line text-base" aria-hidden="true"></i>
-                                <span>Course registration</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="{{ route('student.announcements.index') }}" class="inline-flex items-center gap-3 transition hover:text-[#16136a]">
                                 <i class="ri-megaphone-line text-base" aria-hidden="true"></i>
                                 <span>Announcements</span>

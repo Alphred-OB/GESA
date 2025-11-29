@@ -6,7 +6,7 @@
 
     <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
         <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8" role="status" aria-live="polite">
-            <section class="overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="hidden md:block overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
                 <div class="space-y-4">
                     <div class="skeleton h-3 w-28 rounded-full bg-white/25"></div>
                     <div class="skeleton h-8 w-2/3 rounded-2xl bg-white/20"></div>
@@ -61,13 +61,13 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#0b3019]/20 bg-[#0b3019] bg-gradient-to-br from-[#0b3019] via-emerald-900 to-[#0b3019] p-8 text-white shadow-[0_20px_50px_-30px_rgba(11,48,25,0.6)]">
                 <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
-                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-100">Campus life</span>
+                        <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-50">Campus life</span>
                         <div class="space-y-2">
                             <h1 class="text-3xl font-semibold md:text-4xl">Upcoming events</h1>
-                            <p class="max-w-2xl text-sm text-emerald-100/85">
+                            <p class="max-w-2xl text-sm text-emerald-50">
                                 Stay on top of GESA seminars, workshops, and social meetups. Search or filter by category to plan your week ahead.
                             </p>
                         </div>

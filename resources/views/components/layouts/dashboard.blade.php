@@ -26,11 +26,11 @@
 
         <div class="relative z-20 flex min-h-screen flex-1 flex-col">
             @if ($header)
-                <div class="sticky top-0 z-40 shrink-0 bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/75">
+                <div class="sticky top-0 z-40 shrink-0 bg-white shadow-sm md:bg-white/95 md:backdrop-blur supports-[backdrop-filter]:md:bg-white/75">
                     {{ $header }}
                 </div>
             @else
-                <div class="sticky top-0 z-40 shrink-0 bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/75">
+                <div class="sticky top-0 z-40 shrink-0 bg-white shadow-sm md:bg-white/95 md:backdrop-blur supports-[backdrop-filter]:md:bg-white/75">
                     <x-dashboard.header />
                 </div>
             @endif

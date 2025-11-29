@@ -124,8 +124,27 @@
                             </span>
                             <span class="font-semibold text-[#16136a]">Choose resource file</span>
                             <span class="text-xs text-slate-500">Maximum 50MB · pdf, doc(x), ppt(x), xls(x), zip, mp4, mov, avi</span>
-                            <input id="file" name="file" type="file" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.mp4,.mov,.avi">
+                            <input id="file" name="file" type="file" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.mp4,.mov,.avi" x-ref="fileInput" @change="handleFileChange($event)">
                         </label>
+                        <div x-show="filePreview" x-cloak class="mt-3 flex w-full items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                            <div class="flex-shrink-0">
+                                <template x-if="filePreview.isImage">
+                                    <img :src="filePreview.url" alt="" class="h-10 w-10 rounded-lg object-cover">
+                                </template>
+                                <template x-if="!filePreview.isImage">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-[#16136a] shadow">
+                                        <i class="ri-file-3-line text-lg" aria-hidden="true"></i>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-semibold text-slate-800" x-text="filePreview.name"></p>
+                                <p class="mt-0.5 text-xs text-slate-500" x-text="`${filePreview.sizeLabel} · ${filePreview.type || 'Unknown file type'}`"></p>
+                            </div>
+                            <button type="button" @click="clearFile()" class="text-xs font-semibold text-rose-600 transition hover:text-rose-700">
+                                Remove
+                            </button>
+                        </div>
                         <p class="mt-1 text-xs text-slate-500">Maximum 50MB. Supports documents, archives, and video files.</p>
                     </div>
                 </div>
@@ -185,6 +204,7 @@
                 resourceType: state.resourceType || 'link',
                 selectedClasses: @js(old('target_classes', $resource->target_classes ?? [])),
                 selectedYears: @js(old('target_years', $resource->target_years ?? [])),
+                filePreview: null,
                 toggleClass(value) {
                     this.selectedClasses = this.toggleArray(this.selectedClasses, value);
                 },
@@ -199,6 +219,42 @@
                         list.splice(index, 1);
                     }
                     return list;
+                },
+                handleFileChange(event) {
+                    const files = event.target.files || [];
+                    const file = files[0];
+                    if (!file) {
+                        this.clearFile();
+                        return;
+                    }
+
+                    const sizeKb = file.size / 1024;
+                    const sizeLabel = sizeKb > 1024
+                        ? `${(sizeKb / 1024).toFixed(1)} MB`
+                        : `${Math.round(sizeKb)} KB`;
+
+                    if (this.filePreview && this.filePreview.url) {
+                        URL.revokeObjectURL(this.filePreview.url);
+                    }
+
+                    const isImage = (file.type || '').startsWith('image/');
+
+                    this.filePreview = {
+                        name: file.name,
+                        sizeLabel,
+                        type: file.type || 'Unknown type',
+                        isImage,
+                        url: isImage ? URL.createObjectURL(file) : null,
+                    };
+                },
+                clearFile() {
+                    if (this.$refs.fileInput) {
+                        this.$refs.fileInput.value = '';
+                    }
+                    if (this.filePreview && this.filePreview.url) {
+                        URL.revokeObjectURL(this.filePreview.url);
+                    }
+                    this.filePreview = null;
                 },
             }));
         });
