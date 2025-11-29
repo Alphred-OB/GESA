@@ -1,0 +1,177 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Student\StudentPaystackPaymentController;
+use App\Http\Controllers\Student\StudentProfileController;
+use App\Http\Controllers\Admin\AdminCourseRegistrationController;
+use App\Http\Controllers\Admin\AdminAnnouncementController;
+use App\Http\Controllers\Admin\AdminSuggestionController;
+use App\Http\Controllers\Admin\AdminDueController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminAcademicTimelineController;
+
+Route::get('/', function () {
+    if (Auth::guard('admin')->check()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if (Auth::guard('student')->check()) {
+        return redirect()->route('student.dashboard');
+    }
+
+    return redirect()->route('login');
+})->name('home');
+
+Route::view('/legal/terms', 'legal.terms')->name('legal.terms');
+Route::view('/legal/privacy', 'legal.privacy')->name('legal.privacy');
+Route::view('/legal/cookies', 'legal.cookies')->name('legal.cookies');
+
+Route::view('/developers', 'developers')->name('marketing.developers');
+Route::view('/legal/accessibility', 'legal.accessibility')->name('legal.accessibility');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])
+        ->name('login');
+    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])
+        ->name('auth.login.submit');
+
+    Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+    Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\NewPasswordController::class, 'create'])
+        ->name('password.reset');
+    Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
+        ->name('password.update');
+
+    Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'create'])
+        ->name('auth.register');
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'store'])
+        ->name('auth.register.submit');
+
+    Route::get('/verify-email', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'notice'])
+        ->name('auth.verify.notice');
+    Route::post('/verify-email', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'verify'])
+        ->name('auth.verify.submit');
+    Route::post('/verify-email/resend', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'resend'])
+        ->name('auth.verify.resend');
+    Route::get('/verify-email/resend', function () {
+        return redirect()->route('auth.verify.notice');
+    });
+
+    Route::get('/login/otp', [\App\Http\Controllers\Auth\LoginOtpController::class, 'create'])
+        ->name('auth.login.otp');
+    Route::post('/login/otp', [\App\Http\Controllers\Auth\LoginOtpController::class, 'store'])
+        ->name('auth.login.otp.submit');
+    Route::post('/login/otp/resend', [\App\Http\Controllers\Auth\LoginOtpController::class, 'resend'])
+        ->name('auth.login.otp.resend');
+});
+
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('auth.logout');
+
+Route::get('/student/dashboard', StudentDashboardController::class)
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.dashboard');
+
+Route::get('/student/profile', [StudentProfileController::class, 'show'])
+    ->middleware('auth:student')
+    ->name('student.profile');
+
+Route::post('/student/profile', [StudentProfileController::class, 'update'])
+    ->middleware('auth:student')
+    ->name('student.profile.update');
+
+Route::get('/student/profile/verify-email/{user}/{token}', [StudentProfileController::class, 'verifyEmail'])
+    ->middleware('signed')
+    ->name('student.profile.verify-email');
+
+Route::get('/student/suggestions', [\App\Http\Controllers\Student\StudentSuggestionController::class, 'index'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.suggestions.index');
+
+Route::post('/student/suggestions', [\App\Http\Controllers\Student\StudentSuggestionController::class, 'store'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.suggestions.store');
+
+Route::get('/student/announcements', [\App\Http\Controllers\Student\StudentAnnouncementController::class, 'index'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.announcements.index');
+
+Route::get('/student/announcements/{announcement:slug}', [\App\Http\Controllers\Student\StudentAnnouncementController::class, 'show'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.announcements.show');
+
+Route::get('/student/events', [\App\Http\Controllers\Student\StudentEventController::class, 'index'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.events.index');
+
+Route::get('/student/events/{event}/ics', [\App\Http\Controllers\Student\StudentEventController::class, 'ics'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.events.ics');
+
+Route::get('/student/resources', [\App\Http\Controllers\Student\StudentResourceController::class, 'index'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.resources.index');
+
+Route::get('/student/dues', [\App\Http\Controllers\Student\StudentDueController::class, 'index'])
+    ->middleware('auth:student')
+    ->name('student.dues.index');
+
+Route::post('/student/dues/{due}/paystack', [StudentPaystackPaymentController::class, 'initialize'])
+    ->middleware('auth:student')
+    ->name('student.payments.paystack.initialize');
+
+Route::get('/student/payments/paystack/callback', [StudentPaystackPaymentController::class, 'callback'])
+    ->middleware('auth:student')
+    ->name('student.payments.paystack.callback');
+
+Route::get('/student/dues/{due}/receipt', [StudentPaystackPaymentController::class, 'receipt'])
+    ->middleware('auth:student')
+    ->name('student.payments.paystack.receipt');
+
+Route::get('/student/course-registration', [\App\Http\Controllers\Student\StudentCourseRegistrationController::class, 'show'])
+    ->middleware('auth:student')
+    ->name('student.course-registration.show');
+
+Route::post('/student/course-registration', [\App\Http\Controllers\Student\StudentCourseRegistrationController::class, 'store'])
+    ->middleware('auth:student')
+    ->name('student.course-registration.store');
+
+Route::delete('/student/course-registration/documents/{registration}/{encodedPath}', [\App\Http\Controllers\Student\StudentCourseRegistrationController::class, 'destroyDocument'])
+    ->middleware('auth:student')
+    ->name('student.course-registration.documents.destroy');
+
+Route::get('/admin/dashboard', \App\Http\Controllers\Admin\AdminDashboardController::class)
+    ->middleware('auth:admin')
+    ->name('admin.dashboard');
+
+Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('events', \App\Http\Controllers\Admin\AdminEventController::class)->except(['show']);
+    Route::resource('resources', \App\Http\Controllers\Admin\AdminResourceController::class)->except(['show']);
+    Route::resource('announcements', AdminAnnouncementController::class)->except(['show']);
+    Route::resource('timeline', AdminAcademicTimelineController::class)->except(['show']);
+    Route::get('dues/export', [AdminDueController::class, 'export'])->name('dues.export');
+    Route::post('students/promote-years', [\App\Http\Controllers\Admin\AdminStudentAccountController::class, 'promoteYears'])->name('students.promote-years');
+    Route::get('dues/statistics', [AdminDueController::class, 'statistics'])->name('dues.statistics');
+    Route::resource('dues', AdminDueController::class)->except(['show']);
+    Route::post('course-registrations/bulk', [AdminCourseRegistrationController::class, 'bulk'])->name('course-registrations.bulk');
+    Route::resource('course-registrations', AdminCourseRegistrationController::class)->only(['index', 'show', 'update']);
+    Route::post('suggestions/bulk', [AdminSuggestionController::class, 'bulk'])->name('suggestions.bulk');
+    Route::resource('suggestions', AdminSuggestionController::class)->only(['index', 'show', 'update']);
+    Route::get('profile', [AdminProfileController::class, 'index'])->name('profile');
+    Route::put('profile', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::post('profile/admins', [AdminProfileController::class, 'storeAdmin'])->name('profile.admins.store');
+    Route::post('profile/snapshots', [AdminProfileController::class, 'createSnapshot'])->name('profile.snapshots.store');
+    Route::get('profile/snapshots/download/{snapshot}', [AdminProfileController::class, 'downloadSnapshot'])->name('profile.snapshots.download');
+
+    Route::get('students/export', [\App\Http\Controllers\Admin\AdminStudentAccountController::class, 'export'])
+        ->name('students.export');
+    Route::post('students/promote-years', [\App\Http\Controllers\Admin\AdminStudentAccountController::class, 'promoteYears'])
+        ->name('students.promote-years');
+    Route::resource('students', \App\Http\Controllers\Admin\AdminStudentAccountController::class);
+});
