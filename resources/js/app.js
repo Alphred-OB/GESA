@@ -133,6 +133,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Real-time email validation for student registration
+    const emailInput = document.querySelector('[data-validate-email-prefix]');
+    const classSelect = document.getElementById('class');
+    const emailValidationMessage = document.getElementById('email-validation-message');
+
+    if (emailInput && classSelect && emailValidationMessage) {
+        const classPrefixMap = {
+            'Geomatic Engineering': 'GM',
+            'Spatial Planning': 'SP',
+            'Land Administration': 'LA',
+        };
+
+        const validateEmail = () => {
+            const email = emailInput.value.trim().toLowerCase();
+            const selectedClass = classSelect.value;
+
+            // Clear previous messages
+            emailValidationMessage.textContent = '';
+            emailValidationMessage.classList.add('hidden');
+            emailInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+
+            // If email is empty, don't show validation
+            if (!email) {
+                return;
+            }
+
+            // Check university domain
+            const emailRegex = /^([a-z]{2})-[a-z0-9]+@st\.umat\.edu\.gh$/i;
+            if (!emailRegex.test(email)) {
+                emailValidationMessage.textContent = 'You must use your official university email (e.g., gm-yourname1234@st.umat.edu.gh)';
+                emailValidationMessage.classList.remove('hidden');
+                emailInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                return;
+            }
+
+            // Check prefix matches selected class
+            if (selectedClass) {
+                const match = email.match(/^([a-z]{2})-/i);
+                if (match) {
+                    const emailPrefix = match[1].toUpperCase();
+                    const expectedPrefix = classPrefixMap[selectedClass];
+
+                    if (expectedPrefix && emailPrefix !== expectedPrefix) {
+                        emailValidationMessage.textContent = `Your email prefix (${emailPrefix}) does not match ${selectedClass}. Expected ${expectedPrefix}.`;
+                        emailValidationMessage.classList.remove('hidden');
+                        emailInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                        return;
+                    }
+                }
+            }
+
+            // Email is valid
+            emailInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+        };
+
+        emailInput.addEventListener('input', validateEmail);
+        emailInput.addEventListener('blur', validateEmail);
+        classSelect.addEventListener('change', validateEmail);
+    }
+
     const calendarButtons = document.querySelectorAll('[data-calendar-trigger]');
 
     const launchLink = (href, target = '_blank') => {

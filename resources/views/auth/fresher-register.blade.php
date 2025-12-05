@@ -1,4 +1,4 @@
-@php($title = 'Create Account')
+@php($title = 'Fresher Registration')
 
 <x-layouts.auth :title="$title" card-width="max-w-2xl">
     <x-slot:hero>
@@ -6,20 +6,28 @@
             <div class="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white/90 shadow-lg">
                 <img src="{{ asset('logo.png') }}" alt="GESA Portal Logo" class="h-full w-full object-contain" loading="lazy">
             </div>
-            <h1 class="mt-8 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Join the GESA Community</h1>
+            <h1 class="mt-8 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Fresher Registration</h1>
             <p class="mt-4 max-w-md text-base text-white/80 mx-auto">
-                Create an account to manage registrations, dues, and stay informed about departmental updates.
+                For students who don't have access to their university email yet.
             </p>
         </div>
     </x-slot:hero>
 
     <div class="mx-auto w-full max-w-7xl rounded-3xl bg-white/95 p-10 shadow-xl ring-1 ring-black/5 backdrop-blur">
-        <div class="mb-8 text-center lg:text-left">
-            <h2 class="text-2xl font-semibold text-slate-900">Student Registration</h2>
-            <p class="mt-2 text-sm text-slate-600">Provide your student details to get started.</p>
+        <div class="mb-8">
+            <div class="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+                <div class="flex gap-3">
+                    <i class="ri-alert-line text-2xl text-yellow-600 flex-shrink-0" aria-hidden="true"></i>
+                    <div class="text-sm text-yellow-800">
+                        <p class="font-semibold mb-2">This form is for freshers and students without student email access only.</p>
+                        <p class="mb-2">If you already have access to your university email (ending with @st.umat.edu.gh), please use the <a href="{{ route('auth.register') }}" class="font-semibold underline hover:text-yellow-900">regular registration form</a>.</p>
+                        <p class="font-medium mt-3">Your registration will be reviewed by an administrator within 24-48 hours.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <form method="POST" action="{{ route('auth.register.submit') }}" class="space-y-12" data-auth-form>
+        <form method="POST" action="{{ route('auth.fresher-register.submit') }}" enctype="multipart/form-data" class="space-y-12" data-auth-form>
             @csrf
 
             <div class="space-y-10">
@@ -80,37 +88,15 @@
 
                     <div class="space-y-2">
                         <label for="email" class="block text-sm font-medium text-slate-700">
-                            Student Email Address 
-                            <span class="text-xs font-normal text-slate-500">(University email only)</span>
+                            Personal Email Address
+                            <span class="text-xs font-normal text-slate-500">(Not university email)</span>
                         </label>
                         <div class="relative">
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                                 <i class="ri-mail-line text-lg" aria-hidden="true"></i>
                             </span>
-                            <input 
-                                id="email" 
-                                name="email" 
-                                type="email" 
-                                value="{{ old('email') }}" 
-                                required 
-                                autocomplete="email" 
-                                pattern="^[a-z]{2}-[a-z0-9]+@st\.umat\.edu\.gh$"
-                                data-validate-email-prefix
-                                class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" 
-                                placeholder="gm-aopoku3124@st.umat.edu.gh" 
-                            />
+                            <input id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email" class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="kmensah@gmail.com" />
                         </div>
-                        
-                        <p class="text-xs text-slate-600">
-                            Don't have your student email yet? 
-                            <a href="{{ route('auth.fresher-register') }}" class="font-semibold text-[#16136a] underline hover:text-[#18188a]">
-                                Click here for Fresher Registration
-                            </a>
-                        </p>
-                        
-                        <!-- Real-time validation feedback -->
-                        <p id="email-validation-message" class="text-sm text-red-600 hidden"></p>
-                        
                         @error('email')
                             <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -165,6 +151,32 @@
                                 <p class="text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-2">
+                        <label for="reason" class="block text-sm font-medium text-slate-700">
+                            Why can't you access your student email?
+                        </label>
+                        <div class="relative">
+                            <textarea id="reason" name="reason" rows="3" required maxlength="500" class="block w-full rounded-xl border border-slate-300 bg-white py-3 px-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="Example: I am a fresher and haven't received my student email credentials yet...">{{ old('reason') }}</textarea>
+                        </div>
+                        <p class="text-xs text-slate-500">Please be specific. This helps administrators verify your request.</p>
+                        @error('reason')
+                            <p class="text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-2">
+                        <label for="student_id" class="block text-sm font-medium text-slate-700">
+                            Student ID Card (Optional but recommended)
+                        </label>
+                        <div class="relative">
+                            <input id="student_id" name="student_id" type="file" accept="image/png,image/jpeg,image/jpg" class="block w-full text-sm text-slate-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#16136a] file:text-white hover:file:bg-[#18188a] file:cursor-pointer border border-slate-300 rounded-xl cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
+                        </div>
+                        <p class="text-xs text-slate-500">Upload a clear photo of your student ID to speed up verification (Max 2MB)</p>
+                        @error('student_id')
+                            <p class="text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -273,7 +285,7 @@
                     I agree to the
                     <a href="{{ route('legal.terms') }}" class="font-semibold text-[#16136a] hover:underline">Terms</a>
                     and
-                    <a href="{{ route('legal.privacy') }}" class="font-semibold text-[#16136a] hover:underline">Privacy Policy</a>
+                    <a href="{{ route('legal.privacy') }}" class="font-semild text-[#16136a] hover:underline">Privacy Policy</a>
                     of the GESA Portal.
                 </label>
             </div>
@@ -281,10 +293,13 @@
                 <p class="text-sm text-red-600">{{ $message }}</p>
             @enderror
 
-            <div class="flex items-center justify-end">
+            <div class="flex items-center justify-between">
+                <a href="{{ route('auth.register') }}" class="text-sm font-semibold text-[#16136a] hover:underline">
+                    <i class="ri-arrow-left-line"></i> Back to regular registration
+                </a>
                 <button type="submit" class="flex items-center justify-center space-x-2 rounded-xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/30 transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-[#18188a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                    <i class="ri-user-add-line text-lg" aria-hidden="true"></i>
-                    <span>Create account</span>
+                    <i class="ri-send-plane-line text-lg" aria-hidden="true"></i>
+                    <span>Submit registration request</span>
                 </button>
             </div>
         </form>
@@ -303,7 +318,7 @@
             <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#16136a]/20">
                 <i class="ri-loader-4-line animate-spin text-2xl text-[#16136a]" aria-hidden="true"></i>
             </div>
-            <p class="text-sm font-medium text-slate-700">Creating your account…</p>
+            <p class="text-sm font-medium text-slate-700">Submitting your request</p>
         </div>
     </div>
 </x-layouts.auth>

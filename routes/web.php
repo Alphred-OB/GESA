@@ -52,6 +52,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'store'])
         ->name('auth.register.submit');
 
+    // Fresher Registration (for students without student email access)
+    Route::get('/register/fresher', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'create'])
+        ->name('auth.fresher-register');
+    Route::post('/register/fresher', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'store'])
+        ->name('auth.fresher-register.submit');
+    Route::get('/register/fresher/success', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'success'])
+        ->name('auth.fresher-register.success');
+
     Route::get('/verify-email', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'notice'])
         ->name('auth.verify.notice');
     Route::post('/verify-email', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'verify'])
@@ -192,5 +200,20 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('students.export');
     Route::post('students/promote-years', [\App\Http\Controllers\Admin\AdminStudentAccountController::class, 'promoteYears'])
         ->name('students.promote-years');
+    
+    // Pending Registrations Management
+    Route::get('pending-registrations', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'index'])
+        ->name('pending-registrations.index');
+    Route::get('pending-registrations/{registration}', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'show'])
+        ->name('pending-registrations.show');
+    Route::post('pending-registrations/{registration}/approve', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'approve'])
+        ->name('pending-registrations.approve');
+    Route::post('pending-registrations/{registration}/reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'reject'])
+        ->name('pending-registrations.reject');
+    Route::post('pending-registrations/bulk-approve', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkApprove'])
+        ->name('pending-registrations.bulk-approve');
+    Route::post('pending-registrations/bulk-reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkReject'])
+        ->name('pending-registrations.bulk-reject');
+    
     Route::resource('students', \App\Http\Controllers\Admin\AdminStudentAccountController::class);
 });

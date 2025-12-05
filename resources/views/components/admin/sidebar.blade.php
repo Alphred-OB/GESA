@@ -1,4 +1,7 @@
 @php
+    $pendingRegistrationsCount = \App\Models\PendingRegistration::where('status', 'pending')->count();
+    $pendingSuggestionsCount = \App\Models\Suggestion::where('status', 'pending')->count();
+
     $navConfig = [
         [
             'label' => 'Overview',
@@ -25,6 +28,13 @@
             'icon' => 'ri-team-line',
         ],
         [
+            'label' => 'Pending Registrations',
+            'route_name' => 'admin.pending-registrations.index',
+            'pattern' => 'admin.pending-registrations.*',
+            'icon' => 'ri-user-add-line',
+            'badge' => $pendingRegistrationsCount > 0 ? $pendingRegistrationsCount : null,
+        ],
+        [
             'label' => 'Dues',
             'route_name' => 'admin.dues.index',
             'pattern' => 'admin.dues.*',
@@ -47,6 +57,7 @@
             'route_name' => 'admin.suggestions.index',
             'pattern' => 'admin.suggestions.*',
             'icon' => 'ri-customer-service-2-line',
+            'badge' => $pendingSuggestionsCount > 0 ? $pendingSuggestionsCount : null,
         ],
         [
             'label' => 'Profile',
@@ -65,6 +76,7 @@
             'icon' => $item['icon'],
             'href' => $href,
             'active' => ! empty($item['pattern']) ? request()->routeIs($item['pattern']) : false,
+            'badge' => $item['badge'] ?? null,
         ];
     })->toArray();
 @endphp
