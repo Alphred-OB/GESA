@@ -64,6 +64,21 @@ class LoginController extends Controller
                     ->withErrors(['verification' => __('Please verify your email before signing in. We just sent you a new verification link.')]);
             }
 
+            // Check for PendingRegistration status (for freshers/manual approvals)
+            $pendingRegistration = \App\Models\PendingRegistration::where('email', $user->email)->latest()->first();
+            if ($pendingRegistration) {
+                if ($pendingRegistration->status === 'rejected') {
+                    return back()->withErrors([
+                        'email' => __('Your account application has been rejected. Please contact the administrator.'),
+                    ])->onlyInput('email');
+                }
+                if ($pendingRegistration->status === 'pending') {
+                    return back()->withErrors([
+                        'email' => __('Your account is currently pending approval by an administrator.'),
+                    ])->onlyInput('email');
+                }
+            }
+
             $this->loginOtpService->send($user, $guard);
 
             $request->session()->put('pending_login_otp', [
