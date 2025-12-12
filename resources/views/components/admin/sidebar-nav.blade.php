@@ -15,11 +15,6 @@
                 <i class="{{ $item['icon'] }} text-lg" aria-hidden="true"></i>
             </span>
             <span>{{ $item['label'] }}</span>
-            @if(isset($item['badge']) && $item['badge'])
-                <span class="ml-auto flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-red-500 px-2 text-xs font-bold text-white shadow-md ring-2 ring-white">
-                    {{ $item['badge'] }}
-                </span>
-            @endif
         </a>
     @endforeach
 </nav>

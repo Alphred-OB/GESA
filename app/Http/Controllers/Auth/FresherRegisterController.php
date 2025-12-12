@@ -50,18 +50,6 @@ class FresherRegisterController extends Controller
             'status' => 'pending',
         ]);
 
-        // Send confirmation email
-        try {
-            \Illuminate\Support\Facades\Mail::send('emails.registration-received', [
-                'registration' => $registration,
-            ], function ($message) use ($registration) {
-                $message->to($registration->email)
-                    ->subject('GESA Registration Received');
-            });
-        } catch (\Exception $e) {
-            \Log::error('Failed to send registration received email: ' . $e->getMessage());
-        }
-
         return redirect()->route('auth.fresher-register.success')
             ->with('success', __('Your registration request has been submitted successfully! An administrator will review your request within 24-48 hours. You will receive an email once your account is approved.'));
     }

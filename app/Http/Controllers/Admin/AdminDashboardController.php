@@ -17,8 +17,9 @@ class AdminDashboardController extends Controller
     {
         $admin = $request->user('admin');
 
-        return view('dashboards.admin.index', $this->dashboardService->overview($admin) + [
-            'title' => 'Admin Dashboard',
-        ]);
+        return view('dashboards.admin.index', array_merge(
+            ['admin' => $admin, 'title' => 'Admin Dashboard'],
+            $this->dashboardService->overview($admin)
+        ));
     }
 }

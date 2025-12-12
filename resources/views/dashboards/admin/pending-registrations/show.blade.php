@@ -162,7 +162,7 @@
         {{-- Actions Sidebar --}}
         <div class="space-y-6">
             {{-- Quick Info Card --}}
-            <div class="rounded-2xl p-6 text-white shadow-lg" style="background-color: #16136a;">
+            <div class="rounded-2xl bg-gradient-to-br from-[#16136a] to-[#1a1a8a] p-6 text-white shadow-lg">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
                         <i class="ri-calendar-line text-2xl"></i>
@@ -175,6 +175,8 @@
                 <p class="text-xs text-white/60">{{ $registration->created_at->diffForHumans() }}</p>
             </div>
 
+            {{-- Action Buttons (Only for pending) --}}
+            @if($registration->status === 'pending')
                 <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 space-y-4">
                     <h3 class="font-semibold text-slate-900">Actions</h3>
 
@@ -194,8 +196,7 @@
 
                         <button 
                             type="submit" 
-                            class="w-full flex items-center justify-center gap-2 rounded-xl bg-[#16136a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#16136a]/90"
-                            style="background-color: #16136a !important; color: white !important;"
+                            class="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
                         >
                             <i class="ri-checkbox-circle-line text-lg"></i>
                             Approve Registration
@@ -230,16 +231,16 @@
                             type="submit" 
                             class="w-full flex items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
                             onclick="return confirm('Are you sure you want to reject this registration?')"
-                            style="background-color: #dc2626 !important; color: white !important;"
                         >
                             <i class="ri-close-circle-line text-lg"></i>
                             Reject Registration
                         </button>
                     </form>
                 </div>
-
+            @endif
         </div>
     </div>
 </div>
+    </div>
     </div>
 </x-layouts.admin>

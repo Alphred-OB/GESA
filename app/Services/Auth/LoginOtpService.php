@@ -20,7 +20,7 @@ class LoginOtpService
     {
         $code = $this->generateCode($user, $guard);
 
-        Mail::to($user->email)->send(new LoginOtpCodeMail($user, $code, self::EXPIRATION_MINUTES, $context));
+        Mail::to($user->email)->queue(new LoginOtpCodeMail($user, $code, self::EXPIRATION_MINUTES, $context));
     }
 
     /**

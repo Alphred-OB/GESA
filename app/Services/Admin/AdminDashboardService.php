@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\CourseRegistration;
 use App\Models\Due;
 use App\Models\Event;
+use App\Models\PendingRegistration;
 use App\Models\Suggestion;
 use App\Models\SupportResource;
 use App\Models\User;
@@ -17,27 +18,36 @@ class AdminDashboardService
     public function overview(?User $admin): array
     {
         $adminName = $admin?->fullname ?? $admin?->username ?? 'Administrator';
+        $adminRole = $admin?->role;
         $greeting = $this->greetingForNow();
         $now = Carbon::now();
 
         $studentCount = User::query()
             ->where('role', 'student')
+            ->whereNotNull('email_verified_at')
             ->count();
 
-        $outstandingDuesQuery = Due::query()->outstanding();
-        $outstandingDueCount = (clone $outstandingDuesQuery)->count();
-        $outstandingDueAmount = (float) (clone $outstandingDuesQuery)->sum('amount');
+        // Count upcoming events
+        $upcomingEventsCount = Event::query()
+            ->upcoming()
+            ->count();
+        $eventsThisMonth = Event::query()
+            ->upcoming()
+            ->where('start_at', '>=', $now->copy()->startOfMonth())
+            ->where('start_at', '<=', $now->copy()->endOfMonth())
+            ->count();
 
-        $registrationQuery = CourseRegistration::query();
+        // Changed from CourseRegistration to PendingRegistration (student user registrations)
+        $registrationQuery = PendingRegistration::query();
         $pendingRegistrations = (clone $registrationQuery)
-            ->whereIn('status', ['in_progress', 'submitted'])
+            ->where('status', 'pending')
             ->count();
         $submittedToday = (clone $registrationQuery)
-            ->whereDate('submitted_at', $now->toDateString())
+            ->whereDate('created_at', $now->toDateString())
             ->count();
         $approvedThisWeek = (clone $registrationQuery)
             ->where('status', 'approved')
-            ->where('approved_at', '>=', $now->copy()->startOfWeek())
+            ->where('reviewed_at', '>=', $now->copy()->startOfWeek())
             ->count();
 
         $suggestionsPending = Suggestion::query()
@@ -58,19 +68,19 @@ class AdminDashboardService
                 'cta' => 'Manage students',
             ],
             [
-                'label' => 'Outstanding dues',
-                'value' => 'GHS ' . number_format($outstandingDueAmount, 2),
-                'description' => $outstandingDueCount . ' invoices pending payment.',
-                'icon' => 'ri-money-dollar-circle-fill',
-                'link' => route('admin.dues.index'),
-                'cta' => 'Review dues',
+                'label' => 'Active events',
+                'value' => number_format($upcomingEventsCount),
+                'description' => $eventsThisMonth . ' scheduled this month.',
+                'icon' => 'ri-calendar-event-fill',
+                'link' => route('admin.events.index'),
+                'cta' => 'View events',
             ],
             [
                 'label' => 'Pending registrations',
                 'value' => number_format($pendingRegistrations),
                 'description' => $approvedThisWeek . ' approved this week.',
-                'icon' => 'ri-task-fill',
-                'link' => route('admin.course-registrations.index'),
+                'icon' => 'ri-user-add-fill',
+                'link' => route('admin.pending-registrations.index'),
                 'cta' => 'See registrations',
             ],
             [
@@ -125,10 +135,6 @@ class AdminDashboardService
                 'pending' => $pendingRegistrations,
                 'submittedToday' => $submittedToday,
                 'approvedThisWeek' => $approvedThisWeek,
-            ],
-            'dueSummary' => [
-                'count' => $outstandingDueCount,
-                'amount' => $outstandingDueAmount,
             ],
             'resourcesTotal' => SupportResource::query()->count(),
             'upcomingEvents' => $upcomingEvents,

@@ -169,7 +169,7 @@ class AdminProfileService
     protected function systemSnapshot(): array
     {
         $adminCount = User::query()->where('role', 'admin')->count();
-        $studentCount = User::query()->where('role', 'student')->count();
+        $studentCount = User::query()->where('role', 'student')->whereNotNull('email_verified_at')->count();
 
         $recentAdmins = User::query()
             ->where('role', 'admin')

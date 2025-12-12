@@ -210,10 +210,6 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('pending-registrations.approve');
     Route::post('pending-registrations/{registration}/reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'reject'])
         ->name('pending-registrations.reject');
-    Route::post('pending-registrations/bulk-approve', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkApprove'])
-        ->name('pending-registrations.bulk-approve');
-    Route::post('pending-registrations/bulk-reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkReject'])
-        ->name('pending-registrations.bulk-reject');
     
     Route::resource('students', \App\Http\Controllers\Admin\AdminStudentAccountController::class);
 });

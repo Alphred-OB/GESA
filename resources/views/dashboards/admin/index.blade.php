@@ -103,27 +103,7 @@
                 @endforeach
             </section>
 
-            <section class="grid gap-6 lg:grid-cols-3">
-            <article class="animate-fade-slide rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10 lg:col-span-2">
-                <header class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h2 class="text-lg font-semibold text-[#16136a]">Dues overview</h2>
-                        <p class="text-sm text-slate-500">Quick view of current outstanding invoices.</p>
-                    </div>
-                </header>
-
-                <div class="mt-2 rounded-3xl border border-slate-200/70 bg-slate-50/60 p-6 text-sm text-slate-600">
-                    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Outstanding dues overview</p>
-                            <p class="mt-2 text-lg font-semibold text-[#16136a]">{{ number_format($dueSummary['count'] ?? 0) }} invoices pending</p>
-                            <p class="text-xs text-slate-500">Total balance: <span class="font-semibold text-[#16136a]">GHS {{ number_format((float) ($dueSummary['amount'] ?? 0), 2) }}</span></p>
-                        </div>
-                        <a href="{{ route('admin.dues.index') }}" class="inline-flex items-center gap-2 rounded-full border border-[#16136a]/20 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a] transition hover:-translate-y-0.5 hover:border-[#16136a]/40">Review dues log</a>
-                    </div>
-                </div>
-            </article>
-
+            <section class="grid gap-6 lg:grid-cols-2">
             <aside class="space-y-6">
                 <article class="animate-fade-slide rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
                     <header class="flex items-center justify-between">

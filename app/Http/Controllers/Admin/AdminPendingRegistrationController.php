@@ -65,35 +65,28 @@ class AdminPendingRegistrationController extends Controller
      */
     public function approve(Request $request, PendingRegistration $registration): RedirectResponse
     {
+        if ($registration->status !== 'pending') {
+            return back()->withErrors(['error' => 'This registration has already been processed.']);
+        }
+
         $fullName = trim($registration->first_name . ' ' . $registration->last_name);
 
-        // Only create user if not already created (status was 'pending' or 'rejected')
-        if ($registration->status !== 'approved') {
-            // Check if user already exists
-            $existingUser = User::where('email', $registration->email)->orWhere('index_number', $registration->index_number)->first();
-            
-            if (!$existingUser) {
-                // Create the user account
-                $user = User::create([
-                    'fullname' => $fullName,
-                    'username' => $registration->username,
-                    'email' => $registration->email,
-                    'password' => $registration->password, // Already hashed
-                    'phone_number' => $registration->phone_number,
-                    'index_number' => $registration->index_number,
-                    'class' => $registration->class,
-                    'year' => $registration->year,
-                    'role' => 'student',
-                    'email_verified_at' => now(), // Auto-verify since admin approved
-                ]);
+        // Create the user account
+        $user = User::create([
+            'fullname' => $fullName,
+            'username' => $registration->username,
+            'email' => $registration->email,
+            'password' => $registration->password, // Already hashed
+            'phone_number' => $registration->phone_number,
+            'index_number' => $registration->index_number,
+            'class' => $registration->class,
+            'year' => $registration->year,
+            'role' => 'student',
+            'email_verified_at' => now(), // Auto-verify since admin approved
+        ]);
 
-                // Sync dues
-                $this->dues->syncStudent($user);
-                
-                // Send approval email
-                $this->sendApprovalEmail($user, $registration);
-            }
-        }
+        // Sync dues
+        $this->dues->syncStudent($user);
 
         // Update pending registration
         $registration->update([
@@ -102,6 +95,9 @@ class AdminPendingRegistrationController extends Controller
             'reviewed_by' => Auth::guard('admin')->id(),
             'admin_notes' => $request->input('notes'),
         ]);
+
+        // Send approval email
+        $this->sendApprovalEmail($user, $registration);
 
         return redirect()
             ->route('admin.pending-registrations.index')
@@ -113,13 +109,15 @@ class AdminPendingRegistrationController extends Controller
      */
     public function reject(Request $request, PendingRegistration $registration): RedirectResponse
     {
-        $reason = $request->input('notes') ?: $request->input('reason', 'Registration rejected.');
+        if ($registration->status !== 'pending') {
+            return back()->withErrors(['error' => 'This registration has already been processed.']);
+        }
 
         $registration->update([
             'status' => 'rejected',
             'reviewed_at' => now(),
             'reviewed_by' => Auth::guard('admin')->id(),
-            'admin_notes' => $reason,
+            'admin_notes' => $request->input('notes', 'Registration rejected.'),
         ]);
 
         // Send rejection email
@@ -128,118 +126,6 @@ class AdminPendingRegistrationController extends Controller
         return redirect()
             ->route('admin.pending-registrations.index')
             ->with('success', 'Registration has been rejected.');
-    }
-
-    /**
-     * Bulk approve pending registrations.
-     */
-    public function bulkApprove(Request $request): RedirectResponse
-    {
-        $ids = json_decode($request->input('ids', '[]'), true);
-        
-        if (empty($ids)) {
-            return back()->withErrors(['error' => 'No registrations selected.']);
-        }
-
-        $registrations = PendingRegistration::whereIn('id', $ids)->get();
-
-        if ($registrations->isEmpty()) {
-            return back()->withErrors(['error' => 'No registrations found to approve.']);
-        }
-
-        $approved = 0;
-        foreach ($registrations as $registration) {
-            try {
-                // Only create user if not already approved
-                if ($registration->status !== 'approved') {
-                    // Check if user already exists
-                    $existingUser = User::where('email', $registration->email)
-                        ->orWhere('index_number', $registration->index_number)
-                        ->first();
-                    
-                    if (!$existingUser) {
-                        $fullName = trim($registration->first_name . ' ' . $registration->last_name);
-
-                        // Create the user account
-                        $user = User::create([
-                            'fullname' => $fullName,
-                            'username' => $registration->username,
-                            'email' => $registration->email,
-                            'password' => $registration->password,
-                            'phone_number' => $registration->phone_number,
-                            'index_number' => $registration->index_number,
-                            'class' => $registration->class,
-                            'year' => $registration->year,
-                            'role' => 'student',
-                            'email_verified_at' => now(),
-                        ]);
-
-                        // Sync dues
-                        $this->dues->syncStudent($user);
-                        
-                        // Send email
-                        $this->sendApprovalEmail($user, $registration);
-                    }
-                }
-
-                // Update registration
-                $registration->update([
-                    'status' => 'approved',
-                    'reviewed_at' => now(),
-                    'reviewed_by' => Auth::guard('admin')->id(),
-                    'admin_notes' => 'Bulk approved',
-                ]);
-
-                $approved++;
-            } catch (\Exception $e) {
-                \Log::error('Failed to approve registration ' . $registration->id . ': ' . $e->getMessage());
-            }
-        }
-
-        return redirect()
-            ->route('admin.pending-registrations.index')
-            ->with('success', "{$approved} registration(s) approved successfully.");
-    }
-
-    /**
-     * Bulk reject pending registrations.
-     */
-    public function bulkReject(Request $request): RedirectResponse
-    {
-        $ids = json_decode($request->input('ids', '[]'), true);
-        $reason = $request->input('reason', 'Bulk rejected');
-        
-        if (empty($ids)) {
-            return back()->withErrors(['error' => 'No registrations selected.']);
-        }
-
-        $registrations = PendingRegistration::whereIn('id', $ids)->get();
-
-        if ($registrations->isEmpty()) {
-            return back()->withErrors(['error' => 'No registrations found to reject.']);
-        }
-
-        $rejected = 0;
-        foreach ($registrations as $registration) {
-            try {
-                $registration->update([
-                    'status' => 'rejected',
-                    'reviewed_at' => now(),
-                    'reviewed_by' => Auth::guard('admin')->id(),
-                    'admin_notes' => $reason,
-                ]);
-
-                // Send email
-                $this->sendRejectionEmail($registration);
-                $rejected++;
-            } catch (\Exception $e) {
-                \Log::error('Failed to reject registration ' . $registration->id . ': ' . $e->getMessage());
-            }
-        }
-
-        return redirect()
-            ->route('admin.pending-registrations.index')
-            ->with('success', "{$rejected} registration(s) rejected.");
     }
 
     /**
