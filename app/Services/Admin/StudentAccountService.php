@@ -137,7 +137,6 @@ class StudentAccountService
         $dbClasses = User::query()
             ->where('role', 'student')
             ->where('is_graduated', false)
-            ->whereNotNull('email_verified_at')
             ->select('class')
             ->whereNotNull('class')
             ->distinct()
@@ -156,7 +155,6 @@ class StudentAccountService
         $dbYears = User::query()
             ->where('role', 'student')
             ->where('is_graduated', false)
-            ->whereNotNull('email_verified_at')
             ->select('year')
             ->whereNotNull('year')
             ->distinct()
@@ -181,8 +179,7 @@ class StudentAccountService
     {
         $query = User::query()
             ->where('role', 'student')
-            ->where('is_graduated', false)
-            ->whereNotNull('email_verified_at');
+            ->where('is_graduated', false);
 
         if ($search = trim((string) ($filters['search'] ?? ''))) {
             $query->where(function (Builder $builder) use ($search) {

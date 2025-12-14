@@ -67,7 +67,7 @@
                         <dd class="text-right font-medium text-slate-900">{{ $student->phone_number ?? '—' }}</dd>
                     </div>
                     <div class="flex items-start justify-between gap-6">
-                        <dt class="flex items-center gap-2 text-slate-400"><i class="ri-hashtag text-base text-[#16136a]" aria-hidden="true"></i> Index number</dt>
+                        <dt class="flex items-center gap-2 text-slate-400"><i class="ri-hashtag text-base text-[#16136a]" aria-hidden="true"></i> Reference number</dt>
                         <dd class="text-right font-medium text-slate-900">{{ $student->index_number ?? '—' }}</dd>
                     </div>
                     <div class="flex items-start justify-between gap-6">

@@ -20,19 +20,32 @@
 <body class="min-h-screen bg-slate-100 text-slate-900">
     <div class="relative flex min-h-screen flex-col">
         <div class="grid flex-1 gap-0 lg:grid-cols-2">
-            <div class="relative hidden overflow-hidden bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] lg:flex">
-                <div class="absolute inset-0 animate-gradient bg-[linear-gradient(135deg,#16136a,#2726a0,#16136a)] opacity-70"></div>
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_55%)] mix-blend-screen"></div>
+            <!-- Aurora 3D Animated Background -->
+            <div class="relative hidden overflow-hidden bg-[#16136a] lg:flex" id="aurora-container">
+                <!-- Ambient Background Glows -->
+                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-[#3b82f6] opacity-20 blur-[100px] filter"></div>
+                <div class="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-[#8b5cf6] opacity-20 blur-[100px] filter"></div>
+
+                <!-- Interactive Glass Shapes -->
+                <div class="parallax-shape absolute left-20 top-40 z-0 h-32 w-32 rounded-full border border-white/10 bg-gradient-to-br from-white/10 to-transparent shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-md" data-speed="2"></div>
+                
+                <div class="parallax-shape absolute bottom-40 right-20 z-0 h-48 w-48 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-sm" data-speed="-1.5" style="transform: rotate(45deg);"></div>
+                
+                <div class="parallax-shape absolute bottom-20 left-1/3 z-0 h-16 w-16 rounded-full border border-white/20 bg-gradient-to-b from-white/20 to-transparent shadow-lg backdrop-blur-md" data-speed="3"></div>
+
+                <div class="parallax-shape absolute top-20 right-1/3 z-0 h-24 w-24 rounded-lg border border-white/5 bg-white/5 backdrop-blur-[2px]" data-speed="1" style="transform: rotate(-15deg);"></div>
+
+                <!-- Content Container (Z-Index to stay on top) -->
                 <div class="relative z-10 flex w-full flex-col items-center justify-center px-8 py-16 text-center text-white xl:px-16">
                     @if (isset($hero) && ! $hero->isEmpty())
                         {{ $hero }}
                     @else
                         <div class="space-y-7">
                             <div class="flex flex-col items-center gap-3 text-white/90">
-                                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 shadow-lg">
+                                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 shadow-lg backdrop-blur-md border border-white/10">
                                     <img src="{{ asset('logo.png') }}" alt="GESA" class="h-8 w-8 object-contain" loading="lazy">
                                 </div>
-                                <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-100">
+                                <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-100 backdrop-blur-sm border border-white/5">
                                     Secure access • Step 2 of 2
                                 </div>
                             </div>
@@ -46,11 +59,11 @@
                             </p>
 
                             <div class="grid w-full gap-4 text-left md:grid-cols-2">
-                                <div class="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:bg-white/15">
+                                <div class="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/10">
                                     <p class="text-sm font-semibold text-slate-100">Tip — Search your mailbox</p>
                                     <p class="mt-2 text-sm text-white/85">Search for <span class="font-semibold">"ACSES"</span> or <span class="font-semibold">{{ config('mail.from.address') }}</span> to surface the code email quickly.</p>
                                 </div>
-                                <div class="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:bg-white/15">
+                                <div class="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/10">
                                     <p class="text-sm font-semibold text-slate-100">Didn’t receive it?</p>
                                     <p class="mt-2 text-sm text-white/85">Use "Resend verification code" below, then stay on this page—the latest email always contains the valid OTP.</p>
                                 </div>
@@ -59,6 +72,58 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Parallax Script -->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const container = document.getElementById('aurora-container');
+                    if (!container) return;
+
+                    const shapes = container.querySelectorAll('.parallax-shape');
+
+                    container.addEventListener('mousemove', (e) => {
+                        const { clientX, clientY } = e;
+                        const centerX = container.offsetWidth / 2;
+                        const centerY = container.offsetHeight / 2;
+
+                        shapes.forEach(shape => {
+                            const speed = parseFloat(shape.getAttribute('data-speed'));
+                            const x = (clientX - centerX) * speed / 100;
+                            const y = (clientY - centerY) * speed / 100;
+                            
+                            // Preserve existing transforms (like rotate) while adding translation
+                            const currentTransform = shape.style.transform || '';
+                            // Remove existing translations if any to avoid stacking
+                            const cleanTransform = currentTransform.replace(/translate\([^)]*\)/g, '').trim();
+                            
+                            shape.style.transform = `${cleanTransform} translate(${x}px, ${y}px)`;
+                        });
+                    });
+                    
+                    // Add subtle floating animation via CSS
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        @keyframes float {
+                            0% { transform: translateY(0px) rotate(0deg); }
+                            50% { transform: translateY(-10px) rotate(2deg); }
+                            100% { transform: translateY(0px) rotate(0deg); }
+                        }
+                        .parallax-shape {
+                            transition: transform 0.1s ease-out;
+                            animation: float 6s ease-in-out infinite;
+                        }
+                        .parallax-shape:nth-child(2n) {
+                            animation-duration: 8s;
+                            animation-delay: -2s;
+                        }
+                        .parallax-shape:nth-child(3n) {
+                            animation-duration: 10s;
+                            animation-delay: -5s;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                });
+            </script>
 
             <div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-white via-slate-100 to-slate-200 px-4 py-12 sm:px-6 lg:px-12">
                 <div class="w-full {{ $cardWidth }} space-y-8">

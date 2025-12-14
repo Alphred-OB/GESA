@@ -200,7 +200,7 @@
                     <label for="filter_search" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
                     <div class="relative">
                         <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Name, username, email" class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
+                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Name, username, email, reference no." class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
                     </div>
                 </div>
 
