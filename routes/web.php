@@ -52,11 +52,44 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'store'])
         ->name('auth.register.submit');
 
+    // EMERGENCY CACHE CLEARER - Visit this URL once, then DELETE this route!
+    Route::get('/emergency-clear-cache-now', function() {
+        try {
+            Artisan::call('route:clear');
+            Artisan::call('config:clear');
+            Artisan::call('view:clear');
+            Artisan::call('cache:clear');
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'All caches cleared successfully! OTP verification is now active.',
+                'next_steps' => [
+                    '1. Test fresher registration - it should now require OTP',
+                    '2. DELETE this /emergency-clear-cache-now route from routes/web.php',
+                    '3. Redeploy without this route'
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    });
+
     // Fresher Registration (for students without student email access)
     Route::get('/register/fresher', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'create'])
         ->name('auth.fresher-register');
     Route::post('/register/fresher', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'store'])
         ->name('auth.fresher-register.submit');
+
+    Route::get('/register/fresher/verify', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'showVerifyForm'])
+        ->name('auth.fresher-register.verify');
+    Route::post('/register/fresher/verify', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'verify'])
+        ->name('auth.fresher-register.verify.submit');
+    Route::post('/register/fresher/verify/resend', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'resend'])
+        ->name('auth.fresher-register.resend');
+
     Route::get('/register/fresher/success', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'success'])
         ->name('auth.fresher-register.success');
 

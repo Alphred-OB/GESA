@@ -192,7 +192,7 @@
             </div>
 
             <form method="GET" class="space-y-3 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 md:flex md:flex-wrap md:items-end md:gap-3 md:space-y-0">
-                @foreach (request()->except(['search', 'class', 'year', 'page']) as $key => $value)
+                @foreach (request()->except(['search', 'class', 'year', 'status', 'page']) as $key => $value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                 @endforeach
 
@@ -230,6 +230,18 @@
                     </div>
                 </div>
 
+                <div class="flex w-full flex-col gap-2 md:w-40">
+                    <label for="filter_status" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
+                    <div class="relative">
+                        <select id="filter_status" name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+                            <option value="">All</option>
+                            <option value="active" @selected(($filters['status'] ?? '') === 'active')>Active</option>
+                            <option value="pending" @selected(($filters['status'] ?? '') === 'pending')>Pending</option>
+                        </select>
+                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    </div>
+                </div>
+
                 <div class="flex items-end md:ml-auto md:w-auto">
                     <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
                         <i class="ri-equalizer-line text-base"></i>
@@ -260,6 +272,7 @@
                             <tr>
                                 <th class="px-5 py-2.5">Student</th>
                                 <th class="px-5 py-2.5">Class · Year</th>
+                                <th class="px-5 py-2.5">Status</th>
                                 <th class="px-5 py-2.5">Created</th>
                                 <th class="px-5 py-2.5 text-right">Actions</th>
                             </tr>
@@ -279,7 +292,19 @@
                                         <span class="text-slate-400">·</span>
                                         {{ $student->year ? 'Year ' . $student->year : '—' }}
                                     </td>
-                                    
+                                    <td class="px-5 py-3">
+                                        @if($student->email_verified_at)
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+                                                <i class="ri-checkbox-circle-fill text-xs"></i>
+                                                Active
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                                                <i class="ri-time-line text-xs"></i>
+                                                Pending
+                                            </span>
+                                        @endif
+                                    </td>
                                     <td class="px-5 py-3 text-[12px] text-slate-500">{{ $student->created_at?->format('M j, Y · g:i A') ?? '—' }}</td>
                                     <td class="px-5 py-3">
                                         <div class="flex items-center justify-end gap-1.5">
@@ -304,7 +329,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
+                                    <td colspan="5" class="px-6 py-10 text-center text-sm text-slate-500">
                                         <div class="flex flex-col items-center gap-3">
                                             <i class="ri-emotion-unhappy-line text-3xl text-slate-300"></i>
                                             <p class="font-semibold text-slate-600">No students found</p>
@@ -332,6 +357,22 @@
                                     <div class="flex items-center justify-between">
                                         <dt>Class · Year</dt>
                                         <dd>{{ $student->class ?? '—' }} · {{ $student->year ? 'Year ' . $student->year : '—' }}</dd>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <dt>Status</dt>
+                                        <dd>
+                                            @if($student->email_verified_at)
+                                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+                                                    <i class="ri-checkbox-circle-fill text-xs"></i>
+                                                    Active
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                                                    <i class="ri-time-line text-xs"></i>
+                                                    Pending
+                                                </span>
+                                            @endif
+                                        </dd>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <dt>Created</dt>

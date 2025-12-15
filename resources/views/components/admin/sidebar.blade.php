@@ -1,4 +1,9 @@
 @php
+    // Count pending registrations with verified emails (actionable items only)
+    $pendingRegistrationsCount = \App\Models\PendingRegistration::where('status', 'pending')
+        ->whereNotNull('email_verified_at')
+        ->count();
+
     $navConfig = [
         [
             'label' => 'Overview',
@@ -29,6 +34,7 @@
             'route_name' => 'admin.pending-registrations.index',
             'pattern' => 'admin.pending-registrations.*',
             'icon' => 'ri-user-add-line',
+            'badge' => $pendingRegistrationsCount,
         ],
         [
             'label' => 'Dues',
@@ -71,6 +77,7 @@
             'icon' => $item['icon'],
             'href' => $href,
             'active' => ! empty($item['pattern']) ? request()->routeIs($item['pattern']) : false,
+            'badge' => $item['badge'] ?? null,
         ];
     })->toArray();
 @endphp

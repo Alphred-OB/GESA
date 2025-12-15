@@ -198,6 +198,14 @@ class StudentAccountService
             $query->where('year', $filters['year']);
         }
 
+        if (! empty($filters['status'])) {
+            if ($filters['status'] === 'pending') {
+                $query->whereNull('email_verified_at');
+            } elseif ($filters['status'] === 'active') {
+                $query->whereNotNull('email_verified_at');
+            }
+        }
+
         return $query->orderByRaw('COALESCE(fullname, username) ASC');
     }
 

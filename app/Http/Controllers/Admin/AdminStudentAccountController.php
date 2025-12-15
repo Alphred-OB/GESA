@@ -23,7 +23,7 @@ class AdminStudentAccountController extends Controller
 
     public function index(Request $request): View
     {
-        $filters = $request->only(['search', 'class', 'year']);
+        $filters = $request->only(['search', 'class', 'year', 'status']);
         $perPage = (int) $request->integer('per_page', 25);
         $perPageOptions = [25, 50, 100, 250];
         if (! in_array($perPage, $perPageOptions, true)) {
@@ -77,7 +77,7 @@ class AdminStudentAccountController extends Controller
         ]));
         $student->role = 'student';
         $student->is_seller = (bool) ($data['is_seller'] ?? false);
-        $student->password = Hash::make($data['password']);
+        $student->password = $data['password'];
         $student->save();
 
         $this->dues->syncStudent($student);
@@ -129,7 +129,7 @@ class AdminStudentAccountController extends Controller
         $student->is_seller = (bool) ($data['is_seller'] ?? false);
 
         if (! empty($data['password'])) {
-            $student->password = Hash::make($data['password']);
+            $student->password = $data['password'];
         }
 
         $student->save();
@@ -154,7 +154,7 @@ class AdminStudentAccountController extends Controller
 
     public function export(Request $request): Response
     {
-        $filters = $request->only(['search', 'class', 'year']);
+        $filters = $request->only(['search', 'class', 'year', 'status']);
 
         $query = $this->service->studentsQuery($filters);
 

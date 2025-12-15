@@ -18,39 +18,46 @@
             {{-- Main Content Section --}}
             <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
                 {{-- Stats Cards --}}
-                <div class="grid gap-6 md:grid-cols-3">
-                    <article class="rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 text-white shadow-lg">
+                {{-- Stats Cards --}}
+                <div class="grid gap-4 md:grid-cols-3">
+                    <article class="rounded-2xl border border-yellow-200 bg-yellow-50/30 p-5 transition hover:shadow-md">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-yellow-100">Pending Review</p>
-                                <p class="mt-2 text-4xl font-bold">{{ $registrations->where('status', 'pending')->count() }}</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-yellow-600">Pending</p>
+                                <p class="mt-2 text-3xl font-bold text-slate-800">
+                                    {{ \App\Models\PendingRegistration::where('status', 'pending')->whereNotNull('email_verified_at')->count() }}
+                                </p>
                             </div>
-                            <div class="rounded-full bg-white/20 p-4">
-                                <i class="ri-time-line text-3xl"></i>
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-100 text-yellow-700">
+                                <i class="ri-time-line text-2xl"></i>
                             </div>
                         </div>
                     </article>
 
-                    <article class="rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-6 text-white shadow-lg">
+                    <article class="rounded-2xl border border-green-200 bg-green-50/30 p-5 transition hover:shadow-md">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-green-100">Approved</p>
-                                <p class="mt-2 text-4xl font-bold">{{ $registrations->where('status', 'approved')->count() }}</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-green-600">Approved</p>
+                                <p class="mt-2 text-3xl font-bold text-slate-800">
+                                    {{ \App\Models\PendingRegistration::where('status', 'approved')->whereNotNull('email_verified_at')->count() }}
+                                </p>
                             </div>
-                            <div class="rounded-full bg-white/20 p-4">
-                                <i class="ri-checkbox-circle-line text-3xl"></i>
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-700">
+                                <i class="ri-checkbox-circle-line text-2xl"></i>
                             </div>
                         </div>
                     </article>
 
-                    <article class="rounded-2xl bg-gradient-to-br from-red-500 to-red-600 p-6 text-white shadow-lg">
+                    <article class="rounded-2xl border border-red-200 bg-red-50/30 p-5 transition hover:shadow-md">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-red-100">Rejected</p>
-                                <p class="mt-2 text-4xl font-bold">{{ $registrations->where('status', 'rejected')->count() }}</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-red-600">Rejected</p>
+                                <p class="mt-2 text-3xl font-bold text-slate-800">
+                                    {{ \App\Models\PendingRegistration::where('status', 'rejected')->whereNotNull('email_verified_at')->count() }}
+                                </p>
                             </div>
-                            <div class="rounded-full bg-white/20 p-4">
-                                <i class="ri-close-circle-line text-3xl"></i>
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-700">
+                                <i class="ri-close-circle-line text-2xl"></i>
                             </div>
                         </div>
                     </article>
@@ -120,79 +127,145 @@
 
                 {{-- Registrations Table --}}
                 <div class="overflow-hidden rounded-2xl border border-slate-200/70">
-                    <table class="min-w-full divide-y divide-slate-200 text-left text-[13px] text-slate-600">
-                        <thead class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                            <tr>
-                                <th class="px-5 py-2.5">Student</th>
-                                <th class="px-5 py-2.5">Program</th>
-                                <th class="px-5 py-2.5">Contact</th>
-                                <th class="px-5 py-2.5">Status</th>
-                                <th class="px-5 py-2.5">Submitted</th>
-                                <th class="px-5 py-2.5 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 bg-white">
+                    <div class="hidden md:block">
+                        <table class="min-w-full divide-y divide-slate-200 text-left text-[13px] text-slate-600">
+                            <thead class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                <tr>
+                                    <th class="px-5 py-2.5">Student</th>
+                                    <th class="px-5 py-2.5">Program</th>
+                                    <th class="px-5 py-2.5">Contact</th>
+                                    <th class="px-5 py-2.5">Status</th>
+                                    <th class="px-5 py-2.5">Submitted</th>
+                                    <th class="px-5 py-2.5 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 bg-white">
+                                @forelse($registrations as $registration)
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="px-5 py-3">
+                                            <div class="flex items-center gap-3">
+                                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a] text-white font-semibold text-sm">
+                                                    {{ substr($registration->first_name, 0, 1) }}{{ substr($registration->last_name, 0, 1) }}
+                                                </div>
+                                                <div>
+                                                    <p class="font-semibold text-slate-900 text-[15px]">{{ $registration->first_name }} {{ $registration->last_name }}</p>
+                                                    <p class="text-xs text-slate-500">{{ $registration->index_number }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            <p class="text-sm font-medium text-slate-900">{{ $registration->class }}</p>
+                                            <p class="text-xs text-slate-500">Year {{ $registration->year }}</p>
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            <p class="text-sm text-slate-900">{{ $registration->email }}</p>
+                                            @if($registration->phone_number)
+                                                <p class="text-xs text-slate-500">{{ $registration->phone_number }}</p>
+                                            @endif
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            @if($registration->status === 'pending')
+                                                <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
+                                                    <i class="ri-time-line"></i> Pending
+                                                </span>
+                                            @elseif($registration->status === 'approved')
+                                                <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
+                                                    <i class="ri-checkbox-circle-line"></i> Approved
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800">
+                                                    <i class="ri-close-circle-line"></i> Rejected
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            <p class="text-sm text-slate-900">{{ $registration->created_at->format('M d, Y') }}</p>
+                                            <p class="text-xs text-slate-500">{{ $registration->created_at->diffForHumans() }}</p>
+                                        </td>
+                                        <td class="px-5 py-3 text-right">
+                                            <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-[12px] font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
+                                                <i class="ri-eye-line text-sm"></i> Review
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
+                                            <div class="flex flex-col items-center gap-3">
+                                                <i class="ri-inbox-line text-5xl text-slate-300"></i>
+                                                <p class="font-semibold text-slate-600">No pending registrations found</p>
+                                                <p>Try adjusting your filters</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="md:hidden">
+                        <div class="grid gap-4 p-4">
                             @forelse($registrations as $registration)
-                                <tr class="hover:bg-slate-50 transition">
-                                    <td class="px-5 py-3">
+                                <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
+                                    <div class="flex items-start justify-between mb-4">
                                         <div class="flex items-center gap-3">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a] text-white font-semibold text-sm">
                                                 {{ substr($registration->first_name, 0, 1) }}{{ substr($registration->last_name, 0, 1) }}
                                             </div>
                                             <div>
-                                                <p class="font-semibold text-slate-900 text-[15px]">{{ $registration->first_name }} {{ $registration->last_name }}</p>
+                                                <h2 class="text-base font-semibold text-slate-900">{{ $registration->first_name }} {{ $registration->last_name }}</h2>
                                                 <p class="text-xs text-slate-500">{{ $registration->index_number }}</p>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="px-5 py-3">
-                                        <p class="text-sm font-medium text-slate-900">{{ $registration->class }}</p>
-                                        <p class="text-xs text-slate-500">Year {{ $registration->year }}</p>
-                                    </td>
-                                    <td class="px-5 py-3">
-                                        <p class="text-sm text-slate-900">{{ $registration->email }}</p>
-                                        @if($registration->phone_number)
-                                            <p class="text-xs text-slate-500">{{ $registration->phone_number }}</p>
-                                        @endif
-                                    </td>
-                                    <td class="px-5 py-3">
                                         @if($registration->status === 'pending')
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-[11px] font-semibold text-yellow-800">
                                                 <i class="ri-time-line"></i> Pending
                                             </span>
                                         @elseif($registration->status === 'approved')
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
-                                                <i class="ri-checkbox-circle-line"></i> Approved
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[11px] font-semibold text-green-800">
+                                                <i class="ri-check-line"></i> Approved
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800">
-                                                <i class="ri-close-circle-line"></i> Rejected
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-[11px] font-semibold text-red-800">
+                                                <i class="ri-close-line"></i> Rejected
                                             </span>
                                         @endif
-                                    </td>
-                                    <td class="px-5 py-3">
-                                        <p class="text-sm text-slate-900">{{ $registration->created_at->format('M d, Y') }}</p>
-                                        <p class="text-xs text-slate-500">{{ $registration->created_at->diffForHumans() }}</p>
-                                    </td>
-                                    <td class="px-5 py-3 text-right">
-                                        <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-[12px] font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                            <i class="ri-eye-line text-sm"></i> Review
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
-                                        <div class="flex flex-col items-center gap-3">
-                                            <i class="ri-inbox-line text-5xl text-slate-300"></i>
-                                            <p class="font-semibold text-slate-600">No pending registrations found</p>
-                                            <p>Try adjusting your filters</p>
+                                    </div>
+
+                                    <dl class="space-y-2 text-xs text-slate-500 border-t border-slate-100 pt-3">
+                                        <div class="flex justify-between">
+                                            <dt class="font-medium text-slate-600">Program</dt>
+                                            <dd>{{ $registration->class }}</dd>
                                         </div>
-                                    </td>
-                                </tr>
+                                        <div class="flex justify-between">
+                                            <dt class="font-medium text-slate-600">Year</dt>
+                                            <dd>Year {{ $registration->year }}</dd>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <dt class="font-medium text-slate-600">Email</dt>
+                                            <dd>{{ $registration->email }}</dd>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <dt class="font-medium text-slate-600">Submitted</dt>
+                                            <dd>{{ $registration->created_at->format('M d, Y') }}</dd>
+                                        </div>
+                                    </dl>
+
+                                    <div class="mt-4 flex justify-end">
+                                        <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
+                                            <i class="ri-eye-line text-sm"></i> Review Request
+                                        </a>
+                                    </div>
+                                </article>
+                            @empty
+                                <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
+                                    <i class="ri-inbox-line text-3xl text-slate-300"></i>
+                                    <p class="mt-3 font-semibold text-slate-600">No pending registrations</p>
+                                    <p class="text-sm text-slate-500">Adjust filters to see more</p>
+                                </div>
                             @endforelse
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
 
                     @if($registrations->hasPages())
                         <div class="flex flex-col gap-3 border-t border-slate-200/70 pt-4 px-5 pb-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">

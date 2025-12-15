@@ -79,7 +79,7 @@
             </p>
             <p>
                 Need help?
-                <a href="mailto:acsesrepos@gmail.com" class="font-semibold text-[#16136a] hover:underline">Contact support</a>
+                <a href="mailto:gesaumat24@gmail.com" class="font-semibold text-[#16136a] hover:underline">Contact support</a>
             </p>
         </div>
     </div>

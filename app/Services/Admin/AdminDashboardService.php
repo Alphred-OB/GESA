@@ -38,7 +38,7 @@ class AdminDashboardService
             ->count();
 
         // Changed from CourseRegistration to PendingRegistration (student user registrations)
-        $registrationQuery = PendingRegistration::query();
+        $registrationQuery = PendingRegistration::query()->whereNotNull('email_verified_at');
         $pendingRegistrations = (clone $registrationQuery)
             ->where('status', 'pending')
             ->count();

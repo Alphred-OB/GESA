@@ -22,6 +22,9 @@ class PendingRegistration extends Model
         'admin_notes',
         'reviewed_at',
         'reviewed_by',
+        'verification_code',
+        'verification_expires_at',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -30,5 +33,7 @@ class PendingRegistration extends Model
 
     protected $casts = [
         'reviewed_at' => 'datetime',
+        'verification_expires_at' => 'datetime',
+        'email_verified_at' => 'datetime',
     ];
 }

@@ -35,13 +35,21 @@ class LoginController extends Controller
         $remember = $request->boolean('remember');
         $guards = ['admin', 'student'];
 
+        $userFound = false;
+
         foreach ($guards as $guard) {
             $provider = Auth::guard($guard)->getProvider();
             $credentialsWithRole = array_merge($credentials, ['role' => $guard]);
             $user = $provider->retrieveByCredentials($credentialsWithRole);
 
-            if (! $user || ! $provider->validateCredentials($user, $credentials)) {
-                continue;
+            if ($user) {
+                $userFound = true; // User exists with this role
+                
+                if (! $provider->validateCredentials($user, $credentials)) {
+                    continue; // Password wrong, try next guard? (Unlikely to match another guard with same email/diff pass, but safe to continue)
+                }
+            } else {
+                continue; // User not found in this guard
             }
 
             if (method_exists($user, 'getAttribute')) {
@@ -64,22 +72,23 @@ class LoginController extends Controller
                     ->withErrors(['verification' => __('Please verify your email before signing in. We just sent you a new verification link.')]);
             }
 
-            $this->loginOtpService->send($user, $guard);
+            // Login OTP disabled - log in directly
+            Auth::guard($guard)->login($user, $remember);
+            $request->session()->regenerate();
 
-            $request->session()->put('pending_login_otp', [
-                'user_id' => $user->getAuthIdentifier(),
-                'guard' => $guard,
-                'remember' => $remember,
-                'email' => $user->email,
-            ]);
+            $dashboard = $guard === 'admin' ? 'admin.dashboard' : 'student.dashboard';
 
-            return redirect()->route('auth.login.otp')
-                ->with('status', __('We sent a verification code to your email.'));
+            return redirect()->intended(route($dashboard));
         }
+
+        // If we reached here, login failed. Determine specific error.
+        $errorMessage = $userFound 
+            ? 'The password you entered is incorrect.' 
+            : 'We could not find an account with that email address.';
 
         return back()
             ->withErrors([
-                'email' => __('auth.failed'),
+                'email' => $errorMessage,
             ])
             ->onlyInput('email');
     }
