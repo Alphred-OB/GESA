@@ -20,18 +20,20 @@
                     <i class="ri-information-line text-3xl text-green-600 flex-shrink-0"></i>
                     <div class="space-y-3">
                         <h2 class="text-lg font-semibold text-green-900">What happens next?</h2>
-                        <ol class="space-y-2 text-sm text-green-800 list-decimal list-inside">
-                            <li>An administrator will review your registration request within <strong>24-48 hours</strong></li>
-                            <li>Please visit the GESA office with:
-                                <ul class="ml-6 mt-1 space-y-1 list-disc list-inside">
-                                    <li><strong>Continuing students:</strong> Your Student ID card</li>
-                                    <li><strong>Freshers:</strong> Your admission letter/forms</li>
-                                </ul>
+                        <ul class="space-y-3 text-sm text-green-800 list-none">
+                            <li class="flex gap-3">
+                                <i class="ri-checkbox-circle-fill text-green-600"></i>
+                                <span>Your documentation has been received and will be reviewed by an administrator within <strong>24 to 48 hours</strong>.</span>
                             </li>
-                            <li>Once verified, the admin will approve your account</li>
-                            <li>You'll receive an <strong>email notification</strong> when your account is approved</li>
-                            <li>After approval, you can log in using your username and password</li>
-                        </ol>
+                            <li class="flex gap-3">
+                                <i class="ri-mail-send-fill text-green-600"></i>
+                                <span>You will receive an <strong>email notification</strong> immediately once your account is approved.</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <i class="ri-login-circle-fill text-green-600"></i>
+                                <span>Once approved, you can log in to access your dashboard and manage your dues.</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -40,21 +42,9 @@
                 <div class="flex gap-4">
                     <i class="ri-question-line text-3xl text-blue-600 flex-shrink-0"></i>
                     <div class="space-y-2">
-                        <h3 class="font-semibold text-blue-900">Need help?</h3>
+                        <h3 class="font-semibold text-blue-900">Need help or follow-up?</h3>
                         <p class="text-sm text-blue-800">
-                            If you have any questions about your registration, please contact the GESA executive committee or visit the departmental office.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="rounded-xl border border-yellow-200 bg-yellow-50 p-6">
-                <div class="flex gap-4">
-                    <i class="ri-time-line text-3xl text-yellow-600 flex-shrink-0"></i>
-                    <div class="space-y-2">
-                        <h3 class="font-semibold text-yellow-900">Request taking too long?</h3>
-                        <p class="text-sm text-yellow-800">
-                            If your request hasn't been processed after 48 hours, please visit the GESA office during office hours to follow up.
+                            If your request hasn't been approved after <strong>48 hours</strong>, please reach out to the GESA executive committee or visit the departmental office for assistance.
                         </p>
                     </div>
                 </div>

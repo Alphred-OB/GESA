@@ -8,7 +8,7 @@
             </div>
             <h1 class="mt-8 text-3xl font-semibold tracking-tight text-white lg:text-4xl">Join the GESA Community</h1>
             <p class="mt-4 max-w-md text-base text-white/80 mx-auto">
-                Create an account to manage registrations, dues, and stay informed about departmental updates.
+                Submit a registration request to join. Once approved by an administrator, you'll be able to manage dues and access resources.
             </p>
         </div>
     </x-slot:hero>
@@ -19,7 +19,7 @@
             <p class="mt-2 text-sm text-slate-600">Provide your student details to get started.</p>
         </div>
 
-        <form method="POST" action="{{ route('auth.register.submit') }}" class="space-y-12" data-auth-form>
+        <form method="POST" action="{{ route('auth.register.submit') }}" enctype="multipart/form-data" class="space-y-12" data-auth-form>
             @csrf
 
             <div class="space-y-10">
@@ -80,8 +80,7 @@
 
                     <div class="space-y-2">
                         <label for="email" class="block text-sm font-medium text-slate-700">
-                            Student Email Address 
-                            <span class="text-xs font-normal text-slate-500">(University email only)</span>
+                            Email Address 
                         </label>
                         <div class="relative">
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -94,22 +93,14 @@
                                 value="{{ old('email') }}" 
                                 required 
                                 autocomplete="email" 
-                                pattern="^[a-z]{2}-[a-z0-9]+@st\.umat\.edu\.gh$"
-                                data-validate-email-prefix
                                 class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" 
-                                placeholder="gm-aopoku3124@st.umat.edu.gh" 
+                                placeholder="name@example.com" 
                             />
                         </div>
                         
                         <p class="text-xs text-slate-600">
-                            Don't have your student email yet? 
-                            <a href="{{ route('auth.fresher-register') }}" class="font-semibold text-[#16136a] underline hover:text-[#18188a]">
-                                Click here for Fresher Registration
-                            </a>
+                            You can use your personal or university email address.
                         </p>
-                        
-                        <!-- Real-time validation feedback -->
-                        <p id="email-validation-message" class="text-sm text-red-600 hidden"></p>
                         
                         @error('email')
                             <p class="text-sm text-red-600">{{ $message }}</p>
@@ -163,6 +154,94 @@
                             </div>
                             @error('year')
                                 <p class="text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="lg:col-span-2 space-y-4">
+                            <label class="block text-sm font-medium text-slate-700">
+                                Student ID or Registration Slip
+                                <span class="text-xs font-normal text-slate-500">(Optional)</span>
+                            </label>
+
+                            <div x-data="{ 
+                                fileName: '', 
+                                fileSize: '',
+                                isDragOver: false,
+                                handleFileSelect(e) {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        this.fileName = file.name;
+                                        this.fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                                    }
+                                },
+                                removeFile() {
+                                    this.fileName = '';
+                                    this.fileSize = '';
+                                    this.$refs.fileInput.value = '';
+                                }
+                            }" class="relative">
+                                <!-- Hidden Native Input -->
+                                <input 
+                                    type="file" 
+                                    id="student_document" 
+                                    name="student_document" 
+                                    accept="image/png,image/jpeg,image/jpg,application/pdf" 
+                                    class="sr-only"
+                                    x-ref="fileInput"
+                                    @change="handleFileSelect"
+                                />
+
+                                <!-- Drag & Drop Zone -->
+                                <div 
+                                    @click="$refs.fileInput.click()"
+                                    @dragover.prevent="isDragOver = true"
+                                    @dragleave.prevent="isDragOver = false"
+                                    @drop.prevent="isDragOver = false; $refs.fileInput.files = $event.dataTransfer.files; handleFileSelect({target: $refs.fileInput})"
+                                    :class="{
+                                        'border-[#16136a] bg-[#16136a]/5 ring-4 ring-[#16136a]/10': isDragOver,
+                                        'border-slate-300 bg-slate-50 hover:bg-slate-100': !isDragOver && !fileName,
+                                        'border-green-500 bg-green-50': fileName
+                                    }"
+                                    class="relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed transition-all duration-200"
+                                >
+                                    <template x-if="!fileName">
+                                        <div class="flex flex-col items-center p-6 text-center">
+                                            <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-slate-200">
+                                                <i class="ri-upload-cloud-2-line text-2xl text-[#16136a]"></i>
+                                            </div>
+                                            <p class="text-sm font-semibold text-slate-700">
+                                                Click to upload <span class="text-slate-500">or drag and drop</span>
+                                            </p>
+                                            <p class="mt-1 text-xs text-slate-500">PNG, JPG or PDF (MAX. 2MB)</p>
+                                        </div>
+                                    </template>
+
+                                    <template x-if="fileName">
+                                        <div class="flex w-full items-center gap-4 p-4">
+                                            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-500/10 text-green-600">
+                                                <i class="ri-file-check-line text-2xl"></i>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <p class="truncate text-sm font-semibold text-slate-800" x-text="fileName"></p>
+                                                <p class="text-xs text-slate-500" x-text="fileSize"></p>
+                                            </div>
+                                            <button 
+                                                @click.stop="removeFile()" 
+                                                type="button"
+                                                class="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                                            >
+                                                <i class="ri-close-line text-xl"></i>
+                                            </button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            @error('student_document')
+                                <p class="text-sm text-red-600 font-medium flex items-center gap-1">
+                                    <i class="ri-error-warning-line"></i>
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
                     </div>
@@ -283,8 +362,8 @@
 
             <div class="flex items-center justify-end">
                 <button type="submit" class="flex items-center justify-center space-x-2 rounded-xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/30 transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-[#18188a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                    <i class="ri-user-add-line text-lg" aria-hidden="true"></i>
-                    <span>Create account</span>
+                    <i class="ri-send-plane-line text-lg" aria-hidden="true"></i>
+                    <span>Submit Request</span>
                 </button>
             </div>
         </form>

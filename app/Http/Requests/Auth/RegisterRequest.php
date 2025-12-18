@@ -32,38 +32,14 @@ class RegisterRequest extends FormRequest
                 'string', 
                 'email', 
                 'max:100',
-                // Enforce university email domain
-                'regex:/^[a-z]{2}-[a-z0-9]+@st\.umat\.edu\.gh$/i',
-                // Custom validation to match email prefix with selected class
-                function ($attribute, $value, $fail) {
-                    $class = $this->input('class');
-                    if (!$class) {
-                        return; // Skip if class is not selected
-                    }
-
-                    // Extract the prefix from the email (first 2 characters before the dash)
-                    if (preg_match('/^([a-z]{2})-/i', $value, $matches)) {
-                        $emailPrefix = strtoupper($matches[1]);
-                        
-                        // Map class to expected prefix
-                        $classPrefixMap = [
-                            'Geomatic Engineering' => 'GM',
-                            'Spatial Planning' => 'SP',
-                            'Land Administration' => 'LA',
-                        ];
-                        
-                        $expectedPrefix = $classPrefixMap[$class] ?? null;
-                        
-                        if ($expectedPrefix && $emailPrefix !== $expectedPrefix) {
-                            $fail("Your email prefix ({$emailPrefix}) does not match your selected program. Expected {$expectedPrefix} for {$class}.");
-                        }
-                    }
-                },
+                Rule::unique('users', 'email'),
+                Rule::unique('pending_registrations', 'email')->where(fn ($query) => $query->where('status', 'pending')),
             ],
             'phone_number' => ['nullable', 'digits_between:9,11'],
             'index_number' => ['required', 'digits_between:9,11'],
             'class' => ['required', Rule::in(['Geomatic Engineering', 'Land Administration', 'Spatial Planning'])],
             'year' => ['required', Rule::in(['1', '2', '3', '4'])],
+            'student_document' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
             'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
             'accept_terms' => ['accepted'],
         ];
