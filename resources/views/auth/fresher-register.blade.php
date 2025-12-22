@@ -60,14 +60,85 @@
                         </div>
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" x-data="{
+                        username: '{{ old('username') }}',
+                        checking: false,
+                        available: null,
+                        message: '',
+                        timeout: null,
+                        async checkUsername() {
+                            if (!this.username || this.username.length < 2) {
+                                this.available = null;
+                                this.message = '';
+                                return;
+                            }
+                            
+                            this.checking = true;
+                            
+                            try {
+                                const response = await fetch('{{ route('api.check-username') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({ username: this.username })
+                                });
+                                
+                                const data = await response.json();
+                                this.available = data.available;
+                                this.message = data.message;
+                            } catch (error) {
+                                this.available = null;
+                                this.message = '';
+                            } finally {
+                                this.checking = false;
+                            }
+                        },
+                        debounceCheck() {
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => this.checkUsername(), 500);
+                        }
+                    }">
                         <label for="username" class="block text-sm font-medium text-slate-700">Username</label>
                         <div class="relative">
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                                 <i class="ri-user-star-line text-lg" aria-hidden="true"></i>
                             </span>
-                            <input id="username" name="username" type="text" value="{{ old('username') }}" required autocomplete="username" class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="kmensah" />
+                            <input 
+                                id="username" 
+                                name="username" 
+                                type="text" 
+                                x-model="username"
+                                @input="debounceCheck()"
+                                required 
+                                autocomplete="username" 
+                                :class="{
+                                    'border-green-500 focus:border-green-500 focus:ring-green-500/30': available === true,
+                                    'border-red-500 focus:border-red-500 focus:ring-red-500/30': available === false,
+                                    'border-slate-300 focus:border-[#16136a] focus:ring-[#16136a]/30': available === null
+                                }"
+                                class="block w-full rounded-xl border bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:outline-none focus:ring-2" 
+                                placeholder="kmensah" 
+                            />
+                            <!-- Status indicator -->
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <template x-if="checking">
+                                    <i class="ri-loader-4-line animate-spin text-lg text-slate-400"></i>
+                                </template>
+                                <template x-if="!checking && available === true">
+                                    <i class="ri-checkbox-circle-fill text-lg text-green-500"></i>
+                                </template>
+                                <template x-if="!checking && available === false">
+                                    <i class="ri-close-circle-fill text-lg text-red-500"></i>
+                                </template>
+                            </div>
                         </div>
+                        <!-- Availability message -->
+                        <p x-show="message && !checking" 
+                           x-text="message"
+                           :class="available ? 'text-green-600' : 'text-red-600'"
+                           class="text-sm font-medium transition-all"></p>
                         @error('username')
                             <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror

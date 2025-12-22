@@ -26,7 +26,14 @@ class RegisterRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name' => ['required', 'string', 'max:50'],
-            'username' => ['required', 'string', 'max:50', 'alpha_dash'],
+            'username' => [
+                'required', 
+                'string', 
+                'max:50', 
+                'alpha_dash',
+                Rule::unique('users', 'username'),
+                Rule::unique('pending_registrations', 'username')->where(fn ($query) => $query->where('status', 'pending')),
+            ],
             'email' => [
                 'required', 
                 'string', 
@@ -53,6 +60,7 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'username.unique' => 'This username is already taken. Please choose a different one.',
             'email.regex' => 'You must use your official university email address (e.g., gm-yourname1234@st.umat.edu.gh). If you don\'t have access to your university email, please contact the administrator.',
             'email.required' => 'Email address is required.',
             'email.email' => 'Please provide a valid email address.',

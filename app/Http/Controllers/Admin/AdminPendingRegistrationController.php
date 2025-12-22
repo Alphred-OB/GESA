@@ -70,7 +70,11 @@ class AdminPendingRegistrationController extends Controller
             return back()->withErrors(['error' => 'This registration has already been approved.']);
         }
 
-        $this->processApproval($registration, $request->input('notes'));
+        try {
+            $this->processApproval($registration, $request->input('notes'));
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
 
         $fullName = trim($registration->first_name . ' ' . $registration->last_name);
 
@@ -90,17 +94,29 @@ class AdminPendingRegistrationController extends Controller
         ]);
 
         $count = 0;
+        $failed = [];
+        
         foreach ($request->ids as $id) {
             $registration = PendingRegistration::find($id);
             if ($registration && $registration->status === 'pending') {
-                $this->processApproval($registration, 'Bulk approval');
-                $count++;
+                try {
+                    $this->processApproval($registration, 'Bulk approval');
+                    $count++;
+                } catch (\RuntimeException $e) {
+                    $failed[] = "{$registration->first_name} {$registration->last_name} ({$registration->username})";
+                }
             }
+        }
+
+        $message = "{$count} registrations have been approved successfully.";
+        
+        if (!empty($failed)) {
+            $message .= ' Failed to approve: ' . implode(', ', $failed) . ' (duplicate username/email detected).';
         }
 
         return redirect()
             ->route('admin.pending-registrations.index')
-            ->with('success', "{$count} registrations have been approved successfully.");
+            ->with('success', $message);
     }
 
     /**
@@ -151,10 +167,34 @@ public function reject(Request $request, PendingRegistration $registration): Red
 
     /**
      * Process logic for approving a registration.
+     * 
+     * @throws \RuntimeException if username, email, or index_number already exists
      */
     private function processApproval(PendingRegistration $registration, ?string $notes = null): void
     {
         $fullName = trim($registration->first_name . ' ' . $registration->last_name);
+
+        // Check for existing conflicts before creating
+        $conflicts = [];
+        
+        if (User::where('username', $registration->username)->exists()) {
+            $conflicts[] = "username '{$registration->username}'";
+        }
+        
+        if (User::where('email', $registration->email)->exists()) {
+            $conflicts[] = "email '{$registration->email}'";
+        }
+        
+        if ($registration->index_number && User::where('index_number', $registration->index_number)->exists()) {
+            $conflicts[] = "reference number '{$registration->index_number}'";
+        }
+        
+        if (!empty($conflicts)) {
+            throw new \RuntimeException(
+                'Cannot approve: A user already exists with ' . implode(' and ', $conflicts) . '. ' .
+                'Please reject this registration or ask the student to use a different username.'
+            );
+        }
 
         // Create the user account
         $user = User::create([

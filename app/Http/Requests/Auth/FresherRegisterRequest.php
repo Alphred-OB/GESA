@@ -52,6 +52,7 @@ class FresherRegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'username.unique' => 'This username is already taken. Please choose a different one.',
             'email.not_regex' => 'Please use a personal email address. If you have access to your university email, use the regular registration form instead.',
             'student_id.image' => 'Student ID must be an image file.',
             'student_id.max' => 'Student ID file size must not exceed 2MB.',

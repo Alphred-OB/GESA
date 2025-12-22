@@ -31,6 +31,29 @@ Route::view('/legal/cookies', 'legal.cookies')->name('legal.cookies');
 Route::view('/developers', 'developers')->name('marketing.developers');
 Route::view('/legal/accessibility', 'legal.accessibility')->name('legal.accessibility');
 
+// Username availability check (public API for registration forms)
+Route::post('/api/check-username', function (\Illuminate\Http\Request $request) {
+    $request->validate(['username' => 'required|string|max:50']);
+    
+    $username = strtolower(trim($request->username));
+    
+    // Check in users table
+    $existsInUsers = \App\Models\User::where('username', $username)->exists();
+    
+    // Check in pending registrations (only pending ones)
+    $existsInPending = \App\Models\PendingRegistration::where('username', $username)
+        ->where('status', 'pending')
+        ->exists();
+    
+    $available = !$existsInUsers && !$existsInPending;
+    
+    return response()->json([
+        'available' => $available,
+        'message' => $available ? 'Username is available' : 'This username is already taken'
+    ]);
+})->name('api.check-username');
+
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])
         ->name('login');
