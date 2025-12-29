@@ -229,6 +229,12 @@
                             <tr class="transition hover:bg-slate-50/70">
                                 <td class="px-5 py-4">
                                     <p class="text-sm font-semibold text-slate-900">{{ $due->description }}</p>
+                                    @if ($due->payment_status === 'owing' && $due->rejection_reason)
+                                        <div class="mt-2 rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-[11px] text-rose-700">
+                                            <p class="font-bold uppercase tracking-widest text-[#9f1239] mb-1">Previous Payment Rejected</p>
+                                            <p>{{ $due->rejection_reason }}</p>
+                                        </div>
+                                    @endif
                                     @if ($due->payment_notes)
                                         <p class="mt-1 text-xs text-slate-500">{{ $due->payment_notes }}</p>
                                     @endif
@@ -246,13 +252,22 @@
                                 <td class="px-5 py-4 text-xs text-slate-500">{{ $due->payment_reference ?? $due->reference_number ?? '—' }}</td>
                                 <td class="px-5 py-4">
                                     @if ($status === 'owing')
-                                        <form method="POST" action="{{ route('student.payments.paystack.initialize', $due) }}" class="flex justify-end">
-                                            @csrf
-                                            <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#18188a]">
-                                                <i class="ri-secure-payment-line text-base" aria-hidden="true"></i>
-                                                Pay with Paystack
-                                            </button>
-                                        </form>
+                                        <div class="flex flex-col gap-2 lg:items-end">
+                                            @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
+                                                <a href="{{ route('student.payments.manual.show', $due) }}" class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50">
+                                                    <i class="ri-file-upload-line text-base" aria-hidden="true"></i>
+                                                    Pay Manually
+                                                </a>
+                                            @else
+                                                <form method="POST" action="{{ route('student.payments.paystack.initialize', $due) }}">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#18188a]">
+                                                        <i class="ri-secure-payment-line text-base" aria-hidden="true"></i>
+                                                        Pay with Paystack
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     @elseif ($status === 'pending_verification' && $due->payment_method === 'paystack')
                                         <div class="text-right text-xs font-semibold text-amber-600">Verifying…</div>
                                     @elseif ($status === 'paid')
@@ -301,6 +316,12 @@
                                     <dt>Reference</dt>
                                     <dd class="text-right text-slate-700">{{ $due->payment_reference ?? $due->reference_number ?? '—' }}</dd>
                                 </div>
+                                @if ($due->payment_status === 'owing' && $due->rejection_reason)
+                                    <div class="mt-2 rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-[11px] text-rose-700">
+                                        <p class="font-bold uppercase tracking-widest text-[#9f1239] mb-1">Previous Payment Rejected</p>
+                                        <p>{{ $due->rejection_reason }}</p>
+                                    </div>
+                                @endif
                                 @if ($due->payment_notes)
                                     <div class="mt-2 rounded-xl bg-slate-50 p-3 text-left text-xs text-slate-500">
                                         {{ $due->payment_notes }}
@@ -308,13 +329,22 @@
                                 @endif
                             </dl>
                             @if ($due->payment_status === 'owing')
-                                <form method="POST" action="{{ route('student.payments.paystack.initialize', $due) }}" class="mt-4">
-                                    @csrf
-                                    <button type="submit" class="w-full rounded-full bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#18188a]">
-                                        <i class="ri-secure-payment-line text-base" aria-hidden="true"></i>
-                                        Pay Now
-                                    </button>
-                                </form>
+                                <div class="mt-4 flex flex-col gap-2">
+                                    @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
+                                        <a href="{{ route('student.payments.manual.show', $due) }}" class="flex h-10 w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50">
+                                            <i class="ri-file-upload-line text-base" aria-hidden="true"></i>
+                                            Pay Manually
+                                        </a>
+                                    @else
+                                        <form method="POST" action="{{ route('student.payments.paystack.initialize', $due) }}">
+                                            @csrf
+                                            <button type="submit" class="w-full rounded-full bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#18188a]">
+                                                <i class="ri-secure-payment-line text-base" aria-hidden="true"></i>
+                                                Pay Now
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             @elseif ($due->payment_status === 'pending_verification' && $due->payment_method === 'paystack')
                                 <p class="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-amber-600">Verifying Paystack payment…</p>
                             @elseif ($due->payment_status === 'paid')

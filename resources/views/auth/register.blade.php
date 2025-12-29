@@ -68,13 +68,13 @@
                             this.checking = true;
                             
                             try {
-                                const response = await fetch('{{ route('api.check-username') }}', {
+                                const response = await fetch('{{ route('api.check-availability') }}', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
                                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                     },
-                                    body: JSON.stringify({ username: this.username })
+                                    body: JSON.stringify({ field: 'username', value: this.username })
                                 });
                                 
                                 const data = await response.json();
@@ -136,20 +136,135 @@
                         @enderror
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" x-data="{
+                        indexNumber: '{{ old('index_number') }}',
+                        checking: false,
+                        available: null,
+                        message: '',
+                        timeout: null,
+                        async checkIndexNumber() {
+                            // Basic length check (wait until at least 9 chars)
+                            if (!this.indexNumber || this.indexNumber.length < 9) {
+                                this.available = null;
+                                this.message = '';
+                                return;
+                            }
+                            
+                            this.checking = true;
+                            
+                            try {
+                                const response = await fetch('{{ route('api.check-availability') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({ field: 'index_number', value: this.indexNumber })
+                                });
+                                
+                                const data = await response.json();
+                                this.available = data.available;
+                                this.message = data.message;
+                            } catch (error) {
+                                this.available = null;
+                                this.message = '';
+                            } finally {
+                                this.checking = false;
+                            }
+                        },
+                        debounceCheck() {
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => this.checkIndexNumber(), 500);
+                        }
+                    }">
                         <label for="index_number" class="block text-sm font-medium text-slate-700">Reference number</label>
                         <div class="relative">
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                                 <i class="ri-hashtag text-lg" aria-hidden="true"></i>
                             </span>
-                            <input id="index_number" name="index_number" type="text" value="{{ old('index_number') }}" required inputmode="numeric" pattern="\d{9,11}" maxlength="11" data-numeric-only class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="9012345623" />
+                            <input 
+                                id="index_number" 
+                                name="index_number" 
+                                type="text" 
+                                x-model="indexNumber"
+                                @input="debounceCheck()"
+                                required 
+                                inputmode="numeric" 
+                                pattern="\d{9,11}" 
+                                maxlength="11" 
+                                data-numeric-only 
+                                :class="{
+                                    'border-green-500 focus:border-green-500 focus:ring-green-500/30': available === true,
+                                    'border-red-500 focus:border-red-500 focus:ring-red-500/30': available === false,
+                                    'border-slate-300 focus:border-[#16136a] focus:ring-[#16136a]/30': available === null
+                                }"
+                                class="block w-full rounded-xl border bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:outline-none focus:ring-2" 
+                                placeholder="9012345623" 
+                            />
+                            <!-- Status indicator -->
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <template x-if="checking">
+                                    <i class="ri-loader-4-line animate-spin text-lg text-slate-400"></i>
+                                </template>
+                                <template x-if="!checking && available === true">
+                                    <i class="ri-checkbox-circle-fill text-lg text-green-500"></i>
+                                </template>
+                                <template x-if="!checking && available === false">
+                                    <i class="ri-close-circle-fill text-lg text-red-500"></i>
+                                </template>
+                            </div>
                         </div>
+                        <!-- Availability message -->
+                        <p x-show="message && !checking" 
+                           x-text="message"
+                           :class="available ? 'text-green-600' : 'text-red-600'"
+                           class="text-sm font-medium transition-all"></p>
                         @error('index_number')
                             <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" x-data="{
+                        email: '{{ old('email') }}',
+                        checking: false,
+                        available: null,
+                        message: '',
+                        timeout: null,
+                        async checkEmail() {
+                            // Basic format check
+                            if (!this.email || !this.email.includes('@') || this.email.length < 5) {
+                                this.available = null;
+                                this.message = '';
+                                return;
+                            }
+                            
+                            this.checking = true;
+                            
+                            try {
+                                const response = await fetch('{{ route('api.check-availability') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({ field: 'email', value: this.email })
+                                });
+                                
+                                const data = await response.json();
+                                this.available = data.available;
+                                this.message = data.message;
+                            } catch (error) {
+                                this.available = null;
+                                this.message = '';
+                            } finally {
+                                this.checking = false;
+                            }
+                        },
+                        debounceCheck() {
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => this.checkEmail(), 800);
+                        }
+                    }">
                         <label for="email" class="block text-sm font-medium text-slate-700">
                             Email Address 
                         </label>
@@ -161,31 +276,129 @@
                                 id="email" 
                                 name="email" 
                                 type="email" 
-                                value="{{ old('email') }}" 
+                                x-model="email"
+                                @input="debounceCheck()"
                                 required 
                                 autocomplete="email" 
-                                class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" 
+                                :class="{
+                                    'border-green-500 focus:border-green-500 focus:ring-green-500/30': available === true,
+                                    'border-red-500 focus:border-red-500 focus:ring-red-500/30': available === false,
+                                    'border-slate-300 focus:border-[#16136a] focus:ring-[#16136a]/30': available === null
+                                }"
+                                class="block w-full rounded-xl border bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:outline-none focus:ring-2" 
                                 placeholder="name@example.com" 
                             />
+                            <!-- Status indicator -->
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <template x-if="checking">
+                                    <i class="ri-loader-4-line animate-spin text-lg text-slate-400"></i>
+                                </template>
+                                <template x-if="!checking && available === true">
+                                    <i class="ri-checkbox-circle-fill text-lg text-green-500"></i>
+                                </template>
+                                <template x-if="!checking && available === false">
+                                    <i class="ri-close-circle-fill text-lg text-red-500"></i>
+                                </template>
+                            </div>
                         </div>
                         
                         <p class="text-xs text-slate-600">
                             You can use your personal or university email address.
                         </p>
                         
+                        <!-- Availability message -->
+                        <p x-show="message && !checking" 
+                           x-text="message"
+                           :class="available ? 'text-green-600' : 'text-red-600'"
+                           class="text-sm font-medium transition-all"></p>
+                        
                         @error('email')
                             <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" x-data="{
+                        phoneNumber: '{{ old('phone_number') }}',
+                        checking: false,
+                        available: null,
+                        message: '',
+                        timeout: null,
+                        async checkPhoneNumber() {
+                            // Basic length check
+                            if (!this.phoneNumber || this.phoneNumber.length < 9) {
+                                this.available = null;
+                                this.message = '';
+                                return;
+                            }
+                            
+                            this.checking = true;
+                            
+                            try {
+                                const response = await fetch('{{ route('api.check-availability') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({ field: 'phone_number', value: this.phoneNumber })
+                                });
+                                
+                                const data = await response.json();
+                                this.available = data.available;
+                                this.message = data.message;
+                            } catch (error) {
+                                this.available = null;
+                                this.message = '';
+                            } finally {
+                                this.checking = false;
+                            }
+                        },
+                        debounceCheck() {
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => this.checkPhoneNumber(), 500);
+                        }
+                    }">
                         <label for="phone_number" class="block text-sm font-medium text-slate-700">Phone number</label>
                         <div class="relative">
                             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                                 <i class="ri-phone-line text-lg" aria-hidden="true"></i>
                             </span>
-                            <input id="phone_number" name="phone_number" type="tel" value="{{ old('phone_number') }}" inputmode="numeric" pattern="\d{9,11}" maxlength="11" data-numeric-only class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="0541234567" />
+                            <input 
+                                id="phone_number" 
+                                name="phone_number" 
+                                type="tel" 
+                                x-model="phoneNumber"
+                                @input="debounceCheck()"
+                                inputmode="numeric" 
+                                pattern="\d{9,11}" 
+                                maxlength="11" 
+                                data-numeric-only 
+                                :class="{
+                                    'border-green-500 focus:border-green-500 focus:ring-green-500/30': available === true,
+                                    'border-red-500 focus:border-red-500 focus:ring-red-500/30': available === false,
+                                    'border-slate-300 focus:border-[#16136a] focus:ring-[#16136a]/30': available === null
+                                }"
+                                class="block w-full rounded-xl border bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:outline-none focus:ring-2" 
+                                placeholder="0541234567" 
+                            />
+                            <!-- Status indicator -->
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <template x-if="checking">
+                                    <i class="ri-loader-4-line animate-spin text-lg text-slate-400"></i>
+                                </template>
+                                <template x-if="!checking && available === true">
+                                    <i class="ri-checkbox-circle-fill text-lg text-green-500"></i>
+                                </template>
+                                <template x-if="!checking && available === false">
+                                    <i class="ri-close-circle-fill text-lg text-red-500"></i>
+                                </template>
+                            </div>
                         </div>
+                        <!-- Availability message -->
+                        <p x-show="message && !checking" 
+                           x-text="message"
+                           :class="available ? 'text-green-600' : 'text-red-600'"
+                           class="text-sm font-medium transition-all"></p>
                         @error('phone_number')
                             <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror

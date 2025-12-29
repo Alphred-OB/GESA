@@ -32,8 +32,15 @@ class FresherRegisterRequest extends FormRequest
                 'max:100',
                 // Block university emails - this is for freshers only
                 'not_regex:/^[a-z]{2}-[a-z0-9]+@st\.umat\.edu\.gh$/i',
+                'unique:users,email',
+                'unique:pending_registrations,email',
             ],
-            'phone_number' => ['nullable', 'digits_between:9,11'],
+            'phone_number' => [
+                'nullable', 
+                'digits_between:9,11',
+                'unique:users,phone_number',
+                'unique:pending_registrations,phone_number',
+            ],
             'index_number' => ['required', 'digits_between:9,11', 'unique:pending_registrations,index_number', 'unique:users,index_number'],
             'class' => ['required', \Illuminate\Validation\Rule::in(['Geomatic Engineering', 'Land Administration', 'Spatial Planning'])],
             'year' => ['required', \Illuminate\Validation\Rule::in(['1', '2', '3', '4'])],

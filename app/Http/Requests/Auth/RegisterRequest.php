@@ -42,8 +42,18 @@ class RegisterRequest extends FormRequest
                 Rule::unique('users', 'email'),
                 Rule::unique('pending_registrations', 'email')->where(fn ($query) => $query->where('status', 'pending')),
             ],
-            'phone_number' => ['nullable', 'digits_between:9,11'],
-            'index_number' => ['required', 'digits_between:9,11'],
+            'phone_number' => [
+                'nullable', 
+                'digits_between:9,11',
+                Rule::unique('users', 'phone_number'),
+                Rule::unique('pending_registrations', 'phone_number')->where(fn ($query) => $query->where('status', 'pending')),
+            ],
+            'index_number' => [
+                'required', 
+                'digits_between:9,11',
+                Rule::unique('users', 'index_number'),
+                Rule::unique('pending_registrations', 'index_number')->where(fn ($query) => $query->where('status', 'pending')),
+            ],
             'class' => ['required', Rule::in(['Geomatic Engineering', 'Land Administration', 'Spatial Planning'])],
             'year' => ['required', Rule::in(['1', '2', '3', '4'])],
             'student_document' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
@@ -61,6 +71,8 @@ class RegisterRequest extends FormRequest
     {
         return [
             'username.unique' => 'This username is already taken. Please choose a different one.',
+            'index_number.unique' => 'This reference number is already registered.',
+            'phone_number.unique' => 'This phone number is already registered.',
             'email.regex' => 'You must use your official university email address (e.g., gm-yourname1234@st.umat.edu.gh). If you don\'t have access to your university email, please contact the administrator.',
             'email.required' => 'Email address is required.',
             'email.email' => 'Please provide a valid email address.',

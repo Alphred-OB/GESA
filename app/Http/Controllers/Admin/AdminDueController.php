@@ -8,6 +8,10 @@ use App\Http\Requests\Admin\UpdateDueRequest;
 use App\Models\Due;
 use App\Services\Admin\AdminDueService;
 use Illuminate\Http\RedirectResponse;
+use App\Mail\Student\ManualPaymentApproved;
+use App\Mail\Student\ManualPaymentRejected;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -97,6 +101,82 @@ class AdminDueController extends Controller
                 'description' => $due->description,
                 'student' => $due->student?->fullname ?? $due->student?->username ?? 'student #' . $due->student_id,
             ]));
+    }
+
+    /**
+     * Show the verification page for a manual payment.
+     */
+    public function verify(Due $due): View
+    {
+        if ($due->payment_status !== 'pending_verification') {
+            abort(404);
+        }
+
+        return view('dashboards.admin.dues.verify', [
+            'title' => 'Verify Payment',
+            'due' => $due,
+        ]);
+    }
+
+    /**
+     * Approve a manual payment.
+     */
+    public function approve(Request $request, Due $due): RedirectResponse
+    {
+        if ($due->payment_status !== 'pending_verification') {
+            abort(404);
+        }
+
+        $admin = $request->user('admin');
+
+        $due->update([
+            'payment_status' => 'paid',
+            'payment_date' => now(),
+            'verification_date' => now(),
+            'verified_by' => $admin->user_id,
+            'verification_notes' => $request->input('verification_notes') ?? __('Approved by admin.'),
+        ]);
+
+        // Send Email
+        Mail::to($due->student->email)->send(new ManualPaymentApproved($due));
+
+        return redirect()
+            ->route('admin.dues.index')
+            ->with('status', __('Payment approved and student notified.'));
+    }
+
+    /**
+     * Reject a manual payment.
+     */
+    public function reject(Request $request, Due $due): RedirectResponse
+    {
+        if ($due->payment_status !== 'pending_verification') {
+            abort(404);
+        }
+
+        $request->validate([
+            'rejection_reason' => 'required|string|max:500',
+        ]);
+
+        $admin = $request->user('admin');
+
+        $due->update([
+            'payment_status' => 'owing',
+            'rejection_reason' => $request->input('rejection_reason'),
+            'verification_notes' => __('Rejected by admin.'),
+            'verified_by' => $admin->user_id,
+            'verification_date' => now(),
+        ]);
+
+        // Delete proof? Or keep it? Usually keep for records but maybe hide it. 
+        // For now keep it.
+
+        // Send Email
+        Mail::to($due->student->email)->send(new ManualPaymentRejected($due));
+
+        return redirect()
+            ->route('admin.dues.index')
+            ->with('status', __('Payment rejected and student notified.'));
     }
 
     public function export(Request $request): StreamedResponse

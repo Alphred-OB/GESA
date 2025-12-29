@@ -104,6 +104,10 @@
                         <i class="ri-pie-chart-2-line text-base" aria-hidden="true"></i>
                         View analytics
                     </a>
+                    <a href="{{ route('admin.payment-settings.index') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#16136a]/20 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a] shadow-sm transition hover:-translate-y-0.5 hover:bg-white/90">
+                        <i class="ri-settings-4-line text-base" aria-hidden="true"></i>
+                        Payment Settings
+                    </a>
                     <a href="{{ route('admin.dues.create') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
                         <i class="ri-add-line text-lg"></i>
                         New due
@@ -247,6 +251,7 @@
                                 <th class="px-5 py-2.5">Amount</th>
                                 <th class="px-5 py-2.5">Due date</th>
                                 <th class="px-5 py-2.5">Status</th>
+                                <th class="px-5 py-2.5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 bg-white">
@@ -274,6 +279,16 @@
                                         ])>
                                             {{ $statusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status)) }}
                                         </span>
+                                    </td>
+                                    <td class="px-5 py-3 text-right">
+                                        @if ($status === 'pending_verification')
+                                            <a href="{{ route('admin.dues.verify', $due) }}" class="inline-flex items-center gap-2 rounded-xl bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
+                                                <i class="ri-checkbox-circle-line text-sm"></i>
+                                                Verify
+                                            </a>
+                                        @else
+                                            <div class="text-xs text-slate-400">—</div>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

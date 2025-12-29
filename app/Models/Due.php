@@ -34,6 +34,7 @@ class Due extends Model
         'payment_notes',
         'recorded_by',
         'rejection_reason',
+        'payment_proof',
     ];
 
     protected $casts = [

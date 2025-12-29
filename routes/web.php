@@ -31,27 +31,44 @@ Route::view('/legal/cookies', 'legal.cookies')->name('legal.cookies');
 Route::view('/developers', 'developers')->name('marketing.developers');
 Route::view('/legal/accessibility', 'legal.accessibility')->name('legal.accessibility');
 
-// Username availability check (public API for registration forms)
-Route::post('/api/check-username', function (\Illuminate\Http\Request $request) {
-    $request->validate(['username' => 'required|string|max:50']);
+// Generic availability check (public API for registration forms)
+Route::post('/api/check-availability', function (\Illuminate\Http\Request $request) {
+    $request->validate([
+        'field' => 'required|in:username,email,index_number,phone_number',
+        'value' => 'required|string|max:100',
+    ]);
     
-    $username = strtolower(trim($request->username));
+    $field = $request->field;
+    $value = trim($request->value);
+    
+    if ($field === 'username' || $field === 'email') {
+        $value = strtolower($value);
+    }
     
     // Check in users table
-    $existsInUsers = \App\Models\User::where('username', $username)->exists();
+    $existsInUsers = \App\Models\User::where($field, $value)->exists();
     
     // Check in pending registrations (only pending ones)
-    $existsInPending = \App\Models\PendingRegistration::where('username', $username)
+    $existsInPending = \App\Models\PendingRegistration::where($field, $value)
         ->where('status', 'pending')
         ->exists();
     
     $available = !$existsInUsers && !$existsInPending;
     
+    $fieldNames = [
+        'username' => 'Username',
+        'email' => 'Email address',
+        'index_number' => 'Reference number',
+        'phone_number' => 'Phone number'
+    ];
+    
     return response()->json([
         'available' => $available,
-        'message' => $available ? 'Username is available' : 'This username is already taken'
+        'message' => $available 
+            ? ($fieldNames[$field] . ' is available') 
+            : ($fieldNames[$field] . ' is already taken')
     ]);
-})->name('api.check-username');
+})->name('api.check-availability')->middleware('throttle:30,1');
 
 
 Route::middleware('guest')->group(function () {
@@ -198,6 +215,14 @@ Route::get('/student/dues/{due}/receipt', [StudentPaystackPaymentController::cla
     ->middleware('auth:student')
     ->name('student.payments.paystack.receipt');
 
+Route::get('/student/dues/{due}/manual', [\App\Http\Controllers\Student\StudentManualPaymentController::class, 'show'])
+    ->middleware('auth:student')
+    ->name('student.payments.manual.show');
+
+Route::post('/student/dues/{due}/manual', [\App\Http\Controllers\Student\StudentManualPaymentController::class, 'store'])
+    ->middleware('auth:student')
+    ->name('student.payments.manual.store');
+
 Route::get('/student/course-registration', [\App\Http\Controllers\Student\StudentCourseRegistrationController::class, 'show'])
     ->middleware('auth:student')
     ->name('student.course-registration.show');
@@ -239,6 +264,23 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('dues.statistics')
         ->middleware('admin.role:financial_secretary');
 
+    Route::get('dues/payment-settings', [\App\Http\Controllers\Admin\AdminPaymentSettingController::class, 'index'])
+        ->name('payment-settings.index')
+        ->middleware('admin.role:financial_secretary');
+    Route::put('dues/payment-settings', [\App\Http\Controllers\Admin\AdminPaymentSettingController::class, 'update'])
+        ->name('payment-settings.update')
+        ->middleware('admin.role:financial_secretary');
+
+    Route::get('dues/{due}/verify', [AdminDueController::class, 'verify'])
+        ->name('dues.verify')
+        ->middleware('admin.role:financial_secretary');
+    Route::post('dues/{due}/approve', [AdminDueController::class, 'approve'])
+        ->name('dues.approve')
+        ->middleware('admin.role:financial_secretary');
+    Route::post('dues/{due}/reject', [AdminDueController::class, 'reject'])
+        ->name('dues.reject')
+        ->middleware('admin.role:financial_secretary');
+
     Route::resource('dues', AdminDueController::class)
         ->except(['show'])
         ->middleware('admin.role:financial_secretary');
@@ -268,4 +310,18 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('pending-registrations.reject');
     
     Route::resource('students', \App\Http\Controllers\Admin\AdminStudentAccountController::class);
+
+});
+
+// Critical: Secret route to clear caches when terminal access is unavailable
+Route::get('/system-optimize', function() {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        return "System optimization complete: Views, Config, Cache, and Routes cleared.";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
 });
