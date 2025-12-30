@@ -113,7 +113,7 @@
                                 <div x-show="selectedNetwork === 'mtn'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
                                     <div class="flex items-center gap-3 border-b border-yellow-100 pb-4">
                                         <i class="ri-smartphone-line text-2xl text-yellow-500"></i>
-                                        <h3 class="text-base font-bold text-yellow-900">Standard MTN Steps</h3>
+                                        <h3 class="text-base font-bold text-yellow-900">Pay via MTN MoMoPay</h3>
                                     </div>
                                     <div class="space-y-4">
                                         <div class="flex gap-4 group">
@@ -122,19 +122,19 @@
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-yellow-400 text-[10px] font-black text-yellow-900 group-hover:scale-110 transition-transform">2</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-yellow-600 font-bold">Transfer Money</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-yellow-600 font-bold">MoMoPay & Pay Bill</span> (Option 2)</p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-yellow-400 text-[10px] font-black text-yellow-900 group-hover:scale-110 transition-transform">3</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-yellow-600 font-bold">MoMo User</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-yellow-600 font-bold">MoMoPay</span> (Option 1)</p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-yellow-400 text-[10px] font-black text-yellow-900 group-hover:scale-110 transition-transform">4</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Merchant Number: <span class="text-yellow-600 font-bold">{{ $settings['merchant_number'] }}</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Merchant ID: <span class="text-yellow-600 font-bold">{{ $settings['merchant_number'] }}</span></p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-yellow-400 text-[10px] font-black text-yellow-900 group-hover:scale-110 transition-transform">5</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Amount & Confirm Payment</p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Amount & Reference, then Confirm with PIN</p>
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@
                                 <div x-show="selectedNetwork === 'telecel'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="space-y-6">
                                     <div class="flex items-center gap-3 border-b border-red-100 pb-4">
                                         <i class="ri-smartphone-line text-2xl text-red-500"></i>
-                                        <h3 class="text-base font-bold text-red-900">Standard Telecel Steps</h3>
+                                        <h3 class="text-base font-bold text-red-900">Pay via Telecel Merchant</h3>
                                     </div>
                                     <div class="space-y-4">
                                         <div class="flex gap-4 group">
@@ -152,19 +152,19 @@
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">2</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-red-600 font-bold">Send Money</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-red-600 font-bold">Pay Bill</span></p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">3</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-red-600 font-bold">Mobile Networks</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-red-600 font-bold">Others</span></p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">4</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Account: <span class="text-red-600 font-bold">{{ $settings['merchant_number'] }}</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Merchant Code: <span class="text-red-600 font-bold">{{ $settings['merchant_number'] }}</span></p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">5</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Amount & Authorize Payment</p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Amount & Authorize with PIN</p>
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +173,7 @@
                                 <div x-show="selectedNetwork === 'at'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="space-y-6">
                                     <div class="flex items-center gap-3 border-b border-blue-100 pb-4">
                                         <i class="ri-smartphone-line text-2xl text-blue-500"></i>
-                                        <h3 class="text-base font-bold text-blue-900">Standard AT Steps</h3>
+                                        <h3 class="text-base font-bold text-blue-900">Pay via AT Merchant</h3>
                                     </div>
                                     <div class="space-y-4">
                                         <div class="flex gap-4 group">
@@ -182,19 +182,15 @@
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">2</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-blue-600 font-bold">Send Money</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-blue-600 font-bold">Pay Bill</span></p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">3</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Select <span class="text-blue-600 font-bold">Other Networks</span></p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Merchant Code: <span class="text-blue-600 font-bold">{{ $settings['merchant_number'] }}</span></p>
                                         </div>
                                         <div class="flex gap-4 group">
                                             <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">4</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Number: <span class="text-blue-600 font-bold">{{ $settings['merchant_number'] }}</span></p>
-                                        </div>
-                                        <div class="flex gap-4 group">
-                                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[10px] font-black text-white group-hover:scale-110 transition-transform">5</span>
-                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Amount & Finish Payment</p>
+                                            <p class="text-sm font-semibold text-slate-700 leading-normal">Enter Amount & Confirm Payment</p>
                                         </div>
                                     </div>
                                 </div>
