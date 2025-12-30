@@ -29,16 +29,12 @@ class StoreDueRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'academic_year' => ['required', 'string', 'regex:/^\d{4}\/\d{4}$/'],
             'due_date' => ['required', 'date'],
-            'base_amount' => ['nullable', 'numeric', 'min:0'],
-            'amounts' => ['nullable', 'array'],
+            'base_amount' => 'nullable|numeric|min:0',
+            'amounts' => 'nullable|array',
+            'amounts.*' => 'nullable|array',
+            'amounts.*.*' => 'nullable|numeric|min:0',
+            'target_group' => 'required|in:all,student,admin',
         ];
-
-        foreach ($classes as $class) {
-            $rules["amounts.$class"] = ['nullable', 'array'];
-            foreach ($years as $year) {
-                $rules["amounts.$class.$year"] = ['nullable', 'numeric', 'min:0'];
-            }
-        }
 
         return $rules;
     }

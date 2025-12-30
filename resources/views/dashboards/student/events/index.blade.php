@@ -61,18 +61,17 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#0b3019]/20 bg-[#0b3019] bg-gradient-to-br from-[#0b3019] via-emerald-900 to-[#0b3019] p-8 text-white shadow-[0_20px_50px_-30px_rgba(11,48,25,0.6)]">
+            <section class="relative isolate animate-fade-slide overflow-hidden rounded-[24px] border border-[#0b3019]/20 bg-[#0b3019] bg-gradient-to-br from-[#0b3019] via-emerald-900 to-[#0b3019] p-6 text-white shadow-[0_20px_50px_-30px_rgba(11,48,25,0.6)] sm:p-10">
                 <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
-                        <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-50">Campus life</span>
-                        <div class="space-y-2">
-                            <h1 class="text-3xl font-semibold md:text-4xl">Upcoming events</h1>
-                            <p class="max-w-2xl text-sm text-emerald-50">
+                        <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-50 sm:text-xs">Campus life</span>
+                        <div class="space-y-3">
+                            <h1 class="text-2xl font-bold sm:text-3xl md:text-4xl">Upcoming events</h1>
+                            <p class="max-w-2xl text-xs text-emerald-50/90 sm:text-sm">
                                 Stay on top of GESA seminars, workshops, and social meetups. Search or filter by category to plan your week ahead.
                             </p>
                         </div>
                     </div>
-               
                 </div>
             </section>
 

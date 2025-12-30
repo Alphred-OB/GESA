@@ -63,76 +63,74 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 md:flex-row md:items-center md:justify-between">
+            <header class="flex flex-col gap-6 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 lg:flex-row lg:items-center lg:justify-between lg:p-8">
                 <div class="space-y-2">
-                    <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
+                    <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#16136a] sm:text-xs">
                         <i class="ri-megaphone-line text-base" aria-hidden="true"></i>
-                        Admin communications
+                        Communications
                     </p>
-                    <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Announcements</h1>
+                    <h1 class="text-2xl font-bold text-[#16136a] md:text-3xl">Global announcements</h1>
                     <p class="text-sm text-slate-600">Broadcast updates to the entire student body or target specific groups.</p>
                 </div>
-                <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                    <a href="{{ route('admin.announcements.create') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
+                <div class="flex">
+                    <a href="{{ route('admin.announcements.create') }}" class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 py-3.5 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95 sm:w-auto">
                         <i class="ri-add-line text-lg"></i>
-                        New announcement
+                        Pulse update
                     </a>
                 </div>
             </header>
 
             <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <form method="GET" class="grid gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 md:grid-cols-4">
-                    <label class="flex flex-col gap-2">
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</span>
-                        <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Title or content" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
-                    </label>
+                <form method="GET" class="grid gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
+                    <div class="flex flex-col gap-2 lg:w-48">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Search</span>
+                        <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Keywords..." class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
+                    </div>
 
-                    <label class="flex flex-col gap-2">
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Type</span>
+                    <div class="flex flex-col gap-2 lg:w-40">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Type</span>
                         <div class="relative">
                             <select name="type" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All</option>
+                                <option value="">All Types</option>
                                 @foreach ($types as $value => $label)
                                     <option value="{{ $value }}" @selected(($filters['type'] ?? '') === $value)>{{ $label }}</option>
                                 @endforeach
                             </select>
                             <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         </div>
-                    </label>
+                    </div>
 
-                    <label class="flex flex-col gap-2">
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Priority</span>
+                    <div class="flex flex-col gap-2 lg:w-40">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Priority</span>
                         <div class="relative">
                             <select name="priority" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All</option>
+                                <option value="">All Priorities</option>
                                 @foreach ($priorities as $value => $label)
                                     <option value="{{ $value }}" @selected(($filters['priority'] ?? '') === $value)>{{ $label }}</option>
                                 @endforeach
                             </select>
                             <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         </div>
-                    </label>
+                    </div>
 
-                    <label class="flex flex-col gap-2">
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Audience</span>
+                    <div class="flex flex-col gap-2 lg:w-40">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Audience</span>
                         <div class="relative">
                             <select name="target_type" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All</option>
+                                <option value="">All Audiences</option>
                                 @foreach ($targetTypes as $value => $label)
                                     <option value="{{ $value }}" @selected(($filters['target_type'] ?? '') === $value)>{{ $label }}</option>
                                 @endforeach
                             </select>
                             <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         </div>
-                    </label>
+                    </div>
 
-                    <div class="md:col-span-4 flex items-center justify-end gap-3">
-                        <a href="{{ route('admin.announcements.index') }}" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                            Reset
-                        </a>
-                        <button type="submit" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                            <i class="ri-filter-3-line text-base"></i>
-                            Apply
+                    <div class="flex items-end justify-end gap-2 sm:col-span-2 lg:ml-auto lg:w-auto">
+                        <a href="{{ route('admin.announcements.index') }}" class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 active:scale-95">Reset</a>
+                        <button type="submit" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                            <i class="ri-equalizer-line text-base"></i>
+                            Filter
                         </button>
                     </div>
                 </form>

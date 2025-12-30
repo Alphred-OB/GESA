@@ -113,25 +113,27 @@
                 </div>
             @endif
 
-            <section class="grid gap-6 md:grid-cols-2">
-                <article class="flex h-full flex-col rounded-3xl border border-[#16136a]/15 bg-[#16136a] p-6 text-white shadow-lg shadow-[#16136a]/20">
+            <section class="grid gap-4 sm:grid-cols-2 lg:gap-6">
+                <article class="relative overflow-hidden rounded-3xl border border-[#16136a]/15 bg-[#16136a] p-6 text-white shadow-lg shadow-[#16136a]/20 sm:p-8">
                     <header class="flex items-center justify-between gap-4">
                         <div class="space-y-1">
-                            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">Outstanding balance</p>
-                            <p class="text-3xl font-semibold">GHS {{ number_format((float) ($summary['outstanding_amount'] ?? 0), 2) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-white/60 sm:text-xs">Outstanding balance</p>
+                            <p class="text-3xl font-bold sm:text-4xl">GHS {{ number_format((float) ($summary['outstanding_amount'] ?? 0), 2) }}</p>
                         </div>
-                        <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15"><i class="ri-error-warning-line text-2xl"></i></span>
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15"><i class="ri-error-warning-line text-2xl"></i></span>
                     </header>
+                    <i class="ri-wallet-3-line absolute -bottom-4 -right-4 text-7xl text-white/5 opacity-10" aria-hidden="true"></i>
                 </article>
 
-                <article class="flex h-full flex-col rounded-3xl border border-emerald-100 bg-emerald-50 p-6 text-emerald-900 shadow-lg shadow-emerald-100/40">
+                <article class="relative overflow-hidden rounded-3xl border border-emerald-100 bg-emerald-50 p-6 text-emerald-900 shadow-lg shadow-emerald-100/40 sm:p-8">
                     <header class="flex items-center justify-between gap-4">
                         <div class="space-y-1">
-                            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-600">Payments recorded</p>
-                            <p class="text-3xl font-semibold">GHS {{ number_format((float) ($summary['paid_amount'] ?? 0), 2) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-emerald-600 sm:text-xs">Payments recorded</p>
+                            <p class="text-3xl font-bold sm:text-4xl">GHS {{ number_format((float) ($summary['paid_amount'] ?? 0), 2) }}</p>
                         </div>
-                        <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700"><i class="ri-coins-line text-2xl"></i></span>
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100/80 text-emerald-700 shadow-sm"><i class="ri-coins-line text-2xl"></i></span>
                     </header>
+                    <i class="ri-checkbox-circle-line absolute -bottom-4 -right-4 text-7xl text-emerald-200/20 opacity-30" aria-hidden="true"></i>
                 </article>
             </section>
 
@@ -147,17 +149,17 @@
             @php($activeYear = $filters['academic_year'] ?? '')
             @php($searchTerm = $filters['search'] ?? '')
 
-            <form method="GET" class="grid gap-4 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 md:grid-cols-5">
-                <div class="md:col-span-2 flex flex-col gap-2">
-                    <label class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search description or reference</label>
-                    <input type="search" name="search" value="{{ $searchTerm }}" placeholder="e.g. departmental dues" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+            <form method="GET" class="grid gap-4 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 sm:grid-cols-2 lg:grid-cols-5">
+                <div class="sm:col-span-2 lg:col-span-2 flex flex-col gap-2">
+                    <label class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Search</label>
+                    <input type="search" name="search" value="{{ $searchTerm }}" placeholder="e.g. departmental..." class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <label class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Status</label>
                     <div class="relative">
                         <select name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All statuses</option>
+                            <option value="">All Statuses</option>
                             @foreach ($filterOptions['statuses'] ?? [] as $value => $label)
                                 <option value="{{ $value }}" @selected($activeStatus === $value)>{{ $label }}</option>
                             @endforeach
@@ -167,10 +169,10 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <label class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Academic year</label>
+                    <label class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Academic Year</label>
                     <div class="relative">
                         <select name="academic_year" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All years</option>
+                            <option value="">All Years</option>
                             @foreach ($filterOptions['academic_years'] ?? [] as $year)
                                 <option value="{{ $year }}" @selected($activeYear === $year)>{{ $year }}</option>
                             @endforeach
@@ -179,13 +181,10 @@
                     </div>
                 </div>
 
-                <div class="flex items-end justify-end gap-3 md:col-span-2 md:col-start-4">
-                    <a href="{{ route('student.dues.index') }}" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                        Reset
-                    </a>
-                    <button type="submit" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#18188a]">
+                <div class="flex items-end justify-end gap-2 lg:col-span-1">
+                    <button type="submit" class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
                         <i class="ri-filter-3-line text-base" aria-hidden="true"></i>
-                        Apply
+                        Filter
                     </button>
                 </div>
             </form>
@@ -296,68 +295,77 @@
 
                 <div class="grid gap-4 lg:hidden">
                     @forelse ($dues as $due)
-                        <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
-                            <header class="flex items-start justify-between">
-                                <div>
-                                    <h3 class="text-base font-semibold text-slate-900">{{ $due->description }}</h3>
-                                    <p class="text-xs text-slate-500">{{ $due->academic_year }} · GHS {{ number_format((float) $due->amount, 2) }}</p>
+                        <article class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex-1 space-y-1">
+                                    <h3 class="text-[15px] font-bold text-slate-900 leading-tight">{{ $due->description }}</h3>
+                                    <p class="text-[11px] font-bold uppercase tracking-widest text-slate-400">{{ $due->academic_year }}</p>
                                 </div>
                                 @php($status = $due->payment_status)
-                                <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] {{ $statusColors[$status] ?? 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                                <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider {{ $statusColors[$status] ?? 'bg-slate-100 text-slate-600 border border-slate-200' }}">
                                     {{ $statusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status)) }}
                                 </span>
-                            </header>
-                            <dl class="mt-4 space-y-1 text-xs text-slate-500">
-                                <div class="flex justify-between">
-                                    <dt>Due date</dt>
-                                    <dd class="text-right text-slate-700">{{ optional($due->due_date)->format('M j, Y') ?? '—' }}</dd>
+                            </div>
+
+                            <div class="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-slate-50/80 p-3">
+                                <div class="space-y-0.5">
+                                    <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Amount</p>
+                                    <p class="text-sm font-bold text-[#16136a]">GHS {{ number_format((float) $due->amount, 2) }}</p>
                                 </div>
-                                <div class="flex justify-between">
-                                    <dt>Reference</dt>
-                                    <dd class="text-right text-slate-700">{{ $due->payment_reference ?? $due->reference_number ?? '—' }}</dd>
+                                <div class="space-y-0.5 text-right">
+                                    <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Due Date</p>
+                                    <p class="text-[11px] font-bold text-slate-700">{{ optional($due->due_date)->format('M d, Y') ?? '—' }}</p>
                                 </div>
-                                @if ($due->payment_status === 'owing' && $due->rejection_reason)
-                                    <div class="mt-2 rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-[11px] text-rose-700">
-                                        <p class="font-bold uppercase tracking-widest text-[#9f1239] mb-1">Previous Payment Rejected</p>
-                                        <p>{{ $due->rejection_reason }}</p>
-                                    </div>
-                                @endif
-                                @if ($due->payment_notes)
-                                    <div class="mt-2 rounded-xl bg-slate-50 p-3 text-left text-xs text-slate-500">
-                                        {{ $due->payment_notes }}
-                                    </div>
-                                @endif
-                            </dl>
-                            @if ($due->payment_status === 'owing')
-                                <div class="mt-4 flex flex-col gap-2">
-                                    @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
-                                        <a href="{{ route('student.payments.manual.show', $due) }}" class="flex h-10 w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50">
-                                            <i class="ri-file-upload-line text-base" aria-hidden="true"></i>
-                                            Pay Manually
-                                        </a>
-                                    @else
-                                        <form method="POST" action="{{ route('student.payments.paystack.initialize', $due) }}">
-                                            @csrf
-                                            <button type="submit" class="w-full rounded-full bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#18188a]">
-                                                <i class="ri-secure-payment-line text-base" aria-hidden="true"></i>
-                                                Pay Now
-                                            </button>
-                                        </form>
-                                    @endif
+                            </div>
+
+                            @if ($due->payment_status === 'owing' && $due->rejection_reason)
+                                <div class="mt-3 rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-[10px] text-rose-700">
+                                    <p class="font-bold uppercase tracking-widest text-[#9f1239] mb-0.5">Payment Rejected</p>
+                                    <p>{{ $due->rejection_reason }}</p>
                                 </div>
-                            @elseif ($due->payment_status === 'pending_verification' && $due->payment_method === 'paystack')
-                                <p class="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-amber-600">Verifying Paystack payment…</p>
-                            @elseif ($due->payment_status === 'paid')
-                                <a href="{{ route('student.payments.paystack.receipt', $due) }}" class="mt-4 inline-flex w-full items-center justifycenter gap-2 rounded-full border border-[#16136a]/30 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a] shadow-sm transition hover:-translate-y-0.5 hover:border-[#16136a]/50">
-                                    <i class="ri-file-download-line text-base" aria-hidden="true"></i>
-                                    Download receipt
-                                </a>
                             @endif
+
+                            <footer class="mt-5 space-y-3">
+                                <div class="flex items-center justify-between text-[10px] font-medium text-slate-400">
+                                    <span class="uppercase tracking-widest">Ref: {{ $due->payment_reference ?? $due->reference_number ?? '—' }}</span>
+                                </div>
+
+                                @if ($due->payment_status === 'owing')
+                                    <div class="flex flex-col gap-2">
+                                        @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
+                                            <a href="{{ route('student.payments.manual.show', $due) }}" class="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#16136a] text-xs font-bold uppercase tracking-widest text-white shadow-md transition-all active:scale-95">
+                                                <i class="ri-file-upload-line text-base"></i>
+                                                Pay Manually
+                                            </a>
+                                        @else
+                                            <form method="POST" action="{{ route('student.payments.paystack.initialize', $due) }}">
+                                                @csrf
+                                                <button type="submit" class="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#16136a] text-xs font-bold uppercase tracking-widest text-white shadow-md transition-all active:scale-95">
+                                                    <i class="ri-secure-payment-line text-base"></i>
+                                                    Pay Now
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                @elseif ($due->payment_status === 'pending_verification' && $due->payment_method === 'paystack')
+                                    <div class="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 text-[11px] font-bold uppercase tracking-widest text-amber-700">
+                                        <i class="ri-history-line animate-spin-slow"></i>
+                                        Verifying Paystack...
+                                    </div>
+                                @elseif ($due->payment_status === 'paid')
+                                    <a href="{{ route('student.payments.paystack.receipt', $due) }}" class="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#16136a]/10 bg-[#16136a]/5 text-[11px] font-bold uppercase tracking-widest text-[#16136a] transition-all hover:bg-[#16136a]/10">
+                                        <i class="ri-file-download-line text-base"></i>
+                                        Download Receipt
+                                    </a>
+                                @endif
+                            </footer>
                         </article>
                     @empty
-                        <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-8 text-center text-sm text-slate-500">
-                            <i class="ri-archive-drawer-line text-3xl text-slate-300" aria-hidden="true"></i>
-                            <p class="mt-3 font-semibold text-slate-600">No dues found.</p>
+                        <div class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 p-10 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+                                <i class="ri-archive-drawer-line text-3xl"></i>
+                            </div>
+                            <p class="mt-4 font-bold text-slate-600">No dues found</p>
                         </div>
                     @endforelse
                 </div>

@@ -97,7 +97,7 @@ class AdminDueService
             $filters
         );
 
-        $query->chunkById(500, function (Collection $dues) use (&$aggregates, $paidStatuses, $outstandingStatuses) {
+        $query->chunkById(500, function ($dues) use (&$aggregates, $paidStatuses, $outstandingStatuses) {
             foreach ($dues as $due) {
                 $aggregates['count_total']++;
 
@@ -455,6 +455,7 @@ class AdminDueService
         $dueDate = Carbon::parse($data['due_date']);
         $baseAmount = (float) ($data['base_amount'] ?? 0);
         $matrixInput = $data['amounts'] ?? [];
+        $targetGroup = $data['target_group'] ?? 'all';
 
         $filters = $this->filterOptions();
         $classValues = $filters['classes'];
@@ -470,16 +471,16 @@ class AdminDueService
             }
         }
 
-        DB::transaction(function () use ($classValues, $yearValues, $amountMatrix, $description, $dueDate, $academicYear, $baseAmount, $admin) {
+        DB::transaction(function () use ($classValues, $yearValues, $amountMatrix, $description, $dueDate, $academicYear, $baseAmount, $admin, $targetGroup) {
             foreach ($classValues as $class) {
                 foreach ($yearValues as $year) {
                     DefaultDueConfig::query()->updateOrCreate(
                         ['class' => $class, 'year' => (string) $year],
                         [
+                            'target_group' => $targetGroup,
                             'amount' => $amountMatrix[$class][$year],
                             'description' => $description,
                             'due_date_offset' => Carbon::now()->diffInDays($dueDate, false),
-                            'target_group' => 'all',
                             'created_by' => $admin->user_id,
                             'is_active' => true,
                         ]
@@ -487,10 +488,17 @@ class AdminDueService
                 }
             }
 
-            User::query()
-                ->where('role', 'student')
-                ->orderBy('user_id')
-                ->chunkById(500, function (Collection $students) use ($amountMatrix, $description, $dueDate, $academicYear, $baseAmount, $admin) {
+            $userQuery = User::query();
+            if ($targetGroup === 'student') {
+                $userQuery->where('role', 'student');
+            } elseif ($targetGroup === 'admin') {
+                $userQuery->where('role', 'admin');
+            } else {
+                $userQuery->whereIn('role', ['student', 'admin']);
+            }
+
+            $userQuery->orderBy('user_id')
+                ->chunkById(500, function ($students) use ($amountMatrix, $description, $dueDate, $academicYear, $baseAmount, $admin) {
                     $insert = [];
                     $studentIds = $students->pluck('user_id');
 

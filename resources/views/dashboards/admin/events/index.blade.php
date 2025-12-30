@@ -47,22 +47,22 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-        <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 text-center shadow-lg shadow-[#16136a]/5 sm:text-left md:flex-row md:items-center md:justify-between">
-            <div class="space-y-2">
-                <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                    <i class="ri-calendar-check-fill text-base" aria-hidden="true"></i>
-                    Event management
-                </p>
-                <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Plan and publish admin events</h1>
-                <p class="text-sm text-slate-600">Create, update, and curate campus events that appear on the student timeline.</p>
-            </div>
-            <div class="flex flex-wrap items-center justify-center gap-3 md:justify-end">
-                <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:shadow-xl" aria-label="Create new event">
-                    <i class="ri-add-line text-base" aria-hidden="true"></i>
-                    New event
-                </a>
-            </div>
-        </header>
+            <header class="flex flex-col gap-6 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 lg:items-center lg:justify-between lg:p-8 lg:flex-row">
+                <div class="space-y-2">
+                    <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#16136a] sm:text-xs">
+                        <i class="ri-calendar-check-fill text-base" aria-hidden="true"></i>
+                        Event management
+                    </p>
+                    <h1 class="text-2xl font-bold text-[#16136a] md:text-3xl">Manage campus events</h1>
+                    <p class="text-sm text-slate-600">Curate events that appear on the student timeline and activity feeds.</p>
+                </div>
+                <div class="flex">
+                    <a href="{{ route('admin.events.create') }}" class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 py-3.5 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95 sm:w-auto">
+                        <i class="ri-add-line text-lg"></i>
+                        New event
+                    </a>
+                </div>
+            </header>
 
         @if (session('status'))
             <div class="rounded-3xl border border-emerald-200/60 bg-emerald-50 px-5 py-4 text-sm text-emerald-800 shadow-inner">

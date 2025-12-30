@@ -115,47 +115,48 @@
         </header>
 
         <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-            <div class="grid gap-4 lg:grid-cols-4">
-                <article class="rounded-2xl border border-[#16136a]/20 bg-[#16136a] px-6 py-5 text-white shadow-lg shadow-[#16136a]/20">
+            <div class="grid gap-4 lg:grid-cols-4 lg:gap-6">
+                <article class="relative overflow-hidden rounded-2xl border border-[#16136a]/20 bg-[#16136a] px-6 py-6 text-white shadow-lg shadow-[#16136a]/20">
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-white/80">Total students</p>
-                            <p class="text-4xl font-semibold">{{ number_format($stats['total']) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-white/70">Total students</p>
+                            <p class="text-4xl font-bold">{{ number_format($stats['total']) }}</p>
                         </div>
                         <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
                             <i class="ri-team-line text-2xl" aria-hidden="true"></i>
                         </span>
                     </div>
-                    <p class="mt-6 text-xs uppercase tracking-[0.25em] text-white/70">Across all programmes</p>
+                    <p class="mt-6 text-[10px] uppercase tracking-[0.2em] text-white/50">Across all programmes</p>
+                    <i class="ri-user-star-line absolute -bottom-2 -right-2 text-6xl text-white/5 opacity-10" aria-hidden="true"></i>
                 </article>
 
                 <div class="lg:col-span-3">
                     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                         @forelse ($stats['class_breakdown'] as $classStat)
-                            <article class="rounded-2xl border border-slate-200/80 bg-white px-5 py-4 shadow-sm shadow-[#16136a]/5">
+                            <article class="rounded-2xl border border-slate-200/80 bg-white px-5 py-5 shadow-sm transition-shadow hover:shadow-md">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="space-y-1">
-                                        <div class="flex items-center gap-2 text-sm font-semibold text-[#16136a]">
-                                            <i class="ri-community-line text-base" aria-hidden="true"></i>
+                                        <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#16136a]">
+                                            <i class="ri-community-line text-base text-[#16136a]/60"></i>
                                             <span>{{ $classStat['name'] }}</span>
                                         </div>
-                                        <p class="text-xl font-semibold text-slate-900">{{ number_format($classStat['total']) }}</p>
-                                        <p class="text-xs font-medium uppercase tracking-[0.25em] text-slate-400">students</p>
+                                        <p class="text-2xl font-bold text-slate-900">{{ number_format($classStat['total']) }}</p>
                                     </div>
+                                    <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">Active</span>
                                 </div>
-                                <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-slate-500">
+                                <dl class="mt-4 grid grid-cols-2 gap-2 text-xs">
                                     @foreach ($stats['year_buckets'] as $year)
-                                        <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
-                                            <dt class="font-semibold text-slate-500">Year {{ $year }}</dt>
-                                            <dd class="text-sm font-semibold text-slate-900">{{ number_format($classStat['years'][$year] ?? 0) }}</dd>
+                                        <div class="flex flex-col gap-0.5 rounded-xl bg-slate-50/80 px-3 py-2 border border-slate-100/50">
+                                            <dt class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Year {{ $year }}</dt>
+                                            <dd class="text-xs font-bold text-slate-700">{{ number_format($classStat['years'][$year] ?? 0) }}</dd>
                                         </div>
                                     @endforeach
                                 </dl>
                             </article>
                         @empty
                             <div class="sm:col-span-2 xl:col-span-3">
-                                <div class="flex h-full items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-10 text-sm text-slate-500">
-                                    <p>No student class data yet. Invite students to onboard.</p>
+                                <div class="flex h-full items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-10 text-center text-sm text-slate-500">
+                                    <p>No student class data yet.</p>
                                 </div>
                             </div>
                         @endforelse
@@ -191,24 +192,24 @@
                 </div>
             </div>
 
-            <form method="GET" class="space-y-3 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 md:flex md:flex-wrap md:items-end md:gap-3 md:space-y-0">
+            <form method="GET" class="grid gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
                 @foreach (request()->except(['search', 'class', 'year', 'status', 'page']) as $key => $value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                 @endforeach
 
-                <div class="flex w-full flex-col gap-2 md:w-64">
-                    <label for="filter_search" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
+                <div class="flex flex-col gap-2 lg:w-64">
+                    <label for="filter_search" class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Search</label>
                     <div class="relative">
                         <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Name, username, email, reference no." class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
+                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Name, ref no..." class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
                     </div>
                 </div>
 
-                <div class="flex w-full flex-col gap-2 md:w-52">
-                    <label for="filter_class" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Class</label>
+                <div class="flex flex-col gap-2 lg:w-52">
+                    <label for="filter_class" class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Class</label>
                     <div class="relative">
                         <select id="filter_class" name="class" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All</option>
+                            <option value="">All Classes</option>
                             @foreach ($filterOptions['classes'] as $classOption)
                                 <option value="{{ $classOption }}" @selected(($filters['class'] ?? '') === $classOption)>{{ $classOption }}</option>
                             @endforeach
@@ -217,11 +218,11 @@
                     </div>
                 </div>
 
-                <div class="flex w-full flex-col gap-2 md:w-40">
-                    <label for="filter_year" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Year</label>
+                <div class="flex flex-col gap-2 lg:w-40">
+                    <label for="filter_year" class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Year</label>
                     <div class="relative">
                         <select id="filter_year" name="year" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All</option>
+                            <option value="">All Years</option>
                             @foreach ($filterOptions['years'] as $yearOption)
                                 <option value="{{ $yearOption }}" @selected(($filters['year'] ?? '') == $yearOption)>Year {{ $yearOption }}</option>
                             @endforeach
@@ -230,11 +231,11 @@
                     </div>
                 </div>
 
-                <div class="flex w-full flex-col gap-2 md:w-40">
-                    <label for="filter_status" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
+                <div class="flex flex-col gap-2 lg:w-40">
+                    <label for="filter_status" class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Status</label>
                     <div class="relative">
                         <select id="filter_status" name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <option value="">All</option>
+                            <option value="">All Status</option>
                             <option value="active" @selected(($filters['status'] ?? '') === 'active')>Active</option>
                             <option value="pending" @selected(($filters['status'] ?? '') === 'pending')>Pending</option>
                         </select>
@@ -242,10 +243,10 @@
                     </div>
                 </div>
 
-                <div class="flex items-end md:ml-auto md:w-auto">
-                    <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
+                <div class="flex items-end sm:col-span-2 lg:ml-auto lg:w-auto">
+                    <button type="submit" class="inline-flex h-11 w-full min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
                         <i class="ri-equalizer-line text-base"></i>
-                        Apply
+                        Filter
                     </button>
                 </div>
             </form>
@@ -345,64 +346,51 @@
                 <div class="md:hidden">
                     <div class="grid gap-4">
                         @forelse ($students as $student)
-                            <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <h2 class="text-base font-semibold text-slate-900">{{ $student->fullname ?? $student->username }}</h2>
-                                        <p class="text-xs text-slate-500">{{ $student->email }}</p>
-                                        <p class="text-xs text-slate-400">{{ $student->username }} @if($student->index_number) · {{ $student->index_number }} @endif</p>
+                            <article class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex-1 space-y-1">
+                                        <h2 class="text-base font-bold text-slate-900 leading-tight">{{ $student->fullname ?? $student->username }}</h2>
+                                        <p class="text-[11px] font-medium text-slate-500">{{ $student->email }}</p>
+                                    </div>
+                                    @if($student->email_verified_at)
+                                        <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-700">
+                                            Active
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700">
+                                            Pending
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-slate-50/80 p-3">
+                                    <div class="space-y-0.5">
+                                        <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Class/Year</p>
+                                        <p class="text-xs font-bold text-slate-700">{{ $student->class ?? '—' }} · Y{{ $student->year ?? '—' }}</p>
+                                    </div>
+                                    <div class="space-y-0.5 text-right">
+                                        <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400">ID / Ref</p>
+                                        <p class="text-xs font-bold text-slate-700">{{ $student->username }}</p>
                                     </div>
                                 </div>
-                                <dl class="mt-4 space-y-2 text-xs text-slate-500">
-                                    <div class="flex items-center justify-between">
-                                        <dt>Class · Year</dt>
-                                        <dd>{{ $student->class ?? '—' }} · {{ $student->year ? 'Year ' . $student->year : '—' }}</dd>
+
+                                <footer class="mt-4 flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
+                                    <p class="text-[10px] font-medium text-slate-400">{{ $student->created_at?->format('M d, Y') ?? '—' }}</p>
+                                    <div class="flex items-center gap-1.5">
+                                        <a href="{{ route('admin.students.show', $student) }}" class="inline-flex h-8 items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 text-[11px] font-bold text-slate-600 transition hover:bg-slate-50">
+                                            View
+                                        </a>
+                                        <a href="{{ route('admin.students.edit', $student) }}" class="inline-flex h-8 items-center justify-center gap-1 rounded-lg border border-[#16136a]/10 bg-[#16136a]/5 px-3 text-[11px] font-bold text-[#16136a] transition hover:bg-[#16136a]/10">
+                                            Edit
+                                        </a>
                                     </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt>Status</dt>
-                                        <dd>
-                                            @if($student->email_verified_at)
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
-                                                    <i class="ri-checkbox-circle-fill text-xs"></i>
-                                                    Active
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
-                                                    <i class="ri-time-line text-xs"></i>
-                                                    Pending
-                                                </span>
-                                            @endif
-                                        </dd>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt>Created</dt>
-                                        <dd>{{ $student->created_at?->format('M j, Y') ?? '—' }}</dd>
-                                    </div>
-                                </dl>
-                                <footer class="mt-4 flex items-center justify-end gap-2">
-                                    <a href="{{ route('admin.students.show', $student) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                        <i class="ri-eye-line text-sm"></i>
-                                        View
-                                    </a>
-                                    <a href="{{ route('admin.students.edit', $student) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                        <i class="ri-pencil-line text-sm"></i>
-                                        Edit
-                                    </a>
-                                    <form method="POST" action="{{ route('admin.students.destroy', $student) }}" class="inline-flex" onsubmit="return confirm('Delete this student account?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="inline-flex items-center gap-1 rounded-xl border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-50">
-                                            <i class="ri-delete-bin-line text-sm"></i>
-                                            Delete
-                                        </button>
-                                    </form>
                                 </footer>
                             </article>
                         @empty
-                            <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
-                                <i class="ri-emotion-unhappy-line text-3xl text-slate-300"></i>
-                                <p class="mt-3 font-semibold text-slate-600">No students found.</p>
-                                <p class="text-sm text-slate-500">Adjust filters or add a new student.</p>
+                            <div class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/60 p-10 text-center">
+                                <i class="ri-emotion-unhappy-line text-4xl text-slate-300"></i>
+                                <p class="mt-4 font-bold text-slate-600">No students found</p>
+                                <p class="mt-1 text-xs text-slate-400">Adjust filters or invite students.</p>
                             </div>
                         @endforelse
                     </div>

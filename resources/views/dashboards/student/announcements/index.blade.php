@@ -46,66 +46,58 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="relative isolate hidden lg:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="relative isolate animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-6 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)] sm:p-10">
                 <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
-                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-100/80">Updates</span>
-                        <div class="space-y-2">
-                            <h1 class="text-3xl font-semibold md:text-4xl">Campus announcements</h1>
-                            <p class="max-w-2xl text-sm text-slate-100/85">
-                                Stay informed about academic deadlines, maintenance windows, security advisories, and key GESA portal changes.
+                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-100/80 sm:text-xs">Updates</span>
+                        <div class="space-y-3">
+                            <h1 class="text-2xl font-bold sm:text-3xl md:text-4xl">Campus pulse</h1>
+                            <p class="max-w-2xl text-xs text-slate-100/85 sm:text-sm">
+                                Stay informed about academic deadlines, workshops, security advisories, and key GESA portal changes.
                             </p>
                         </div>
                     </div>
-                    
                 </div>
             </section>
 
-            <form method="GET" action="{{ route('student.announcements.index') }}" class="grid gap-4 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10 md:grid-cols-4">
-                <label class="flex flex-col gap-2">
-                    <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</span>
-                    <input type="search" name="search" value="{{ $filters['search'] }}" placeholder="Keyword, topic, department" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
-                </label>
+            <form method="GET" action="{{ route('student.announcements.index') }}" class="grid gap-4 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
+                <div class="flex flex-col gap-2 lg:flex-1">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Search</span>
+                    <input type="search" name="search" value="{{ $filters['search'] }}" placeholder="Keyword, department..." class="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+                </div>
 
-                <label class="flex flex-col gap-2">
-                    <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Type</span>
+                <div class="flex flex-col gap-2 lg:w-44">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Type</span>
                     <div class="relative">
-                        <select name="type" class="w-full appearance-none rounded-2xl border border-slate-200 bg-white py-3 pl-4 pr-12 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
-                            <option value="">All</option>
+                        <select name="type" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-12 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+                            <option value="">All Types</option>
                             @foreach ($types as $value => $label)
                                 <option value="{{ $value }}" @selected($filters['type'] === $value)> {{ $label }}</option>
                             @endforeach
                         </select>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                            <path d="m6 9 6 6 6-6" />
-                        </svg>
+                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     </div>
-                </label>
+                </div>
 
-                <label class="flex flex-col gap-2">
-                    <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Priority</span>
+                <div class="flex flex-col gap-2 lg:w-44">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Priority</span>
                     <div class="relative">
-                        <select name="priority" class="w-full appearance-none rounded-2xl border border-slate-200 bg-white py-3 pl-4 pr-12 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
-                            <option value="">All</option>
+                        <select name="priority" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-white py-3 pl-4 pr-12 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+                            <option value="">All Priorities</option>
                             @foreach ($priorities as $value => $label)
                                 <option value="{{ $value }}" @selected($filters['priority'] === $value)> {{ $label }}</option>
                             @endforeach
                         </select>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                            <path d="m6 9 6 6 6-6" />
-                        </svg>
+                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     </div>
-                </label>
+                </div>
 
-                <div class="flex items-end gap-2">
-                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#16136a] px-4 py-3 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:bg-[#18188a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                            <path d="M10 18a8 8 0 1 1 8-8" />
-                            <path d="m22 22-4.35-4.35" />
-                        </svg>
-                        Apply filters
+                <div class="flex items-end gap-2 sm:col-span-2 lg:w-auto">
+                    <button type="submit" class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg transition hover:-translate-y-0.5 active:scale-95 sm:w-auto">
+                        <i class="ri-equalizer-line text-base"></i>
+                        Filter
                     </button>
-                    <a href="{{ route('student.announcements.index') }}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">Reset</a>
+                    <a href="{{ route('student.announcements.index') }}" class="inline-flex h-12 items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-sm font-bold text-slate-600 transition hover:bg-slate-50 active:scale-95">Reset</a>
                 </div>
             </form>
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminSuggestionController;
 use App\Http\Controllers\Admin\AdminDueController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminAcademicTimelineController;
+use App\Http\Controllers\Admin\AdminPersonalDueController;
 
 Route::get('/', function () {
     if (Auth::guard('admin')->check()) {
@@ -284,6 +285,12 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::resource('dues', AdminDueController::class)
         ->except(['show'])
         ->middleware('admin.role:financial_secretary');
+
+    // Admin Personal Dues
+    Route::get('personal-dues', [AdminPersonalDueController::class, 'index'])->name('personal-dues.index');
+    Route::get('personal-dues/{due}/manual', [AdminPersonalDueController::class, 'showManualPayment'])->name('personal-dues.manual.show');
+    Route::post('personal-dues/{due}/manual', [AdminPersonalDueController::class, 'storeManualPayment'])->name('personal-dues.manual.store');
+
     Route::post('course-registrations/bulk', [AdminCourseRegistrationController::class, 'bulk'])->name('course-registrations.bulk');
     Route::resource('course-registrations', AdminCourseRegistrationController::class)->only(['index', 'show', 'update']);
     Route::post('suggestions/bulk', [AdminSuggestionController::class, 'bulk'])->name('suggestions.bulk');

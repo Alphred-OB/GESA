@@ -65,21 +65,21 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="relative isolate hidden lg:block animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-10 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)]">
-                <div class="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <section class="relative isolate animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-6 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)] sm:p-10">
+                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div class="space-y-3">
-                        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-100/80">GESA Admin Console</p>
-                        <h1 class="text-3xl font-semibold md:text-4xl">{{ $hero['greeting'] ?? 'Welcome' }}, {{ $adminName ?? 'Administrator' }}</h1>
-                        <p class="max-w-2xl text-sm text-emerald-100/85">{{ $hero['message'] ?? 'Monitor student activity, approvals, and support trends from a single view.' }}</p>
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.35em] text-emerald-100/80 sm:text-xs">GESA Admin Console</p>
+                        <h1 class="text-2xl font-semibold sm:text-3xl md:text-4xl">{{ $hero['greeting'] ?? 'Welcome' }}, {{ $adminName ?? 'Administrator' }}</h1>
+                        <p class="max-w-2xl text-xs text-emerald-100/85 sm:text-sm">{{ $hero['message'] ?? 'Monitor student activity, approvals, and support trends from a single view.' }}</p>
                     </div>
-                    <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-4 text-sm text-emerald-50 shadow-inner">
+                    <div class="rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-xs text-emerald-50 shadow-inner sm:rounded-3xl sm:px-6 sm:py-4 sm:text-sm">
                         <p class="font-semibold uppercase tracking-[0.25em] text-emerald-200">Last updated</p>
-                        <p class="mt-2 leading-6">{{ $hero['lastUpdated'] ?? now()->isoFormat('MMMM D, YYYY [at] h:mm A') }}</p>
+                        <p class="mt-1 leading-relaxed sm:mt-2 sm:leading-6">{{ $hero['lastUpdated'] ?? now()->isoFormat('MMMM D, YYYY [at] h:mm A') }}</p>
                     </div>
                 </div>
             </section>
 
-            <section class="grid gap-6 lg:grid-cols-4">
+            <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
                 @foreach ($overviewCards as $card)
                     <article class="animate-fade-slide rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
                         <div class="flex items-start justify-between">
@@ -88,7 +88,7 @@
                                 <p class="text-2xl font-semibold text-[#16136a]">{{ $card['value'] }}</p>
                                 <p class="text-sm text-slate-500">{{ $card['description'] }}</p>
                             </div>
-                            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
+                            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
                                 <i class="{{ $card['icon'] ?? 'ri-checkbox-blank-circle-fill' }} text-2xl" aria-hidden="true"></i>
                             </span>
                         </div>

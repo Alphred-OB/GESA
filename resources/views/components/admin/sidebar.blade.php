@@ -4,12 +4,20 @@
         ->whereNotNull('email_verified_at')
         ->count();
 
+    $pendingDuesCount = \App\Models\Due::where('payment_status', 'pending_verification')->count();
+
     $navConfig = [
         [
             'label' => 'Overview',
             'route_name' => 'admin.dashboard',
             'pattern' => 'admin.dashboard',
             'icon' => 'ri-dashboard-line',
+        ],
+        [
+            'label' => 'My Dues',
+            'route_name' => 'admin.personal-dues.index',
+            'pattern' => 'admin.personal-dues.*',
+            'icon' => 'ri-wallet-3-line',
         ],
         [
             'label' => 'Events',
@@ -41,6 +49,7 @@
             'route_name' => 'admin.dues.index',
             'pattern' => 'admin.dues.*',
             'icon' => 'ri-money-dollar-circle-line',
+            'badge' => $pendingDuesCount,
         ],
         [
             'label' => 'Announcements',

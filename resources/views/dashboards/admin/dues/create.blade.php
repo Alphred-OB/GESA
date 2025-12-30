@@ -51,13 +51,28 @@
                 </div>
 
                 <div class="grid gap-5 md:grid-cols-3">
-                    <label class="flex flex-col gap-2 md:col-span-2">
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Due date</span>
-                        <input type="date" name="due_date" value="{{ old('due_date') }}" required class="h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+                    <div class="flex flex-col gap-2">
+                        <label for="due_date" class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Due Date</label>
+                        <input type="date" id="due_date" name="due_date" value="{{ old('due_date', date('Y-11-30')) }}" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:ring-4 focus:ring-[#16136a]/10">
                         @error('due_date')
                             <span class="text-xs text-rose-600">{{ $message }}</span>
                         @enderror
-                    </label>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="target_group" class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Target Group</label>
+                        <div class="relative">
+                            <select id="target_group" name="target_group" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50/50 pl-4 pr-10 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:ring-4 focus:ring-[#16136a]/10">
+                                <option value="all" @selected(old('target_group') === 'all')>Everyone (Students & Admins)</option>
+                                <option value="student" @selected(old('target_group', 'student') === 'student')>Students Only</option>
+                                <option value="admin" @selected(old('target_group') === 'admin')>Admins Only</option>
+                            </select>
+                            <i class="ri-group-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        </div>
+                        @error('target_group')
+                            <span class="text-xs text-rose-600">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="flex flex-col gap-2">
                         <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Base amount (GHS)</span>
                         <div class="flex gap-2">

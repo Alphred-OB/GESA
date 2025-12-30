@@ -75,46 +75,43 @@
         @php($duesAction = collect($quickActions ?? [])->firstWhere('label', 'Outstanding dues'))
         @php($nextEvent = ($events ?? collect())->first())
 
-        <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/20 bg-[#16136a] bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-10 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)]">
+        <section class="relative isolate animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/20 bg-[#16136a] bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-6 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)] sm:p-10">
             <div class="pointer-events-none absolute -inset-20 opacity-10">
                 <div class="h-full w-full animate-spin duration-[48000ms] ease-linear motion-reduce:animate-none">
                     <div class="h-full w-full rounded-[56px] bg-[conic-gradient(from_120deg_at_50%_50%,rgba(255,255,255,0.25),rgba(255,255,255,0)_70%)] blur-xl"></div>
                 </div>
             </div>
             <div class="relative z-10 flex flex-col gap-6">
-                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-50/90">GESA Student Portal</p>
-                <div class="space-y-4">
-                    <h1 class="text-3xl font-semibold md:text-4xl">{{ $hero['greeting'] ?? 'Welcome back' }}, {{ $hero['first_name'] ?? 'Student' }}!</h1>
-                    <p class="max-w-2xl text-sm text-emerald-50">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.35em] text-emerald-50/90 sm:text-xs">GESA Student Portal</p>
+                <div class="space-y-3 sm:space-y-4">
+                    <h1 class="text-2xl font-semibold sm:text-3xl md:text-4xl">{{ $hero['greeting'] ?? 'Welcome back' }}, {{ $hero['first_name'] ?? 'Student' }}!</h1>
+                    <p class="max-w-2xl text-xs text-emerald-50/90 sm:text-sm">
                         {{ $hero['message'] ?? 'Stay on top of your academic tasks, dues, and campus life in one place.' }}
                     </p>
                 </div>
-                <div class="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-50/90">
+                <div class="flex flex-wrap gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-50/80 sm:gap-3 sm:text-xs">
                     @foreach ($hero['chips'] ?? [] as $chip)
                         <span class="rounded-full bg-white/15 px-3 py-1">{{ $chip }}</span>
                     @endforeach
                 </div>
                 @if ($duesAction || $nextEvent)
-                    <div class="mt-2 flex flex-wrap gap-3 text-xs text-slate-100/80">
+                    <div class="mt-2 flex flex-col gap-3 text-xs sm:flex-row sm:items-center">
                         @if ($duesAction)
-                            <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1">
+                            <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-slate-100/90">
                                 <i class="ri-wallet-3-line text-sm" aria-hidden="true"></i>
-                                <span class="text-[11px] font-semibold tracking-[0.22em]">{{ strtoupper($duesAction['state'] ?? 'Dues') }}</span>
+                                <span class="text-[10px] font-semibold tracking-[0.22em] sm:text-[11px]">{{ strtoupper($duesAction['state'] ?? 'Dues') }}</span>
                                 @if (!empty($duesAction['value']))
-                                    <span class="text-slate-100/80">· {{ $duesAction['value'] }}</span>
+                                    <span class="text-slate-100/70">· {{ $duesAction['value'] }}</span>
                                 @endif
                             </div>
                         @endif
                         @if ($nextEvent)
-                            <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1">
+                            <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-slate-100/90">
                                 <i class="ri-calendar-event-line text-sm" aria-hidden="true"></i>
-                                <span class="text-[11px] font-semibold tracking-[0.22em]">NEXT EVENT</span>
-                                <span class="text-xs font-medium text-slate-100">
-                                    {{ \Illuminate\Support\Str::limit($nextEvent['title'] ?? 'Upcoming event', 40) }}
+                                <span class="text-[10px] font-semibold tracking-[0.22em] sm:text-[11px]">NEXT EVENT</span>
+                                <span class="text-[11px] font-medium text-slate-100 sm:text-xs">
+                                    {{ \Illuminate\Support\Str::limit($nextEvent['title'] ?? 'Upcoming event', 30) }}
                                 </span>
-                                @if (!empty($nextEvent['datetime']))
-                                    <span class="text-slate-100/80">· {{ $nextEvent['datetime'] }}</span>
-                                @endif
                             </div>
                         @endif
                     </div>
@@ -122,27 +119,27 @@
             </div>
         </section>
 
-        <section class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 lg:gap-6">
             @foreach ($quickActions as $index => $action)
                 <article class="rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/12 animate-fade-slide {{ $index > 0 ? 'delay-[' . (60 * $index) . 'ms]' : '' }}">
                     <div class="flex items-start gap-4">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" class="h-7 w-7" aria-hidden="true">
                                 {!! $action['icon_svg'] ?? '<circle cx="12" cy="12" r="6" />' !!}
                             </svg>
                         </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a]/70">
-                                <span>{{ $action['label'] ?? 'Action' }}</span>
+                        <div class="min-w-0 flex-1 space-y-4">
+                            <div class="flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#16136a]/70">
+                                <span class="truncate">{{ $action['label'] ?? 'Action' }}</span>
                                 @if (!empty($action['state']))
-                                    <span class="rounded-full bg-[#16136a]/7 px-2 py-0.5 text-[10px] tracking-[0.22em]">
+                                    <span class="shrink-0 rounded-full bg-[#16136a]/7 px-2 py-0.5 text-[9px] tracking-[0.22em]">
                                         {{ strtoupper($action['state']) }}
                                     </span>
                                 @endif
                             </div>
-                            <p class="text-2xl font-semibold text-[#16136a]">{{ $action['value'] ?? '--' }}</p>
-                            <p class="text-sm text-slate-600">{{ $action['summary'] ?? '' }}</p>
-                            <a href="{{ $action['cta_url'] ?? '#' }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#16136a] transition hover:underline">
+                            <p class="text-2xl font-bold text-[#16136a] sm:text-3xl">{{ $action['value'] ?? '--' }}</p>
+                            <p class="text-sm text-slate-600 line-clamp-2">{{ $action['summary'] ?? '' }}</p>
+                            <a href="{{ $action['cta_url'] ?? '#' }}" class="inline-flex items-center gap-2 text-sm font-bold text-[#16136a] transition hover:underline">
                                 {{ $action['cta'] ?? 'Open' }}
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                     <path d="m9 5 7 7-7 7" />
