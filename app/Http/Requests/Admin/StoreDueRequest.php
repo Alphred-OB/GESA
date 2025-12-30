@@ -29,7 +29,7 @@ class StoreDueRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'academic_year' => ['required', 'string', 'regex:/^\d{4}\/\d{4}$/'],
             'due_date' => ['required', 'date'],
-            'base_amount' => ['required', 'numeric', 'min:0'],
+            'base_amount' => ['nullable', 'numeric', 'min:0'],
             'amounts' => ['nullable', 'array'],
         ];
 
