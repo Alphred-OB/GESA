@@ -282,14 +282,20 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('dues.reject')
         ->middleware('admin.role:financial_secretary');
 
+    Route::get('dues/{due}/receipt', [AdminDueController::class, 'receipt'])
+        ->name('dues.receipt')
+        ->middleware('admin.role:financial_secretary');
+
+
     Route::resource('dues', AdminDueController::class)
-        ->except(['show'])
+        ->except(['show', 'destroy'])
         ->middleware('admin.role:financial_secretary');
 
     // Admin Personal Dues
     Route::get('personal-dues', [AdminPersonalDueController::class, 'index'])->name('personal-dues.index');
     Route::get('personal-dues/{due}/manual', [AdminPersonalDueController::class, 'showManualPayment'])->name('personal-dues.manual.show');
     Route::post('personal-dues/{due}/manual', [AdminPersonalDueController::class, 'storeManualPayment'])->name('personal-dues.manual.store');
+    Route::get('personal-dues/{due}/receipt', [AdminPersonalDueController::class, 'receipt'])->name('personal-dues.receipt');
 
     Route::post('course-registrations/bulk', [AdminCourseRegistrationController::class, 'bulk'])->name('course-registrations.bulk');
     Route::resource('course-registrations', AdminCourseRegistrationController::class)->only(['index', 'show', 'update']);
@@ -317,6 +323,23 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('pending-registrations.reject');
     
     Route::resource('students', \App\Http\Controllers\Admin\AdminStudentAccountController::class);
+
+    // Developer Maintenance Routes (Hidden from UI)
+    Route::prefix('maintenance')->name('dues.maintenance.')->middleware('admin.role:financial_secretary,president')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'index'])->name('index');
+        Route::get('/details', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'showDueDetails'])->name('details');
+        Route::post('/sync-missing', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'syncMissing'])->name('sync-missing');
+        Route::post('/sync-all', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'syncAll'])->name('sync-all');
+        Route::post('/delete-duplicate', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'deleteDuplicate'])->name('delete-duplicate');
+        Route::post('/delete-all-duplicates', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'deleteAllDuplicates'])->name('delete-all-duplicates');
+        Route::put('/{due}', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'editDue'])->name('edit');
+        Route::get('/merge', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'showMerge'])->name('merge-form');
+        Route::post('/merge', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'mergeDues'])->name('merge');
+        Route::post('/delete-all-orphaned', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'deleteAllOrphaned'])->name('delete-all-orphaned');
+        Route::get('/edit-amounts', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'showEditAmounts'])->name('edit-amounts');
+        Route::post('/update-single-amount', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'updateSingleAmount'])->name('update-single-amount');
+        Route::post('/update-all-amounts', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'updateAllAmounts'])->name('update-all-amounts');
+    });
 
 });
 

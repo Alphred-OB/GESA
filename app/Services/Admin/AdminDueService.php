@@ -626,45 +626,83 @@ class AdminDueService
             ->groupBy(fn (Due $due) => $due->academic_year . '|' . $due->description);
 
         if ($templates->isEmpty()) {
-            $configs = DefaultDueConfig::query()
-                ->where('class', $class)
-                ->where('year', (string) $year)
+            // Get all unique active dues (by academic_year + description) to check against
+            // Use groupBy to ensure we get truly unique combinations
+            $uniqueDues = Due::query()
                 ->where('is_active', true)
-                ->where('target_group', 'all')
+                ->select('academic_year', 'description')
+                ->selectRaw('MIN(due_date) as due_date')
+                ->selectRaw('MIN(recorded_by) as recorded_by')
+                ->groupBy('academic_year', 'description')
                 ->get();
 
-            foreach ($configs as $config) {
-                $referenceDue = Due::query()
-                    ->where('description', $config->description)
-                    ->orderByDesc('created_at')
+            foreach ($uniqueDues as $referenceDue) {
+                // Check if this student's class/year has a config for this due
+                $config = DefaultDueConfig::query()
+                    ->where('class', $class)
+                    ->where('year', (string) $year)
+                    ->where('description', $referenceDue->description)
+                    ->where('is_active', true)
+                    ->whereIn('target_group', ['all', 'student'])
                     ->first();
 
-                if (! $referenceDue) {
-                    continue;
+                // If no specific config, try to find a config with same description for any class/year
+                // This handles cases where dues were created for all class/year combinations
+                if (! $config) {
+                    $config = DefaultDueConfig::query()
+                        ->where('class', $class)
+                        ->where('year', (string) $year)
+                        ->where('is_active', true)
+                        ->whereIn('target_group', ['all', 'student'])
+                        ->first();
+
+                    // Only use this config if description matches
+                    if ($config && $config->description !== $referenceDue->description) {
+                        $config = null;
+                    }
                 }
 
+                if (! $config) {
+                    // Still no config - use the amount from any existing due with same description and year
+                    $existingDue = Due::query()
+                        ->where('description', $referenceDue->description)
+                        ->where('academic_year', $referenceDue->academic_year)
+                        ->where('is_active', true)
+                        ->first();
+
+                    if (! $existingDue) {
+                        continue;
+                    }
+
+                    // Use the existing due as a template
+                    $amount = $existingDue->amount;
+                    $baseDueDate = $existingDue->due_date ?: now();
+                } else {
+                    $amount = $config->amount;
+                    $baseDate = $config->created_at ?: $referenceDue->due_date ?: now();
+                    $baseDueDate = $baseDate;
+                    
+                    if ($config->due_date_offset !== null) {
+                        $baseDueDate = $baseDate->copy()->addDays((int) $config->due_date_offset);
+                    }
+                }
+
+                // Check if this due already exists for the student
                 $exists = Due::query()
                     ->where('student_id', $student->user_id)
                     ->where('academic_year', $referenceDue->academic_year)
-                    ->where('description', $config->description)
+                    ->where('description', $referenceDue->description)
                     ->exists();
 
                 if ($exists) {
                     continue;
                 }
 
-                $baseDate = $config->created_at ?: $referenceDue->due_date ?: now();
-                $dueDate = $baseDate;
-
-                if ($config->due_date_offset !== null) {
-                    $dueDate = $baseDate->copy()->addDays((int) $config->due_date_offset);
-                }
-
                 Due::query()->create([
                     'student_id' => $student->user_id,
-                    'description' => $config->description,
-                    'amount' => $config->amount,
-                    'due_date' => $dueDate->toDateString(),
+                    'description' => $referenceDue->description,
+                    'amount' => $amount,
+                    'due_date' => $baseDueDate instanceof \DateTimeInterface ? $baseDueDate->format('Y-m-d') : $baseDueDate,
                     'academic_year' => $referenceDue->academic_year,
                     'payment_status' => 'owing',
                     'payment_method' => null,

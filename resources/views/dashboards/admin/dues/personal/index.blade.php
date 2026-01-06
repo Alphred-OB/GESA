@@ -196,7 +196,10 @@
                                                 </a>
                                             @endif
                                         @elseif ($status === 'paid')
-                                            <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Verified</span>
+                                            <a href="{{ route('admin.personal-dues.receipt', $due) }}" class="inline-flex items-center gap-2 rounded-full border border-[#16136a]/30 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a] shadow-sm transition hover:-translate-y-0.5 hover:border-[#16136a]/50">
+                                                <i class="ri-file-download-line text-base" aria-hidden="true"></i>
+                                                Receipt
+                                            </a>
                                         @else
                                             <div class="text-xs text-slate-400">Verifying…</div>
                                         @endif
@@ -256,10 +259,10 @@
                                             </a>
                                         @endif
                                     @elseif ($due->payment_status === 'paid')
-                                        <div class="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
-                                            <i class="ri-checkbox-circle-line"></i>
-                                            Verified
-                                        </div>
+                                        <a href="{{ route('admin.personal-dues.receipt', $due) }}" class="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-widest text-emerald-700 shadow-sm transition hover:bg-emerald-100/50">
+                                            <i class="ri-file-download-line text-lg"></i>
+                                            Download Receipt
+                                        </a>
                                     @else
                                         <div class="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 text-[11px] font-bold uppercase tracking-widest text-amber-700">
                                             <i class="ri-history-line animate-spin-slow"></i>

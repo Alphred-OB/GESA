@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class AdminDueController extends Controller
 {
@@ -199,4 +203,61 @@ class AdminDueController extends Controller
             'filtersMeta' => $filtersMeta,
         ]);
     }
+    public function receipt(Request $request, Due $due): Response|RedirectResponse
+    {
+        // Only allow paid dues to have receipts
+        if ($due->payment_status !== 'paid') {
+            return redirect()
+                ->route('admin.dues.index')
+                ->with('error', __('Receipt is available once the payment is marked as paid.'));
+        }
+
+        $student = $due->student;
+        if (!$student) {
+            abort(404, 'User not found for this due.');
+        }
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultPaperOrientation', 'portrait');
+        $options->set('defaultPaperSize', 'a4');
+
+        $dompdf = new Dompdf($options);
+
+        $institution = config('app.name', 'GESA Portal');
+        $generatedAt = now()->format('F j, Y \a\t g:i A');
+
+        $logoPath = public_path('logo.png');
+        $logoData = null;
+        if (is_file($logoPath)) {
+            $logoContents = @file_get_contents($logoPath);
+            if ($logoContents !== false) {
+                $logoData = 'data:image/' . pathinfo($logoPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($logoContents);
+            }
+        }
+
+        $html = view('dashboards.student.dues.receipt', [
+            'due' => $due,
+            'student' => $student,
+            'institution' => $institution,
+            'generatedAt' => $generatedAt,
+            'logoData' => $logoData,
+        ])->render();
+
+        $dompdf->loadHtml($html, 'UTF-8');
+        $dompdf->render();
+
+        $filename = sprintf(
+            'GESA-receipt-%s.pdf',
+            Str::slug($due->payment_reference ?? $due->reference_number ?? ('due-' . $due->due_id))
+        );
+
+        $pdfOutput = $dompdf->output();
+
+        return response($pdfOutput, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
 }
+

@@ -214,10 +214,10 @@
                 <!-- Column 2: Payment Details -->
                 <td class="text-right">
                     <span class="info-label">Payment Method</span>
-                    <span class="info-value">Online / Portal</span>
+                    <span class="info-value">{{ $due->payment_method === 'paystack' ? 'Online / Paystack' : ($due->payment_method === 'manual' ? 'Manual Payment' : 'Portal / Cash') }}</span>
 
                     <span class="info-label" style="margin-top: 10px;">Reference ID</span>
-                    <span class="info-value">{{ $due->payment_reference ?? '—' }}</span>
+                    <span class="info-value">{{ $due->payment_reference ?? $due->reference_number ?? '—' }}</span>
 
                     <!-- Dynamic Badge -->
                     @if(strtolower($due->payment_status) == 'paid')
@@ -238,7 +238,7 @@
             <table class="summary-table">
                 <tr>
                     <td colspan="2" style="vertical-align: middle;">
-                        <span class="info-label">Student name</span>
+                        <span class="info-label">{{ ($student->role ?? '') === 'admin' ? 'Member' : 'Student' }} name</span>
                         <span class="info-value">{{ $student->fullname ?? $student->username }}</span>
                     </td>
                 </tr>

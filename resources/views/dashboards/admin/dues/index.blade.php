@@ -289,6 +289,10 @@
                                                 <i class="ri-checkbox-circle-line text-sm"></i>
                                                 Verify
                                             </a>
+                                        @elseif ($status === 'paid')
+                                            <a href="{{ route('admin.dues.receipt', $due) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-600 shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-100" title="Download Receipt">
+                                                <i class="ri-file-download-line text-lg"></i>
+                                            </a>
                                         @else
                                             <div class="text-xs text-slate-400">—</div>
                                         @endif
@@ -349,6 +353,11 @@
                                         <a href="{{ route('admin.dues.verify', $due) }}" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#16136a] py-3 text-xs font-bold uppercase tracking-widest text-white shadow-md transition-transform active:scale-95">
                                             <i class="ri-checkbox-circle-line text-sm"></i>
                                             Verify Payment
+                                        </a>
+                                    @elseif ($status === 'paid')
+                                        <a href="{{ route('admin.dues.receipt', $due) }}" class="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 text-[11px] font-bold uppercase tracking-widest text-emerald-700 shadow-sm transition hover:bg-emerald-100/50">
+                                            <i class="ri-file-download-line text-lg"></i>
+                                            Download Receipt
                                         </a>
                                     @endif
                                 </footer>
