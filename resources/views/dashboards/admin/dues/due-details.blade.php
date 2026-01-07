@@ -221,7 +221,7 @@
                                     <td class="px-4 py-3 text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             @if ($due->payment_status === 'pending_verification')
-                                                <a href="{{ route('admin.dues.verify', $due) }}" class="rounded-lg bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-200" title="Verify Payment">
+                                                <a href="{{ route('admin.dues.verify-payment', $due) }}" class="rounded-lg bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-200" title="Verify Payment">
                                                     <i class="ri-checkbox-circle-line"></i>
                                                 </a>
                                             @endif

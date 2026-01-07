@@ -285,7 +285,7 @@
                                     </td>
                                     <td class="px-5 py-3 text-right">
                                         @if ($status === 'pending_verification')
-                                            <a href="{{ route('admin.dues.verify', $due) }}" class="inline-flex items-center gap-2 rounded-xl bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
+                                            <a href="{{ route('admin.dues.verify-payment', $due) }}" class="inline-flex items-center gap-2 rounded-xl bg-[#16136a] px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
                                                 <i class="ri-checkbox-circle-line text-sm"></i>
                                                 Verify
                                             </a>
@@ -350,7 +350,7 @@
                                         <span class="font-medium">{{ $due->academic_year }}</span>
                                     </div>
                                     @if ($status === 'pending_verification')
-                                        <a href="{{ route('admin.dues.verify', $due) }}" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#16136a] py-3 text-xs font-bold uppercase tracking-widest text-white shadow-md transition-transform active:scale-95">
+                                        <a href="{{ route('admin.dues.verify-payment', $due) }}" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#16136a] py-3 text-xs font-bold uppercase tracking-widest text-white shadow-md transition-transform active:scale-95">
                                             <i class="ri-checkbox-circle-line text-sm"></i>
                                             Verify Payment
                                         </a>

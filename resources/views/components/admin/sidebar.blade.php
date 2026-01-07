@@ -45,6 +45,13 @@
             'badge' => $pendingRegistrationsCount,
         ],
         [
+            'label' => 'Verifications',
+            'route_name' => 'admin.dues.verifications',
+            'pattern' => 'admin.dues.verifications',
+            'icon' => 'ri-checkbox-circle-line',
+            'badge' => $pendingDuesCount,
+        ],
+        [
             'label' => 'Dues',
             'route_name' => 'admin.dues.index',
             'pattern' => 'admin.dues.*',

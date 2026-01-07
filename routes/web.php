@@ -264,6 +264,10 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('dues/statistics', [AdminDueController::class, 'statistics'])
         ->name('dues.statistics')
         ->middleware('admin.role:financial_secretary');
+    
+    Route::get('dues/verifications', [AdminDueController::class, 'verifications'])
+        ->name('dues.verifications')
+        ->middleware('admin.role:financial_secretary');
 
     Route::get('dues/payment-settings', [\App\Http\Controllers\Admin\AdminPaymentSettingController::class, 'index'])
         ->name('payment-settings.index')
@@ -272,8 +276,8 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('payment-settings.update')
         ->middleware('admin.role:financial_secretary');
 
-    Route::get('dues/{due}/verify', [AdminDueController::class, 'verify'])
-        ->name('dues.verify')
+    Route::get('verify-payment/{due}', [AdminDueController::class, 'verify'])
+        ->name('dues.verify-payment')
         ->middleware('admin.role:financial_secretary');
     Route::post('dues/{due}/approve', [AdminDueController::class, 'approve'])
         ->name('dues.approve')

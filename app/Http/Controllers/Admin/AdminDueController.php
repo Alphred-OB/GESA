@@ -51,6 +51,12 @@ class AdminDueController extends Controller
         ]);
     }
 
+    public function verifications(Request $request): View
+    {
+        $request->merge(['status' => 'pending_verification']);
+        return $this->index($request);
+    }
+
     public function create(): View
     {
         $filtersMeta = $this->service->filterOptions();
