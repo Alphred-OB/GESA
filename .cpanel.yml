@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/kingadu/public_html/student.gesa-umat.com/
+    - /bin/cp -R * $DEPLOYPATH
