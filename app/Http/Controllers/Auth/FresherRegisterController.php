@@ -37,10 +37,10 @@ class FresherRegisterController extends Controller
             $studentIdPath = $request->file('student_id')->store('student-ids', 'public');
         }
 
-        // Check if OTP routes are available (route cache cleared)
-        $otpEnabled = Route::has('auth.fresher-register.verify');
+        // Check if email verification is enabled via environment variable
+        $otpEnabled = config('app.email_verification_enabled', false);
 
-        // Generate OTP only if enabled
+        // Generate OTP if enabled
         $otp = null;
         if ($otpEnabled) {
             $otp = (string) random_int(100000, 999999);
@@ -66,7 +66,7 @@ class FresherRegisterController extends Controller
         ]);
 
         if ($otpEnabled) {
-            // NEW FLOW: Send OTP and redirect to verification
+            // Send OTP and redirect to verification page
             try {
                 Mail::send('emails.fresher-verification', ['code' => $otp], function ($message) use ($registration) {
                     $message->to($registration->email)
@@ -81,9 +81,9 @@ class FresherRegisterController extends Controller
 
             return redirect()->route('auth.fresher-register.verify');
         } else {
-            // OLD FLOW: Skip OTP, go directly to success (backwards compatibility)
+            // Skip OTP, go directly to success
             return redirect()->route('auth.fresher-register.success')
-                ->with('success', __('Your registration request has been submitted successfully! An administrator will review your request within 24-48 hours. You will receive an email once your account is approved.'));
+                ->with('success', __('Your registration request has been submitted successfully! An administrator will review your request within 24-48 hours.'));
         }
     }
 

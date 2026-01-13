@@ -46,7 +46,14 @@ class RegisterController extends Controller
                 ->withInput();
         }
 
-        $otp = (string) random_int(100000, 999999);
+        // Check if email verification is enabled via environment variable
+        $otpEnabled = config('app.email_verification_enabled', false);
+
+        // Generate OTP if enabled
+        $otp = null;
+        if ($otpEnabled) {
+            $otp = (string) random_int(100000, 999999);
+        }
 
         // Handle document upload
         $documentPath = null;
@@ -68,24 +75,30 @@ class RegisterController extends Controller
             'student_id_path' => $documentPath,
             'reason' => null,
             'status' => 'pending',
-            'verification_code' => Hash::make($otp),
-            'verification_expires_at' => now()->addMinutes(15),
-            'email_verified_at' => null,
+            'verification_code' => $otpEnabled ? Hash::make($otp) : null,
+            'verification_expires_at' => $otpEnabled ? now()->addMinutes(15) : null,
+            'email_verified_at' => $otpEnabled ? null : now(), // Auto-verify if OTP disabled
         ]);
 
-        // Send OTP
-        try {
-            \Illuminate\Support\Facades\Mail::send('emails.fresher-verification', ['code' => $otp], function ($message) use ($registration) {
-                $message->to($registration->email)
-                    ->subject('Verify Your GESA Registration');
-            });
-        } catch (\Exception $e) {
-            \Log::error('Failed to send verification email: ' . $e->getMessage());
+        if ($otpEnabled) {
+            // Send OTP and redirect to verification page
+            try {
+                \Illuminate\Support\Facades\Mail::send('emails.fresher-verification', ['code' => $otp], function ($message) use ($registration) {
+                    $message->to($registration->email)
+                        ->subject('Verify Your GESA Registration');
+                });
+            } catch (\Exception $e) {
+                \Log::error('Failed to send verification email: ' . $e->getMessage());
+            }
+
+            // Store ID in session for verification step
+            session(['fresher_pending_id' => $registration->id]);
+
+            return redirect()->route('auth.fresher-register.verify');
+        } else {
+            // Skip OTP, go directly to success
+            return redirect()->route('auth.fresher-register.success')
+                ->with('success', __('Your registration request has been submitted successfully! An administrator will review your request within 24-48 hours.'));
         }
-
-        // Store ID in session for verification step
-        session(['fresher_pending_id' => $registration->id]);
-
-        return redirect()->route('auth.fresher-register.verify');
     }
 }

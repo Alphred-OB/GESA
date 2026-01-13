@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DefaultDueConfig;
 use App\Models\Due;
+use App\Models\PendingRegistration;
 use App\Models\User;
 use App\Services\Admin\AdminDueService;
 use Illuminate\Http\RedirectResponse;
@@ -78,8 +79,10 @@ class AdminDuesMaintenanceController extends Controller
             }
 
             // Find duplicate dues (same student has same due multiple times)
+            // We use TRIM to catch cases with accidental whitespace
             $duplicates = DB::table('dues')
-                ->select('student_id', 'academic_year', 'description')
+                ->select('student_id', 'academic_year')
+                ->selectRaw('TRIM(description) as description')
                 ->selectRaw('COUNT(*) as duplicate_count')
                 ->selectRaw('GROUP_CONCAT(due_id) as due_ids')
                 ->where('is_active', true)
@@ -129,6 +132,59 @@ class AdminDuesMaintenanceController extends Controller
                 'loadError' => 'Failed to load maintenance data: ' . $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Show a general overview of all students and their current dues status.
+     * This is effectively "what the student sees" but for every student.
+     */
+    public function studentRegistry(Request $request): View
+    {
+        $search = $request->query('search');
+        $class = $request->query('class');
+        $year = $request->query('year');
+
+        $studentsQuery = User::query()
+            ->where('role', 'student')
+            ->where('is_graduated', false)
+            ->whereNotNull('email_verified_at')
+            ->with(['dues' => function($q) {
+                $q->where('is_active', true);
+            }]);
+
+        if ($search) {
+            $studentsQuery->where(function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('index_number', 'like', "%{$search}%");
+            });
+        }
+
+        if ($class) {
+            $studentsQuery->where('class', $class);
+        }
+
+        if ($year) {
+            $studentsQuery->where('year', $year);
+        }
+
+        $students = $studentsQuery->orderBy('class')->orderBy('year')->paginate(20)->withQueryString();
+
+        // Calculate balances for the paginated set
+        foreach ($students as $student) {
+            $activeDues = $student->dues;
+            $student->outstanding_balance = (float) $activeDues->whereIn('payment_status', ['owing', 'pending_verification'])->sum('amount');
+            $student->paid_balance = (float) $activeDues->where('payment_status', 'paid')->sum('amount');
+            $student->dues_count = $activeDues->count();
+            $student->owing_count = $activeDues->where('payment_status', 'owing')->count();
+        }
+
+        return view('dashboards.admin.dues.student-registry', [
+            'title' => 'Student Dues Registry',
+            'students' => $students,
+            'classes' => User::where('role', 'student')->distinct()->pluck('class')->filter(),
+            'years' => [1, 2, 3, 4],
+        ]);
     }
 
     /**
@@ -1012,9 +1068,554 @@ class AdminDuesMaintenanceController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Dues Maintenance: Failed to update all amounts', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Failed to update amounts: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Search for a student to trace their dues (Debugging Tool).
+     */
+    public function traceStudent(Request $request): View|RedirectResponse
+    {
+        $query = $request->query('query');
+        
+        if (!$query) {
+            return redirect()->route('admin.dues.maintenance.index')->with('error', 'Please provide a student name, index number, or ID.');
+        }
+
+        $student = User::query()
+            ->where('role', 'student')
+            ->where(function ($q) use ($query) {
+                $q->where('user_id', $query)
+                  ->orWhere('username', 'like', "%{$query}%")
+                  ->orWhere('fullname', 'like', "%{$query}%")
+                  ->orWhere('index_number', 'like', "%{$query}%")
+                  ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->first();
+
+        if (!$student) {
+            return redirect()->route('admin.dues.maintenance.index')->with('error', "No student found matching '{$query}'");
+        }
+
+        // Get ALL dues for this student (active and inactive)
+        $dues = Due::query()
+            ->where('student_id', $student->user_id)
+            ->orderByDesc('academic_year')
+            ->orderByDesc('is_active')
+            ->get();
+
+        $stats = [
+            'total_active' => $dues->where('is_active', true)->whereIn('payment_status', ['owing', 'pending_verification'])->sum('amount'),
+            'total_paid' => $dues->where('payment_status', 'paid')->sum('amount'),
+            'count_active' => $dues->where('is_active', true)->count(),
+            'count_inactive' => $dues->where('is_active', false)->count(),
+        ];
+
+        return view('dashboards.admin.dues.trace-student', [
+            'title' => 'Student Due Trace: ' . ($student->fullname ?? $student->username),
+            'student' => $student,
+            'dues' => $dues,
+            'stats' => $stats,
+        ]);
+    }
+
+    /**
+     * Normalize all due descriptions (Trim whitespace).
+     * Helps fix issues where 'Official Dues' and 'Official Dues ' are treated as different.
+     */
+    public function normalizeDescriptions(): RedirectResponse
+    {
+        try {
+            $updated = DB::table('dues')
+                ->whereRaw('description != TRIM(description)')
+                ->update([
+                    'description' => DB::raw('TRIM(description)')
+                ]);
+
+            return back()->with('status', "Successfully normalized {$updated} dues descriptions by trimming whitespace.");
+        } catch (\Exception $e) {
+            Log::error('Dues Maintenance: Normalization failed', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to normalize descriptions.');
+        }
+    }
+
+    /**
+     * Show the Default Dues Config manager.
+     * This is where admins can view and edit the default amounts for each class/year/description.
+     */
+    public function duesConfig(): View
+    {
+        // Get all unique descriptions from DefaultDueConfig
+        $descriptions = DefaultDueConfig::query()
+            ->where('is_active', true)
+            ->distinct()
+            ->pluck('description')
+            ->filter()
+            ->values();
+
+        // Get all classes and years
+        $matrix = $this->dueService->matrix();
+        $classes = $matrix['classes'];
+        $years = $matrix['years'];
+
+        // Get all config entries grouped by description
+        $configByDescription = [];
+        foreach ($descriptions as $description) {
+            $configs = DefaultDueConfig::query()
+                ->where('description', $description)
+                ->where('is_active', true)
+                ->get()
+                ->keyBy(fn($c) => $c->class . '|' . $c->year);
+
+            $configMatrix = [];
+            foreach ($classes as $class) {
+                foreach ($years as $year) {
+                    $key = $class . '|' . $year;
+                    $configMatrix[$class][$year] = $configs->get($key)?->amount ?? null;
+                }
+            }
+
+            $configByDescription[$description] = $configMatrix;
+        }
+
+        // Get counts of students affected by each class/year
+        $studentCounts = User::query()
+            ->where('role', 'student')
+            ->where('is_graduated', false)
+            ->whereNotNull('email_verified_at')
+            ->selectRaw('class, year, COUNT(*) as count')
+            ->groupBy('class', 'year')
+            ->get()
+            ->keyBy(fn($s) => $s->class . '|' . $s->year);
+
+        return view('dashboards.admin.dues.dues-config', [
+            'title' => 'Default Dues Configuration',
+            'descriptions' => $descriptions,
+            'classes' => $classes,
+            'years' => $years,
+            'configByDescription' => $configByDescription,
+            'studentCounts' => $studentCounts,
+        ]);
+    }
+
+    /**
+     * Update a specific DefaultDueConfig entry.
+     */
+    public function updateDuesConfig(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'class' => 'required|string',
+            'year' => 'required|string',
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        try {
+            DefaultDueConfig::updateOrCreate(
+                [
+                    'class' => $validated['class'],
+                    'year' => $validated['year'],
+                    'description' => $validated['description'],
+                ],
+                [
+                    'amount' => (float) $validated['amount'],
+                    'is_active' => true,
+                    'target_group' => 'student',
+                ]
+            );
+
+            Log::info('Dues Maintenance: Updated DefaultDueConfig', [
+                'class' => $validated['class'],
+                'year' => $validated['year'],
+                'description' => $validated['description'],
+                'amount' => $validated['amount'],
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Updated config for {$validated['class']} Year {$validated['year']}: GHS " . number_format($validated['amount'], 2));
+        } catch (\Exception $e) {
+            Log::error('Dues Maintenance: Failed to update config', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to update configuration.');
+        }
+    }
+
+    /**
+     * Bulk update all DefaultDueConfig entries for a description.
+     */
+    public function bulkUpdateDuesConfig(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'amounts' => 'required|array',
+        ]);
+
+        $description = $validated['description'];
+        $amounts = $validated['amounts'];
+
+        try {
+            $updated = 0;
+
+            DB::transaction(function () use ($description, $amounts, &$updated, $request) {
+                foreach ($amounts as $class => $years) {
+                    foreach ($years as $year => $amount) {
+                        if ($amount === null || $amount === '') {
+                            continue;
+                        }
+
+                        DefaultDueConfig::updateOrCreate(
+                            [
+                                'class' => trim($class),
+                                'year' => trim((string) $year),
+                                'description' => $description,
+                            ],
+                            [
+                                'amount' => (float) $amount,
+                                'is_active' => true,
+                                'target_group' => 'student',
+                            ]
+                        );
+                        $updated++;
+                    }
+                }
+            });
+
+            Log::info('Dues Maintenance: Bulk updated DefaultDueConfig', [
+                'description' => $description,
+                'updated' => $updated,
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Updated {$updated} configuration entries for '{$description}'.");
+        } catch (\Exception $e) {
+            Log::error('Dues Maintenance: Bulk config update failed', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to update configurations.');
+        }
+    }
+
+    /**
+     * Resync all student dues amounts from DefaultDueConfig.
+     * This corrects any dues that have incorrect amounts.
+     */
+    public function resyncDuesFromConfig(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'description' => 'nullable|string',
+            'academic_year' => 'nullable|string',
+            'only_owing' => 'nullable|boolean',
+        ]);
+
+        $description = $validated['description'] ?? null;
+        $academicYear = $validated['academic_year'] ?? null;
+        $onlyOwing = $validated['only_owing'] ?? true;
+
+        try {
+            $result = DB::transaction(function () use ($description, $academicYear, $onlyOwing, $request) {
+                // Get all relevant DefaultDueConfig entries
+                $configQuery = DefaultDueConfig::query()->where('is_active', true);
+                
+                if ($description) {
+                    $configQuery->where('description', $description);
+                }
+
+                $configs = $configQuery->get()->keyBy(fn($c) => $c->class . '|' . $c->year . '|' . $c->description);
+
+                // Get all dues that need checking
+                $duesQuery = Due::query()
+                    ->with('student:user_id,class,year')
+                    ->where('is_active', true);
+
+                if ($description) {
+                    $duesQuery->where('description', $description);
+                }
+
+                if ($academicYear) {
+                    $duesQuery->where('academic_year', $academicYear);
+                }
+
+                if ($onlyOwing) {
+                    $duesQuery->where('payment_status', 'owing');
+                }
+
+                $corrected = 0;
+                $skipped = 0;
+
+                $duesQuery->chunkById(500, function ($dues) use ($configs, &$corrected, &$skipped) {
+                    foreach ($dues as $due) {
+                        $student = $due->student;
+                        if (!$student || !$student->class || $student->year === null) {
+                            $skipped++;
+                            continue;
+                        }
+
+                        $key = $student->class . '|' . $student->year . '|' . $due->description;
+                        $config = $configs->get($key);
+
+                        if (!$config) {
+                            $skipped++;
+                            continue;
+                        }
+
+                        // Check if amount needs correction
+                        if ((float) $due->amount !== (float) $config->amount) {
+                            $due->update(['amount' => $config->amount]);
+                            $corrected++;
+                        }
+                    }
+                }, 'due_id');
+
+                return [
+                    'corrected' => $corrected,
+                    'skipped' => $skipped,
+                ];
+            });
+
+            Log::info('Dues Maintenance: Resynced dues from config', [
+                'description' => $description,
+                'academic_year' => $academicYear,
+                'only_owing' => $onlyOwing,
+                'result' => $result,
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            $message = "Corrected {$result['corrected']} dues to match configuration.";
+            if ($result['skipped'] > 0) {
+                $message .= " Skipped {$result['skipped']} dues (no config found or missing student data).";
+            }
+
+            return back()->with('status', $message);
+        } catch (\Exception $e) {
+            Log::error('Dues Maintenance: Resync from config failed', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to resync dues: ' . $e->getMessage());
+        }
+    }
+
+    // =========================================================================
+    // ACCOUNT MANAGEMENT SECTION
+    // =========================================================================
+
+    /**
+     * Show the account management page.
+     */
+    public function accountManagement(Request $request): View
+    {
+        $search = $request->query('search');
+        $type = $request->query('type', 'all'); // all, pending, users
+        
+        $pendingRegistrations = collect();
+        $users = collect();
+        
+        if ($search) {
+            // Search pending registrations
+            if ($type === 'all' || $type === 'pending') {
+                $pendingRegistrations = PendingRegistration::query()
+                    ->where(function($q) use ($search) {
+                        $q->where('first_name', 'like', "%{$search}%")
+                          ->orWhere('last_name', 'like', "%{$search}%")
+                          ->orWhere('email', 'like', "%{$search}%")
+                          ->orWhere('username', 'like', "%{$search}%")
+                          ->orWhere('index_number', 'like', "%{$search}%");
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->limit(50)
+                    ->get();
+            }
+            
+            // Search users
+            if ($type === 'all' || $type === 'users') {
+                $users = User::query()
+                    ->where('role', 'student')
+                    ->where(function($q) use ($search) {
+                        $q->where('fullname', 'like', "%{$search}%")
+                          ->orWhere('email', 'like', "%{$search}%")
+                          ->orWhere('username', 'like', "%{$search}%")
+                          ->orWhere('index_number', 'like', "%{$search}%");
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->limit(50)
+                    ->get();
+            }
+        }
+
+        // Get counts for stats
+        $stats = [
+            'total_pending' => PendingRegistration::where('status', 'pending')->count(),
+            'pending_unverified' => PendingRegistration::where('status', 'pending')->whereNull('email_verified_at')->count(),
+            'pending_verified' => PendingRegistration::where('status', 'pending')->whereNotNull('email_verified_at')->count(),
+            'total_users' => User::where('role', 'student')->count(),
+        ];
+
+        return view('dashboards.admin.dues.account-management', [
+            'title' => 'Account Management',
+            'search' => $search,
+            'type' => $type,
+            'pendingRegistrations' => $pendingRegistrations,
+            'users' => $users,
+            'stats' => $stats,
+        ]);
+    }
+
+    /**
+     * Delete a pending registration.
+     */
+    public function deletePendingRegistration(Request $request, int $id): RedirectResponse
+    {
+        try {
+            $registration = PendingRegistration::findOrFail($id);
+            $name = "{$registration->first_name} {$registration->last_name}";
+            $email = $registration->email;
+            
+            $registration->delete();
+            
+            Log::info('Account Management: Deleted pending registration', [
+                'id' => $id,
+                'name' => $name,
+                'email' => $email,
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Deleted pending registration for {$name} ({$email}).");
+        } catch (\Exception $e) {
+            Log::error('Account Management: Failed to delete pending registration', ['id' => $id, 'error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to delete pending registration: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a user account.
+     */
+    public function deleteUserAccount(Request $request, int $id): RedirectResponse
+    {
+        try {
+            $user = User::where('role', 'student')->findOrFail($id);
+            $name = $user->fullname ?? $user->username;
+            $email = $user->email;
+            
+            // Delete associated dues first
+            Due::where('student_id', $id)->delete();
+            
+            $user->delete();
+            
+            Log::info('Account Management: Deleted user account', [
+                'id' => $id,
+                'name' => $name,
+                'email' => $email,
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Deleted user account for {$name} ({$email}) and all associated dues.");
+        } catch (\Exception $e) {
+            Log::error('Account Management: Failed to delete user account', ['id' => $id, 'error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to delete user account: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Force approve a pending registration (bypass email verification).
+     * Creates the user account and syncs dues.
+     */
+    public function forceApprovePending(Request $request, int $id): RedirectResponse
+    {
+        try {
+            $registration = PendingRegistration::findOrFail($id);
+            
+            if ($registration->status === 'approved') {
+                return back()->with('error', 'This registration is already approved.');
+            }
+
+            // Check for conflicts
+            $conflicts = [];
+            if (User::where('username', $registration->username)->exists()) {
+                $conflicts[] = "username '{$registration->username}'";
+            }
+            if (User::where('email', $registration->email)->exists()) {
+                $conflicts[] = "email '{$registration->email}'";
+            }
+            if ($registration->index_number && User::where('index_number', $registration->index_number)->exists()) {
+                $conflicts[] = "reference number '{$registration->index_number}'";
+            }
+            
+            if (!empty($conflicts)) {
+                return back()->with('error', 'Cannot approve: A user already exists with ' . implode(' and ', $conflicts) . '.');
+            }
+
+            $fullName = trim($registration->first_name . ' ' . $registration->last_name);
+
+            // Create the user account
+            $user = User::create([
+                'fullname' => $fullName,
+                'username' => $registration->username,
+                'email' => $registration->email,
+                'password' => $registration->password, // Already hashed
+                'phone_number' => $registration->phone_number,
+                'index_number' => $registration->index_number,
+                'class' => $registration->class,
+                'year' => $registration->year,
+                'role' => 'student',
+                'email_verified_at' => now(), // Force verify
+            ]);
+
+            // Bypass the password hashing cast by updating directly
+            User::where('user_id', $user->user_id)->update([
+                'password' => $registration->password
+            ]);
+
+            // Sync dues
+            $this->dueService->syncStudent($user);
+
+            // Update pending registration
+            $registration->update([
+                'status' => 'approved',
+                'email_verified_at' => $registration->email_verified_at ?? now(),
+                'reviewed_at' => now(),
+                'reviewed_by' => $request->user('admin')?->user_id,
+                'admin_notes' => 'Force approved via Account Management',
+            ]);
+
+            Log::info('Account Management: Force approved pending registration', [
+                'registration_id' => $id,
+                'user_id' => $user->user_id,
+                'name' => $fullName,
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Successfully approved {$fullName}! They can now log in with dues assigned.");
+        } catch (\Exception $e) {
+            Log::error('Account Management: Failed to force approve', ['id' => $id, 'error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to approve: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Force verify email for a pending registration.
+     */
+    public function forceVerifyEmail(Request $request, int $id): RedirectResponse
+    {
+        try {
+            $registration = PendingRegistration::findOrFail($id);
+            
+            if ($registration->email_verified_at) {
+                return back()->with('error', 'This registration is already email verified.');
+            }
+
+            $registration->update([
+                'email_verified_at' => now(),
+                'verification_code' => null,
+                'verification_expires_at' => null,
+            ]);
+
+            $name = "{$registration->first_name} {$registration->last_name}";
+
+            Log::info('Account Management: Force verified email', [
+                'id' => $id,
+                'name' => $name,
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Email verified for {$name}. Registration is now pending admin approval.");
+        } catch (\Exception $e) {
+            Log::error('Account Management: Failed to force verify email', ['id' => $id, 'error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to verify email: ' . $e->getMessage());
         }
     }
 }
-
 

@@ -82,4 +82,12 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token, $this->email));
     }
+
+    /**
+     * Get the dues for the user.
+     */
+    public function dues(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Due::class, 'student_id', 'user_id');
+    }
 }

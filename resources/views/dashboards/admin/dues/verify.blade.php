@@ -57,7 +57,7 @@
                         </div>
 
                         <!-- Approve Form -->
-                        <form x-show="action === 'approve'" action="{{ route('admin.dues.approve', $due) }}" method="POST" class="space-y-4">
+                        <form x-show="action === 'approve'" action="{{ route('admin.dues.approve', $due) }}" method="POST" class="space-y-4" onsubmit="console.log('Form submitting to:', this.action); return true;">
                             @csrf
                             <div class="space-y-2">
                                 <label class="text-xs font-semibold text-slate-500">Verification Notes (Optional)</label>

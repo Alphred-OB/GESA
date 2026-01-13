@@ -86,20 +86,83 @@
             </div>
         </div>
 
-        {{-- Sync All Button --}}
-        <div class="rounded-2xl border border-blue-200 bg-blue-50 p-5">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h3 class="font-semibold text-blue-900">Sync All Students</h3>
-                    <p class="text-sm text-blue-700">Assign all active dues to students who don't have them. Safe to run - won't duplicate or overwrite existing dues.</p>
+        {{-- Quick Search & Diagnostic Tools --}}
+        <div class="grid gap-4 md:grid-cols-2">
+            {{-- Sync All --}}
+            <div class="rounded-2xl border border-blue-200 bg-blue-50 p-5">
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-semibold text-blue-900">Sync All Students</h3>
+                        <p class="text-sm text-blue-700">Assign all active dues to students who don't have them.</p>
+                    </div>
+                    <form action="{{ route('admin.dues.maintenance.sync-all') }}" method="POST" onsubmit="return confirm('This will sync dues for ALL students. Continue?')">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 w-full justify-center">
+                            <i class="ri-refresh-line"></i>
+                            Sync All Students
+                        </button>
+                    </form>
                 </div>
-                <form action="{{ route('admin.dues.maintenance.sync-all') }}" method="POST" onsubmit="return confirm('This will sync dues for ALL students. Continue?')">
-                    @csrf
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                        <i class="ri-refresh-line"></i>
-                        Sync All Students
-                    </button>
-                </form>
+            </div>
+
+            {{-- Student Dues Registry --}}
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-sm">
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-semibold text-emerald-900">Student Dues Registry</h3>
+                        <p class="text-sm text-emerald-700">View "what the student sees" - a master list of all students and their net balances.</p>
+                    </div>
+                    <a href="{{ route('admin.dues.maintenance.registry') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 w-full justify-center">
+                        <i class="ri-team-line"></i>
+                        Open Registry
+                    </a>
+                </div>
+            </div>
+
+            {{-- Student Due Tracer --}}
+            <div class="rounded-2xl border border-purple-200 bg-purple-50 p-5 shadow-sm">
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-semibold text-purple-900">Student Due Tracer</h3>
+                        <p class="text-sm text-purple-700 italic">Investigate balance discrepancies for a specific student.</p>
+                    </div>
+                    <form action="{{ route('admin.dues.maintenance.trace') }}" method="GET" class="flex gap-2">
+                        <input type="text" name="query" placeholder="Name, Index #, or ID" 
+                            class="flex-1 rounded-xl border-purple-200 bg-white px-4 py-2 text-sm focus:border-purple-500 focus:ring-purple-500">
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-purple-700">
+                            <i class="ri-search-line"></i>
+                            Trace
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {{-- Default Dues Config --}}
+            <div class="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 shadow-sm">
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-semibold text-indigo-900">Default Dues Config</h3>
+                        <p class="text-sm text-indigo-700">Manage default amounts by class/year for new student registrations.</p>
+                    </div>
+                    <a href="{{ route('admin.dues.maintenance.config') }}" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 w-full justify-center">
+                        <i class="ri-settings-4-line"></i>
+                        Open Config Manager
+                    </a>
+                </div>
+            </div>
+
+            {{-- Account Management --}}
+            <div class="rounded-2xl border border-rose-200 bg-rose-50 p-5 shadow-sm">
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-semibold text-rose-900">Account Management</h3>
+                        <p class="text-sm text-rose-700">Delete stuck accounts, force approve pending registrations, bypass verification.</p>
+                    </div>
+                    <a href="{{ route('admin.dues.maintenance.accounts') }}" class="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 w-full justify-center">
+                        <i class="ri-user-settings-line"></i>
+                        Open Account Manager
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -280,13 +343,23 @@
                             <p class="text-xs text-slate-500">{{ $duplicates->count() }} students have the same due assigned multiple times</p>
                         </div>
                     </div>
-                    <form action="{{ route('admin.dues.maintenance.delete-all-duplicates') }}" method="POST" onsubmit="return confirm('This will delete ALL duplicate dues, keeping only one per student (prioritizing paid ones). Continue?')">
-                        @csrf
-                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">
-                            <i class="ri-delete-bin-line"></i>
-                            Delete All Duplicates
-                        </button>
-                    </form>
+                    <div class="flex items-center gap-2">
+                        <form action="{{ route('admin.dues.maintenance.normalize-descriptions') }}" method="POST" 
+                            onsubmit="return confirm('This will trim trailing/leading spaces from all due descriptions. This helps group similar-looking dues. Continue?')">
+                            @csrf
+                            <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
+                                <i class="ri-brush-line"></i>
+                                Normalize Names
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.dues.maintenance.delete-all-duplicates') }}" method="POST" onsubmit="return confirm('This will delete ALL duplicate dues, keeping only one per student (prioritizing paid ones). Continue?')">
+                            @csrf
+                            <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">
+                                <i class="ri-delete-bin-line"></i>
+                                Delete All Duplicates
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto -mx-6 sm:mx-0">

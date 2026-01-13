@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Email Verification (OTP)
+    |--------------------------------------------------------------------------
+    |
+    | This option controls whether email verification (OTP) is required for
+    | new user registrations. Set to true to require email verification,
+    | or false to bypass it (useful when SMTP is not working).
+    |
+    */
+
+    'email_verification_enabled' => env('EMAIL_VERIFICATION_ENABLED', false),
+
 ];

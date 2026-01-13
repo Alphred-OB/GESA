@@ -343,6 +343,22 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         Route::get('/edit-amounts', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'showEditAmounts'])->name('edit-amounts');
         Route::post('/update-single-amount', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'updateSingleAmount'])->name('update-single-amount');
         Route::post('/update-all-amounts', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'updateAllAmounts'])->name('update-all-amounts');
+        Route::get('/trace', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'traceStudent'])->name('trace');
+        Route::post('/normalize-descriptions', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'normalizeDescriptions'])->name('normalize-descriptions');
+        Route::get('/registry', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'studentRegistry'])->name('registry');
+        
+        // Dues Config Manager
+        Route::get('/config', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'duesConfig'])->name('config');
+        Route::post('/config/update', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'updateDuesConfig'])->name('config.update');
+        Route::post('/config/bulk-update', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'bulkUpdateDuesConfig'])->name('config.bulk-update');
+        Route::post('/resync-from-config', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'resyncDuesFromConfig'])->name('resync-from-config');
+
+        // Account Management (delete accounts, force approve, etc.)
+        Route::get('/accounts', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'accountManagement'])->name('accounts');
+        Route::delete('/accounts/pending/{id}', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'deletePendingRegistration'])->name('accounts.delete-pending');
+        Route::delete('/accounts/user/{id}', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'deleteUserAccount'])->name('accounts.delete-user');
+        Route::post('/accounts/pending/{id}/force-approve', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'forceApprovePending'])->name('accounts.force-approve');
+        Route::post('/accounts/pending/{id}/force-verify', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'forceVerifyEmail'])->name('accounts.force-verify');
     });
 
 });
