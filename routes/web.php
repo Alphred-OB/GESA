@@ -331,6 +331,10 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::post('pending-registrations/{registration}/reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'reject'])
         ->name('pending-registrations.reject');
     
+    // Live polling API for pending registrations (returns JSON)
+    Route::get('api/pending-registrations/count', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'pendingRegistrationsApi'])
+        ->name('api.pending-registrations.count');
+    
     Route::resource('students', \App\Http\Controllers\Admin\AdminStudentAccountController::class);
 
     // Developer Maintenance Routes (Hidden from UI)

@@ -282,4 +282,30 @@ public function reject(Request $request, PendingRegistration $registration): Red
             \Log::error('Failed to send rejection email: ' . $e->getMessage());
         }
     }
+
+    /**
+     * API endpoint for live polling of pending registrations count.
+     */
+    public function pendingRegistrationsApi(): \Illuminate\Http\JsonResponse
+    {
+        $pendingCount = PendingRegistration::where('status', 'pending')->count();
+        
+        // Get the most recent pending registrations for notification details
+        $recentPending = PendingRegistration::where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get(['id', 'first_name', 'last_name', 'email', 'class', 'year', 'created_at']);
+
+        return response()->json([
+            'total_count' => $pendingCount,
+            'registrations' => $recentPending->map(fn($r) => [
+                'id' => $r->id,
+                'name' => $r->first_name . ' ' . $r->last_name,
+                'email' => $r->email,
+                'class' => $r->class,
+                'year' => $r->year,
+                'created_at' => $r->created_at->diffForHumans(),
+            ]),
+        ]);
+    }
 }

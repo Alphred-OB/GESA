@@ -2,7 +2,7 @@
 
 {{-- 
     Live Polling Sidebar Navigation
-    Badges for Verifications and Dues are updated in real-time via AJAX polling.
+    Badges for Verifications, Dues, and Pending Registrations are updated in real-time via AJAX polling.
     The polling pauses when admin is actively interacting (modal open, form focused).
 --}}
 
@@ -15,6 +15,7 @@
         @php
             $isVerificationsLink = str_contains($item['href'], 'verifications');
             $isDuesLink = str_contains($item['href'], 'dues') && !$isVerificationsLink;
+            $isPendingRegistrationsLink = str_contains($item['href'], 'pending-registrations');
         @endphp
         <a 
             href="{{ $item['href'] }}" 
@@ -33,8 +34,20 @@
             </span>
             <span class="flex-1">{{ $item['label'] }}</span>
             
+            {{-- Dynamic badge for Pending Registrations --}}
+            @if ($isPendingRegistrationsLink)
+                <template x-if="pendingRegistrationsCount > 0">
+                    <span 
+                        x-text="pendingRegistrationsCount > 99 ? '99+' : pendingRegistrationsCount"
+                        :class="{
+                            'bg-white/20 text-white': {{ $item['active'] ? 'true' : 'false' }},
+                            'bg-red-500 text-white animate-pulse': {{ $item['active'] ? 'false' : 'true' }}
+                        }"
+                        class="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold transition-all"
+                    ></span>
+                </template>
             {{-- Dynamic badge for Verifications --}}
-            @if ($isVerificationsLink)
+            @elseif ($isVerificationsLink)
                 <template x-if="pendingCount > 0">
                     <span 
                         x-text="pendingCount > 99 ? '99+' : pendingCount"
@@ -45,7 +58,7 @@
                         class="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold transition-all"
                     ></span>
                 </template>
-            {{-- Dynamic badge for Dues (same count) --}}
+            {{-- Dynamic badge for Dues (same count as verifications) --}}
             @elseif ($isDuesLink)
                 <template x-if="pendingCount > 0">
                     <span 
@@ -57,7 +70,7 @@
                         class="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold transition-all"
                     ></span>
                 </template>
-            {{-- Static badges for other nav items --}}
+            {{-- Static badges for other nav items (fallback) --}}
             @elseif (!empty($item['badge']) && $item['badge'] > 0)
                 <span @class([
                     'flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold',
@@ -75,6 +88,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('liveNavBadges', () => ({
         pendingCount: {{ \App\Models\Due::where('payment_status', 'pending_verification')->count() }},
+        pendingRegistrationsCount: {{ \App\Models\PendingRegistration::where('status', 'pending')->count() }},
         isPolling: false,
         pollInterval: null,
         isPaused: false,
@@ -95,6 +109,7 @@ document.addEventListener('alpine:init', () => {
             this.pollInterval = setInterval(() => {
                 if (!this.isPaused && !document.hidden) {
                     this.fetchPendingCount();
+                    this.fetchPendingRegistrations();
                 }
             }, this.POLL_INTERVAL_MS);
             
@@ -102,6 +117,7 @@ document.addEventListener('alpine:init', () => {
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden && !this.isPaused) {
                     this.fetchPendingCount();
+                    this.fetchPendingRegistrations();
                 }
             });
             
@@ -112,6 +128,7 @@ document.addEventListener('alpine:init', () => {
                 } else {
                     this.isPaused = false;
                     this.fetchPendingCount();
+                    this.fetchPendingRegistrations();
                 }
             });
         },
@@ -139,6 +156,7 @@ document.addEventListener('alpine:init', () => {
                                 this.isPaused = false;
                                 // Immediately fetch after resuming
                                 this.fetchPendingCount();
+                                this.fetchPendingRegistrations();
                             }
                         }, 300);
                     }
@@ -192,6 +210,44 @@ document.addEventListener('alpine:init', () => {
             } catch (error) {
                 // Silent fail - don't interrupt the admin
                 console.debug('Live poll failed:', error);
+            }
+        },
+        
+        async fetchPendingRegistrations() {
+            try {
+                const response = await fetch('{{ route("admin.api.pending-registrations.count") }}', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const newCount = data.total_count || 0;
+                    
+                    // Only update and notify if count changed
+                    if (newCount !== this.pendingRegistrationsCount) {
+                        const wasHigher = newCount > this.pendingRegistrationsCount;
+                        this.pendingRegistrationsCount = newCount;
+                        
+                        // Dispatch event for other components to refresh
+                        if (wasHigher) {
+                            window.dispatchEvent(new CustomEvent('new-registration-arrived', { 
+                                detail: { count: newCount, data: data.registrations } 
+                            }));
+                        } else {
+                            window.dispatchEvent(new CustomEvent('registration-count-updated', { 
+                                detail: { count: newCount } 
+                            }));
+                        }
+                    }
+                }
+            } catch (error) {
+                // Silent fail - don't interrupt the admin
+                console.debug('Pending registrations poll failed:', error);
             }
         },
         

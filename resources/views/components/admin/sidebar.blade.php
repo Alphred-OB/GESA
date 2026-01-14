@@ -1,10 +1,6 @@
 @php
-    // Count pending registrations with verified emails (actionable items only)
-    $pendingRegistrationsCount = \App\Models\PendingRegistration::where('status', 'pending')
-        ->whereNotNull('email_verified_at')
-        ->count();
-
-    // Note: pendingDuesCount is now fetched live via AJAX in sidebar-nav.blade.php
+    // Note: pendingRegistrationsCount is now fetched live via AJAX polling
+    // Note: pendingDuesCount is now fetched live via AJAX polling in sidebar-nav.blade.php
 
     $navConfig = [
         [
@@ -42,7 +38,7 @@
             'route_name' => 'admin.pending-registrations.index',
             'pattern' => 'admin.pending-registrations.*',
             'icon' => 'ri-user-add-line',
-            'badge' => $pendingRegistrationsCount,
+            // Badge is live-updated via AJAX polling
         ],
         [
             'label' => 'Verifications',
