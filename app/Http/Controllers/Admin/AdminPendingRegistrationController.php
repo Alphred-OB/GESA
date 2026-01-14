@@ -23,7 +23,7 @@ class AdminPendingRegistrationController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = PendingRegistration::query()->whereNotNull('email_verified_at');
+        $query = PendingRegistration::query();
 
         // Search filter
         if ($request->filled('search')) {

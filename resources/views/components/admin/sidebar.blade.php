@@ -4,7 +4,7 @@
         ->whereNotNull('email_verified_at')
         ->count();
 
-    $pendingDuesCount = \App\Models\Due::where('payment_status', 'pending_verification')->count();
+    // Note: pendingDuesCount is now fetched live via AJAX in sidebar-nav.blade.php
 
     $navConfig = [
         [
@@ -49,14 +49,14 @@
             'route_name' => 'admin.dues.verifications',
             'pattern' => 'admin.dues.verifications',
             'icon' => 'ri-checkbox-circle-line',
-            'badge' => $pendingDuesCount,
+            // Badge is live-updated via AJAX polling
         ],
         [
             'label' => 'Dues',
             'route_name' => 'admin.dues.index',
             'pattern' => 'admin.dues.*',
             'icon' => 'ri-money-dollar-circle-line',
-            'badge' => $pendingDuesCount,
+            // Badge is live-updated via AJAX polling
         ],
         [
             'label' => 'Announcements',

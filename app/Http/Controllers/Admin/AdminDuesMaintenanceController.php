@@ -147,7 +147,6 @@ class AdminDuesMaintenanceController extends Controller
         $studentsQuery = User::query()
             ->where('role', 'student')
             ->where('is_graduated', false)
-            ->whereNotNull('email_verified_at')
             ->with(['dues' => function($q) {
                 $q->where('is_active', true);
             }]);
@@ -251,7 +250,6 @@ class AdminDuesMaintenanceController extends Controller
         $missingStudents = User::query()
             ->where('role', 'student')
             ->where('is_graduated', false)
-            ->whereNotNull('email_verified_at')
             ->whereNotIn('user_id', $studentsWithDue)
             ->select('user_id', 'username', 'fullname', 'email', 'class', 'year', 'index_number')
             ->orderBy('class')
@@ -338,7 +336,6 @@ class AdminDuesMaintenanceController extends Controller
                 $studentsNeedingDue = User::query()
                     ->where('role', 'student')
                     ->where('is_graduated', false)
-                    ->whereNotNull('email_verified_at')
                     ->whereNotIn('user_id', $studentsWithDue)
                     ->get();
 
@@ -397,7 +394,6 @@ class AdminDuesMaintenanceController extends Controller
             $students = User::query()
                 ->where('role', 'student')
                 ->where('is_graduated', false)
-                ->whereNotNull('email_verified_at')
                 ->get();
 
             $syncedCount = 0;

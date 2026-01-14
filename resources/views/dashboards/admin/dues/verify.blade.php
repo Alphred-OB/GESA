@@ -1,6 +1,19 @@
 <x-layouts.admin :title="$title">
     @include('components.dashboard.skeleton-styles')
 
+    {{-- Pause sidebar polling while admin is on this verification page --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Dispatch event to pause polling while verifying
+            window.dispatchEvent(new CustomEvent('verification-in-progress', { detail: { paused: true } }));
+        });
+        
+        // Resume polling when leaving the page
+        window.addEventListener('beforeunload', () => {
+            window.dispatchEvent(new CustomEvent('verification-in-progress', { detail: { paused: false } }));
+        });
+    </script>
+
     <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-4xl space-y-10 px-5 py-10 sm:px-6 lg:px-8">
         <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8">
             <header class="h-32 w-full animate-pulse rounded-3xl bg-slate-100"></header>

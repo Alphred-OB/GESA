@@ -21,8 +21,7 @@ class StudentAccountService
     {
         $base = User::query()
             ->where('role', 'student')
-            ->where('is_graduated', false)
-            ->whereNotNull('email_verified_at');
+            ->where('is_graduated', false);
 
         $totalStudents = (clone $base)->count();
 
@@ -87,8 +86,7 @@ class StudentAccountService
 
         $graduatedBase = User::query()
             ->where('role', 'student')
-            ->where('is_graduated', true)
-            ->whereNotNull('email_verified_at');
+            ->where('is_graduated', true);
 
         $totalGraduated = (clone $graduatedBase)->count();
 

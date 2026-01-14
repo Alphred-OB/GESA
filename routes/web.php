@@ -269,6 +269,11 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('dues.verifications')
         ->middleware('admin.role:financial_secretary');
 
+    // Live polling API for pending verifications (returns JSON)
+    Route::get('api/dues/pending-verifications', [AdminDueController::class, 'pendingVerificationsApi'])
+        ->name('api.dues.pending-verifications')
+        ->middleware('admin.role:financial_secretary');
+
     Route::get('dues/payment-settings', [\App\Http\Controllers\Admin\AdminPaymentSettingController::class, 'index'])
         ->name('payment-settings.index')
         ->middleware('admin.role:financial_secretary');

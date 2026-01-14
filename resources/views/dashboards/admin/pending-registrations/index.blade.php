@@ -25,7 +25,7 @@
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-widest text-yellow-600">Pending</p>
                                 <p class="mt-2 text-3xl font-bold text-slate-800">
-                                    {{ \App\Models\PendingRegistration::where('status', 'pending')->whereNotNull('email_verified_at')->count() }}
+                                    {{ \App\Models\PendingRegistration::where('status', 'pending')->count() }}
                                 </p>
                             </div>
                             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-100 text-yellow-700">
@@ -39,7 +39,7 @@
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-widest text-green-600">Approved</p>
                                 <p class="mt-2 text-3xl font-bold text-slate-800">
-                                    {{ \App\Models\PendingRegistration::where('status', 'approved')->whereNotNull('email_verified_at')->count() }}
+                                    {{ \App\Models\PendingRegistration::where('status', 'approved')->count() }}
                                 </p>
                             </div>
                             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-700">
@@ -53,7 +53,7 @@
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-widest text-red-600">Rejected</p>
                                 <p class="mt-2 text-3xl font-bold text-slate-800">
-                                    {{ \App\Models\PendingRegistration::where('status', 'rejected')->whereNotNull('email_verified_at')->count() }}
+                                    {{ \App\Models\PendingRegistration::where('status', 'rejected')->count() }}
                                 </p>
                             </div>
                             <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-700">

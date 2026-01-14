@@ -57,6 +57,41 @@ class AdminDueController extends Controller
         return $this->index($request);
     }
 
+    /**
+     * API endpoint for live polling of pending verifications.
+     * Returns count and list of pending verifications as JSON.
+     */
+    public function pendingVerificationsApi(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $pendingDues = Due::with('student:id,username,email,fullname,class,year')
+            ->where('payment_status', 'pending_verification')
+            ->orderBy('updated_at', 'desc')
+            ->limit(50)
+            ->get()
+            ->map(function ($due) {
+                return [
+                    'id' => $due->due_id,
+                    'student_name' => $due->student?->fullname ?? $due->student?->username ?? 'Student #' . $due->student_id,
+                    'student_email' => $due->student?->email ?? 'No email',
+                    'student_class' => $due->student?->class ?? '—',
+                    'student_year' => $due->student?->year ? 'Year ' . $due->student?->year : '—',
+                    'amount' => number_format((float) $due->amount, 2),
+                    'academic_year' => $due->academic_year,
+                    'reference' => $due->payment_reference ?? $due->reference_number ?? '—',
+                    'submitted_at' => $due->updated_at->format('M j, Y @ H:i'),
+                    'submitted_ago' => $due->updated_at->diffForHumans(),
+                    'verify_url' => route('admin.dues.verify-payment', $due),
+                ];
+            });
+
+        return response()->json([
+            'count' => $pendingDues->count(),
+            'total_count' => Due::where('payment_status', 'pending_verification')->count(),
+            'verifications' => $pendingDues,
+            'timestamp' => now()->toIso8601String(),
+        ]);
+    }
+
     public function create(): View
     {
         $filtersMeta = $this->service->filterOptions();

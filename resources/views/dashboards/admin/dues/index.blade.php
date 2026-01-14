@@ -383,4 +383,92 @@
             </section>
         </div>
     </div>
+
+    {{-- Live Verification Toast Notification --}}
+    <div 
+        x-data="liveVerificationToast()"
+        x-show="showToast"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-2"
+        class="fixed bottom-6 right-6 z-50 max-w-sm"
+        style="display: none;"
+    >
+        <div class="flex items-start gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-xl shadow-amber-900/10">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white">
+                <i class="ri-notification-badge-line text-lg"></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-semibold text-amber-800">New Payment Pending</p>
+                <p class="mt-1 text-sm text-amber-700" x-text="toastMessage">A new payment is awaiting verification.</p>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+                <a 
+                    :href="refreshUrl"
+                    class="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-amber-600"
+                >
+                    <i class="ri-refresh-line"></i>
+                    Refresh
+                </a>
+                <button 
+                    @click="hideToast()" 
+                    class="rounded-lg p-1.5 text-amber-500 transition hover:bg-amber-100"
+                    aria-label="Dismiss notification"
+                >
+                    <i class="ri-close-line text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('liveVerificationToast', () => ({
+            showToast: false,
+            toastMessage: 'A new payment is awaiting verification.',
+            refreshUrl: '{{ route("admin.dues.verifications") }}',
+            autoHideTimeout: null,
+            
+            init() {
+                // Listen for new verification events from sidebar polling
+                window.addEventListener('new-verification-arrived', (e) => {
+                    this.showNewVerificationToast(e.detail);
+                });
+            },
+            
+            showNewVerificationToast(detail) {
+                const count = detail.count;
+                const firstNew = detail.data?.[0];
+                
+                if (firstNew) {
+                    this.toastMessage = `${firstNew.student_name} submitted a payment (GHS ${firstNew.amount})`;
+                } else {
+                    this.toastMessage = `${count} payment${count > 1 ? 's' : ''} awaiting verification`;
+                }
+                
+                this.showToast = true;
+                
+                // Auto-hide after 10 seconds
+                if (this.autoHideTimeout) {
+                    clearTimeout(this.autoHideTimeout);
+                }
+                this.autoHideTimeout = setTimeout(() => {
+                    this.hideToast();
+                }, 10000);
+            },
+            
+            hideToast() {
+                this.showToast = false;
+                if (this.autoHideTimeout) {
+                    clearTimeout(this.autoHideTimeout);
+                    this.autoHideTimeout = null;
+                }
+            }
+        }));
+    });
+    </script>
 </x-layouts.admin>
+
