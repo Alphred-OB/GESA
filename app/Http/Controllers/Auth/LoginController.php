@@ -83,49 +83,68 @@ class LoginController extends Controller
             return redirect()->intended(route($dashboard));
         }
 
-        // If user not found in users table, check pending registrations
-        if (!$userFound) {
-            $pendingRegistration = \App\Models\PendingRegistration::where('email', $credentials['email'])
-                ->where('status', 'pending')
-                ->first();
-
-            if ($pendingRegistration) {
-                // Check password
-                if (\Illuminate\Support\Facades\Hash::check($credentials['password'], $pendingRegistration->password)) {
-                    // Password correct - check status
-                    if (is_null($pendingRegistration->email_verified_at)) {
-                        // Email not verified - allow resend OTP
-                        if ($emailVerificationEnabled) {
-                            // Store pending ID in session for verification
-                            session(['fresher_pending_id' => $pendingRegistration->id]);
-                            
-                            return redirect()->route('auth.fresher-register.verify')
-                                ->withErrors(['verification' => __('Your email is not verified yet. Please verify your email to complete registration.')]);
-                        } else {
-                            // Email verification disabled, but still pending - show pending message
-                            return back()
-                                ->withErrors(['email' => __('Your registration is pending admin approval. Please wait for an administrator to review your request.')])
-                                ->onlyInput('email');
-                        }
-                    } else {
-                        // Email verified but still pending admin approval
-                        return back()
-                            ->withErrors(['email' => __('Your registration is pending admin approval. Please wait for an administrator to review your request.')])
-                            ->onlyInput('email');
+        // FIRST: Check if this email exists in pending registrations table
+        // This should be checked before "no account found" to provide better UX
+        $pendingRegistration = \App\Models\PendingRegistration::where('email', $credentials['email'])->first();
+        
+        if ($pendingRegistration) {
+            // Verify password first
+            if (!\Illuminate\Support\Facades\Hash::check($credentials['password'], $pendingRegistration->password)) {
+                return back()
+                    ->withErrors(['email' => __('The password you entered is incorrect.')])
+                    ->onlyInput('email');
+            }
+            
+            // Password correct - check registration status
+            switch ($pendingRegistration->status) {
+                case 'pending':
+                    // Check if email verification is needed
+                    if ($emailVerificationEnabled && is_null($pendingRegistration->email_verified_at)) {
+                        session(['fresher_pending_id' => $pendingRegistration->id]);
+                        return redirect()->route('auth.fresher-register.verify')
+                            ->withErrors(['verification' => __('Your email is not verified yet. Please verify your email to complete registration.')]);
                     }
-                } else {
-                    // Wrong password for pending registration
+                    
+                    // Email verified (or verification disabled) but awaiting admin approval
                     return back()
-                        ->withErrors(['email' => __('The password you entered is incorrect.')])
+                        ->withErrors([
+                            'email' => __('Your registration is pending admin approval. Please wait for an administrator to review your request. If this is taking too long, please contact the GESA executives.')
+                        ])
                         ->onlyInput('email');
-                }
+                    
+                case 'approved':
+                    // This shouldn't happen - approved registrations should be in users table
+                    // But just in case, tell user to try logging in again
+                    return back()
+                        ->withErrors([
+                            'email' => __('Your registration has been approved! Please try logging in again. If this issue persists, contact the GESA executives.')
+                        ])
+                        ->onlyInput('email');
+                    
+                case 'rejected':
+                    // Registration was rejected
+                    $adminNotes = $pendingRegistration->admin_notes;
+                    $message = __('Your registration request was not approved.');
+                    if ($adminNotes) {
+                        $message .= ' ' . __('Reason: :reason', ['reason' => $adminNotes]);
+                    }
+                    $message .= ' ' . __('Please contact the GESA executives for more information or to submit a new request.');
+                    
+                    return back()
+                        ->withErrors(['email' => $message])
+                        ->onlyInput('email');
+                    
+                default:
+                    return back()
+                        ->withErrors(['email' => __('There was an issue with your registration. Please contact the GESA executives for assistance.')])
+                        ->onlyInput('email');
             }
         }
 
         // If we reached here, login failed. Determine specific error.
         $errorMessage = $userFound 
             ? 'The password you entered is incorrect.' 
-            : 'We could not find an account with that email address.';
+            : 'We could not find an account with that email address. If you recently registered, your account may still be pending approval.';
 
         return back()
             ->withErrors([
