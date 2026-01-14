@@ -166,6 +166,23 @@ public function reject(Request $request, PendingRegistration $registration): Red
     }
 
     /**
+     * Delete multiple pending registrations.
+     */
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:pending_registrations,id',
+        ]);
+
+        $count = PendingRegistration::whereIn('id', $request->ids)->delete();
+
+        return redirect()
+            ->route('admin.pending-registrations.index')
+            ->with('success', "{$count} registrations have been permanently deleted.");
+    }
+
+    /**
      * Process logic for approving a registration.
      * 
      * @throws \RuntimeException if username, email, or index_number already exists

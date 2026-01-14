@@ -331,6 +331,14 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::post('pending-registrations/{registration}/reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'reject'])
         ->name('pending-registrations.reject');
     
+    // Bulk actions for pending registrations
+    Route::post('pending-registrations/bulk-approve', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkApprove'])
+        ->name('pending-registrations.bulk-approve');
+    Route::post('pending-registrations/bulk-reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkReject'])
+        ->name('pending-registrations.bulk-reject');
+    Route::delete('pending-registrations/bulk-delete', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkDelete'])
+        ->name('pending-registrations.bulk-delete');
+    
     // Live polling API for pending registrations (returns JSON)
     Route::get('api/pending-registrations/count', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'pendingRegistrationsApi'])
         ->name('api.pending-registrations.count');

@@ -1,7 +1,57 @@
 @php($title = 'Pending Registrations')
 
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
+    <div 
+        x-data="{ 
+            selected: [], 
+            allSelected: false,
+            registrations: {{ $registrations->map(fn($r) => $r->id)->toJson() }},
+            toggleAll() {
+                if (this.allSelected) {
+                    this.selected = [];
+                    this.allSelected = false;
+                } else {
+                    this.selected = [...this.registrations];
+                    this.allSelected = true;
+                }
+            },
+            toggle(id) {
+                if (this.selected.includes(id)) {
+                    this.selected = this.selected.filter(i => i !== id);
+                } else {
+                    this.selected.push(id);
+                }
+                this.allSelected = this.selected.length === this.registrations.length && this.registrations.length > 0;
+            },
+            submitBulk(action) {
+                if (!this.selected.length) return;
+                
+                let confirmMsg = '';
+                let method = 'POST';
+                let route = '';
+
+                if (action === 'approve') {
+                    confirmMsg = `Are you sure you want to approve ${this.selected.length} selected registrations?`;
+                    route = '{{ route("admin.pending-registrations.bulk-approve") }}';
+                } else if (action === 'reject') {
+                    confirmMsg = `Are you sure you want to reject ${this.selected.length} selected registrations?`;
+                    route = '{{ route("admin.pending-registrations.bulk-reject") }}';
+                } else if (action === 'delete') {
+                    confirmMsg = `Are you sure you want to PERMANENTLY DELETE ${this.selected.length} selected registrations? This action cannot be undone.`;
+                    route = '{{ route("admin.pending-registrations.bulk-delete") }}';
+                    method = 'DELETE';
+                }
+
+                if (confirm(confirmMsg)) {
+                    const form = document.getElementById('bulk-action-form');
+                    form.action = route;
+                    document.getElementById('bulk-method').value = method;
+                    form.submit();
+                }
+            }
+        }"
+        class="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8"
+    >
         <div class="space-y-10">
             {{-- Header --}}
             <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 text-center shadow-lg shadow-[#16136a]/5 sm:text-left md:flex-row md:items-center md:justify-between">
@@ -17,7 +67,6 @@
 
             {{-- Main Content Section --}}
             <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                {{-- Stats Cards --}}
                 {{-- Stats Cards --}}
                 <div class="grid gap-4 md:grid-cols-3">
                     <article class="rounded-2xl border border-yellow-200 bg-yellow-50/30 p-5 transition hover:shadow-md">
@@ -106,6 +155,57 @@
                     </div>
                 </form>
 
+                {{-- Bulk Action Confirmation Form --}}
+                <form id="bulk-action-form" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" id="bulk-method" name="_method" value="POST">
+                    <template x-for="id in selected" :key="id">
+                        <input type="hidden" name="ids[]" :value="id">
+                    </template>
+                </form>
+
+                {{-- Bulk Action Bar --}}
+                <div 
+                    x-show="selected.length > 0"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="translate-y-full opacity-0"
+                    x-transition:enter-end="translate-y-0 opacity-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="translate-y-0 opacity-100"
+                    x-transition:leave-end="translate-y-full opacity-0"
+                    class="fixed bottom-10 left-1/2 z-50 flex -translate-x-1/2 flex-wrap items-center gap-4 rounded-full border border-[#16136a]/20 bg-white/95 px-6 py-3 shadow-2xl backdrop-blur-md transition-all sm:flex-nowrap"
+                >
+                    <div class="flex items-center gap-3 border-r border-slate-200 pr-4">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#16136a] text-xs font-bold text-white" x-text="selected.length"></div>
+                        <p class="text-sm font-semibold text-slate-700">Selected</p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button 
+                            @click="submitBulk('approve')" 
+                            class="inline-flex items-center gap-2 rounded-full bg-green-600 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:-translate-y-0.5 hover:bg-green-700"
+                        >
+                            <i class="ri-check-line"></i> Approve
+                        </button>
+                        <button 
+                            @click="submitBulk('reject')" 
+                            class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:-translate-y-0.5 hover:bg-orange-600"
+                        >
+                            <i class="ri-close-line"></i> Reject
+                        </button>
+                        <button 
+                            @click="submitBulk('delete')" 
+                            class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:-translate-y-0.5 hover:bg-red-700"
+                        >
+                            <i class="ri-delete-bin-line"></i> Delete
+                        </button>
+                    </div>
+
+                    <button @click="selected = []; allSelected = false" class="ml-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600">
+                        Cancel
+                    </button>
+                </div>
+
                 {{-- Success/Error Messages --}}
                 @if(session('success'))
                     <div class="rounded-2xl bg-green-50 border border-green-200 p-4">
@@ -131,6 +231,16 @@
                         <table class="min-w-full divide-y divide-slate-200 text-left text-[13px] text-slate-600">
                             <thead class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                                 <tr>
+                                    <th class="px-5 py-2.5">
+                                        <div class="flex items-center">
+                                            <input 
+                                                type="checkbox" 
+                                                @click="toggleAll()" 
+                                                :checked="allSelected"
+                                                class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]"
+                                            >
+                                        </div>
+                                    </th>
                                     <th class="px-5 py-2.5">Student</th>
                                     <th class="px-5 py-2.5">Program</th>
                                     <th class="px-5 py-2.5">Contact</th>
@@ -141,7 +251,20 @@
                             </thead>
                             <tbody class="divide-y divide-slate-200 bg-white">
                                 @forelse($registrations as $registration)
-                                    <tr class="hover:bg-slate-50 transition">
+                                    <tr 
+                                        :class="selected.includes({{ $registration->id }}) ? 'bg-[#16136a]/5' : 'hover:bg-slate-50'" 
+                                        class="transition-colors"
+                                    >
+                                        <td class="px-5 py-3">
+                                            <div class="flex items-center">
+                                                <input 
+                                                    type="checkbox" 
+                                                    :checked="selected.includes({{ $registration->id }})"
+                                                    @click="toggle({{ $registration->id }})"
+                                                    class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]"
+                                                >
+                                            </div>
+                                        </td>
                                         <td class="px-5 py-3">
                                             <div class="flex items-center gap-3">
                                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a] text-white font-semibold text-sm">
@@ -190,10 +313,10 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
+                                        <td colspan="7" class="px-6 py-10 text-center text-sm text-slate-500">
                                             <div class="flex flex-col items-center gap-3">
                                                 <i class="ri-inbox-line text-5xl text-slate-300"></i>
-                                                <p class="font-semibold text-slate-600">No pending registrations found</p>
+                                                <p class="font-semibold text-slate-600">No registrations found</p>
                                                 <p>Try adjusting your filters</p>
                                             </div>
                                         </td>
@@ -203,10 +326,24 @@
                         </table>
                     </div>
 
+                    {{-- Mobile View --}}
                     <div class="md:hidden">
                         <div class="grid gap-4 p-4">
                             @forelse($registrations as $registration)
-                                <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
+                                <article 
+                                    @click="toggle({{ $registration->id }})"
+                                    :class="selected.includes({{ $registration->id }}) ? 'border-[#16136a] bg-[#16136a]/5' : 'border-slate-200/70 bg-white'"
+                                    class="relative rounded-2xl border p-5 shadow-sm transition"
+                                >
+                                    {{-- Checkbox for mobile --}}
+                                    <div class="absolute right-4 top-4">
+                                        <input 
+                                            type="checkbox" 
+                                            :checked="selected.includes({{ $registration->id }})"
+                                            class="h-5 w-5 rounded-full border-slate-300 text-[#16136a] focus:ring-[#16136a]"
+                                        >
+                                    </div>
+
                                     <div class="flex items-start justify-between mb-4">
                                         <div class="flex items-center gap-3">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a] text-white font-semibold text-sm">
@@ -217,6 +354,9 @@
                                                 <p class="text-xs text-slate-500">{{ $registration->index_number }}</p>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="mb-3">
                                         @if($registration->status === 'pending')
                                             <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-[11px] font-semibold text-yellow-800">
                                                 <i class="ri-time-line"></i> Pending
@@ -251,8 +391,12 @@
                                         </div>
                                     </dl>
 
-                                    <div class="mt-4 flex justify-end">
-                                        <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
+                                    <div class="mt-4 flex justify-end gap-2">
+                                        <a 
+                                            @click.stop 
+                                            href="{{ route('admin.pending-registrations.show', $registration) }}" 
+                                            class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]"
+                                        >
                                             <i class="ri-eye-line text-sm"></i> Review Request
                                         </a>
                                     </div>
@@ -260,7 +404,7 @@
                             @empty
                                 <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
                                     <i class="ri-inbox-line text-3xl text-slate-300"></i>
-                                    <p class="mt-3 font-semibold text-slate-600">No pending registrations</p>
+                                    <p class="mt-3 font-semibold text-slate-600">No registrations found</p>
                                     <p class="text-sm text-slate-500">Adjust filters to see more</p>
                                 </div>
                             @endforelse
