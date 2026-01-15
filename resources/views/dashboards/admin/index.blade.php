@@ -1,70 +1,8 @@
 @php($title = 'Admin Dashboard')
 
 <x-layouts.admin :title="$title">
-    @include('components.dashboard.skeleton-styles')
-
-    <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
-        <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-10" role="status" aria-live="polite">
-            <section class="hidden lg:block overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-[#16136a] p-10 shadow-[0_24px_60px_-30px_rgba(22,19,106,0.45)]">
-                <div class="space-y-4">
-                    <div class="skeleton h-3 w-40 rounded-full bg-white/25"></div>
-                    <div class="skeleton h-9 w-2/3 rounded-2xl bg-white/30"></div>
-                    <div class="skeleton h-4 w-3/4 rounded-2xl bg-white/20"></div>
-                </div>
-            </section>
-
-            <section class="grid gap-6 lg:grid-cols-4">
-                @for ($i = 0; $i < 4; $i++)
-                    <article class="rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="flex-1 space-y-3">
-                                <div class="skeleton h-3 w-24 rounded-full bg-slate-200"></div>
-                                <div class="skeleton h-7 w-20 rounded-2xl bg-slate-200"></div>
-                                <div class="skeleton h-4 w-full rounded-2xl bg-slate-200/80"></div>
-                            </div>
-                            <div class="skeleton h-12 w-12 rounded-2xl bg-[#16136a]/10"></div>
-                        </div>
-                    </article>
-                @endfor
-            </section>
-
-            <section class="grid gap-6 lg:grid-cols-3">
-                <article class="rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10 lg:col-span-2">
-                    <div class="space-y-4">
-                        <div class="skeleton h-4 w-48 rounded-full bg-slate-200"></div>
-                        <div class="skeleton h-3 w-64 rounded-full bg-slate-100"></div>
-                        <div class="grid gap-4 md:grid-cols-3">
-                            @for ($i = 0; $i < 3; $i++)
-                                <div class="skeleton h-24 rounded-2xl bg-slate-100"></div>
-                            @endfor
-                        </div>
-                        <div class="skeleton h-24 rounded-3xl bg-slate-50"></div>
-                    </div>
-                </article>
-
-                <aside class="space-y-6">
-                    <article class="rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="space-y-3">
-                            <div class="skeleton h-4 w-40 rounded-full bg-slate-200"></div>
-                            @for ($i = 0; $i < 3; $i++)
-                                <div class="skeleton h-12 rounded-2xl bg-slate-100"></div>
-                            @endfor
-                        </div>
-                    </article>
-
-                    <article class="rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="space-y-3">
-                            <div class="skeleton h-4 w-44 rounded-full bg-slate-200"></div>
-                            @for ($i = 0; $i < 3; $i++)
-                                <div class="skeleton h-10 rounded-2xl bg-slate-100"></div>
-                            @endfor
-                        </div>
-                    </article>
-                </aside>
-            </section>
-        </div>
-
-        <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
+    <div class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
+        <div class="space-y-10">
             <section class="relative isolate animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-6 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)] sm:p-10">
                 <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div class="space-y-3">

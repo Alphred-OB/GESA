@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\PendingRegistration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class RegisterController extends Controller
@@ -28,31 +29,31 @@ class RegisterController extends Controller
 
     /**
      * Handle an incoming registration request.
+     * Auto-approves the registration and creates the user account immediately.
      */
     public function store(RegisterRequest $request): RedirectResponse
     {
         $data = $request->validated();
         
-        // Check for existing user or pending registration
-        if (User::where('email', $data['email'])->exists() || User::where('index_number', $data['index_number'])->exists()) {
+        $fullName = trim($data['first_name'] . ' ' . $data['last_name']);
+        
+        // Check for existing user conflicts
+        if (User::where('email', $data['email'])->exists()) {
             return back()
-                ->withErrors(['email' => __('An account already exists with these details.')])
+                ->withErrors(['email' => __('An account already exists with this email.')])
                 ->withInput();
         }
-
-        if (PendingRegistration::where('email', $data['email'])->where('status', 'pending')->exists()) {
+        
+        if (User::where('index_number', $data['index_number'])->exists()) {
             return back()
-                ->withErrors(['email' => __('A registration request is already pending for this email.')])
+                ->withErrors(['index_number' => __('An account already exists with this reference number.')])
                 ->withInput();
         }
-
-        // Check if email verification is enabled via environment variable
-        $otpEnabled = config('app.email_verification_enabled', false);
-
-        // Generate OTP if enabled
-        $otp = null;
-        if ($otpEnabled) {
-            $otp = (string) random_int(100000, 999999);
+        
+        if (User::where('username', $data['username'])->exists()) {
+            return back()
+                ->withErrors(['username' => __('This username is already taken.')])
+                ->withInput();
         }
 
         // Handle document upload
@@ -61,8 +62,25 @@ class RegisterController extends Controller
             $documentPath = $request->file('student_document')->store('student-ids', 'public');
         }
 
-        // Create pending registration
-        $registration = PendingRegistration::create([
+        // Create the user account directly (auto-approved)
+        $user = User::create([
+            'fullname' => $fullName,
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'phone_number' => $data['phone_number'] ?? null,
+            'index_number' => $data['index_number'],
+            'class' => $data['class'],
+            'year' => $data['year'],
+            'role' => 'student',
+            'email_verified_at' => now(), // Auto-verified
+        ]);
+
+        // Sync dues for the new student
+        $this->dues->syncStudent($user);
+
+        // Store audit record in pending_registrations
+        PendingRegistration::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'username' => $data['username'],
@@ -74,31 +92,35 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'student_id_path' => $documentPath,
             'reason' => null,
-            'status' => 'pending',
-            'verification_code' => $otpEnabled ? Hash::make($otp) : null,
-            'verification_expires_at' => $otpEnabled ? now()->addMinutes(15) : null,
-            'email_verified_at' => $otpEnabled ? null : now(), // Auto-verify if OTP disabled
+            'status' => 'approved', // Auto-approved
+            'email_verified_at' => now(),
+            'reviewed_at' => now(),
+            'reviewed_by' => null, // System auto-approved
+            'admin_notes' => 'Auto-approved during registration',
         ]);
 
-        if ($otpEnabled) {
-            // Send OTP and redirect to verification page
-            try {
-                \Illuminate\Support\Facades\Mail::send('emails.fresher-verification', ['code' => $otp], function ($message) use ($registration) {
-                    $message->to($registration->email)
-                        ->subject('Verify Your GESA Registration');
-                });
-            } catch (\Exception $e) {
-                \Log::error('Failed to send verification email: ' . $e->getMessage());
-            }
+        // Send welcome email
+        $this->sendWelcomeEmail($user);
 
-            // Store ID in session for verification step
-            session(['fresher_pending_id' => $registration->id]);
+        return redirect()->route('auth.fresher-register.success')
+            ->with('success', __('Your account has been created successfully! You can now log in with your credentials.'));
+    }
 
-            return redirect()->route('auth.fresher-register.verify');
-        } else {
-            // Skip OTP, go directly to success
-            return redirect()->route('auth.fresher-register.success')
-                ->with('success', __('Your registration request has been submitted successfully! An administrator will review your request within 24-48 hours.'));
+    /**
+     * Send welcome email to the newly registered user.
+     */
+    private function sendWelcomeEmail(User $user): void
+    {
+        try {
+            Mail::send('emails.registration-approved', [
+                'user' => $user,
+                'registration' => null,
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Welcome to GESA! Your Account is Ready 🎉');
+            });
+        } catch (\Exception $e) {
+            \Log::error('Failed to send welcome email: ' . $e->getMessage());
         }
     }
 }

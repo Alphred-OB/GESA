@@ -26,14 +26,14 @@
         <form method="POST" action="{{ route('auth.login.submit') }}" class="space-y-6" data-auth-form>
             @csrf
             <div class="space-y-2">
-                <label for="email" class="block text-sm font-medium text-slate-700">Email address</label>
+                <label for="identifier" class="block text-sm font-medium text-slate-700">Email, Username, or Reference Number</label>
                 <div class="relative">
                     <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                        <i class="ri-mail-line text-lg" aria-hidden="true"></i>
+                        <i class="ri-user-line text-lg" aria-hidden="true"></i>
                     </span>
-                    <input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email" class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-3 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="you@example.com" />
+                    <input id="identifier" name="identifier" type="text" value="{{ old('identifier') }}" required autofocus autocomplete="username" class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-3 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="Email, username, or reference number" />
                 </div>
-                @error('email')
+                @error('identifier')
                     <p class="text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>

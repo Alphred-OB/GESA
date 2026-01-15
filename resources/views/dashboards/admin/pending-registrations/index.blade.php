@@ -425,4 +425,95 @@
             </section>
         </div>
     </div>
+
+    {{-- Live Registration Toast Notification --}}
+    <div 
+        x-data="liveRegistrationToast()"
+        x-show="showToast"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-2"
+        class="fixed bottom-6 right-6 z-50 max-w-sm"
+        style="display: none;"
+    >
+        <div class="flex items-start gap-4 rounded-2xl border border-blue-200 bg-blue-50 p-4 shadow-xl shadow-blue-900/10">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500 text-white">
+                <i class="ri-user-add-line text-lg"></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-semibold text-blue-800">New Registration</p>
+                <p class="mt-1 text-sm text-blue-700" x-text="toastMessage">A new student has registered.</p>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+                <button 
+                    @click="refreshPage()"
+                    class="inline-flex items-center gap-1.5 rounded-xl bg-blue-500 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-blue-600"
+                >
+                    <i class="ri-refresh-line"></i>
+                    Refresh
+                </button>
+                <button 
+                    @click="hideToast()" 
+                    class="rounded-lg p-1.5 text-blue-500 transition hover:bg-blue-100"
+                    aria-label="Dismiss notification"
+                >
+                    <i class="ri-close-line text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('liveRegistrationToast', () => ({
+            showToast: false,
+            toastMessage: 'A new student has registered.',
+            autoHideTimeout: null,
+            
+            init() {
+                // Listen for new registration events from sidebar polling
+                window.addEventListener('new-registration-arrived', (e) => {
+                    this.showNewRegistrationToast(e.detail);
+                });
+            },
+            
+            showNewRegistrationToast(detail) {
+                const count = detail.count;
+                const firstNew = detail.data?.[0];
+                
+                if (firstNew) {
+                    this.toastMessage = `${firstNew.name} (${firstNew.class}, Year ${firstNew.year}) just registered`;
+                } else {
+                    this.toastMessage = `${count} new registration${count > 1 ? 's' : ''} pending review`;
+                }
+                
+                this.showToast = true;
+                
+                // Auto-hide after 10 seconds
+                if (this.autoHideTimeout) {
+                    clearTimeout(this.autoHideTimeout);
+                }
+                this.autoHideTimeout = setTimeout(() => {
+                    this.hideToast();
+                }, 10000);
+            },
+            
+            refreshPage() {
+                window.location.reload();
+            },
+            
+            hideToast() {
+                this.showToast = false;
+                if (this.autoHideTimeout) {
+                    clearTimeout(this.autoHideTimeout);
+                    this.autoHideTimeout = null;
+                }
+            }
+        }));
+    });
+    </script>
 </x-layouts.admin>
+

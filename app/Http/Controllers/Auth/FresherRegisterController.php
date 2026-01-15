@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\FresherRegisterRequest;
 use App\Models\PendingRegistration;
+use App\Models\User;
+use App\Services\Admin\AdminDueService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 class FresherRegisterController extends Controller
 {
+    public function __construct(
+        private readonly AdminDueService $dueService
+    ) {}
+
     /**
      * Show the fresher registration form.
      */
@@ -26,6 +32,7 @@ class FresherRegisterController extends Controller
 
     /**
      * Handle an incoming fresher registration request.
+     * Auto-approves the registration and creates the user account immediately.
      */
     public function store(FresherRegisterRequest $request): RedirectResponse
     {
@@ -37,17 +44,48 @@ class FresherRegisterController extends Controller
             $studentIdPath = $request->file('student_id')->store('student-ids', 'public');
         }
 
-        // Check if email verification is enabled via environment variable
-        $otpEnabled = config('app.email_verification_enabled', false);
+        $fullName = trim($data['first_name'] . ' ' . $data['last_name']);
 
-        // Generate OTP if enabled
-        $otp = null;
-        if ($otpEnabled) {
-            $otp = (string) random_int(100000, 999999);
+        // Check for existing conflicts before creating
+        $conflicts = [];
+        
+        if (User::where('username', $data['username'])->exists()) {
+            return back()
+                ->withErrors(['username' => 'This username is already taken. Please choose a different one.'])
+                ->withInput();
+        }
+        
+        if (User::where('email', $data['email'])->exists()) {
+            return back()
+                ->withErrors(['email' => 'An account with this email already exists.'])
+                ->withInput();
+        }
+        
+        if ($data['index_number'] && User::where('index_number', $data['index_number'])->exists()) {
+            return back()
+                ->withErrors(['index_number' => 'An account with this reference number already exists.'])
+                ->withInput();
         }
 
-        // Create pending registration
-        $registration = PendingRegistration::create([
+        // Create the user account directly (auto-approved)
+        $user = User::create([
+            'fullname' => $fullName,
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'phone_number' => $data['phone_number'] ?? null,
+            'index_number' => $data['index_number'],
+            'class' => $data['class'],
+            'year' => $data['year'],
+            'role' => 'student',
+            'email_verified_at' => now(), // Auto-verified
+        ]);
+
+        // Sync dues for the new student
+        $this->dueService->syncStudent($user);
+
+        // Optionally store a record in pending_registrations for audit trail
+        PendingRegistration::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'username' => $data['username'],
@@ -59,32 +97,18 @@ class FresherRegisterController extends Controller
             'password' => Hash::make($data['password']),
             'reason' => $data['reason'],
             'student_id_path' => $studentIdPath,
-            'status' => 'pending',
-            'verification_code' => $otpEnabled ? Hash::make($otp) : null,
-            'verification_expires_at' => $otpEnabled ? now()->addMinutes(15) : null,
-            'email_verified_at' => $otpEnabled ? null : now(), // Auto-verify if OTP disabled
+            'status' => 'approved', // Auto-approved
+            'email_verified_at' => now(),
+            'reviewed_at' => now(),
+            'reviewed_by' => null, // System auto-approved
+            'admin_notes' => 'Auto-approved during registration',
         ]);
 
-        if ($otpEnabled) {
-            // Send OTP and redirect to verification page
-            try {
-                Mail::send('emails.fresher-verification', ['code' => $otp], function ($message) use ($registration) {
-                    $message->to($registration->email)
-                        ->subject('Verify Your GESA Registration');
-                });
-            } catch (\Exception $e) {
-                \Log::error('Failed to send verification email: ' . $e->getMessage());
-            }
+        // Send welcome email
+        $this->sendWelcomeEmail($user);
 
-            // Store ID in session for verification step
-            session(['fresher_pending_id' => $registration->id]);
-
-            return redirect()->route('auth.fresher-register.verify');
-        } else {
-            // Skip OTP, go directly to success
-            return redirect()->route('auth.fresher-register.success')
-                ->with('success', __('Your registration request has been submitted successfully! An administrator will review your request within 24-48 hours.'));
-        }
+        return redirect()->route('auth.fresher-register.success')
+            ->with('success', __('Your account has been created successfully! You can now log in with your credentials.'));
     }
 
     /**
@@ -189,5 +213,23 @@ class FresherRegisterController extends Controller
     public function success(): View
     {
         return view('auth.fresher-register-success');
+    }
+
+    /**
+     * Send welcome email to the newly registered user.
+     */
+    private function sendWelcomeEmail(User $user): void
+    {
+        try {
+            Mail::send('emails.registration-approved', [
+                'user' => $user,
+                'registration' => null,
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Welcome to GESA! Your Account is Ready 🎉');
+            });
+        } catch (\Exception $e) {
+            \Log::error('Failed to send welcome email: ' . $e->getMessage());
+        }
     }
 }

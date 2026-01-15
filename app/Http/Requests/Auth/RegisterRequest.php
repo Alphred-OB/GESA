@@ -30,7 +30,6 @@ class RegisterRequest extends FormRequest
                 'required', 
                 'string', 
                 'max:50', 
-                'alpha_dash',
                 Rule::unique('users', 'username'),
                 Rule::unique('pending_registrations', 'username')->where(fn ($query) => $query->where('status', 'pending')),
             ],

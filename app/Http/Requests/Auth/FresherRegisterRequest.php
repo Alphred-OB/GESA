@@ -24,7 +24,7 @@ class FresherRegisterRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name' => ['required', 'string', 'max:50'],
-            'username' => ['required', 'string', 'max:50', 'alpha_dash', 'unique:pending_registrations,username', 'unique:users,username'],
+            'username' => ['required', 'string', 'max:50', 'unique:pending_registrations,username', 'unique:users,username'],
             'email' => [
                 'required',
                 'string',
