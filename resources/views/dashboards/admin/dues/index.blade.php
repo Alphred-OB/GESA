@@ -86,6 +86,29 @@
         </div>
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
+            {{-- Session Messages --}}
+            @if(session('success') || session('status'))
+                <div class="rounded-2xl bg-green-50 border border-green-200 p-4 animate-fade-slide">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+                            <i class="ri-checkbox-circle-fill text-xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-green-800">{{ session('success') ?? session('status') }}</p>
+                    </div>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="rounded-2xl bg-red-50 border border-red-200 p-4 animate-fade-slide">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600">
+                            <i class="ri-error-warning-fill text-xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
             <header class="flex flex-col gap-6 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 lg:flex-row lg:items-center lg:justify-between lg:p-8">
                 <div class="space-y-2">
                     <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#16136a] sm:text-xs">

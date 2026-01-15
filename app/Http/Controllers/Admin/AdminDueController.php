@@ -151,10 +151,12 @@ class AdminDueController extends Controller
     /**
      * Show the verification page for a manual payment.
      */
-    public function verify(Due $due): View
+    public function verify(Due $due): View|RedirectResponse
     {
         if ($due->payment_status !== 'pending_verification') {
-            abort(404);
+            return redirect()
+                ->route('admin.dues.verifications')
+                ->with('error', __('This payment has already been processed (approved or rejected) by another administrator.'));
         }
 
         return view('dashboards.admin.dues.verify', [
@@ -169,7 +171,9 @@ class AdminDueController extends Controller
     public function approve(Request $request, Due $due): RedirectResponse
     {
         if ($due->payment_status !== 'pending_verification') {
-            abort(404);
+            return redirect()
+                ->route('admin.dues.verifications')
+                ->with('error', __('This payment has already been approved or rejected by another administrator.'));
         }
 
         $admin = $request->user('admin');
@@ -196,7 +200,9 @@ class AdminDueController extends Controller
     public function reject(Request $request, Due $due): RedirectResponse
     {
         if ($due->payment_status !== 'pending_verification') {
-            abort(404);
+            return redirect()
+                ->route('admin.dues.verifications')
+                ->with('error', __('This payment has already been approved or rejected by another administrator.'));
         }
 
         $request->validate([

@@ -164,46 +164,48 @@
                     </template>
                 </form>
 
-                {{-- Bulk Action Bar --}}
+                {{-- Bulk Action Panel (Inline) --}}
                 <div 
                     x-show="selected.length > 0"
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="translate-y-full opacity-0"
-                    x-transition:enter-end="translate-y-0 opacity-100"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="translate-y-0 opacity-100"
-                    x-transition:leave-end="translate-y-full opacity-0"
-                    class="fixed bottom-10 left-1/2 z-50 flex -translate-x-1/2 flex-wrap items-center gap-4 rounded-full border border-[#16136a]/20 bg-white/95 px-6 py-3 shadow-2xl backdrop-blur-md transition-all sm:flex-nowrap"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 -translate-y-2"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    class="rounded-2xl border border-[#16136a]/20 bg-[#16136a]/5 p-4 flex flex-wrap items-center justify-between gap-4"
                 >
-                    <div class="flex items-center gap-3 border-r border-slate-200 pr-4">
-                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#16136a] text-xs font-bold text-white" x-text="selected.length"></div>
-                        <p class="text-sm font-semibold text-slate-700">Selected</p>
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a] text-sm font-bold text-white shadow-lg shadow-[#16136a]/20" x-text="selected.length"></div>
+                        <div>
+                            <p class="text-sm font-bold text-[#16136a]">Bulk Actions</p>
+                            <p class="text-xs text-slate-500 font-medium">Apply action to all selected registrations</p>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <button 
                             @click="submitBulk('approve')" 
-                            class="inline-flex items-center gap-2 rounded-full bg-green-600 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:-translate-y-0.5 hover:bg-green-700"
+                            class="inline-flex h-10 items-center gap-2 rounded-xl bg-green-600 px-5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 active:translate-y-0"
                         >
-                            <i class="ri-check-line"></i> Approve
+                            <i class="ri-check-line text-sm"></i> Approve
                         </button>
                         <button 
                             @click="submitBulk('reject')" 
-                            class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:-translate-y-0.5 hover:bg-orange-600"
+                            class="inline-flex h-10 items-center gap-2 rounded-xl bg-orange-500 px-5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-orange-600 active:translate-y-0"
                         >
-                            <i class="ri-close-line"></i> Reject
+                            <i class="ri-close-line text-sm"></i> Reject
                         </button>
                         <button 
                             @click="submitBulk('delete')" 
-                            class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:-translate-y-0.5 hover:bg-red-700"
+                            class="inline-flex h-10 items-center gap-2 rounded-xl bg-red-600 px-5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red-700 active:translate-y-0"
                         >
-                            <i class="ri-delete-bin-line"></i> Delete
+                            <i class="ri-delete-bin-line text-sm"></i> Delete
+                        </button>
+                        
+                        <div class="h-8 w-px bg-slate-200 mx-2 hidden sm:block"></div>
+                        
+                        <button @click="selected = []; allSelected = false" class="h-10 px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 transition hover:text-slate-600">
+                            Cancel
                         </button>
                     </div>
-
-                    <button @click="selected = []; allSelected = false" class="ml-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600">
-                        Cancel
-                    </button>
                 </div>
 
                 {{-- Success/Error Messages --}}
