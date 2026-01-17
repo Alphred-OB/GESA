@@ -125,9 +125,23 @@
                             </thead>
                             <tbody class="divide-y divide-slate-100 bg-white">
                                 @foreach ($classes as $class)
-                                    <tr class="hover:bg-slate-50/50">
+                                    <tr class="hover:bg-slate-50/50 group">
                                         <td class="px-4 py-3 font-medium text-slate-700">
-                                            {{ $class }}
+                                            <div class="flex items-center justify-between">
+                                                <span>{{ $class }}</span>
+                                                <button type="button" 
+                                                    onclick="if(confirm('Resync ALL students in {{ addslashes($class) }} for {{ addslashes($description) }}?')) { 
+                                                        const f = document.createElement('form');
+                                                        f.method='POST'; f.action='{{ route('admin.dues.maintenance.resync-from-config') }}';
+                                                        f.innerHTML='@csrf<input type="hidden" name="description" value=\"{{ addslashes($description) }}\"><input type="hidden" name="class" value=\"{{ addslashes($class) }}\"><input type="hidden" name="only_owing" value=\"0\">';
+                                                        document.body.appendChild(f); f.submit();
+                                                    }"
+                                                    class="hidden group-hover:inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase text-slate-500 hover:bg-blue-100 hover:text-blue-600 transition"
+                                                    title="Resync ONLY this class (including paid)">
+                                                    <i class="ri-refresh-line"></i>
+                                                    Resync
+                                                </button>
+                                            </div>
                                         </td>
                                         @foreach ($years as $year)
                                             @php

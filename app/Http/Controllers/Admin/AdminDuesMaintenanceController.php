@@ -112,6 +112,11 @@ class AdminDuesMaintenanceController extends Controller
                 })
                 ->count();
 
+            // Get all possible classes and years for filters
+            $matrix = $this->dueService->matrix();
+            $classes = $matrix['classes'];
+            $years = $matrix['years'];
+
             return view('dashboards.admin.dues.maintenance', [
                 'title' => 'Dues Maintenance',
                 'uniqueDues' => $uniqueDues,
@@ -119,6 +124,8 @@ class AdminDuesMaintenanceController extends Controller
                 'missingDues' => $missingDues,
                 'duplicates' => $duplicates,
                 'orphanedCount' => $orphanedCount,
+                'classes' => $classes,
+                'years' => $years,
             ]);
         } catch (\Exception $e) {
             Log::error('Dues Maintenance: Failed to load dashboard', ['error' => $e->getMessage()]);
@@ -1263,20 +1270,32 @@ class AdminDuesMaintenanceController extends Controller
         $validated = $request->validate([
             'description' => 'nullable|string',
             'academic_year' => 'nullable|string',
+            'class' => 'nullable|string',
+            'year' => 'nullable|integer',
             'only_owing' => 'nullable|boolean',
         ]);
 
         $description = $validated['description'] ?? null;
         $academicYear = $validated['academic_year'] ?? null;
+        $class = $validated['class'] ?? null;
+        $year = $validated['year'] ?? null;
         $onlyOwing = $validated['only_owing'] ?? true;
 
         try {
-            $result = DB::transaction(function () use ($description, $academicYear, $onlyOwing, $request) {
+            $result = DB::transaction(function () use ($description, $academicYear, $class, $year, $onlyOwing, $request) {
                 // Get all relevant DefaultDueConfig entries
                 $configQuery = DefaultDueConfig::query()->where('is_active', true);
                 
                 if ($description) {
                     $configQuery->where('description', $description);
+                }
+
+                if ($class) {
+                    $configQuery->where('class', $class);
+                }
+
+                if ($year !== null) {
+                    $configQuery->where('year', (string) $year);
                 }
 
                 $configs = $configQuery->get()->keyBy(fn($c) => $c->class . '|' . $c->year . '|' . $c->description);
@@ -1292,6 +1311,14 @@ class AdminDuesMaintenanceController extends Controller
 
                 if ($academicYear) {
                     $duesQuery->where('academic_year', $academicYear);
+                }
+
+                if ($class) {
+                    $duesQuery->whereHas('student', fn($q) => $q->where('class', $class));
+                }
+
+                if ($year !== null) {
+                    $duesQuery->whereHas('student', fn($q) => $q->where('year', $year));
                 }
 
                 if ($onlyOwing) {
