@@ -65,6 +65,10 @@
                         <div class="flex-1">
                             <h3 class="font-semibold text-emerald-900">Resync All Owing Dues</h3>
                             <p class="text-sm text-emerald-700">Update all owing dues to match these configs</p>
+                            <label class="mt-2 flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="only_owing" value="0" class="rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-xs font-medium text-emerald-800">Force update PAID dues too</span>
+                            </label>
                         </div>
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
                             <i class="ri-refresh-line"></i>
@@ -92,11 +96,16 @@
                         onsubmit="return confirm('Resync all owing dues for {{ $description }} to match config?')">
                         @csrf
                         <input type="hidden" name="description" value="{{ $description }}">
-                        <input type="hidden" name="only_owing" value="1">
-                        <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
-                            <i class="ri-refresh-line"></i>
-                            Resync This Due
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" name="only_owing" value="0" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                <span class="text-[10px] font-bold uppercase text-slate-500">Incl. Paid</span>
+                            </label>
+                            <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
+                                <i class="ri-refresh-line"></i>
+                                Resync This Due
+                            </button>
+                        </div>
                     </form>
                 </div>
 

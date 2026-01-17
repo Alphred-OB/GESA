@@ -156,7 +156,18 @@
             </div>
 
             {{-- Filter tabs --}}
-            <div x-data="{ filter: 'all' }" class="space-y-4">
+            <div x-data="{ 
+                filter: 'all',
+                editingDue: null,
+                openEditModal(due) {
+                    this.editingDue = due;
+                    document.body.classList.add('overflow-hidden');
+                },
+                closeEditModal() {
+                    this.editingDue = null;
+                    document.body.classList.remove('overflow-hidden');
+                }
+            }" class="space-y-4">
                 <div class="flex flex-wrap gap-2">
                     <button @click="filter = 'all'" :class="filter === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'" class="rounded-lg px-4 py-2 text-sm font-medium transition">
                         All ({{ $stats['total'] }})
@@ -232,6 +243,16 @@
                                                     <i class="ri-file-download-line"></i>
                                                 </a>
                                             @endif
+
+                                            <button @click="openEditModal({
+                                                id: {{ $due->due_id }},
+                                                student: '{{ addslashes($due->student?->fullname ?? $due->student?->username ?? 'Unknown') }}',
+                                                amount: {{ $due->amount }},
+                                                description: '{{ addslashes($due->description) }}',
+                                                due_date: '{{ $due->due_date }}'
+                                            })" class="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-200" title="Edit Due">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -243,6 +264,59 @@
                         </tbody>
                     </table>
                 </div>
+                {{-- Edit Modal --}}
+                <template x-if="editingDue">
+                    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+                        <div @click="closeEditModal()" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+                        
+                        <div class="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl transition-all">
+                            <div class="bg-[#16136a] px-6 py-4 text-white">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-bold">Edit Due Amount</h3>
+                                    <button @click="closeEditModal()" class="rounded-lg p-1 hover:bg-white/10">
+                                        <i class="ri-close-line text-xl"></i>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-white/70" x-text="editingDue.student"></p>
+                            </div>
+
+                            <form :action="'{{ route('admin.dues.maintenance.edit', '') }}/' + editingDue.id" method="POST" class="p-6 space-y-4">
+                                @csrf
+                                @method('PUT')
+                                
+                                <input type="hidden" name="description" :value="editingDue.description">
+                                
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Due Amount (GHS)</label>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">GHS</span>
+                                        <input type="number" name="amount" step="0.01" min="0" :value="editingDue.amount" required
+                                            class="w-full rounded-xl border-slate-200 pl-12 pr-4 py-2.5 text-sm focus:border-[#16136a] focus:ring-[#16136a]/20">
+                                    </div>
+                                    <p class="mt-1 text-[10px] text-amber-600">
+                                        <i class="ri-error-warning-line"></i>
+                                        Note: Changing paid dues will NOT affect payment logs, only the recorded amount.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Due Date</label>
+                                    <input type="date" name="due_date" :value="editingDue.due_date" 
+                                        class="w-full rounded-xl border-slate-200 px-4 py-2.5 text-sm focus:border-[#16136a] focus:ring-[#16136a]/20">
+                                </div>
+
+                                <div class="flex gap-2 pt-2">
+                                    <button type="button" @click="closeEditModal()" class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="flex-1 rounded-xl bg-[#16136a] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 hover:bg-[#16136a]/90 transition">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </template>
             </div>
         </section>
 

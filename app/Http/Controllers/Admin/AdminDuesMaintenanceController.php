@@ -273,11 +273,6 @@ class AdminDuesMaintenanceController extends Controller
      */
     public function editDue(Request $request, Due $due): RedirectResponse
     {
-        // Cannot edit paid dues
-        if ($due->payment_status === 'paid') {
-            return back()->with('error', 'Cannot edit a paid due.');
-        }
-
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0',
             'due_date' => 'nullable|date',
@@ -832,7 +827,6 @@ class AdminDuesMaintenanceController extends Controller
         try {
             $result = DB::transaction(function () use ($academicYear, $description, $updates, $request) {
                 $totalUpdated = 0;
-                $skippedPaid = 0;
 
                 foreach ($updates as $update) {
                     $class = $update['class'];
@@ -851,30 +845,18 @@ class AdminDuesMaintenanceController extends Controller
                         continue;
                     }
 
-                    // Update ONLY owing dues (protect paid and pending)
+                    // Update ALL dues
                     $updated = Due::query()
                         ->whereIn('student_id', $studentIds)
                         ->where('academic_year', $academicYear)
                         ->where('description', $description)
-                        ->where('payment_status', 'owing')  // Only update owing dues
                         ->update(['amount' => $newAmount]);
 
                     $totalUpdated += $updated;
-
-                    // Count how many paid/pending were skipped
-                    $paidPendingCount = Due::query()
-                        ->whereIn('student_id', $studentIds)
-                        ->where('academic_year', $academicYear)
-                        ->where('description', $description)
-                        ->whereIn('payment_status', ['paid', 'pending_verification'])
-                        ->count();
-
-                    $skippedPaid += $paidPendingCount;
                 }
 
                 return [
                     'updated' => $totalUpdated,
-                    'skipped' => $skippedPaid,
                 ];
             });
 
@@ -887,9 +869,6 @@ class AdminDuesMaintenanceController extends Controller
             ]);
 
             $message = "Updated {$result['updated']} dues.";
-            if ($result['skipped'] > 0) {
-                $message .= " Skipped {$result['skipped']} paid/pending dues (amounts preserved).";
-            }
 
             return redirect()->route('admin.dues.maintenance.edit-amounts', [
                 'academic_year' => $academicYear,
@@ -932,35 +911,22 @@ class AdminDuesMaintenanceController extends Controller
                 return back()->with('error', 'No students found in this class/year.');
             }
 
-            // Update ONLY owing dues
+            // Update ALL dues
             $updated = Due::query()
                 ->whereIn('student_id', $studentIds)
                 ->where('academic_year', $validated['academic_year'])
                 ->where('description', $validated['description'])
-                ->where('payment_status', 'owing')
                 ->update(['amount' => $validated['new_amount']]);
-
-            // Count skipped
-            $skipped = Due::query()
-                ->whereIn('student_id', $studentIds)
-                ->where('academic_year', $validated['academic_year'])
-                ->where('description', $validated['description'])
-                ->whereIn('payment_status', ['paid', 'pending_verification'])
-                ->count();
 
             Log::info('Dues Maintenance: Updated single class/year amount', [
                 'class' => $validated['class'],
                 'year' => $validated['year'],
                 'new_amount' => $validated['new_amount'],
                 'updated' => $updated,
-                'skipped' => $skipped,
                 'admin_id' => $request->user('admin')?->user_id,
             ]);
 
             $message = "Updated {$updated} dues for {$validated['class']} Year {$validated['year']} to GHS " . number_format($validated['new_amount'], 2);
-            if ($skipped > 0) {
-                $message .= " ({$skipped} paid/pending skipped)";
-            }
 
             return back()->with('status', $message);
 
