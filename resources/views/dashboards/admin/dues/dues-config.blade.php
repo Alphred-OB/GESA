@@ -1,6 +1,4 @@
-@php($title = 'Default Dues Configuration')
-
-<x-layouts.admin :title="$title">
+<x-layouts.admin title="Default Dues Configuration">
     <div class="mx-auto w-full max-w-7xl space-y-8 px-5 py-10 sm:px-6 lg:px-8">
         {{-- Header --}}
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
