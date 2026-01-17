@@ -165,44 +165,39 @@
                 </div>
             </div>
 
-            {{-- Bulk Class Fixer --}}
-            <div class="rounded-2xl border border-orange-200 bg-orange-50 p-5 shadow-sm md:col-span-2">
-                <div class="flex flex-col gap-4">
+            {{-- Matrix Amount Adjuster --}}
+            <div class="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 shadow-sm md:col-span-2">
+                <div class="flex flex-col h-full justify-between gap-4">
                     <div>
-                        <h3 class="font-semibold text-orange-900">Bulk Class Amount Adjuster</h3>
-                        <p class="text-sm text-orange-700">Change the amount for an entire class. <strong class="text-rose-600 underline">This will update PAID dues too.</strong></p>
-                    </div>
-                    <form action="{{ route('admin.dues.maintenance.update-single-amount') }}" method="POST" class="grid gap-3 sm:grid-cols-5">
-                        @csrf
-                        <select name="description" required class="rounded-xl border-orange-200 text-sm focus:ring-orange-500">
-                            <option value="">Select Due...</option>
-                            @foreach($uniqueDues->pluck('description')->unique() as $desc)
-                                <option value="{{ $desc }}">{{ $desc }}</option>
-                            @endforeach
-                        </select>
-                        <select name="academic_year" required class="rounded-xl border-orange-200 text-sm focus:ring-orange-500">
-                            <option value="">Select Year...</option>
-                            @foreach($uniqueDues->pluck('academic_year')->unique() as $ay)
-                                <option value="{{ $ay }}">{{ $ay }}</option>
-                            @endforeach
-                        </select>
-                        <select name="class" required class="rounded-xl border-orange-200 text-sm focus:ring-orange-500">
-                            <option value="">Select Class...</option>
-                            @foreach($classes as $c)
-                                <option value="{{ $c }}">{{ $c }}</option>
-                            @endforeach
-                        </select>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">GHS</span>
-                            <input type="number" name="new_amount" step="0.01" min="0" required placeholder="0.00" 
-                                class="w-full rounded-xl border-orange-200 pl-10 text-sm focus:ring-orange-500">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-200 text-indigo-700">
+                                <i class="ri-grid-line"></i>
+                            </div>
+                            <h3 class="font-semibold text-indigo-900 leading-tight text-base">Matrix Amount Adjuster</h3>
                         </div>
-                        <button type="submit" onclick="return confirm('⚠️ WARNING: This will update EVERY student in this class, including those who have already PAID.\n\nContinue?')"
-                            class="inline-flex items-center gap-2 rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-700 justify-center">
-                            <i class="ri-check-double-line"></i>
-                            Update All
-                        </button>
-                    </form>
+                        <p class="text-xs text-indigo-700">View and edit every <strong>Class vs Year</strong> combination in a single grid. Perfect for bulk updates to <strong>paid records</strong>.</p>
+                    </div>
+                    
+                    <div class="bg-white/50 border border-indigo-100 rounded-xl p-3">
+                        <label class="block text-[10px] font-bold text-indigo-500 uppercase mb-2">1. Select a Due Type to Edit in Matrix:</label>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($uniqueDues->unique('description') as $dueType)
+                                <a href="{{ route('admin.dues.maintenance.edit-amounts', ['academic_year' => $dueType->academic_year, 'description' => $dueType->description]) }}" 
+                                   class="inline-flex items-center gap-2 rounded-lg bg-white border border-indigo-100 px-3 py-2 text-xs font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-600 hover:text-white hover:border-indigo-600">
+                                    <i class="ri-table-line"></i>
+                                    {{ $dueType->description }} ({{ $dueType->academic_year }})
+                                </a>
+                            @endforeach
+                            @if($uniqueDues->isEmpty())
+                                <p class="text-xs italic text-slate-400">No active dues to display.</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-indigo-600/70 italic">
+                        <i class="ri-information-line align-middle"></i>
+                        The Matrix View allows you to change any amount and apply it to "PAID" students instantly.
+                    </p>
                 </div>
             </div>
         </div>
