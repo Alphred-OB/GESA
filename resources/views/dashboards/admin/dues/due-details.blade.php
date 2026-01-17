@@ -434,7 +434,7 @@
                                 <p class="text-xs text-white/70" x-text="editingDue.student"></p>
                             </div>
 
-                            <form :action="'{{ route('admin.dues.maintenance.edit', '') }}/' + editingDue.id" method="POST" class="p-6 space-y-4">
+                            <form :action="'{{ route('admin.dues.maintenance.index') }}' + '/' + editingDue.id" method="POST" class="p-6 space-y-4">
                                 @csrf
                                 @method('PUT')
                                 
