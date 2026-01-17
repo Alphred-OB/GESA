@@ -93,10 +93,13 @@
                                                 {{-- Stats --}}
                                                 <div class="mt-1 text-[10px]">
                                                     @if (($cellData['student_count'] ?? 0) > 0)
-                                                        <span class="text-blue-600 font-medium">{{ $cellData['student_count'] }} students</span>
-                                                        @if (($cellData['paid_count'] ?? 0) > 0)
-                                                            <span class="text-emerald-600 ml-1">({{ $cellData['paid_count'] }} paid)</span>
-                                                        @endif
+                                                        <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $academicYear, 'description' => $description, 'class' => $class, 'year' => $year]) }}" 
+                                                           class="hover:underline">
+                                                            <span class="text-blue-600 font-medium">{{ $cellData['student_count'] }} students</span>
+                                                            @if (($cellData['paid_count'] ?? 0) > 0)
+                                                                <span class="text-emerald-600 ml-1">({{ $cellData['paid_count'] }} paid)</span>
+                                                            @endif
+                                                        </a>
                                                     @else
                                                         <span class="italic text-slate-400">no students yet</span>
                                                     @endif
