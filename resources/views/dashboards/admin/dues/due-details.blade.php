@@ -146,19 +146,80 @@
         {{-- Students With This Due --}}
         <section class="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
             <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
-                    <i class="ri-user-line text-lg"></i>
-                </div>
                 <div>
                     <h2 class="text-lg font-semibold text-slate-800">Students With This Due</h2>
-                    <p class="text-xs text-slate-500">{{ $dues->count() }} students have this due assigned</p>
+                    <p class="text-xs text-slate-500">{{ $dues->count() }} students match current filters</p>
                 </div>
+            </div>
+
+            {{-- Filter Bar --}}
+            <div class="rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
+                <form action="{{ route('admin.dues.maintenance.details') }}" method="GET" class="grid gap-4 sm:grid-cols-4 lg:grid-cols-5">
+                    <input type="hidden" name="academic_year" value="{{ $academicYear }}">
+                    <input type="hidden" name="description" value="{{ $description }}">
+                    
+                    {{-- Search --}}
+                    <div class="relative items-center">
+                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search name, ref..." 
+                            class="w-full rounded-xl border-slate-200 pl-10 text-sm focus:ring-[#16136a]/20 focus:border-[#16136a]">
+                    </div>
+
+                    {{-- Class --}}
+                    <select name="class" class="rounded-xl border-slate-200 text-sm focus:ring-[#16136a]/20 focus:border-[#16136a]">
+                        <option value="">All Classes</option>
+                        @foreach($classes as $c)
+                            <option value="{{ $c }}" {{ request('class') == $c ? 'selected' : '' }}>{{ $c }}</option>
+                        @endforeach
+                    </select>
+
+                    {{-- Year --}}
+                    <select name="year" class="rounded-xl border-slate-200 text-sm focus:ring-[#16136a]/20 focus:border-[#16136a]">
+                        <option value="">All Years</option>
+                        @foreach($years as $y)
+                            <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>Year {{ $y }}</option>
+                        @endforeach
+                    </select>
+
+                    {{-- Status (Handled via URL query now for simplicity with filters) --}}
+                    <select name="status" x-model="filter" class="rounded-xl border-slate-200 text-sm focus:ring-[#16136a]/20 focus:border-[#16136a]">
+                        <option value="all">All Statuses</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending_verification">Pending</option>
+                        <option value="owing">Owing</option>
+                    </select>
+
+                    <div class="flex gap-2">
+                        <button type="submit" class="flex-1 rounded-xl bg-slate-800 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-900 transition flex items-center justify-center gap-2">
+                            <i class="ri-filter-3-line"></i>
+                            Filter
+                        </button>
+                        @if(request()->hasAny(['search', 'class', 'year']))
+                            <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $academicYear, 'description' => $description]) }}" 
+                                class="rounded-xl bg-white border border-slate-200 px-3 py-2 text-slate-500 hover:bg-slate-50 transition" title="Clear Filters">
+                                <i class="ri-refresh-line"></i>
+                            </a>
+                        @endif
+                    </div>
+                </form>
             </div>
 
             {{-- Filter tabs --}}
             <div x-data="{ 
-                filter: 'all',
+                filter: '{{ request('status', 'all') }}',
                 editingDue: null,
+                selectedDues: [],
+                showBulkModal: false,
+                allSelected: false,
+                toggleAll() {
+                    this.allSelected = !this.allSelected;
+                    if (this.allSelected) {
+                        this.selectedDues = Array.from(document.querySelectorAll('.due-checkbox'))
+                            .map(cb => cb.value);
+                    } else {
+                        this.selectedDues = [];
+                    }
+                },
                 openEditModal(due) {
                     this.editingDue = due;
                     document.body.classList.add('overflow-hidden');
@@ -185,21 +246,27 @@
 
                 <div class="overflow-x-auto rounded-xl border border-slate-200">
                     <table class="min-w-full divide-y divide-slate-200 text-sm">
-                        <thead class="bg-slate-50">
+                        <thead class="bg-slate-50 uppercase tracking-wider text-slate-500 text-[10px]">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Student</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Reference #</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Class/Year</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Amount</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Due Date</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Status</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-slate-500">Payment Ref</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase text-slate-500">Actions</th>
+                                <th class="px-4 py-3 text-left w-10">
+                                    <input type="checkbox" @click="toggleAll()" :checked="allSelected" class="rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]">
+                                </th>
+                                <th class="px-4 py-3 text-left font-bold">Student</th>
+                                <th class="px-4 py-3 text-left font-bold">Reference #</th>
+                                <th class="px-4 py-3 text-left font-bold">Class/Year</th>
+                                <th class="px-4 py-3 text-left font-bold">Amount</th>
+                                <th class="px-4 py-3 text-left font-bold">Due Date</th>
+                                <th class="px-4 py-3 text-left font-bold">Status</th>
+                                <th class="px-4 py-3 text-left font-bold">Payment Info</th>
+                                <th class="px-4 py-3 text-right font-bold">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 bg-white">
                             @forelse ($dues as $due)
-                                <tr x-show="filter === 'all' || filter === '{{ $due->payment_status }}'" class="hover:bg-slate-50">
+                                <tr x-show="filter === 'all' || filter === '{{ $due->payment_status }}'" class="hover:bg-indigo-50/30 transition-colors">
+                                    <td class="px-4 py-3">
+                                        <input type="checkbox" value="{{ $due->due_id }}" x-model="selectedDues" class="due-checkbox rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]">
+                                    </td>
                                     <td class="px-4 py-3">
                                         <div class="font-medium text-slate-700">{{ $due->student?->fullname ?? $due->student?->username ?? 'Unknown' }}</div>
                                         <div class="text-xs text-slate-400">{{ $due->student?->email ?? '—' }}</div>
@@ -264,7 +331,94 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- Edit Modal --}}
+                {{-- Sticky Bulk Actions Bar --}}
+                <div x-show="selectedDues.length > 0" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="translate-y-full opacity-0"
+                    x-transition:enter-end="translate-y-0 opacity-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="translate-y-0 opacity-100"
+                    x-transition:leave-end="translate-y-full opacity-0"
+                    class="fixed bottom-6 left-1/2 z-[90] -translate-x-1/2 w-full max-w-2xl px-4">
+                    <div class="rounded-3xl border border-[#16136a]/20 bg-[#16136a] p-4 text-white shadow-2xl flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                                <i class="ri-checkbox-multiple-line text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold"><span x-text="selectedDues.length"></span> Students Selected</p>
+                                <p class="text-[10px] text-white/60">Bulk update all marked records</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button @click="showBulkModal = true; document.body.classList.add('overflow-hidden')" 
+                                class="rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-[#16136a] shadow-lg transition hover:bg-slate-100">
+                                <i class="ri-edit-box-line mr-1"></i>
+                                Edit Selection
+                            </button>
+                            <button @click="selectedDues = []; allSelected = false" class="rounded-xl bg-slate-100/10 px-4 py-2.5 text-xs font-bold hover:bg-white/10 transition">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Bulk Edit Modal --}}
+                <template x-if="showBulkModal">
+                    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+                        <div @click="showBulkModal = false; document.body.classList.remove('overflow-hidden')" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+                        
+                        <div class="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl transition-all">
+                            <div class="bg-indigo-600 px-6 py-4 text-white">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-bold uppercase tracking-widest text-sm">Bulk Update Dues</h3>
+                                    <button @click="showBulkModal = false; document.body.classList.remove('overflow-hidden')" class="rounded-lg p-1 hover:bg-white/10">
+                                        <i class="ri-close-line text-xl"></i>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-indigo-100 mt-1">Updating <span class="font-bold underline" x-text="selectedDues.length"></span> selected records</p>
+                            </div>
+
+                            <form action="{{ route('admin.dues.maintenance.bulk-edit-individual') }}" method="POST" class="p-6 space-y-4">
+                                @csrf
+                                <template x-for="id in selectedDues">
+                                    <input type="hidden" name="due_ids[]" :value="id">
+                                </template>
+                                
+                                <div class="p-3 bg-amber-50 border border-amber-100 rounded-xl text-[10px] text-amber-700">
+                                    <i class="ri-information-line"></i>
+                                    This will update the <strong>amount</strong> and/or <strong>due date</strong> for all selected students, including those who have already paid.
+                                </div>
+
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">New Batch Amount (GHS)</label>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">GHS</span>
+                                        <input type="number" name="amount" step="0.01" min="0" placeholder="0.00" required
+                                            class="w-full rounded-xl border-slate-200 pl-12 pr-4 py-2.5 text-sm focus:border-indigo-600 focus:ring-indigo-600/20">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">New Batch Due Date (Optional)</label>
+                                    <input type="date" name="due_date" 
+                                        class="w-full rounded-xl border-slate-200 px-4 py-2.5 text-sm focus:border-indigo-600 focus:ring-indigo-600/20">
+                                </div>
+
+                                <div class="flex gap-2 pt-2">
+                                    <button type="button" @click="showBulkModal = false; document.body.classList.remove('overflow-hidden')" class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition">
+                                        Exit
+                                    </button>
+                                    <button type="submit" class="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition">
+                                        Apply to All
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </template>
+
+                {{-- Edit Single Modal --}}
                 <template x-if="editingDue">
                     <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
                         <div @click="closeEditModal()" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>

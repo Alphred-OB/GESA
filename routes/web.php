@@ -369,6 +369,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         Route::post('/config/update', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'updateDuesConfig'])->name('config.update');
         Route::post('/config/bulk-update', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'bulkUpdateDuesConfig'])->name('config.bulk-update');
         Route::post('/resync-from-config', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'resyncDuesFromConfig'])->name('resync-from-config');
+        Route::post('/bulk-edit-individual', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'bulkEditIndividualDues'])->name('bulk-edit-individual');
 
         // Account Management (delete accounts, force approve, etc.)
         Route::get('/accounts', [\App\Http\Controllers\Admin\AdminDuesMaintenanceController::class, 'accountManagement'])->name('accounts');

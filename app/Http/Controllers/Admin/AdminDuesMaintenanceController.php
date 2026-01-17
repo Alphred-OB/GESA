@@ -224,18 +224,38 @@ class AdminDuesMaintenanceController extends Controller
     {
         $academicYear = $request->query('academic_year');
         $description = $request->query('description');
+        $search = $request->query('search');
+        $class = $request->query('class');
+        $year = $request->query('year');
 
         if (!$academicYear || !$description) {
             abort(404, 'Academic year and description required');
         }
 
         // Get all dues of this type with student info
-        $dues = Due::query()
+        $duesQuery = Due::query()
             ->with('student:user_id,username,fullname,email,class,year,index_number')
             ->where('academic_year', $academicYear)
             ->where('description', $description)
-            ->where('is_active', true)
-            ->orderByRaw("CASE payment_status WHEN 'paid' THEN 1 WHEN 'pending_verification' THEN 2 ELSE 3 END")
+            ->where('is_active', true);
+
+        if ($search) {
+            $duesQuery->whereHas('student', function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('index_number', 'like', "%{$search}%");
+            });
+        }
+
+        if ($class) {
+            $duesQuery->whereHas('student', fn($q) => $q->where('class', $class));
+        }
+
+        if ($year) {
+            $duesQuery->whereHas('student', fn($q) => $q->where('year', $year));
+        }
+
+        $dues = $duesQuery->orderByRaw("CASE payment_status WHEN 'paid' THEN 1 WHEN 'pending_verification' THEN 2 ELSE 3 END")
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -264,6 +284,9 @@ class AdminDuesMaintenanceController extends Controller
             ->orderBy('fullname')
             ->get();
 
+        // For filters
+        $matrix = $this->dueService->matrix();
+
         return view('dashboards.admin.dues.due-details', [
             'title' => $description . ' - Details',
             'academicYear' => $academicYear,
@@ -272,7 +295,43 @@ class AdminDuesMaintenanceController extends Controller
             'stats' => $stats,
             'safeToDelete' => $safeToDelete,
             'missingStudents' => $missingStudents,
+            'classes' => $matrix['classes'],
+            'years' => $matrix['years'],
         ]);
+    }
+
+    /**
+     * Bulk edit individual dues.
+     */
+    public function bulkEditIndividualDues(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'due_ids' => 'required|array',
+            'due_ids.*' => 'required|integer|exists:dues,due_id',
+            'amount' => 'required|numeric|min:0',
+            'due_date' => 'nullable|date',
+        ]);
+
+        try {
+            $updateData = ['amount' => $validated['amount']];
+            if ($request->filled('due_date')) {
+                $updateData['due_date'] = $validated['due_date'];
+            }
+
+            $count = Due::whereIn('due_id', $validated['due_ids'])->update($updateData);
+
+            Log::info('Dues Maintenance: Bulk updated individual dues', [
+                'count' => $count,
+                'due_ids' => $validated['due_ids'],
+                'amount' => $validated['amount'],
+                'admin_id' => $request->user('admin')?->user_id,
+            ]);
+
+            return back()->with('status', "Successfully updated $count dues to GHS " . number_format($validated['amount'], 2));
+        } catch (\Exception $e) {
+            Log::error('Dues Maintenance: Failed to bulk update dues', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Failed to bulk update dues: ' . $e->getMessage());
+        }
     }
 
     /**
