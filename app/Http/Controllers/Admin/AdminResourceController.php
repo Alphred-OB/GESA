@@ -27,7 +27,7 @@ class AdminResourceController extends Controller
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
-        return view('dashboards.admin.resources.index2', [
+        return view('dashboards.admin.resources.index', [
             'title' => 'Academic resources',
             'resources' => $resources,
             'perPageOptions' => $perPageOptions,

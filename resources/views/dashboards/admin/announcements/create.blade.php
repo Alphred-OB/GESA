@@ -5,14 +5,22 @@
 @endphp
 
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-5xl space-y-10 px-5 py-10 sm:px-6 lg:px-8">
-        <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-            <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                <i class="ri-megaphone-line text-base" aria-hidden="true"></i>
-                Compose announcement
-            </p>
-            <h1 class="text-3xl font-semibold text-[#16136a]">Share updates with students</h1>
-            <p class="text-sm text-slate-600">Target all students or focus on a specific audience. Announcements are sent instantly via email.</p>
+    <div class="mx-auto w-full max-w-5xl px-6 py-8 lg:px-8">
+        <header class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]/50">
+                    <i class="ri-add-circle-line"></i>
+                    Create
+                </div>
+                <h1 class="text-3xl font-semibold tracking-tight text-slate-900">New Announcement</h1>
+                <p class="max-w-xl text-sm font-medium text-slate-500">Write your message and choose who should receive it.</p>
+            </div>
+            <div class="flex">
+                <a href="{{ route('admin.announcements.index') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#16136a] transition-opacity hover:opacity-70">
+                    <i class="ri-arrow-left-line"></i>
+                    Back to Announcements
+                </a>
+            </div>
         </header>
 
         @include('dashboards.admin.announcements.partials.form', [

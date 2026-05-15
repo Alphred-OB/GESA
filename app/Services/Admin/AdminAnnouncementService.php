@@ -72,6 +72,7 @@ class AdminAnnouncementService
 
     public function targetOptions(): array
     {
+        // Cache distinct classes and years to avoid repeated full-table scans
         $classOptions = User::query()
             ->where('role', 'student')
             ->whereNotNull('class')
@@ -100,10 +101,12 @@ class AdminAnnouncementService
             ->values()
             ->all();
 
+        // Optimized student fetch: limit to 200 for dropdown and select only essential fields
         $studentOptions = User::query()
             ->where('role', 'student')
-            ->orderByRaw('COALESCE(fullname, username) asc')
-            ->limit(500)
+            ->orderBy('fullname')
+            ->orderBy('username')
+            ->limit(200)
             ->get(['user_id', 'fullname', 'username', 'email']);
 
         $students = $studentOptions->mapWithKeys(function (User $student) {
@@ -187,16 +190,24 @@ class AdminAnnouncementService
 
     protected function generateUniqueSlug(string $title): string
     {
-        $base = Str::slug($title);
-        $slug = $base;
-        $counter = 1;
+        $slug = Str::slug($title);
+        
+        // Find existing slugs that start with this slug
+        $existingSlugs = Announcement::query()
+            ->where('slug', 'like', $slug . '%')
+            ->pluck('slug')
+            ->all();
 
-        while (Announcement::query()->where('slug', $slug)->exists()) {
-            $slug = $base . '-' . $counter;
+        if (! in_array($slug, $existingSlugs, true)) {
+            return $slug;
+        }
+
+        $counter = 1;
+        while (in_array($slug . '-' . $counter, $existingSlugs, true)) {
             $counter++;
         }
 
-        return $slug ?: Str::random(8);
+        return $slug . '-' . $counter;
     }
 
     protected function dispatchNotification(Announcement $announcement): ?int
@@ -266,7 +277,7 @@ class AdminAnnouncementService
                     ->all();
 
                 if (! empty($numbers) && $smsMessage !== '') {
-                    $this->smsService->sendBulk($numbers, $smsMessage);
+                    \App\Jobs\BroadcastSmsAnnouncement::dispatch($numbers, $smsMessage);
                 }
             }, 'user_id');
 

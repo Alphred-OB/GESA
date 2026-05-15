@@ -99,7 +99,7 @@
                         <div class="flex items-center gap-3">
                             <label class="flex items-center gap-1.5 cursor-pointer">
                                 <input type="checkbox" name="only_owing" value="0" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
-                                <span class="text-[10px] font-bold uppercase text-slate-500">Incl. Paid</span>
+                                <span class="text-[10px] font-semibold uppercase text-slate-500">Incl. Paid</span>
                             </label>
                             <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
                                 <i class="ri-refresh-line"></i>
@@ -136,7 +136,7 @@
                                                         f.innerHTML='@csrf<input type="hidden" name="description" value=\"{{ addslashes($description) }}\"><input type="hidden" name="class" value=\"{{ addslashes($class) }}\"><input type="hidden" name="only_owing" value=\"0\">';
                                                         document.body.appendChild(f); f.submit();
                                                     }"
-                                                    class="hidden group-hover:inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase text-slate-500 hover:bg-blue-100 hover:text-blue-600 transition"
+                                                    class="hidden group-hover:inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase text-slate-500 hover:bg-blue-100 hover:text-blue-600 transition"
                                                     title="Resync ONLY this class (including paid)">
                                                     <i class="ri-refresh-line"></i>
                                                     Resync

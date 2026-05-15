@@ -38,54 +38,21 @@ class FresherRegisterController extends Controller
     {
         $data = $request->validated();
         
-        // Handle student ID upload
+        // Handle student ID upload - Store in private storage for security
         $studentIdPath = null;
         if ($request->hasFile('student_id')) {
-            $studentIdPath = $request->file('student_id')->store('student-ids', 'public');
+            $studentIdPath = $request->file('student_id')->store('student-ids', 'local');
         }
 
         $fullName = trim($data['first_name'] . ' ' . $data['last_name']);
 
-        // Check for existing conflicts before creating
-        $conflicts = [];
-        
-        if (User::where('username', $data['username'])->exists()) {
-            return back()
-                ->withErrors(['username' => 'This username is already taken. Please choose a different one.'])
-                ->withInput();
-        }
-        
-        if (User::where('email', $data['email'])->exists()) {
-            return back()
-                ->withErrors(['email' => 'An account with this email already exists.'])
-                ->withInput();
-        }
-        
-        if ($data['index_number'] && User::where('index_number', $data['index_number'])->exists()) {
-            return back()
-                ->withErrors(['index_number' => 'An account with this reference number already exists.'])
-                ->withInput();
-        }
+        // Conflict checking is already handled by FresherRegisterRequest validation rules (Rule::unique)
 
-        // Create the user account directly (auto-approved)
-        $user = User::create([
-            'fullname' => $fullName,
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'phone_number' => $data['phone_number'] ?? null,
-            'index_number' => $data['index_number'],
-            'class' => $data['class'],
-            'year' => $data['year'],
-            'role' => 'student',
-            'email_verified_at' => now(), // Auto-verified
-        ]);
+        // Generate OTP for email verification
+        $otp = (string) random_int(100000, 999999);
 
-        // Sync dues for the new student
-        $this->dueService->syncStudent($user);
-
-        // Optionally store a record in pending_registrations for audit trail
-        PendingRegistration::create([
+        // Create a pending registration record (requires admin approval)
+        $registration = PendingRegistration::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'username' => $data['username'],
@@ -97,18 +64,22 @@ class FresherRegisterController extends Controller
             'password' => Hash::make($data['password']),
             'reason' => $data['reason'],
             'student_id_path' => $studentIdPath,
-            'status' => 'approved', // Auto-approved
-            'email_verified_at' => now(),
-            'reviewed_at' => now(),
-            'reviewed_by' => null, // System auto-approved
-            'admin_notes' => 'Auto-approved during registration',
+            'status' => 'pending',
+            'verification_code' => Hash::make($otp),
+            'verification_expires_at' => now()->addMinutes(15),
         ]);
 
-        // Send welcome email
-        $this->sendWelcomeEmail($user);
+        // Send OTP email
+        try {
+            Mail::to($registration->email)->send(new \App\Mail\Auth\FresherVerificationMail($otp));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send verification email: ' . $e->getMessage());
+        }
 
-        return redirect()->route('auth.fresher-register.success')
-            ->with('success', __('Your account has been created successfully! You can now log in with your credentials.'));
+        session(['fresher_pending_id' => $registration->id]);
+
+        return redirect()->route('auth.fresher-register.verify')
+            ->with('success', __('Please verify your email address. We have sent a 6-digit code to your email.'));
     }
 
     /**
@@ -196,10 +167,7 @@ class FresherRegisterController extends Controller
         ]);
 
         try {
-            Mail::send('emails.fresher-verification', ['code' => $otp], function ($message) use ($registration) {
-                $message->to($registration->email)
-                    ->subject('Verify Your GESA Registration');
-            });
+            Mail::to($registration->email)->send(new \App\Mail\Auth\FresherVerificationMail($otp));
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send email. Please try again.');
         }
@@ -215,21 +183,4 @@ class FresherRegisterController extends Controller
         return view('auth.fresher-register-success');
     }
 
-    /**
-     * Send welcome email to the newly registered user.
-     */
-    private function sendWelcomeEmail(User $user): void
-    {
-        try {
-            Mail::send('emails.registration-approved', [
-                'user' => $user,
-                'registration' => null,
-            ], function ($message) use ($user) {
-                $message->to($user->email)
-                    ->subject('Welcome to GESA! Your Account is Ready 🎉');
-            });
-        } catch (\Exception $e) {
-            \Log::error('Failed to send welcome email: ' . $e->getMessage());
-        }
-    }
 }

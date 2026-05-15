@@ -1,118 +1,106 @@
-@php($title = 'Reset password')
+@php($title = 'Reset Password')
 
-<x-layouts.auth :title="$title" card-width="max-w-lg">
-    <x-slot:hero>
-        <div class="mx-auto w-full max-w-lg text-center text-white">
-            <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white/10 shadow-lg">
-                <img src="{{ asset('logo.png') }}" alt="GESA Portal Logo" class="h_full w_full object-contain" loading="lazy">
+<x-layouts.auth :title="$title" card-width="max-w-md">
+    <div class="auth-card-hover p-8 md:p-12">
+        <div class="mb-10 text-center">
+            <div class="stagger-1 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#16136a]/5 text-[#16136a] shadow-inner mx-auto backdrop-blur-sm">
+                <i class="ri-shield-keyhole-line text-3xl"></i>
             </div>
-            <h1 class="text-2xl font-semibold">Finish resetting your password</h1>
-            <p class="mt-2 text-sm text-white/80">Choose a strong new password to secure your GESA account.</p>
-        </div>
-    </x-slot:hero>
-
-    <div class="space-y-8">
-        <div class="space-y-3 text-center">
-            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#16136a]/10 text-[#16136a]">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M6 5v14" />
-                    <path d="M12 5v14" />
-                    <path d="M18 5v14" />
-                </svg>
-            </div>
-            <h1 class="text-2xl font-semibold text-slate-900">Set a new password</h1>
-            <p class="text-sm text-slate-600">Create a strong password to secure your GESA Portal account.</p>
+            <h2 class="stagger-2 text-3xl font-semibold tracking-tight text-slate-900">Set new password</h2>
+            <p class="stagger-3 mt-2 text-base text-slate-500">Choose a strong, secure password for your GESA account.</p>
         </div>
 
         @if (session('status'))
-            <div class="rounded-xl border border-[#16136a]/20 bg-[#16136a]/10 px-4 py-3 text-sm text-[#16136a]">
-                {{ session('status') }}
+            <div class="stagger-1 mb-6 rounded-2xl border border-green-100 bg-green-50/50 px-5 py-4 text-sm font-medium text-green-700 backdrop-blur-sm animate-fade-slide-up">
+                <div class="flex items-center gap-3">
+                    <i class="ri-checkbox-circle-fill text-xl"></i>
+                    <span>{{ session('status') }}</span>
+                </div>
             </div>
         @endif
 
         <form method="POST" action="{{ route('password.update') }}" class="space-y-6" data-auth-form>
             @csrf
-
             <input type="hidden" name="token" value="{{ $token }}">
             <input type="hidden" name="email" value="{{ $email }}">
 
-            <div class="space-y-2">
-                <label for="password" class="block text-sm font-medium text-slate-700">New password</label>
-                <div class="relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect width="18" height="11" x="3" y="11" rx="2" />
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
+            <div class="stagger-4 space-y-2">
+                <label for="password" class="block text-sm font-semibold text-slate-700">New Password</label>
+                <div class="group auth-input-group relative">
+                    <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
+                        <i class="ri-lock-2-line text-lg"></i>
                     </span>
-                    <input id="password" name="password" type="password" required autocomplete="new-password"
-                        class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30"
-                        placeholder="Create a new password" />
-                    <button type="button" data-password-toggle="#password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 transition hover:text-slate-600" aria-label="Toggle password visibility">
-                        <svg data-eye xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M2.458 12C3.732 7.943 7.522 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S3.732 16.057 2.458 12Z" />
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <svg data-eye-off xmlns="http://www.w3.org/2000/svg" class="hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="m3 3 18 18" />
-                            <path d="M10.584 10.59a1.999 1.999 0 0 0 2.828 2.83" />
-                            <path d="M9.878 5.132A9.76 9.76 0 0 1 12 5c4.478 0 8.268 2.943 9.542 7a9.88 9.88 0 0 1-1.616 3.043m-4.112 2.773A9.711 9.711 0 0 1 12 19c-4.478 0-8.268-2.943-9.542-7a9.835 9.835 0 0 1 2.223-3.592" />
-                        </svg>
+                    <input id="password" name="password" type="password" required autocomplete="new-password" 
+                        class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" 
+                        placeholder="••••••••" />
+                    <button type="button" data-password-toggle="#password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-all duration-300 hover:text-[#16136a] hover:scale-110 active:scale-90" aria-label="Toggle password visibility">
+                        <i data-eye class="ri-eye-line text-lg"></i>
+                        <i data-eye-off class="ri-eye-off-line hidden text-lg"></i>
                     </button>
                 </div>
                 @error('password')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs font-semibold text-red-500 animate-fade-slide-up">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="space-y-2">
-                <label for="password_confirmation" class="block text-sm font-medium text-slate-700">Confirm password</label>
-                <div class="relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect width="18" height="11" x="3" y="11" rx="2" />
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
+            <!-- Password Strength System -->
+            <div class="stagger-4 hidden space-y-4 rounded-2xl border border-slate-200/50 bg-slate-50/5 p-5 shadow-inner backdrop-blur-sm transition-all duration-300 hover:bg-white/10" data-password-strength data-password-input="#password">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Security Rating</span>
+                    <span data-password-strength-label class="text-xs font-semibold text-slate-400 transition-colors duration-300">Weak</span>
+                </div>
+                <div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-200/50">
+                    <div data-password-strength-bar class="h-full w-0 bg-red-500 transition-all duration-500"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                    <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="length" data-state="fail">
+                        <i class="ri-checkbox-circle-fill text-sm"></i>
+                        <span>Min. 8 Chars</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="mixed" data-state="fail">
+                        <i class="ri-checkbox-circle-fill text-sm"></i>
+                        <span>Case-sensitive</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="number" data-state="fail">
+                        <i class="ri-checkbox-circle-fill text-sm"></i>
+                        <span>Numbers</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="symbol" data-state="fail">
+                        <i class="ri-checkbox-circle-fill text-sm"></i>
+                        <span>Symbols</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stagger-4 space-y-2">
+                <label for="password_confirmation" class="block text-sm font-semibold text-slate-700">Confirm Password</label>
+                <div class="group auth-input-group relative">
+                    <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
+                        <i class="ri-lock-check-line text-lg"></i>
                     </span>
-                    <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password"
-                        class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30"
-                        placeholder="Re-enter new password" />
-                    <button type="button" data-password-toggle="#password_confirmation" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 transition hover:text-slate-600" aria-label="Toggle password visibility">
-                        <svg data-eye xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M2.458 12C3.732 7.943 7.522 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S3.732 16.057 2.458 12Z" />
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                        <svg data-eye-off xmlns="http://www.w3.org/2000/svg" class="hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="m3 3 18 18" />
-                            <path d="M10.584 10.59a1.999 1.999 0 0 0 2.828 2.83" />
-                            <path d="M9.878 5.132A9.76 9.76 0 0 1 12 5c4.478 0 8.268 2.943 9.542 7a9.88 9.88 0 0 1-1.616 3.043m-4.112 2.773A9.711 9.711 0 0 1 12 19c-4.478 0-8.268-2.943-9.542-7a9.835 9.835 0 0 1 2.223-3.592" />
-                        </svg>
+                    <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" 
+                        class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" 
+                        placeholder="••••••••" />
+                    <button type="button" data-password-toggle="#password_confirmation" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-all duration-300 hover:text-[#16136a] hover:scale-110 active:scale-90" aria-label="Toggle password visibility">
+                        <i data-eye class="ri-eye-line text-lg"></i>
+                        <i data-eye-off class="ri-eye-off-line hidden text-lg"></i>
                     </button>
                 </div>
-                @error('password_confirmation')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
-                @enderror
             </div>
 
-            <button type="submit" class="flex w-full items-center justify-center space-x-2 rounded-xl bg-[#16136a] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/25 transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-[#18188a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="m5 12 5 5L20 7" />
-                </svg>
-                <span>Update password</span>
+            <button type="submit" class="stagger-5 auth-button-press group relative flex w-full items-center justify-center overflow-hidden rounded-2xl bg-[#16136a] px-4 py-4 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-2xl hover:shadow-[#16136a]/30">
+                <div class="flex items-center space-x-2 transition-transform duration-300 group-hover:scale-105">
+                    <span>Update Password</span>
+                    <i class="ri-checkbox-circle-fill transition-transform duration-300 group-hover:scale-110"></i>
+                </div>
             </button>
         </form>
 
-        <div class="text-center text-sm text-slate-500">
-            <a href="{{ route('login') }}" class="font-semibold text-[#16136a] hover:underline">Back to sign in</a>
-        </div>
-    </div>
-
-    <div id="auth-loading-overlay" class="hidden fixed inset-0 z-40 items-center justify-center bg-white/80 backdrop-blur-sm">
-        <div class="flex flex-col items-center space-y-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#16136a]/20">
-                <i class="ri-loader-4-line animate-spin text-2xl text-[#16136a]" aria-hidden="true"></i>
-            </div>
-            <p class="text-sm font-medium text-slate-700">Saving your new password…</p>
+        <div class="stagger-5 mt-10 border-t border-slate-200/50 pt-8 text-center">
+            <a href="{{ route('login') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-[#16136a] transition-all duration-300 hover:text-[#18188a] hover:scale-105">
+                <i class="ri-arrow-left-line transition-transform duration-300 group-hover:-translate-x-1"></i>
+                <span>Back to sign in</span>
+            </a>
         </div>
     </div>
 </x-layouts.auth>

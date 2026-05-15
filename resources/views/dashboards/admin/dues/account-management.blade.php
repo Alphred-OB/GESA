@@ -48,7 +48,7 @@
                         <i class="ri-time-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ $stats['total_pending'] }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ $stats['total_pending'] }}</p>
                         <p class="text-xs text-slate-500">Total Pending</p>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         <i class="ri-mail-close-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ $stats['pending_unverified'] }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ $stats['pending_unverified'] }}</p>
                         <p class="text-xs text-slate-500">Unverified Email</p>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                         <i class="ri-mail-check-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ $stats['pending_verified'] }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ $stats['pending_verified'] }}</p>
                         <p class="text-xs text-slate-500">Awaiting Approval</p>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                         <i class="ri-user-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ $stats['total_users'] }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ $stats['total_users'] }}</p>
                         <p class="text-xs text-slate-500">Active Students</p>
                     </div>
                 </div>

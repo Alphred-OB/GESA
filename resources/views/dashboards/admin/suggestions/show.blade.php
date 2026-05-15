@@ -1,101 +1,142 @@
 @php
-    use Illuminate\Support\Facades\Storage;
-    use Illuminate\Support\Str;
-    $title = 'Suggestion · ' . ($suggestion->subject ?? 'Preview');
+    $title = 'Review Suggestion';
 @endphp
 
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-4xl space-y-8 px-5 py-10 sm:px-6 lg:px-8">
-        <nav class="flex items-center gap-2 text-sm text-slate-500">
-            <a href="{{ route('admin.suggestions.index') }}" class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-600 transition hover:bg-slate-200">
-                <i class="ri-arrow-left-line text-base" aria-hidden="true"></i>
-                Back to suggestions
-            </a>
-        </nav>
+    <div class="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            {{-- Header --}}
+            <nav class="flex items-center gap-4">
+                <a href="{{ route('admin.suggestions.index') }}" class="flex h-12 items-center gap-3 rounded-2xl bg-slate-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">
+                    <i class="ri-arrow-left-line text-lg"></i>
+                    Back to Inbox
+                </a>
+            </nav>
 
-        <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-                <div class="space-y-2">
-                    <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                        <i class="ri-message-2-line text-base" aria-hidden="true"></i>
-                        Student suggestion
-                    </p>
-                    <h1 class="text-2xl font-semibold text-[#16136a]">{{ $suggestion->subject }}</h1>
+            <header class="text-center lg:text-left flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#16136a] mb-4">
+                        <i class="ri-chat-voice-line text-sm"></i>
+                        Student Voice
+                    </div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $suggestion->subject }}</h1>
+                    <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Feedback from {{ $suggestion->user?->fullname ?? $suggestion->user?->username ?? 'Anonymous' }}</p>
                 </div>
+                
                 @php
                     $status = strtolower($suggestion->status ?? 'pending');
-                    $badgeMap = [
-                        'pending' => 'bg-amber-100 text-amber-800',
-                        'in_review' => 'bg-blue-100 text-blue-800',
-                        'resolved' => 'bg-emerald-100 text-emerald-800',
-                        'dismissed' => 'bg-rose-100 text-rose-700',
-                    ];
-                    $badgeClass = $badgeMap[$status] ?? 'bg-slate-100 text-slate-600';
+                    $statusColor = match($status) {
+                        'pending' => 'bg-amber-100 text-amber-700 border-amber-200',
+                        'in_review' => 'bg-blue-100 text-blue-700 border-blue-200',
+                        'resolved' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                        'dismissed' => 'bg-rose-100 text-rose-700 border-rose-200',
+                        default => 'bg-slate-100 text-slate-500 border-slate-200'
+                    };
                 @endphp
-                <span class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] {{ $badgeClass }}">
-                    <i class="ri-checkbox-circle-line text-sm"></i>
-                    {{ $statuses[$suggestion->status] ?? Str::headline($suggestion->status) }}
-                </span>
-            </div>
-            <div class="flex flex-wrap items-center gap-4 text-xs text-slate-500">
-                <span class="inline-flex items-center gap-2">
-                    <i class="ri-user-line" aria-hidden="true"></i>
-                    {{ $suggestion->user?->fullname ?? $suggestion->user?->username ?? 'Unknown student' }}
-                    @if ($suggestion->user?->email)
-                        <span class="text-slate-400">·</span>
-                        {{ $suggestion->user?->email }}
-                    @endif
-                </span>
-                <span class="inline-flex items-center gap-2">
-                    <i class="ri-time-line" aria-hidden="true"></i>
-                    Submitted {{ $suggestion->created_at?->format('M j, Y · g:i A') ?? '—' }}
-                </span>
-                <span class="inline-flex items-center gap-2">
-                    <i class="ri-price-tag-3-line" aria-hidden="true"></i>
-                    {{ $categories[$suggestion->category] ?? Str::headline($suggestion->category) }}
-                </span>
-            </div>
-        </header>
+                <div class="inline-flex h-14 items-center gap-3 rounded-[1.5rem] border {{ $statusColor }} px-6">
+                    <span class="relative flex h-2.5 w-2.5">
+                        @if($status === 'pending')
+                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+                        @endif
+                        <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-current"></span>
+                    </span>
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em]">{{ $statuses[$suggestion->status] ?? Str::headline($suggestion->status) }}</span>
+                </div>
+            </header>
 
-        <section class="space-y-4 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-            <h2 class="text-lg font-semibold text-slate-900">Message</h2>
-            <div class="prose max-w-none whitespace-pre-line text-slate-700">
-                {{ $suggestion->message }}
-            </div>
-        </section>
-
-        <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-            <h2 class="text-lg font-semibold text-slate-900">Update status</h2>
-            <form method="POST" action="{{ route('admin.suggestions.update', $suggestion) }}" class="mt-4 flex flex-col gap-3 md:flex-row md:items-center">
-                @csrf
-                @method('PUT')
-                <label class="flex w-full flex-col gap-2 text-sm text-slate-600 md:w-64">
-                    <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</span>
-                    <select name="status" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        @foreach ($statuses as $value => $label)
-                            <option value="{{ $value }}" @selected($suggestion->status === $value)>{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </label>
-                <button type="submit" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                    <i class="ri-save-line text-base"></i>
-                    Save changes
-                </button>
-            </form>
-            @if ($suggestion->handled_at)
-                <p class="mt-3 text-xs uppercase tracking-[0.2em] text-slate-400">Last handled {{ $suggestion->handled_at->format('M j, Y · g:i A') }}</p>
+            @if (session('status'))
+                <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <p>{{ session('status') }}</p>
+                    </div>
+                </div>
             @endif
-        </section>
 
-        @if ($suggestion->attachment_path)
-            <section class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <h2 class="text-lg font-semibold text-slate-900">Attachment</h2>
-                <p class="mt-2 text-sm text-slate-600">Download the file provided by the student.</p>
-                <a href="{{ Storage::disk('public')->url($suggestion->attachment_path) }}" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 rounded-2xl border border-[#16136a]/30 px-4 py-2 text-sm font-semibold text-[#16136a] transition hover:-translate-y-0.5 hover:border-[#16136a]">
-                    <i class="ri-download-2-line text-base"></i>
-                    Download attachment
-                </a>
-            </section>
-        @endif
+            <div class="grid gap-8">
+                {{-- Suggestion Message --}}
+                <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12 relative overflow-hidden">
+                    <i class="ri-double-quotes-l absolute top-8 left-8 text-6xl text-[#16136a]/5"></i>
+                    <div class="relative z-10">
+                        <h2 class="mb-8 text-sm font-semibold uppercase tracking-widest text-[#16136a]">Message Content</h2>
+                        <div class="prose prose-slate max-w-none">
+                            <p class="text-lg font-semibold leading-relaxed text-slate-700 whitespace-pre-wrap">
+                                {{ $suggestion->message }}
+                            </p>
+                        </div>
+
+                        @if ($suggestion->attachment_path)
+                            <div class="mt-12 flex items-center justify-between gap-6 rounded-3xl bg-slate-50 p-6 border border-slate-100">
+                                <div class="flex items-center gap-4">
+                                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500 text-white shadow-lg shadow-blue-500/20">
+                                        <i class="ri-attachment-line text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-[#16136a]">Supporting Document</p>
+                                        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Provided by student</p>
+                                    </div>
+                                </div>
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($suggestion->attachment_path) }}" target="_blank" class="flex h-12 items-center gap-2 rounded-2xl bg-white px-6 text-[10px] font-semibold uppercase tracking-widest text-[#16136a] shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5">
+                                    <i class="ri-download-cloud-line text-lg"></i>
+                                    View File
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </section>
+
+                {{-- Administrative Action --}}
+                <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12">
+                    <h2 class="mb-8 text-sm font-semibold uppercase tracking-widest text-[#16136a]">Management</h2>
+                    
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-12">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="h-14 w-14 flex items-center justify-center rounded-2xl bg-slate-100 text-slate-400 font-semibold text-lg">
+                                    {{ strtoupper(substr($suggestion->user?->fullname ?? 'S', 0, 1)) }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-[#16136a]">{{ $suggestion->user?->fullname ?? $suggestion->user?->username ?? 'Anonymous Student' }}</p>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest">{{ $suggestion->user?->email ?? 'No email provided' }}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-4 pt-2">
+                                <div class="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+                                    <i class="ri-calendar-line text-sm"></i>
+                                    {{ $suggestion->created_at?->format('M j, Y') }}
+                                </div>
+                                <div class="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+                                    <i class="ri-price-tag-3-line text-sm"></i>
+                                    {{ $categories[$suggestion->category] ?? Str::headline($suggestion->category) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <form method="POST" action="{{ route('admin.suggestions.update', $suggestion) }}" class="flex items-center gap-3">
+                            @csrf
+                            @method('PUT')
+                            <select name="status" class="h-14 w-48 rounded-2xl border-none bg-slate-50 px-5 text-xs font-semibold uppercase tracking-widest text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                @foreach ($statuses as $value => $label)
+                                    <option value="{{ $value }}" @selected($suggestion->status === (string) $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="flex h-14 items-center gap-3 rounded-2xl bg-[#16136a] px-8 text-xs font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
+                                <i class="ri-save-line text-lg"></i>
+                                Update
+                            </button>
+                        </form>
+                    </div>
+
+                    @if ($suggestion->handled_at)
+                        <div class="flex items-center gap-3 rounded-2xl bg-emerald-50 px-5 py-4">
+                            <i class="ri-history-line text-emerald-600 text-lg"></i>
+                            <p class="text-[10px] font-semibold uppercase tracking-widest text-emerald-700">
+                                Last handled {{ $suggestion->handled_at->format('M j, Y · g:i A') }}
+                            </p>
+                        </div>
+                    @endif
+                </section>
+            </div>
+        </div>
     </div>
 </x-layouts.admin>

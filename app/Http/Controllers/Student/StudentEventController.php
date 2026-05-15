@@ -50,6 +50,57 @@ class StudentEventController extends Controller
         ]);
     }
 
+    public function show(Event $event): View
+    {
+        $startAt = $event->start_at ? $event->start_at->copy() : null;
+        $endAt = $event->end_at
+            ? $event->end_at->copy()
+            : ($startAt ? $startAt->copy()->addHour() : null);
+
+        $startUtc = $startAt ? $startAt->copy()->utc() : null;
+        $endUtc = $endAt ? $endAt->copy()->utc() : null;
+
+        $googleDates = $startUtc ? $startUtc->format('Ymd\THis\Z') : null;
+        $googleDateRange = $googleDates;
+        if ($googleDates && $endUtc) {
+            $googleDateRange .= '/' . $endUtc->format('Ymd\THis\Z');
+        }
+
+        $googleUrl = $googleDateRange
+            ? 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+                . '&text=' . urlencode($event->title)
+                . '&dates=' . $googleDateRange
+                . ($event->location ? '&location=' . urlencode($event->location) : '')
+                . ($event->description ? '&details=' . urlencode(strip_tags($event->description)) : '')
+            : null;
+
+        $outlookUrl = $startUtc
+            ? 'https://outlook.office.com/calendar/0/deeplink/compose?path=/calendar/action/compose'
+                . '&rru=addevent'
+                . '&subject=' . urlencode($event->title)
+                . '&startdt=' . $startUtc->format('Y-m-d\TH:i:s\Z')
+                . ($endUtc ? '&enddt=' . $endUtc->format('Y-m-d\TH:i:s\Z') : '')
+                . ($event->location ? '&location=' . urlencode($event->location) : '')
+                . ($event->description ? '&body=' . urlencode(strip_tags($event->description)) : '')
+            : null;
+
+        $icsUrl = route('student.events.ics', $event);
+        $webcalUrl = preg_replace('#^https?#', 'webcal', $icsUrl);
+
+        $calendarLinks = [
+            'ics' => $icsUrl,
+            'webcal' => $webcalUrl,
+            'google' => $googleUrl,
+            'outlook' => $outlookUrl,
+        ];
+
+        return view('dashboards.student.events.show', [
+            'title' => $event->title,
+            'event' => $event,
+            'calendarLinks' => $calendarLinks,
+        ]);
+    }
+
     private function loadUpcomingEvents(): Collection
     {
         return Event::query()

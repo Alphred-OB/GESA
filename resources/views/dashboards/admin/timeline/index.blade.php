@@ -1,224 +1,172 @@
-@php($title = $title ?? 'Academic timeline')
+@php($title = $title ?? 'Academic Timeline')
 
 <x-layouts.admin :title="$title">
-	@include('components.dashboard.skeleton-styles')
+    <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            {{-- Header Section --}}
+            <header class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Academic Timeline</h1>
+                    <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Orchestrate key academic milestones</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden sm:flex flex-col items-end">
+                        <span class="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Total Milestones</span>
+                        <span class="text-2xl font-semibold text-[#16136a]">{{ number_format($entries->total()) }}</span>
+                    </div>
+                    <div class="h-10 w-px bg-slate-200 mx-2"></div>
+                    <a href="{{ route('admin.timeline.create') }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                        <i class="ri-add-line text-lg transition-transform group-hover:rotate-90"></i>
+                        New Milestone
+                    </a>
+                </div>
+            </header>
 
-	<div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
-		<div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8" role="status" aria-live="polite">
-			<header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 shadow-lg shadow-[#16136a]/5">
-				<div class="space-y-2">
-					<div class="skeleton inline-flex h-7 w-48 items-center rounded-full bg-[#16136a]/10"></div>
-					<div class="skeleton h-8 w-80 rounded-2xl bg-slate-200"></div>
-					<div class="skeleton h-4 w-64 rounded-2xl bg-slate-100"></div>
-				</div>
-				<div class="flex flex-wrap items-center justify-center gap-3 md:justify-end">
-					<div class="skeleton h-10 w-32 rounded-2xl bg-[#16136a]/10"></div>
-				</div>
-			</header>
+            {{-- Summary Cards (Bento Style) --}}
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="relative overflow-hidden rounded-[2.5rem] bg-[#16136a] p-8 text-white shadow-xl shadow-[#16136a]/20">
+                    <div class="relative z-10">
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/50">Active Milestones</p>
+                        @php($activeCount = $entries->where('is_published', true)->count())
+                        <p class="mt-4 text-4xl font-semibold text-emerald-400">{{ $activeCount }}</p>
+                        <p class="mt-2 text-xs font-semibold text-white/40 italic">Live for student visibility</p>
+                    </div>
+                    <i class="ri-flag-2-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                </div>
 
-			<section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-				<div class="flex flex-col gap-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-					<div class="space-y-2">
-						<div class="skeleton h-4 w-44 rounded-full bg-slate-200"></div>
-						<div class="skeleton h-3 w-56 rounded-full bg-slate-100"></div>
-					</div>
-					<div class="skeleton h-10 w-40 rounded-2xl bg-slate-100"></div>
-				</div>
+                <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">Next Upcoming</p>
+                    @php($nextEntry = $entries->where('starts_at', '>', now())->sortBy('starts_at')->first())
+                    @if($nextEntry)
+                        <p class="mt-4 text-lg font-semibold text-[#16136a] truncate">{{ $nextEntry->title }}</p>
+                        <p class="mt-1 text-xs font-semibold text-slate-400">{{ $nextEntry->starts_at->format('M d, Y') }} ({{ $nextEntry->starts_at->diffForHumans() }})</p>
+                    @else
+                        <p class="mt-4 text-lg font-semibold text-slate-300 italic">No upcoming events</p>
+                        <p class="mt-1 text-xs font-semibold text-slate-400">Schedule a new entry</p>
+                    @endif
+                </div>
 
-				<div class="overflow-hidden rounded-2xl border border-slate-200/70">
-					<div class="hidden md:block">
-						<div class="skeleton h-10 w-full bg-slate-50/80"></div>
-						@for ($i = 0; $i < 4; $i++)
-							<div class="skeleton h-12 w-full bg-white"></div>
-						@endfor
-					</div>
-					<div class="grid gap-4 p-4 md:hidden">
-						@for ($i = 0; $i < 3; $i++)
-							<div class="skeleton h-24 w-full rounded-2xl bg-white"></div>
-						@endfor
-					</div>
-				</div>
+                <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">Academic Coverage</p>
+                    @php($years = $entries->pluck('academic_year')->unique()->count())
+                    <p class="mt-4 text-4xl font-semibold text-[#16136a]">{{ $years }} <span class="text-lg text-slate-300 uppercase tracking-widest">Sessions</span></p>
+                    <p class="mt-2 text-xs font-semibold text-slate-400">Recorded academic years</p>
+                </div>
+            </div>
 
-				<div class="mt-4 rounded-2xl border border-slate-200/70 bg-slate-50/50 px-4 py-3">
-					<div class="skeleton h-4 w-40 rounded-full bg-slate-200"></div>
-				</div>
-			</section>
-		</div>
+            @if (session('status'))
+                <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <p>{{ session('status') }}</p>
+                    </div>
+                </div>
+            @endif
 
-		<div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-			<header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 text-center shadow-lg shadow-[#16136a]/5 sm:text-left md:flex-row md:items-center md:justify-between">
-				<div class="space-y-2">
-					<p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-						<i class="ri-time-line text-base" aria-hidden="true"></i>
-						Academic timeline
-					</p>
-					<h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Orchestrate key academic milestones</h1>
-					<p class="text-sm text-slate-600">Publish semester checkpoints so students can stay ahead of registrations, exams, and breaks.</p>
-				</div>
-				<div class="flex flex-wrap items-center justify-center gap-3 md:justify-end">
-					<a href="{{ route('admin.timeline.create') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:shadow-xl" aria-label="Create timeline entry">
-						<i class="ri-add-line text-base" aria-hidden="true"></i>
-						New entry
-					</a>
-				</div>
-			</header>
+            {{-- Timeline List --}}
+            <section class="space-y-6">
+                <div class="flex items-center justify-between px-4">
+                    <h2 class="text-sm font-semibold uppercase tracking-widest text-[#16136a]">Published Milestones</h2>
+                    <form method="GET" class="flex items-center gap-3">
+                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Display</label>
+                        <select name="per_page" onchange="this.form.submit()" class="h-10 rounded-xl border-none bg-slate-100 px-3 text-xs font-semibold text-slate-600 outline-none focus:ring-2 focus:ring-[#16136a]/10">
+                            @foreach ($perPageOptions as $option)
+                                <option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }} Rows</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
 
-			@if (session('status'))
-				<div class="rounded-3xl border border-emerald-200/60 bg-emerald-50 px-5 py-4 text-sm text-emerald-800 shadow-inner">
-					<div class="flex items-start gap-3">
-						<span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-							<i class="ri-check-line text-lg" aria-hidden="true"></i>
-						</span>
-						<p>{{ session('status') }}</p>
-					</div>
-				</div>
-			@endif
+                <div class="grid gap-6">
+                    @forelse ($entries as $entry)
+                        <article class="group relative overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/60 lg:p-8">
+                            <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                                <div class="flex items-start gap-6 lg:items-center">
+                                    <div @class([
+                                        'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl font-semibold transition-transform group-hover:scale-110',
+                                        'bg-[#16136a] text-white shadow-lg shadow-[#16136a]/20' => $entry->is_published && !$entry->isPast(),
+                                        'bg-emerald-100 text-emerald-600' => $entry->is_published && $entry->isPast(),
+                                        'bg-slate-100 text-slate-400' => !$entry->is_published
+                                    ])>
+                                        @if($entry->isPast())
+                                            <i class="ri-checkbox-circle-line text-2xl"></i>
+                                        @else
+                                            <i class="ri-flag-2-line text-2xl"></i>
+                                        @endif
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="flex flex-wrap items-center gap-3">
+                                            <h3 class="truncate text-xl font-semibold text-slate-900">{{ $entry->title }}</h3>
+                                            @if ($entry->is_published)
+                                                <span class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-emerald-600">
+                                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                    Live
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                                                    Hidden
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div class="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2">
+                                            <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+                                                <i class="ri-calendar-event-line text-[#16136a]"></i>
+                                                {{ $entry->starts_at?->format('F d, Y') }}
+                                            </div>
+                                            <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+                                                <i class="ri-government-line text-[#16136a]"></i>
+                                                {{ $entry->academic_year ?? 'Not Assigned' }}
+                                            </div>
+                                            @if($entry->isPast())
+                                                <div class="flex items-center gap-2 text-xs font-semibold text-emerald-500 italic">
+                                                    <i class="ri-history-line"></i>
+                                                    Archived (Past Event)
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
 
-			<section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-				<div class="flex flex-col gap-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-					<div>
-						<h2 class="text-lg font-semibold text-[#16136a]">Published milestones</h2>
-						<p class="text-sm text-slate-500">Showing {{ $entries->firstItem() ?? 0 }}-{{ $entries->lastItem() ?? 0 }} of {{ $entries->total() }} entries.</p>
-					</div>
-					<form method="GET" class="flex flex-col items-center gap-2 sm:flex-row" x-data>
-						@foreach (request()->except(['per_page', 'page']) as $key => $value)
-							<input type="hidden" name="{{ $key }}" value="{{ $value }}">
-						@endforeach
-						<label for="per_page" class="text-sm font-medium text-slate-600">Rows per page</label>
-						<select id="per_page" name="per_page" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a] sm:w-auto" x-on:change="$el.form.submit()">
-							@foreach ($perPageOptions as $option)
-								<option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }}</option>
-							@endforeach
-						</select>
-					</form>
-				</div>
+                                <div class="flex items-center gap-3 lg:justify-end">
+                                    <a href="{{ route('admin.timeline.edit', $entry) }}" class="flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-slate-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-slate-600 transition-all hover:bg-[#16136a] hover:text-white sm:flex-initial">
+                                        <i class="ri-edit-line text-lg"></i>
+                                        Edit Entry
+                                    </a>
+                                    <form method="POST" action="{{ route('admin.timeline.destroy', $entry) }}" onsubmit="return confirm('Delete this milestone permanentely?');" class="flex flex-1 sm:flex-initial">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-rose-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-rose-500 transition-all hover:bg-rose-500 hover:text-white sm:w-auto">
+                                            <i class="ri-delete-bin-line text-lg"></i>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {{-- Visual Timeline Line --}}
+                            <div class="absolute left-0 top-0 h-full w-1.5 bg-[#16136a]/5 transition-all group-hover:bg-[#16136a]/20"></div>
+                        </article>
+                    @empty
+                        <div class="rounded-[2.5rem] border border-dashed border-slate-300 p-20 text-center">
+                            <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 text-slate-200">
+                                <i class="ri-time-line text-5xl"></i>
+                            </div>
+                            <h3 class="mt-6 text-lg font-semibold text-slate-900">No Milestones Published</h3>
+                            <p class="mt-2 text-sm font-semibold text-slate-400">Plan and publish your academic sessions to guide students.</p>
+                            <a href="{{ route('admin.timeline.create') }}" class="mt-8 inline-flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-8 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20">
+                                <i class="ri-add-line text-lg"></i>
+                                Add First Entry
+                            </a>
+                        </div>
+                    @endforelse
+                </div>
 
-				<div class="overflow-hidden rounded-2xl border border-slate-200/70">
-					<div class="hidden md:block">
-						<table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-600">
-							<thead class="bg-slate-50/80 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-								<tr>
-									<th scope="col" class="px-6 py-3">Milestone</th>
-									<th scope="col" class="px-6 py-3">Window</th>
-									<th scope="col" class="px-6 py-3">Academic year</th>
-									<th scope="col" class="px-6 py-3">Status</th>
-									<th scope="col" class="px-6 py-3"><span class="sr-only">Actions</span></th>
-								</tr>
-							</thead>
-							<tbody class="divide-y divide-slate-100">
-								@forelse ($entries as $entry)
-									<tr class="transition hover:bg-slate-50/70">
-										<td class="px-6 py-4 align-top">
-											<div class="space-y-1">
-												<p class="flex items-center gap-2 text-sm font-semibold text-[#16136a]">
-													<i class="ri-flag-2-line text-base" aria-hidden="true"></i>
-													{{ $entry->title }}
-												</p>
-											</div>
-										</td>
-										<td class="px-6 py-4 align-top text-sm text-slate-500">
-											<p><i class="ri-calendar-line mr-1 text-[#16136a]" aria-hidden="true"></i>{{ optional($entry->starts_at)->format('M j, Y') }}</p>
-										</td>
-										<td class="px-6 py-4 align-top text-sm text-slate-500">{{ $entry->academic_year ?? '—' }}</td>
-										<td class="px-6 py-4 align-top">
-											@if ($entry->is_published)
-												<span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-													<span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-													Live
-												</span>
-											@else
-												<span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
-													<span class="h-2 w-2 rounded-full bg-slate-400"></span>
-													Hidden
-												</span>
-											@endif
-										</td>
-										<td class="px-6 py-4 text-right text-sm">
-											<div class="flex items-center justify-end gap-3">
-												<a href="{{ route('admin.timeline.edit', $entry) }}" class="inline-flex items-center gap-2 rounded-xl border border-[#16136a]/20 px-3 py-1.5 text-xs font-semibold text-[#16136a] transition hover:border-[#16136a] hover:text-[#16136a]"><i class="ri-edit-line text-sm" aria-hidden="true"></i>Edit</a>
-												<form method="POST" action="{{ route('admin.timeline.destroy', $entry) }}" onsubmit="return confirm('Delete this timeline entry?');">
-													@csrf
-													@method('DELETE')
-													<button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:border-rose-400 hover:bg-rose-100">
-														<i class="ri-delete-bin-6-line text-sm" aria-hidden="true"></i>
-														Delete
-													</button>
-												</form>
-											</div>
-										</td>
-									</tr>
-								@empty
-									<tr>
-										<td colspan="5" class="px-6 py-10 text-center text-sm text-slate-500">
-											<div class="mx-auto flex w-full max-w-md flex-col items-center gap-4">
-												<span class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#16136a]/10 text-[#16136a]">
-													<i class="ri-time-line text-2xl" aria-hidden="true"></i>
-												</span>
-												<p>No timeline events yet. Create your first milestone to guide students through the semester.</p>
-												<a href="{{ route('admin.timeline.create') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:shadow-xl">
-													<i class="ri-add-line text-base" aria-hidden="true"></i>
-													Create milestone
-												</a>
-											</div>
-										</td>
-									</tr>
-								@endforelse
-							</tbody>
-						</table>
-					</div>
-
-					<div class="divide-y divide-slate-100 md:hidden">
-						@foreach ($entries as $entry)
-							<article class="space-y-4 p-5">
-								<header class="space-y-1">
-									<p class="flex items-center gap-2 text-sm font-semibold text-[#16136a]"><i class="ri-flag-2-line text-base" aria-hidden="true"></i>{{ $entry->title }}</p>
-								</header>
-								<dl class="space-y-1 text-xs text-slate-500">
-									<div class="flex items-start gap-2">
-										<dt class="font-semibold text-[#16136a]">Date</dt>
-										<dd>{{ optional($entry->starts_at)->format('M j, Y') }}</dd>
-									</div>
-									<div class="flex items-start gap-2">
-										<dt class="font-semibold text-[#16136a]">Year</dt>
-										<dd>{{ $entry->academic_year ?? '—' }}</dd>
-									</div>
-									<div class="flex items-start gap-2">
-										<dt class="font-semibold text-[#16136a]">Status</dt>
-										<dd>
-											@if ($entry->is_published)
-												<span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
-													<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-													Live
-												</span>
-											@else
-												<span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
-													<span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
-													Hidden
-												</span>
-											@endif
-										</dd>
-									</div>
-								</dl>
-								<div class="flex flex-wrap gap-3">
-									<a href="{{ route('admin.timeline.edit', $entry) }}" class="inline-flex items-center gap-2 rounded-xl border border-[#16136a]/20 px-3 py-1.5 text-xs font-semibold text-[#16136a] transition hover:border-[#16136a] hover:text-[#16136a]"><i class="ri-edit-line text-sm" aria-hidden="true"></i>Edit</a>
-									<form method="POST" action="{{ route('admin.timeline.destroy', $entry) }}" class="inline" onsubmit="return confirm('Delete this timeline entry?');">
-										@csrf
-										@method('DELETE')
-										<button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:border-rose-400 hover:bg-rose-100">
-											<i class="ri-delete-bin-6-line text-sm" aria-hidden="true"></i>
-											Delete
-										</button>
-									</form>
-								</div>
-							</article>
-						@endforeach
-					</div>
-				</div>
-
-				<div class="rounded-2xl border border-slate-200/70 bg-slate-50/50 px-4 py-3">
-					{{ $entries->links('vendor.pagination.data-limit') }}
-				</div>
-			</section>
-		</div>
-	</div>
+                {{-- Pagination --}}
+                @if($entries->hasPages())
+                    <div class="mt-8 rounded-[2rem] bg-slate-50 p-4">
+                        {{ $entries->links() }}
+                    </div>
+                @endif
+            </section>
+        </div>
+    </div>
 </x-layouts.admin>

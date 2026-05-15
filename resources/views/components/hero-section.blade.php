@@ -6,7 +6,7 @@
                     ACSES Student Experience
                 </span>
 
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+                <h1 class="text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
                     Stay ahead of your
                     <span class="text-[#0b3019]">academic journey</span>
                     with one central hub.

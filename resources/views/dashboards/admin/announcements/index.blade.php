@@ -4,279 +4,239 @@
 @endphp
 
 <x-layouts.admin :title="$title">
-    @include('components.dashboard.skeleton-styles')
-
-    <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
-        <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8" role="status" aria-live="polite">
-            <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10">
-                <div class="space-y-2">
-                    <div class="skeleton inline-flex h-7 w-52 items-center rounded-full bg-[#16136a]/10"></div>
-                    <div class="skeleton h-8 w-64 rounded-2xl bg-slate-200"></div>
-                    <div class="skeleton h-4 w-80 rounded-2xl bg-slate-100"></div>
+    <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <header class="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]/50">
+                    <i class="ri-notification-3-line"></i>
+                    Message Center
                 </div>
-                <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                    <div class="skeleton h-11 w-44 rounded-2xl bg-[#16136a]/10"></div>
-                </div>
-            </header>
+                <h1 class="text-3xl font-semibold tracking-tight text-slate-900">Announcements</h1>
+                <p class="max-w-xl text-sm font-medium text-slate-500">Create and manage updates for students.</p>
+            </div>
+            <div class="flex w-full md:w-auto">
+                <a href="{{ route('admin.announcements.create') }}" class="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95 md:h-auto md:w-auto md:py-3.5 md:tracking-[0.2em]">
+                    <i class="ri-add-line text-lg"></i>
+                    <span class="whitespace-nowrap">New Announcement</span>
+                </a>
+            </div>
+        </header>
 
-            <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <div class="grid gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 md:grid-cols-4">
-                    @for ($i = 0; $i < 4; $i++)
-                        <div class="flex flex-col gap-2">
-                            <div class="skeleton h-3 w-24 rounded-full bg-slate-200"></div>
-                            <div class="skeleton h-11 w-full rounded-2xl bg-white"></div>
+        <!-- Filters Section -->
+        <section class="mb-8">
+            <form method="GET" class="grid grid-cols-1 gap-4 rounded-[24px] border border-slate-200/60 bg-white p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-4 lg:items-end lg:p-6">
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Search</label>
+                    <div class="relative">
+                        <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search..." class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium transition focus:border-[#16136a] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#16136a]/5" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Type</label>
+                    <div class="relative">
+                        <select name="type" class="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 pl-4 pr-10 text-sm font-medium transition focus:border-[#16136a] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#16136a]/5">
+                            <option value="">All Types</option>
+                            @foreach ($types as $value => $label)
+                                <option value="{{ $value }}" @selected(($filters['type'] ?? '') === $value)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Priority</label>
+                    <div class="relative">
+                        <select name="priority" class="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 pl-4 pr-10 text-sm font-medium transition focus:border-[#16136a] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#16136a]/5">
+                            <option value="">All Priorities</option>
+                            @foreach ($priorities as $value => $label)
+                                <option value="{{ $value }}" @selected(($filters['priority'] ?? '') === $value)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-2 lg:pt-0">
+                    <button type="submit" class="flex-1 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#16136a] px-5 text-[11px] font-semibold uppercase tracking-widest text-white transition hover:bg-[#16136a]/90 active:scale-95 lg:flex-none">
+                        <i class="ri-filter-3-line text-base"></i>
+                        Refine
+                    </button>
+                    @if(request()->anyFilled(['search', 'type', 'priority', 'target_type']))
+                        <a href="{{ route('admin.announcements.index') }}" class="flex-1 inline-flex h-11 items-center justify-center rounded-xl bg-slate-100 px-5 text-[11px] font-semibold uppercase tracking-widest text-slate-500 transition hover:bg-slate-200 lg:flex-none">Reset</a>
+                    @endif
+                </div>
+            </form>
+        </section>
+
+        <!-- Main Content Area -->
+        <div class="rounded-[32px] border border-slate-200/60 bg-white shadow-sm overflow-hidden">
+            <!-- Desktop Table View -->
+            <div class="hidden overflow-x-auto md:block">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-100 bg-slate-50/50">
+                            <th class="px-8 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Announcement</th>
+                            <th class="px-6 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 text-center">Type</th>
+                            <th class="px-6 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 text-center">Priority</th>
+                            <th class="px-6 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Audience</th>
+                            <th class="px-6 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 text-right">Delivered</th>
+                            <th class="px-8 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        @forelse ($announcements as $announcement)
+                            <tr class="group transition-colors hover:bg-slate-50/50">
+                                <td class="px-8 py-5">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-semibold text-slate-900 group-hover:text-[#16136a] transition-colors">{{ $announcement->title }}</span>
+                                        <span class="mt-1 text-xs font-medium text-slate-400">{{ $announcement->sent_at?->format('M j, Y · g:i A') ?? 'Pending dispatch' }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-center">
+                                    <span class="inline-flex rounded-lg border border-slate-200 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                                        {{ $types[$announcement->type] ?? $announcement->type }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 text-center">
+                                    @php
+                                        $priorityClass = match($announcement->priority) {
+                                            'high' => 'bg-rose-50 text-rose-600',
+                                            'low' => 'bg-slate-100 text-slate-500',
+                                            default => 'bg-emerald-50 text-emerald-600',
+                                        };
+                                    @endphp
+                                    <span @class(['inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-widest', $priorityClass])>
+                                        {{ $priorities[$announcement->priority] ?? $announcement->priority }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ri-user-received-line text-slate-400"></i>
+                                        <span class="text-xs font-semibold text-slate-600">{{ $targetTypes[$announcement->target_type] ?? $announcement->target_type }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-right">
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-semibold tabular-nums text-slate-700">{{ number_format($announcement->delivered_count ?? 0) }}</span>
+                                        <span class="text-[10px] font-semibold uppercase tracking-tighter text-slate-400">Delivered</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <div class="flex justify-end gap-2 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                                        <a href="{{ route('admin.announcements.edit', $announcement) }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition-all hover:border-[#16136a] hover:text-[#16136a] hover:shadow-md">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                        <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Archive this announcement?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition-all hover:border-rose-400 hover:text-rose-500 hover:shadow-md">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-8 py-20">
+                                    <div class="flex flex-col items-center justify-center text-center">
+                                        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300">
+                                            <i class="ri-notification-off-line text-3xl"></i>
+                                        </div>
+                                        <h3 class="mt-4 text-lg font-semibold text-slate-900">Silence is golden</h3>
+                                        <p class="mt-2 text-sm text-slate-500 max-w-xs">No announcements yet. Start a new update to reach your audience.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Card View -->
+            <div class="grid grid-cols-1 divide-y divide-slate-100 md:hidden">
+                @forelse ($announcements as $announcement)
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-semibold text-slate-900 line-clamp-2">{{ $announcement->title }}</h4>
+                                <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{{ $announcement->sent_at?->format('M j, Y') ?? 'Pending' }}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('admin.announcements.edit', $announcement) }}" class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400">
+                                    <i class="ri-edit-line text-sm"></i>
+                                </a>
+                                <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Archive this announcement?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400">
+                                        <i class="ri-delete-bin-line text-sm"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    @endfor
-                    <div class="md:col-span-4 flex items-center justify-end gap-3">
-                        <div class="skeleton h-10 w-24 rounded-2xl bg-white"></div>
-                        <div class="skeleton h-10 w-32 rounded-2xl bg-[#16136a]/10"></div>
-                    </div>
-                </div>
+                        
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="rounded-md border border-slate-200 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-widest text-slate-500">
+                                {{ $types[$announcement->type] ?? $announcement->type }}
+                            </span>
+                            @php
+                                $priorityClass = match($announcement->priority) {
+                                    'high' => 'bg-rose-50 text-rose-600',
+                                    'low' => 'bg-slate-100 text-slate-500',
+                                    default => 'bg-emerald-50 text-emerald-600',
+                                };
+                            @endphp
+                            <span @class(['rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-widest', $priorityClass])>
+                                {{ $priorities[$announcement->priority] ?? $announcement->priority }}
+                            </span>
+                        </div>
 
-                <div class="flex flex-col gap-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-                    <div class="skeleton h-3 w-72 rounded-full bg-slate-200"></div>
-                    <div class="flex items-center gap-2">
-                        <div class="skeleton h-3 w-40 rounded-full bg-slate-200"></div>
-                        <div class="skeleton h-9 w-20 rounded-xl bg-slate-100"></div>
+                        <div class="flex items-center justify-between border-t border-slate-50 pt-3">
+                            <div class="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
+                                <i class="ri-user-received-line"></i>
+                                {{ $targetTypes[$announcement->target_type] ?? $announcement->target_type }}
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs font-semibold text-slate-700">{{ number_format($announcement->delivered_count ?? 0) }}</span>
+                                <span class="text-[9px] font-semibold text-slate-400 uppercase tracking-tighter">Delivered</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="overflow-hidden rounded-2xl border border-slate-200/70">
-                    <div class="hidden md:block">
-                        <div class="skeleton h-10 w-full bg-slate-50/80"></div>
-                        @for ($i = 0; $i < 4; $i++)
-                            <div class="skeleton h-12 w-full bg-white"></div>
-                        @endfor
+                @empty
+                    <div class="p-10 text-center">
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest">No announcements found</p>
                     </div>
-                    <div class="grid gap-4 p-4 md:hidden">
-                        @for ($i = 0; $i < 3; $i++)
-                            <div class="skeleton h-28 w-full rounded-2xl bg-white"></div>
-                        @endfor
-                    </div>
-                </div>
-
-                <div class="flex flex-col gap-3 border-t border-slate-200/70 pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-                    <div class="skeleton h-3 w-40 rounded-full bg-slate-200"></div>
-                    <div class="skeleton h-8 w-32 rounded-2xl bg-slate-100 sm:ml-auto"></div>
-                </div>
-            </section>
+                @endforelse
+            </div>
         </div>
 
-        <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <header class="flex flex-col gap-6 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 lg:flex-row lg:items-center lg:justify-between lg:p-8">
-                <div class="space-y-2">
-                    <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-[#16136a] sm:text-xs">
-                        <i class="ri-megaphone-line text-base" aria-hidden="true"></i>
-                        Communications
-                    </p>
-                    <h1 class="text-2xl font-bold text-[#16136a] md:text-3xl">Global announcements</h1>
-                    <p class="text-sm text-slate-600">Broadcast updates to the entire student body or target specific groups.</p>
-                </div>
-                <div class="flex">
-                    <a href="{{ route('admin.announcements.create') }}" class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 py-3.5 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95 sm:w-auto">
-                        <i class="ri-add-line text-lg"></i>
-                        Pulse update
-                    </a>
-                </div>
-            </header>
-
-            <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <form method="GET" class="grid gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
-                    <div class="flex flex-col gap-2 lg:w-48">
-                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Search</span>
-                        <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Keywords..." class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
-                    </div>
-
-                    <div class="flex flex-col gap-2 lg:w-40">
-                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Type</span>
-                        <div class="relative">
-                            <select name="type" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All Types</option>
-                                @foreach ($types as $value => $label)
-                                    <option value="{{ $value }}" @selected(($filters['type'] ?? '') === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-2 lg:w-40">
-                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Priority</span>
-                        <div class="relative">
-                            <select name="priority" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All Priorities</option>
-                                @foreach ($priorities as $value => $label)
-                                    <option value="{{ $value }}" @selected(($filters['priority'] ?? '') === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-2 lg:w-40">
-                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400">Audience</span>
-                        <div class="relative">
-                            <select name="target_type" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All Audiences</option>
-                                @foreach ($targetTypes as $value => $label)
-                                    <option value="{{ $value }}" @selected(($filters['target_type'] ?? '') === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <div class="flex items-end justify-end gap-2 sm:col-span-2 lg:ml-auto lg:w-auto">
-                        <a href="{{ route('admin.announcements.index') }}" class="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 active:scale-95">Reset</a>
-                        <button type="submit" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                            <i class="ri-equalizer-line text-base"></i>
-                            Filter
-                        </button>
-                    </div>
-                </form>
-
-                <div class="flex flex-col gap-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-                    <p class="font-semibold">Showing {{ $announcements->firstItem() ?? 0 }}–{{ $announcements->lastItem() ?? 0 }} of {{ $announcements->total() }} announcements</p>
-                    <form method="GET" class="flex items-center gap-2">
+            <!-- Pagination Footer -->
+            <footer class="flex flex-col items-center justify-between gap-4 border-t border-slate-50 bg-slate-50/30 px-8 py-6 md:flex-row">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                    Showing {{ $announcements->firstItem() ?? 0 }}–{{ $announcements->lastItem() ?? 0 }} of {{ $announcements->total() }}
+                </p>
+                <div class="flex items-center gap-6">
+                    <form method="GET" class="flex items-center gap-3">
                         @foreach (request()->except(['per_page', 'page']) as $key => $value)
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
-                        <label for="announcements_per_page" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Rows per page</label>
-                        <select id="announcements_per_page" name="per_page" class="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a]" onchange="this.form.submit()">
+                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Rows</label>
+                        <select name="per_page" class="h-9 rounded-lg border border-slate-200 bg-white px-2 text-xs font-semibold text-slate-600 focus:outline-none" onchange="this.form.submit()">
                             @foreach ($perPageOptions as $option)
                                 <option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }}</option>
                             @endforeach
                         </select>
                     </form>
-                </div>
-
-                <div class="overflow-hidden rounded-2xl border border-slate-200/70">
-                    <div class="hidden md:block">
-                        <table class="min-w-full divide-y divide-slate-200 text-left text-[13px] text-slate-600 md:table">
-                            <thead class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                                <tr>
-                                    <th class="px-5 py-2.5">Announcement</th>
-                                    <th class="px-5 py-2.5">Type</th>
-                                    <th class="px-5 py-2.5">Priority</th>
-                                    <th class="px-5 py-2.5">Audience</th>
-                                    <th class="px-5 py-2.5">Sent</th>
-                                    <th class="px-5 py-2.5 text-right">Delivered</th>
-                                    <th class="px-5 py-2.5 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200 bg-white">
-                                @forelse ($announcements as $announcement)
-                                    <tr class="transition hover:bg-slate-50/60">
-                                        <td class="px-5 py-3">
-                                            <div class="flex flex-col gap-1">
-                                                <span class="text-[15px] font-semibold text-slate-900">{{ $announcement->title }}</span>
-                                                <p class="text-xs text-slate-500 line-clamp-2">{{ $announcement->excerpt ?? Str::limit(strip_tags($announcement->content), 120) }}</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{{ $types[$announcement->type] ?? Str::headline($announcement->type) }}</td>
-                                        <td class="px-5 py-3">
-                                            <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold {{ match($announcement->priority) {
-                                                'high' => 'bg-rose-50 text-rose-600',
-                                                'low' => 'bg-sky-50 text-sky-700',
-                                                default => 'bg-emerald-50 text-emerald-700',
-                                            } }}">
-                                                {{ $priorities[$announcement->priority] ?? Str::headline($announcement->priority) }}
-                                            </span>
-                                        </td>
-                                        <td class="px-5 py-3 text-xs text-slate-500">{{ $targetTypes[$announcement->target_type] ?? Str::headline($announcement->target_type) }}</td>
-                                        <td class="px-5 py-3 text-[12px] text-slate-500">{{ $announcement->sent_at?->format('M j, Y · g:i A') ?? '—' }}</td>
-                                        <td class="px-5 py-3 text-right text-[12px] text-slate-600">{{ number_format($announcement->delivered_count ?? 0) }}</td>
-                                        <td class="px-5 py-3">
-                                            <div class="flex justify-end gap-2">
-                                                <a href="{{ route('admin.announcements.edit', $announcement) }}" class="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                                    <i class="ri-edit-line" aria-hidden="true"></i>
-                                                    Edit
-                                                </a>
-                                                <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Delete this announcement? This action cannot be undone.');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-50">
-                                                        <i class="ri-delete-bin-line" aria-hidden="true"></i>
-                                                        Delete
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
-                                            <div class="flex flex-col items-center gap-3">
-                                                <i class="ri-megaphone-off-line text-3xl text-slate-300"></i>
-                                                <p class="font-semibold text-slate-600">No announcements yet</p>
-                                                <p class="text-sm text-slate-500">Send your first update using the "New announcement" button above.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="grid gap-4 md:hidden">
-                        @forelse ($announcements as $announcement)
-                            <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
-                                <header class="space-y-1">
-                                    <h2 class="text-base font-semibold text-slate-900">{{ $announcement->title }}</h2>
-                                    <p class="text-xs text-slate-500">{{ $announcement->sent_at?->format('M j, Y · g:i A') ?? 'Pending dispatch' }}</p>
-                                </header>
-                                <p class="mt-2 text-sm text-slate-600">{{ $announcement->excerpt ?? Str::limit(strip_tags($announcement->content), 150) }}</p>
-                                <dl class="mt-4 space-y-2 text-xs text-slate-500">
-                                    <div class="flex items-center justify-between">
-                                        <dt>Type</dt>
-                                        <dd>{{ $types[$announcement->type] ?? Str::headline($announcement->type) }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt>Priority</dt>
-                                        <dd>{{ $priorities[$announcement->priority] ?? Str::headline($announcement->priority) }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt>Audience</dt>
-                                        <dd>{{ $targetTypes[$announcement->target_type] ?? Str::headline($announcement->target_type) }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt>Delivered</dt>
-                                        <dd>{{ number_format($announcement->delivered_count ?? 0) }}</dd>
-                                    </div>
-                                </dl>
-                                <footer class="mt-4 space-y-3 text-xs font-semibold">
-                                    <div class="flex items-center justify-between gap-2">
-                                        <a href="{{ route('admin.announcements.edit', $announcement) }}" class="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                            <i class="ri-edit-line text-sm" aria-hidden="true"></i>
-                                            Edit
-                                        </a>
-                                        <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Delete this announcement? This action cannot be undone.');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1.5 text-[11px] font-semibold text-rose-600 transition hover:bg-rose-50">
-                                                <i class="ri-delete-bin-line text-sm" aria-hidden="true"></i>
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </div>
-                                </footer>
-                            </article>
-                        @empty
-                            <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
-                                <i class="ri-megaphone-off-line text-3xl text-slate-300"></i>
-                                <p class="mt-3 font-semibold text-slate-600">No announcements yet</p>
-                                <p class="text-sm text-slate-500">Send your first update using the button above.</p>
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-
-                <div class="flex flex-col gap-3 border-t border-slate-200/70 pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-                    <p class="text-xs text-slate-500">Page {{ $announcements->currentPage() }} of {{ $announcements->lastPage() }}</p>
-                    <div class="flex justify-center sm:ml-auto sm:justify-end">
+                    <div class="dash-pagination">
                         {{ $announcements->onEachSide(1)->links('vendor.pagination.data-limit') }}
                     </div>
                 </div>
-            </section>
+            </footer>
         </div>
-    </x-layouts.admin>
+    </div>
+</x-layouts.admin>

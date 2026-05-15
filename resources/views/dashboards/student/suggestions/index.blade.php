@@ -1,131 +1,38 @@
 <x-layouts.dashboard :title="$title">
-    @include('components.dashboard.skeleton-styles')
-
-    <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
-        <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-8" role="status" aria-live="polite">
-            <section class="hidden md:block overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
-                <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                    <div class="space-y-4">
-                        <div class="skeleton h-3 w-32 rounded-full bg-white/25"></div>
-                        <div class="skeleton h-9 w-64 rounded-2xl bg-white/20"></div>
-                        <div class="skeleton h-4 w-80 rounded-2xl bg-white/15"></div>
-                    </div>
-                    <div class="mt-6 w-full max-w-sm rounded-3xl border border-white/20 bg-white/10 p-6 shadow-inner md:mt-0">
-                        <div class="skeleton h-3 w-40 rounded-full bg-white/30"></div>
-                        <div class="mt-4 space-y-3">
-                            <div class="skeleton h-4 w-full rounded-2xl bg-white/20"></div>
-                            <div class="skeleton h-4 w-3/4 rounded-2xl bg-white/20"></div>
+    <div class="mx-auto w-full max-w-full px-8 py-10">
+        <div class="space-y-10">
+            {{-- Simplified Bento Hero --}}
+            <section class="relative isolate overflow-hidden rounded-2xl bg-[#16136a] p-6 sm:p-10 text-white shadow-xl shadow-[#16136a]/20">
+                <div class="relative z-10 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+                    <div class="space-y-4 max-w-2xl">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 ring-1 ring-white/20 backdrop-blur-md">
+                                <i class="ri-lightbulb-flash-line"></i> Feedback
+                            </span>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <div class="grid gap-8 lg:grid-cols-3">
-                <section class="lg:col-span-2 space-y-6">
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="space-y-3">
-                            <div class="skeleton h-5 w-56 rounded-full bg-slate-200"></div>
-                            <div class="skeleton h-4 w-72 rounded-full bg-slate-100"></div>
-                        </div>
-                        <div class="mt-6 space-y-5">
-                            <div class="grid gap-5 sm:grid-cols-2">
-                                <div class="space-y-2">
-                                    <div class="skeleton h-3 w-28 rounded-full bg-slate-200"></div>
-                                    <div class="skeleton h-11 rounded-2xl bg-slate-100"></div>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="skeleton h-3 w-32 rounded-full bg-slate-200"></div>
-                                    <div class="skeleton h-11 rounded-2xl bg-slate-100"></div>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <div class="skeleton h-3 w-36 rounded-full bg-slate-200"></div>
-                                <div class="skeleton h-32 rounded-2xl bg-slate-100"></div>
-                            </div>
-                            <div class="space-y-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-4">
-                                <div class="skeleton h-3 w-40 rounded-full bg-slate-200"></div>
-                                <div class="skeleton h-4 w-3/4 rounded-full bg-slate-100"></div>
-                                <div class="skeleton h-9 w-32 rounded-full bg-slate-100"></div>
-                            </div>
-                            <div class="flex justify-end">
-                                <div class="skeleton h-11 w-40 rounded-full bg-[#16136a]/20"></div>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-
-                <aside class="space-y-6">
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="skeleton h-3 w-44 rounded-full bg-slate-200"></div>
-                        <div class="mt-5 space-y-4">
-                            @for ($i = 0; $i < 3; $i++)
-                                <div class="flex gap-3">
-                                    <div class="skeleton h-6 w-6 rounded-full bg-[#16136a]/10"></div>
-                                    <div class="flex-1 space-y-2">
-                                        <div class="skeleton h-4 w-32 rounded-full bg-slate-200"></div>
-                                        <div class="skeleton h-3 w-48 rounded-full bg-slate-100"></div>
-                                    </div>
-                                </div>
-                            @endfor
-                        </div>
-                    </article>
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="skeleton h-3 w-40 rounded-full bg-slate-200"></div>
-                        <div class="mt-5 space-y-3">
-                            <div class="skeleton h-4 w-full rounded-full bg-slate-100"></div>
-                            <div class="skeleton h-4 w-3/4 rounded-full bg-slate-100"></div>
-                        </div>
-                    </article>
-                </aside>
-            </div>
-
-            <section class="space-y-4 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
-                <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                    <div class="space-y-2">
-                        <div class="skeleton h-5 w-48 rounded-full bg-slate-200"></div>
-                        <div class="skeleton h-4 w-72 rounded-full bg-slate-100"></div>
-                    </div>
-                    <div class="skeleton h-4 w-40 rounded-full bg-slate-100"></div>
-                </div>
-                <div class="space-y-3">
-                    @for ($i = 0; $i < 3; $i++)
-                        <div class="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-                            <div class="space-y-2">
-                                <div class="skeleton h-4 w-2/3 rounded-full bg-slate-200"></div>
-                                <div class="skeleton h-4 w-full rounded-full bg-slate-100"></div>
-                                <div class="flex flex-wrap gap-3">
-                                    <div class="skeleton h-4 w-24 rounded-full bg-slate-100"></div>
-                                    <div class="skeleton h-4 w-24 rounded-full bg-slate-100"></div>
-                                    <div class="skeleton h-4 w-20 rounded-full bg-slate-100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endfor
-                </div>
-            </section>
-        </div>
-
-        <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
-            <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
-                <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                    <div class="space-y-4">
-                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-blue-100">Feedback</span>
                         <div class="space-y-2">
-                            <h1 class="text-3xl font-semibold md:text-4xl">Suggestion box</h1>
-                            <p class="max-w-2xl text-sm text-blue-100/85">
-                                Share ideas, highlight concerns, or request improvements. The ACSES support team reviews every submission and will follow up when required.
+                            <h1 class="text-3xl sm:text-5xl font-semibold tracking-tight leading-none text-white">Suggestion Box</h1>
+                            <p class="text-sm font-medium text-white/70 leading-relaxed max-w-xl">
+                                Share ideas, highlight concerns, or request improvements.
                             </p>
                         </div>
                     </div>
-                    <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-4 text-sm text-blue-50 shadow-inner">
-                        <p class="font-semibold uppercase tracking-[0.25em] text-blue-200">Response window</p>
-                        <p class="mt-2 leading-6">Team replies typically arrive within <span class="font-semibold">2 business days</span>. Remember to include as many details as possible for faster resolution.</p>
+                    
+                    <div class="shrink-0 rounded-xl border border-white/10 bg-white/5 px-6 py-4 text-sm shadow-inner backdrop-blur-md max-w-[300px]">
+                        <p class="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/50">Response Window</p>
+                        <p class="mt-2 text-xs font-semibold leading-relaxed text-white/70">
+                            Typically <span class="text-white font-semibold">2 business days</span>.
+                        </p>
                     </div>
                 </div>
+
+                <!-- Subtle background depth -->
+                <div class="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-white/5 blur-3xl"></div>
+                <i class="ri-lightbulb-flash-line absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none"></i>
             </section>
 
             @if (session('status'))
-                <div class="animate-fade-slide rounded-3xl border border-blue-200 bg-blue-50 p-4 text-blue-900 shadow-lg shadow-blue-100/60">
+                <div class="animate-fade-slide rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-900 shadow-lg shadow-blue-100/60">
                     <div class="flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                             <path d="m5 12 4 4L19 6" />
@@ -139,7 +46,7 @@
             @endif
 
             @if ($errors->any())
-                <div class="animate-fade-slide rounded-3xl border border-rose-200 bg-rose-50 p-4 text-rose-900 shadow-lg shadow-rose-100/60">
+                <div class="animate-fade-slide rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-900 shadow-lg shadow-rose-100/60">
                     <div class="flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                             <path d="M12 8v4" />
@@ -160,7 +67,7 @@
 
             <div class="grid gap-8 lg:grid-cols-3">
                 <section class="lg:col-span-2">
-                    <article class="animate-fade-slide rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
+                    <article class="animate-fade-slide rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
                         <header>
                             <h2 class="text-lg font-semibold text-[#16136a]">Submit a suggestion</h2>
                             <p class="text-sm text-slate-500">All fields marked with * are required. Attach relevant screenshots or files if available (max 4&nbsp;MB).</p>
@@ -173,7 +80,7 @@
                                 <label class="flex flex-col gap-2">
                                     <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Category *</span>
                                     <div class="relative">
-                                        <select name="category" class="w-full appearance-none rounded-2xl border border-slate-200 bg-white py-3 pl-4 pr-12 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+                                        <select name="category" class="w-full appearance-none rounded-xl border border-slate-200 bg-white py-3 pl-4 pr-12 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
                                             @foreach ($categories as $value => $label)
                                                 <option value="{{ $value }}" @selected(old('category') === $value)>{{ $label }}</option>
                                             @endforeach
@@ -186,16 +93,16 @@
 
                                 <label class="flex flex-col gap-2">
                                     <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Subject *</span>
-                                    <input type="text" name="subject" value="{{ old('subject') }}" maxlength="160" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40" placeholder="Give a short headline">
+                                    <input type="text" name="subject" value="{{ old('subject') }}" maxlength="160" class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40" placeholder="Give a short headline">
                                 </label>
                             </div>
 
                             <label class="flex flex-col gap-2">
                                 <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Message *</span>
-                                <textarea name="message" rows="6" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40" placeholder="Explain the idea, improvement, or issue in detail. Include specific examples or references.">{{ old('message') }}</textarea>
+                                <textarea name="message" rows="6" class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40" placeholder="Explain the idea, improvement, or issue in detail. Include specific examples or references.">{{ old('message') }}</textarea>
                             </label>
 
-                            <label class="flex flex-col gap-3 rounded-2xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-sm text-slate-600">
+                            <label class="flex flex-col gap-3 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 px-4 py-6 text-sm text-slate-600">
                                 <span class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Attachment (optional)</span>
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                     <div class="space-y-1">
@@ -226,7 +133,7 @@
                 </section>
 
                 <aside class="space-y-6">
-                    <article class="animate-fade-slide rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
+                    <article class="animate-fade-slide rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
                         <h3 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">What to include</h3>
                         <ul class="mt-4 space-y-3 text-sm text-slate-600">
                             <li class="flex gap-3">
@@ -253,7 +160,7 @@
                         </ul>
                     </article>
 
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
+                    <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10">
                         <h3 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Need immediate help?</h3>
                         <div class="mt-4 space-y-3 text-sm text-slate-600">
                             <p class="flex items-center gap-2 text-slate-700">
@@ -294,11 +201,11 @@
                 </header>
 
                 @if ($suggestions->isEmpty())
-                    <article class="rounded-3xl border border-dashed border-slate-300 bg-white/70 p-8 text-center text-sm text-slate-500">
+                    <article class="rounded-xl border border-dashed border-slate-300 bg-white/70 p-8 text-center text-sm text-slate-500">
                         <p>No suggestions submitted yet. Share your first idea using the form above.</p>
                     </article>
                 @else
-                    <div class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-lg shadow-[#16136a]/5">
+                    <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-lg shadow-[#16136a]/5">
                         <div class="hidden lg:block">
                             <table class="min-w-full divide-y divide-slate-200 text-sm text-slate-600">
                                 <thead class="bg-slate-50 text-xs uppercase tracking-[0.2em] text-slate-400">

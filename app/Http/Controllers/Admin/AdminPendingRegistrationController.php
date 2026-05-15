@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class AdminPendingRegistrationController extends Controller
 {
-    public function __construct(private readonly AdminDueService $dues)
+    public function __construct(private readonly \App\Services\Auth\RegistrationService $registrationService)
     {
     }
 
@@ -71,7 +71,7 @@ class AdminPendingRegistrationController extends Controller
         }
 
         try {
-            $this->processApproval($registration, $request->input('notes'));
+            $this->registrationService->approve($registration, $request->input('notes'));
         } catch (\RuntimeException $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -93,25 +93,26 @@ class AdminPendingRegistrationController extends Controller
             'ids.*' => 'exists:pending_registrations,id',
         ]);
 
+        $registrations = PendingRegistration::whereIn('id', $request->ids)
+            ->where('status', 'pending')
+            ->get();
+
         $count = 0;
         $failed = [];
         
-        foreach ($request->ids as $id) {
-            $registration = PendingRegistration::find($id);
-            if ($registration && $registration->status === 'pending') {
-                try {
-                    $this->processApproval($registration, 'Bulk approval');
-                    $count++;
-                } catch (\RuntimeException $e) {
-                    $failed[] = "{$registration->first_name} {$registration->last_name} ({$registration->username})";
-                }
+        foreach ($registrations as $registration) {
+            try {
+                $this->registrationService->approve($registration, 'Bulk approval');
+                $count++;
+            } catch (\RuntimeException $e) {
+                $failed[] = "{$registration->first_name} {$registration->last_name} ({$registration->username})";
             }
         }
 
-        $message = "{$count} registrations have been approved successfully.";
+        $message = "{$count} registrations approved successfully.";
         
         if (!empty($failed)) {
-            $message .= ' Failed to approve: ' . implode(', ', $failed) . ' (duplicate username/email detected).';
+            $message .= ' Issues with: ' . implode(', ', $failed);
         }
 
         return redirect()
@@ -120,26 +121,21 @@ class AdminPendingRegistrationController extends Controller
     }
 
     /**
- * Reject a pending registration.
- */
-public function reject(Request $request, PendingRegistration $registration): RedirectResponse
-{
-    // Allow rejecting pending OR approved registrations (so admin can reverse an approval)
-    if (! in_array($registration->status, ['pending', 'approved'])) {
-        return back()->withErrors(['error' => 'This registration has already been rejected.']);
+     * Reject a pending registration.
+     */
+    public function reject(Request $request, PendingRegistration $registration): RedirectResponse
+    {
+        // Allow rejecting pending OR approved registrations (so admin can reverse an approval)
+        if (! in_array($registration->status, ['pending', 'approved'])) {
+            return back()->withErrors(['error' => 'This registration has already been rejected.']);
+        }
+
+        $this->registrationService->reject($registration, $request->input('notes', 'Registration rejected.'));
+
+        return redirect()
+            ->route('admin.pending-registrations.index')
+            ->with('success', 'Registration has been rejected.');
     }
-
-    // If was approved, delete the User record first
-    if ($registration->status === 'approved') {
-        User::where('email', $registration->email)->delete();
-    }
-
-    $this->processRejection($registration, $request->input('notes', 'Registration rejected.'));
-
-    return redirect()
-        ->route('admin.pending-registrations.index')
-        ->with('success', 'Registration has been rejected.');
-}
 
     /**
      * Reject multiple pending registrations.
@@ -151,13 +147,14 @@ public function reject(Request $request, PendingRegistration $registration): Red
             'ids.*' => 'exists:pending_registrations,id',
         ]);
 
+        $registrations = PendingRegistration::whereIn('id', $request->ids)
+            ->where('status', 'pending')
+            ->get();
+
         $count = 0;
-        foreach ($request->ids as $id) {
-            $registration = PendingRegistration::find($id);
-            if ($registration && $registration->status === 'pending') {
-                $this->processRejection($registration, $request->input('notes', 'Bulk rejection'));
-                $count++;
-            }
+        foreach ($registrations as $registration) {
+            $this->registrationService->reject($registration, $request->input('notes', 'Bulk rejection'));
+            $count++;
         }
 
         return redirect()
@@ -166,7 +163,7 @@ public function reject(Request $request, PendingRegistration $registration): Red
     }
 
     /**
-     * Delete multiple pending registrations.
+     * Reject multiple pending registrations.
      */
     public function bulkDelete(Request $request): RedirectResponse
     {
@@ -180,124 +177,6 @@ public function reject(Request $request, PendingRegistration $registration): Red
         return redirect()
             ->route('admin.pending-registrations.index')
             ->with('success', "{$count} registrations have been permanently deleted.");
-    }
-
-    /**
-     * Process logic for approving a registration.
-     * 
-     * @throws \RuntimeException if username, email, or index_number already exists
-     */
-    private function processApproval(PendingRegistration $registration, ?string $notes = null): void
-    {
-        $fullName = trim($registration->first_name . ' ' . $registration->last_name);
-
-        // Check for existing conflicts before creating
-        $conflicts = [];
-        
-        if (User::where('username', $registration->username)->exists()) {
-            $conflicts[] = "username '{$registration->username}'";
-        }
-        
-        if (User::where('email', $registration->email)->exists()) {
-            $conflicts[] = "email '{$registration->email}'";
-        }
-        
-        if ($registration->index_number && User::where('index_number', $registration->index_number)->exists()) {
-            $conflicts[] = "reference number '{$registration->index_number}'";
-        }
-        
-        if (!empty($conflicts)) {
-            throw new \RuntimeException(
-                'Cannot approve: A user already exists with ' . implode(' and ', $conflicts) . '. ' .
-                'Please reject this registration or ask the student to use a different username.'
-            );
-        }
-
-        // Create the user account
-        $user = User::create([
-            'fullname' => $fullName,
-            'username' => $registration->username,
-            'email' => $registration->email,
-            'password' => $registration->password, // Already hashed
-            'phone_number' => $registration->phone_number,
-            'index_number' => $registration->index_number,
-            'class' => $registration->class,
-            'year' => $registration->year,
-            'role' => 'student',
-            'email_verified_at' => $registration->email_verified_at, // Copy from OTP-verified registration
-        ]);
-
-        // Fix: The User model has a 'hashed' cast which hashes the password again.
-        // Since $registration->password is already hashed, we need to bypass the model cast
-        // by directly updating the record in the database.
-        User::where('user_id', $user->user_id)->update([
-            'password' => $registration->password
-        ]);
-
-        // Sync dues
-        $this->dues->syncStudent($user);
-
-        // Update pending registration
-        $registration->update([
-            'status' => 'approved',
-            'reviewed_at' => now(),
-            'reviewed_by' => Auth::guard('admin')->id(),
-            'admin_notes' => $notes,
-        ]);
-
-        // Send approval email
-        $this->sendApprovalEmail($user, $registration);
-    }
-
-    /**
-     * Process logic for rejecting a registration.
-     */
-    private function processRejection(PendingRegistration $registration, ?string $notes = null): void
-    {
-        $registration->update([
-            'status' => 'rejected',
-            'reviewed_at' => now(),
-            'reviewed_by' => Auth::guard('admin')->id(),
-            'admin_notes' => $notes,
-        ]);
-
-        // Send rejection email
-        $this->sendRejectionEmail($registration);
-    }
-
-    /**
-     * Send approval email to the user.
-     */
-    private function sendApprovalEmail(User $user, PendingRegistration $registration): void
-    {
-        try {
-            Mail::send('emails.registration-approved', [
-                'user' => $user,
-                'registration' => $registration,
-            ], function ($message) use ($user) {
-                $message->to($user->email)
-                    ->subject('Your GESA Account Has Been Approved! 🎉');
-            });
-        } catch (\Exception $e) {
-            \Log::error('Failed to send approval email: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Send rejection email to the applicant.
-     */
-    private function sendRejectionEmail(PendingRegistration $registration): void
-    {
-        try {
-            Mail::send('emails.registration-rejected', [
-                'registration' => $registration,
-            ], function ($message) use ($registration) {
-                $message->to($registration->email)
-                    ->subject('GESA Registration Update');
-            });
-        } catch (\Exception $e) {
-            \Log::error('Failed to send rejection email: ' . $e->getMessage());
-        }
     }
 
     /**
@@ -324,5 +203,19 @@ public function reject(Request $request, PendingRegistration $registration): Red
                 'created_at' => $r->created_at->diffForHumans(),
             ]),
         ]);
+    }
+
+    /**
+     * View the private student document (ID or registration slip).
+     */
+    public function viewDocument(PendingRegistration $registration): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        if (!$registration->student_id_path || !\Illuminate\Support\Facades\Storage::disk('local')->exists($registration->student_id_path)) {
+            abort(404, 'Document not found.');
+        }
+
+        $path = \Illuminate\Support\Facades\Storage::disk('local')->path($registration->student_id_path);
+        
+        return response()->file($path);
     }
 }

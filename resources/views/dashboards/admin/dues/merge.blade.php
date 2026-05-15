@@ -33,19 +33,19 @@
             <h3 class="font-semibold text-amber-900 mb-3">Source Due (Will Be Deleted)</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                    <p class="text-xs font-bold uppercase text-amber-600">Description</p>
+                    <p class="text-xs font-semibold uppercase text-amber-600">Description</p>
                     <p class="font-semibold text-amber-900">{{ $sourceDesc }}</p>
                 </div>
                 <div>
-                    <p class="text-xs font-bold uppercase text-amber-600">Academic Year</p>
+                    <p class="text-xs font-semibold uppercase text-amber-600">Academic Year</p>
                     <p class="font-semibold text-amber-900">{{ $sourceYear }}</p>
                 </div>
                 <div>
-                    <p class="text-xs font-bold uppercase text-amber-600">Total Students</p>
+                    <p class="text-xs font-semibold uppercase text-amber-600">Total Students</p>
                     <p class="font-semibold text-amber-900">{{ $sourceStats->total ?? 0 }}</p>
                 </div>
                 <div>
-                    <p class="text-xs font-bold uppercase text-amber-600">Paid / Pending / Owing</p>
+                    <p class="text-xs font-semibold uppercase text-amber-600">Paid / Pending / Owing</p>
                     <p class="font-semibold">
                         <span class="text-emerald-700">{{ $sourceStats->paid ?? 0 }}</span> /
                         <span class="text-amber-700">{{ $sourceStats->pending ?? 0 }}</span> /
@@ -104,7 +104,7 @@
                             <i class="ri-close-line"></i>
                             Cancel
                         </a>
-                        <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-amber-700">
+                        <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700">
                             <i class="ri-git-merge-line"></i>
                             Merge Into Selected Due
                         </button>

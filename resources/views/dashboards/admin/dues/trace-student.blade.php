@@ -22,7 +22,7 @@
         {{-- Student Info Card --}}
         <section class="grid gap-6 md:grid-cols-3">
             <div class="md:col-span-1 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-                <h2 class="text-base font-bold text-slate-800 border-b pb-2">Student Profile</h2>
+                <h2 class="text-base font-semibold text-slate-800 border-b pb-2">Student Profile</h2>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
                         <span class="text-slate-500">Index Number</span>
@@ -45,13 +45,13 @@
 
             <div class="md:col-span-2 grid gap-4 grid-cols-2">
                 <div class="rounded-3xl border border-[#16136a]/15 bg-[#16136a] p-6 text-white shadow-lg">
-                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Outstanding Balance</p>
-                    <p class="text-3xl font-bold mt-2">GHS {{ number_format($stats['total_active'], 2) }}</p>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">Outstanding Balance</p>
+                    <p class="text-3xl font-semibold mt-2">GHS {{ number_format($stats['total_active'], 2) }}</p>
                     <p class="text-xs text-white/40 mt-1">From {{ $stats['count_active'] }} active records</p>
                 </div>
                 <div class="rounded-3xl border border-emerald-100 bg-emerald-50 p-6 text-emerald-900 shadow-sm">
-                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">Total Paid</p>
-                    <p class="text-3xl font-bold mt-2 text-emerald-800">GHS {{ number_format($stats['total_paid'], 2) }}</p>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-600">Total Paid</p>
+                    <p class="text-3xl font-semibold mt-2 text-emerald-800">GHS {{ number_format($stats['total_paid'], 2) }}</p>
                     <p class="text-xs text-emerald-500 mt-1">History records</p>
                 </div>
             </div>
@@ -91,8 +91,8 @@
                                         <div class="text-[10px] text-slate-400 italic">{{ $due->payment_notes }}</div>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 font-bold text-slate-900">GHS {{ number_format($due->amount, 2) }}</td>
-                                <td class="px-4 py-3 uppercase text-[10px] font-bold">
+                                <td class="px-4 py-3 font-semibold text-slate-900">GHS {{ number_format($due->amount, 2) }}</td>
+                                <td class="px-4 py-3 uppercase text-[10px] font-semibold">
                                     @php($status = $due->payment_status)
                                     <span class="px-2 py-0.5 rounded-full border
                                         {{ $status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 

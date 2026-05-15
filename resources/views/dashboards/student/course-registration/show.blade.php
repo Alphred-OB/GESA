@@ -31,16 +31,16 @@
 
     <div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
         <div x-show="loading" x-transition.opacity.duration.200ms class="space-y-10" role="status" aria-live="polite">
-            <section class="hidden md:block overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
+            <section class="hidden md:block overflow-hidden rounded-xl border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
                 <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
                     <div class="space-y-4">
                         <span class="skeleton inline-block h-5 w-28 rounded-full bg-white/20"></span>
                         <div class="space-y-3">
-                            <div class="skeleton h-10 w-64 rounded-2xl bg-white/35"></div>
-                            <div class="skeleton h-4 w-80 rounded-2xl bg-white/25"></div>
+                            <div class="skeleton h-10 w-64 rounded-xl bg-white/35"></div>
+                            <div class="skeleton h-4 w-80 rounded-xl bg-white/25"></div>
                         </div>
                     </div>
-                    <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-5 text-sm shadow-inner">
+                    <div class="rounded-xl border border-white/20 bg-white/10 px-6 py-5 text-sm shadow-inner">
                         <div class="skeleton h-3 w-32 rounded-full bg-white/30"></div>
                         <div class="mt-3 flex items-center gap-4">
                             <div class="skeleton h-7 w-32 rounded-full bg-white/30"></div>
@@ -56,13 +56,13 @@
             </section>
 
             <div class="space-y-6">
-                <div class="skeleton h-14 w-full rounded-3xl bg-emerald-100/40"></div>
-                <div class="skeleton h-14 w-full rounded-3xl bg-rose-100/40"></div>
+                <div class="skeleton h-14 w-full rounded-xl bg-emerald-100/40"></div>
+                <div class="skeleton h-14 w-full rounded-xl bg-rose-100/40"></div>
             </div>
 
             <div class="grid gap-8 lg:grid-cols-3">
                 <section class="space-y-6 lg:col-span-2">
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
+                    <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
                         <div class="space-y-4 border-b border-slate-200 pb-4">
                             <div class="skeleton h-5 w-52 rounded-full bg-slate-200"></div>
                             <div class="skeleton h-4 w-72 rounded-full bg-slate-100"></div>
@@ -74,16 +74,16 @@
                             </div>
                             <div class="space-y-3">
                                 @for ($i = 0; $i < 2; $i++)
-                                    <div class="rounded-2xl border border-slate-200 px-4 py-3">
+                                    <div class="rounded-xl border border-slate-200 px-4 py-3">
                                         <div class="skeleton h-4 w-48 rounded-full bg-slate-100"></div>
                                     </div>
                                 @endfor
                             </div>
-                            <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6"></div>
+                            <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6"></div>
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
+                    <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
                         <div class="space-y-4 border-b border-slate-200 pb-4">
                             <div class="skeleton h-5 w-60 rounded-full bg-slate-200"></div>
                             <div class="skeleton h-4 w-72 rounded-full bg-slate-100"></div>
@@ -91,10 +91,10 @@
                         <div class="mt-6 space-y-6">
                             <div class="space-y-2">
                                 <div class="skeleton h-4 w-40 rounded-full bg-slate-200"></div>
-                                <div class="skeleton h-12 w-full rounded-2xl bg-slate-100"></div>
+                                <div class="skeleton h-12 w-full rounded-xl bg-slate-100"></div>
                                 <div class="skeleton h-3 w-48 rounded-full bg-slate-100"></div>
                             </div>
-                            <div class="space-y-2 rounded-2xl border border-slate-200/80 bg-slate-50/80 px-4 py-4">
+                            <div class="space-y-2 rounded-xl border border-slate-200/80 bg-slate-50/80 px-4 py-4">
                                 @for ($i = 0; $i < 2; $i++)
                                     <div class="skeleton h-4 w-full rounded-full bg-slate-100"></div>
                                 @endfor
@@ -108,7 +108,7 @@
                 </section>
 
                 <aside class="space-y-6">
-                    <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
+                    <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
                         <div class="skeleton h-4 w-32 rounded-full bg-slate-200"></div>
                         <div class="mt-4 space-y-4">
                             @for ($i = 0; $i < 3; $i++)
@@ -123,7 +123,7 @@
                         </div>
                     </article>
 
-                    <article class="rounded-3xl border border-[#16136a]/10 bg-[#16136a]/5 p-6 text-slate-700 shadow-lg shadow-[#16136a]/10">
+                    <article class="rounded-xl border border-[#16136a]/10 bg-[#16136a]/5 p-6 text-slate-700 shadow-lg shadow-[#16136a]/10">
                         <div class="skeleton h-4 w-32 rounded-full bg-[#16136a]/20"></div>
                         <div class="mt-4 space-y-3">
                             <div class="skeleton h-4 w-48 rounded-full bg-[#16136a]/15"></div>
@@ -146,7 +146,7 @@
 
         <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="space-y-10">
             @if (session('status'))
-                <div class="rounded-3xl border border-emerald-200 bg-emerald-50 px-6 py-4 text-sm text-emerald-700 shadow-sm">
+                <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-6 py-4 text-sm text-emerald-700 shadow-sm">
                     <div class="flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                             <path d="M5 13l4 4L19 7" />
@@ -157,7 +157,7 @@
             @endif
 
             @if ($errors->any())
-                <div class="rounded-3xl border border-rose-200 bg-rose-50 px-6 py-4 text-sm text-rose-700 shadow-sm">
+                <div class="rounded-xl border border-rose-200 bg-rose-50 px-6 py-4 text-sm text-rose-700 shadow-sm">
                     <div class="flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                             <path d="M12 9v4" />
@@ -176,47 +176,53 @@
                 </div>
             @endif
 
-            <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-[24px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-8 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.4)]">
-            <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-                <div class="space-y-4">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-100">Registration</span>
-                    <div class="space-y-2">
-                        <h1 class="text-3xl font-semibold md:text-4xl">Course registration</h1>
-                        <p class="max-w-2xl text-sm text-emerald-100/85">
+        <section class="relative isolate hidden md:block animate-fade-slide overflow-hidden rounded-xl bg-[#16136a] p-8 sm:p-12 text-white shadow-[0_20px_50px_-30px_rgba(22,19,106,0.5)]">
+            <div class="relative z-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+                <div class="space-y-6 max-w-3xl">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200 ring-1 ring-emerald-500/50 backdrop-blur-md">
+                        <i class="ri-file-paper-2-line"></i> Registration
+                    </span>
+                    <div class="space-y-4">
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-none text-white">Course Registration</h1>
+                        <p class="text-base font-semibold text-emerald-100/80 leading-relaxed max-w-2xl">
                             Submit your semester course selections, upload documents, and track approval progress from one place.
                         </p>
                     </div>
                 </div>
-                <div class="rounded-3xl border border-white/15 bg-white/10 px-6 py-5 text-sm shadow-inner">
-                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-200">Current status</p>
-                    <div class="mt-2 flex items-center gap-3">
-                        <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold {{ $badgeClasses[$status] ?? $badgeClasses['not_started'] }}">
+                
+                <div class="shrink-0 rounded-xl border border-white/10 bg-white/5 px-8 py-6 text-sm shadow-inner backdrop-blur-md">
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200/70">Current Status</p>
+                    <div class="mt-4 flex flex-col sm:flex-row sm:items-baseline gap-3">
+                        <span class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-widest {{ $badgeClasses[$status] ?? $badgeClasses['not_started'] }}">
                             {{ $statusLabels[$status] ?? \Illuminate\Support\Str::headline($status) }}
                         </span>
-                        <span class="text-xl font-semibold text-white">{{ $progress }}%</span>
+                        <span class="text-4xl font-semibold tabular-nums tracking-tighter text-white leading-none mt-2 sm:mt-0">{{ $progress }}%</span>
                     </div>
-                    <p class="mt-3 text-sm text-emerald-100/85">{{ $statusCopy[$status] ?? $statusCopy['not_started'] }}</p>
-                    <dl class="mt-4 space-y-2 text-xs text-emerald-100/80">
-                        <div class="flex items-center justify-between gap-4">
+                    <dl class="mt-6 space-y-3 text-[11px] font-semibold text-emerald-100/80 uppercase tracking-widest">
+                        <div class="flex items-center justify-between gap-6 border-b border-white/10 pb-2">
                             <dt>Submitted</dt>
-                            <dd>{{ $submittedAt ? $submittedAt->format('M j, Y · g:i A') : '—' }}</dd>
+                            <dd class="text-white">{{ $submittedAt ? $submittedAt->format('M j, Y') : '—' }}</dd>
                         </div>
-                        <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center justify-between gap-6 border-b border-white/10 pb-2">
                             <dt>Approved</dt>
-                            <dd>{{ $approvedAt ? $approvedAt->format('M j, Y · g:i A') : 'Pending' }}</dd>
+                            <dd class="text-white">{{ $approvedAt ? $approvedAt->format('M j, Y') : 'Pending' }}</dd>
                         </div>
-                        <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center justify-between gap-6">
                             <dt>Attachments</dt>
-                            <dd>{{ $pendingDocuments }} {{ \Illuminate\Support\Str::plural('file', $pendingDocuments) }}</dd>
+                            <dd class="text-white">{{ $pendingDocuments }} {{ \Illuminate\Support\Str::plural('file', $pendingDocuments) }}</dd>
                         </div>
                     </dl>
                 </div>
             </div>
+
+            <!-- Decorative background elements -->
+            <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gradient-to-br from-emerald-400/20 to-transparent blur-3xl"></div>
+            <div class="absolute -left-32 -bottom-32 h-96 w-96 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-3xl"></div>
         </section>
 
         <div class="grid gap-8 lg:grid-cols-3">
             <section class="space-y-6 lg:col-span-2">
-                <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
+                <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
                     <header class="space-y-2 border-b border-slate-200 pb-4">
                         <h2 class="text-lg font-semibold text-[#16136a]">Registration file</h2>
                         <p class="text-sm text-slate-500">Upload the official PDF from the registrar. It will replace any previous submission.</p>
@@ -237,7 +243,7 @@
                             <ul class="space-y-3">
                                 @foreach ($documents as $path)
                                     @php($encoded = base64_encode($path))
-                                    <li class="flex flex-col gap-2 rounded-2xl border border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                                    <li class="flex flex-col gap-2 rounded-xl border border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                                         <div class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#16136a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                                 <path d="M4 4v12a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V8l-6-6H8a4 4 0 0 0-4 4Z" />
@@ -265,14 +271,14 @@
                                 @endforeach
                             </ul>
                         @else
-                            <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6 text-center text-sm text-slate-500">
+                            <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6 text-center text-sm text-slate-500">
                                 No registration PDF uploaded yet.
                             </div>
                         @endif
                     </div>
                 </article>
 
-                <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
+                <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
                     <header class="space-y-2 border-b border-slate-200 pb-4">
                         <h2 class="text-lg font-semibold text-[#16136a]">Upload course registration PDF</h2>
                         <p class="text-sm text-slate-500">Download the pre-filled PDF from the registrar portal and upload it here. We already know your class and year.</p>
@@ -282,11 +288,11 @@
                         @csrf
                         <label class="flex flex-col gap-2">
                             <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Registration PDF</span>
-                            <input type="file" name="registration_pdf" accept="application/pdf" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm file:mr-4 file:rounded-full file:border-0 file:bg-[#16136a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#18188a] focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+                            <input type="file" name="registration_pdf" accept="application/pdf" class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm file:mr-4 file:rounded-full file:border-0 file:bg-[#16136a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#18188a] focus:border-[#16136a]/60 focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
                             <span class="text-xs text-slate-400">Only PDF files up to 8 MB are accepted.</span>
                         </label>
 
-                        <div class="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/80 px-4 py-4 text-xs text-slate-500">
+                        <div class="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-slate-50/80 px-4 py-4 text-xs text-slate-500">
                             <div class="flex items-start gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                                     <path d="M13 16h-1v-4h-1" />
@@ -318,7 +324,7 @@
             </section>
 
             <aside class="space-y-6">
-                <article class="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
+                <article class="rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/5">
                     <h3 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Timeline</h3>
                     <ol class="mt-4 space-y-4 text-sm text-slate-600">
                         <li class="flex items-start gap-3">
@@ -345,7 +351,7 @@
                     </ol>
                 </article>
 
-                <article class="rounded-3xl border border-[#16136a]/10 bg-[#16136a]/5 p-6 text-sm text-slate-700 shadow-lg shadow-[#16136a]/10">
+                <article class="rounded-xl border border-[#16136a]/10 bg-[#16136a]/5 p-6 text-sm text-slate-700 shadow-lg shadow-[#16136a]/10">
                     <h3 class="text-sm font-semibold uppercase tracking-[0.3em] text-[#16136a]">Need help?</h3>
                     <p class="mt-3 text-sm">Contact GESA academic services if you need assistance.</p>
                     <ul class="mt-4 space-y-3 text-sm">

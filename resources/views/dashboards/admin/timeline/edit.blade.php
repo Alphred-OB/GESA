@@ -1,42 +1,89 @@
-@php($title = $title ?? 'Edit timeline entry')
+@php($title = 'Edit Timeline Entry')
 
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-4xl space-y-8 px-5 py-10 sm:px-6 lg:px-8">
-        <header class="space-y-3 text-center sm:text-left">
-            <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                <i class="ri-edit-line text-base" aria-hidden="true"></i>
-                Update milestone
-            </p>
-            <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Refine academic timeline entry</h1>
-            <p class="text-sm text-slate-600">Adjust messaging, dates, or CTA, then toggle visibility for students.</p>
-        </header>
-
-        <section class="space-y-5 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-            <form method="POST" action="{{ route('admin.timeline.update', $entry) }}" class="space-y-6">
-                @csrf
-                @method('PUT')
-                @include('dashboards.admin.timeline.partials.form', ['entry' => $entry])
-
-                <div class="flex flex-wrap items-center justify-end gap-3">
-                    <a href="{{ route('admin.timeline.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-[#16136a]">
-                        <i class="ri-arrow-go-back-line text-base" aria-hidden="true"></i>
-                        Back
-                    </a>
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:shadow-xl">
-                        <i class="ri-save-3-line text-base" aria-hidden="true"></i>
-                        Update milestone
-                    </button>
+    <div class="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            {{-- Header --}}
+            <header class="text-center">
+                <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#16136a]/5 text-[#16136a]">
+                    <i class="ri-edit-line text-3xl"></i>
                 </div>
-            </form>
+                <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $title }}</h1>
+                <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Update existing academic milestone</p>
+            </header>
 
-            <form method="POST" action="{{ route('admin.timeline.destroy', $entry) }}" onsubmit="return confirm('Delete this timeline entry?');" class="flex justify-end">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:border-rose-400 hover:bg-rose-100">
-                    <i class="ri-delete-bin-6-line text-base" aria-hidden="true"></i>
-                    Delete entry
-                </button>
-            </form>
-        </section>
+            {{-- Form Card --}}
+            <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12">
+                <form action="{{ route('admin.timeline.update', $entry) }}" method="POST" class="space-y-8">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="space-y-6">
+                        <div class="grid gap-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <label for="title" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Milestone Title</label>
+                                <div class="relative">
+                                    <i class="ri-flag-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <input id="title" name="title" type="text" value="{{ old('title', $entry->title) }}" required maxlength="150" 
+                                        class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
+                                        placeholder="e.g. End of Semester Exams">
+                                </div>
+                                @error('title')
+                                    <p class="text-[10px] font-semibold text-rose-500 ml-1 italic">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="academic_year" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Academic Year</label>
+                                <div class="relative">
+                                    <i class="ri-government-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <input id="academic_year" name="academic_year" type="text" value="{{ old('academic_year', $entry->academic_year) }}" maxlength="15" 
+                                        class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
+                                        placeholder="e.g. 2024/2025">
+                                </div>
+                                @error('academic_year')
+                                    <p class="text-[10px] font-semibold text-rose-500 ml-1 italic">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="starts_at" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Event Date</label>
+                            <div class="relative">
+                                <i class="ri-calendar-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input id="starts_at" name="starts_at" type="date" value="{{ old('starts_at', optional($entry->starts_at)->format('Y-m-d')) }}" required 
+                                    class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                            </div>
+                            @error('starts_at')
+                                <p class="text-[10px] font-semibold text-rose-500 ml-1 italic">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="flex items-center justify-between rounded-3xl border border-slate-100 bg-slate-50/50 p-6">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-tight text-[#16136a]">Publish Immediately</p>
+                                <p class="mt-1 text-[10px] font-semibold text-slate-400">Visibility for all students</p>
+                            </div>
+                            <label class="relative inline-flex cursor-pointer items-center">
+                                <input type="hidden" name="is_published" value="0">
+                                <input type="checkbox" name="is_published" value="1" class="peer sr-only" @checked(old('is_published', $entry->is_published ?? true))>
+                                <div class="h-8 w-14 rounded-full bg-slate-200 transition-all peer-checked:bg-[#16136a] peer-focus:ring-4 peer-focus:ring-[#16136a]/10"></div>
+                                <div class="absolute left-1 top-1 h-6 w-6 rounded-full bg-white shadow-sm transition-all peer-checked:translate-x-6"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4 pt-4 sm:flex-row">
+                        <button type="submit" class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
+                            <i class="ri-save-line text-lg"></i>
+                            Update Milestone
+                        </button>
+                        <a href="{{ route('admin.timeline.index') }}" class="flex h-14 items-center justify-center rounded-2xl bg-slate-50 px-8 text-sm font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
 </x-layouts.admin>

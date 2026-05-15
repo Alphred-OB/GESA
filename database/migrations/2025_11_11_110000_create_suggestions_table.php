@@ -11,7 +11,8 @@ return new class extends Migration
         if (! Schema::hasTable('suggestions')) {
             Schema::create('suggestions', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('user_id')->constrained('users', 'user_id')->cascadeOnDelete();
+                $table->integer('user_id');
+                $table->foreign('user_id')->references('user_id')->on('users')->cascadeOnDelete();
                 $table->string('category');
                 $table->string('subject', 160);
                 $table->text('message');

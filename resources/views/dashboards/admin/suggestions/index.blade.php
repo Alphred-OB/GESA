@@ -1,375 +1,275 @@
 @php
-    use Illuminate\Support\Str;
-    $title = 'Student suggestions';
+    $title = $title ?? 'Student Feedback';
+    $now = now();
 @endphp
 
 <x-layouts.admin :title="$title">
-	@include('components.dashboard.skeleton-styles')
-	<div x-data="{ loading: true }" x-init="setTimeout(() => { loading = false }, 600)" class="relative">
-	    <div x-show="loading" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 flex justify-center bg-slate-50/80 backdrop-blur-sm" role="status" aria-live="polite">
-	        <div class="mx-auto w-full max-w-6xl space-y-8 px-5 py-10 sm:px-6 lg:px-8">
-	            <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/90 p-6 shadow-lg shadow-[#16136a]/10">
-	                <div class="space-y-2">
-	                    <div class="skeleton inline-flex h-7 w-48 items-center rounded-full bg-[#16136a]/10"></div>
-	                    <div class="skeleton h-8 w-64 rounded-2xl bg-slate-200"></div>
-	                    <div class="skeleton h-4 w-80 rounded-2xl bg-slate-100"></div>
-	                </div>
-	            </header>
+    <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            {{-- Header Section --}}
+            <header class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Suggestions Hub</h1>
+                    <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Review and respond to the student voice</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden sm:flex flex-col items-end">
+                        <span class="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Total Inbox</span>
+                        <span class="text-2xl font-semibold text-[#16136a]">{{ number_format($metrics['total'] ?? 0) }}</span>
+                    </div>
+                    <div class="h-10 w-px bg-slate-200 mx-2"></div>
+                    <div class="flex flex-col items-end">
+                        <span class="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500">Awaiting Action</span>
+                        <span class="text-2xl font-semibold text-amber-600">{{ number_format($metrics['pending'] ?? 0) }}</span>
+                    </div>
+                </div>
+            </header>
 
-	            <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-	                <div class="grid gap-4 sm:grid-cols-3">
-	                    @for ($i = 0; $i < 3; $i++)
-	                        <article class="rounded-2xl border border-slate-200/80 bg-slate-50 px-5 py-4 shadow-sm">
-	                            <div class="space-y-3">
-	                                <div class="skeleton h-3 w-32 rounded-full bg-slate-200"></div>
-	                                <div class="skeleton h-8 w-16 rounded-2xl bg-slate-200"></div>
-	                                <div class="skeleton h-3 w-24 rounded-full bg-slate-100"></div>
-	                            </div>
-	                        </article>
-	                    @endfor
-	                </div>
+            {{-- Summary Cards (Bento Style) --}}
+            @php
+                $pending = $metrics['pending'] ?? 0;
+                $resolved = $metrics['resolved'] ?? 0;
+                $total = $metrics['total'] ?? 0;
+                $velocity = $metrics['resolvedThisWeek'] ?? 0;
+                $rate = $total > 0 ? round(($resolved / $total) * 100) : 100;
+            @endphp
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div @class([
+                    'relative overflow-hidden rounded-[2.5rem] p-8 text-white shadow-xl',
+                    'bg-[#16136a] shadow-[#16136a]/20' => $pending > 0,
+                    'bg-emerald-600 shadow-emerald-600/20' => $pending === 0,
+                ])>
+                    <div class="relative z-10">
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/50">Inbox Status</p>
+                        @if($pending > 0)
+                            <p class="mt-4 text-4xl font-semibold text-amber-400">{{ $pending }} <span class="text-lg text-white/40 font-semibold uppercase tracking-widest">Pending</span></p>
+                            <p class="mt-2 text-xs font-semibold text-white/40 italic">Feedback requiring immediate review</p>
+                        @else
+                            <p class="mt-4 text-4xl font-semibold text-white">Inbox <span class="text-lg text-white/40 font-semibold uppercase tracking-widest">Clear</span></p>
+                            <p class="mt-2 text-xs font-semibold text-white/40 italic">All suggestions have been reviewed</p>
+                        @endif
+                    </div>
+                    <i class="ri-mail-unread-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                </div>
 
-	                <div class="grid gap-3 md:grid-cols-4">
-	                    <div class="space-y-2 md:col-span-2">
-	                        <div class="skeleton h-3 w-24 rounded-full bg-slate-200"></div>
-	                        <div class="skeleton h-11 w-full rounded-2xl bg-slate-100"></div>
-	                    </div>
-	                    <div class="space-y-2">
-	                        <div class="skeleton h-3 w-20 rounded-full bg-slate-200"></div>
-	                        <div class="skeleton h-11 w-full rounded-2xl bg-slate-100"></div>
-	                    </div>
-	                    <div class="space-y-2">
-	                        <div class="skeleton h-3 w-20 rounded-full bg-slate-200"></div>
-	                        <div class="skeleton h-11 w-full rounded-2xl bg-slate-100"></div>
-	                    </div>
-	                    <div class="space-y-2">
-	                        <div class="skeleton h-3 w-16 rounded-full bg-slate-200"></div>
-	                        <div class="skeleton h-11 w-full rounded-2xl bg-[#16136a]/10"></div>
-	                    </div>
-	                </div>
+                <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">Response Rate</p>
+                    <p class="mt-4 text-4xl font-semibold text-[#16136a]">{{ $rate }}% <span class="text-lg text-slate-300 uppercase tracking-widest">Resolved</span></p>
+                    <p class="mt-2 text-xs font-semibold text-slate-400">{{ $resolved }} cases handled successfully</p>
+                </div>
 
-	                <div class="flex flex-col gap-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-	                    <div class="skeleton h-3 w-56 rounded-full bg-slate-100"></div>
-	                    <div class="flex items-center gap-2">
-	                        <div class="skeleton h-3 w-32 rounded-full bg-slate-100"></div>
-	                        <div class="skeleton h-9 w-20 rounded-xl bg-slate-100"></div>
-	                    </div>
-	                </div>
+                <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">Activity Velocity</p>
+                    <p class="mt-4 text-4xl font-semibold text-emerald-600">+{{ $velocity }} <span class="text-lg text-slate-300 uppercase tracking-widest">Weekly</span></p>
+                    <p class="mt-2 text-xs font-semibold text-slate-400">Resolved since Monday</p>
+                </div>
+            </div>
 
-	                <div class="overflow-hidden rounded-2xl border border-slate-200/70">
-	                    <div class="hidden md:block">
-	                        <div class="skeleton h-10 w-full bg-slate-50"></div>
-	                        <div class="space-y-2 bg-white p-4">
-	                            @for ($i = 0; $i < 5; $i++)
-	                                <div class="skeleton h-11 w-full rounded-xl bg-slate-50"></div>
-	                            @endfor
-	                        </div>
-	                    </div>
+            @if (session('status'))
+                <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <p>{{ session('status') }}</p>
+                    </div>
+                </div>
+            @endif
 
-	                    <div class="grid gap-4 bg-white p-4 md:hidden">
-	                        @for ($i = 0; $i < 3; $i++)
-	                            <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
-	                                <div class="space-y-3">
-	                                    <div class="skeleton h-4 w-40 rounded-full bg-slate-200"></div>
-	                                    <div class="skeleton h-3 w-32 rounded-full bg-slate-100"></div>
-	                                    <div class="skeleton h-3 w-24 rounded-full bg-slate-100"></div>
-	                                </div>
-	                                <div class="mt-4 flex items-center justify-between">
-	                                    <div class="skeleton h-3 w-24 rounded-full bg-slate-100"></div>
-	                                    <div class="skeleton h-8 w-24 rounded-xl bg-slate-100"></div>
-	                                </div>
-	                            </article>
-	                        @endfor
-	                    </div>
-	                </div>
+            {{-- Filter Bar --}}
+            <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-6 shadow-xl shadow-slate-200/40 lg:p-8">
+                <form method="GET" class="grid gap-6 md:grid-cols-4 lg:grid-cols-5">
+                    @php
+                        $extraFilters = request()->except(['search', 'category', 'status', 'page']);
+                    @endphp
+                    @foreach ($extraFilters as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endforeach
 
-	                <div class="mt-4 flex flex-col gap-3 border-t border-slate-200/70 pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-	                    <div class="skeleton h-3 w-48 rounded-full bg-slate-100"></div>
-	                    <div class="flex justify-center gap-2 sm:ml-auto sm:justify-end">
-	                        @for ($i = 0; $i < 4; $i++)
-	                            <div class="skeleton h-8 w-8 rounded-full bg-slate-100"></div>
-	                        @endfor
-	                    </div>
-	                </div>
-	            </section>
-	        </div>
-	    </div>
+                    <div class="md:col-span-2 space-y-2">
+                        <label for="search" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Search Content</label>
+                        <div class="relative">
+                            <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" 
+                                class="h-12 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
+                                placeholder="Keywords, student names, subjects...">
+                        </div>
+                    </div>
 
-	    <div x-show="!loading" x-transition.opacity.duration.200ms x-cloak class="mx-auto w-full max-w-6xl space-y-10 px-5 py-10 sm:px-6 lg:px-8">
-	        <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/5">
-	            <div class="space-y-2">
-	                <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-	                    <i class="ri-chat-1-line text-base" aria-hidden="true"></i>
-	                    {{ $title }}
-	                </p>
-	                <h1 class="text-2xl font-semibold text-[#16136a] sm:text-3xl">Review student suggestions</h1>
-	                <p class="text-sm text-slate-600">See what students are asking for and track progress as you resolve their feedback.</p>
-	            </div>
-	        </header>
+                    <div class="space-y-2">
+                        <label for="category" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Category</label>
+                        <select id="category" name="category" class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                            <option value="">All Categories</option>
+                            @foreach ($categories as $catVal => $catLabel)
+                                <option value="{{ $catVal }}" @if(($filters['category'] ?? '') == (string)$catVal) selected @endif>{{ $catLabel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-	        <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-	            <div class="grid gap-4 sm:grid-cols-3">
-	                <article class="rounded-2xl border border-slate-200/80 bg-slate-50 px-5 py-4 shadow-sm">
-	                    <div class="flex items-center justify-between">
-	                        <div>
-	                            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Total suggestions</p>
-	                            <p class="mt-2 text-3xl font-semibold text-[#16136a]">{{ number_format($metrics['total']) }}</p>
-	                        </div>
-	                        <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
-	                            <i class="ri-chat-1-line text-xl" aria-hidden="true"></i>
-	                        </span>
-	                    </div>
-	                    <p class="mt-3 text-xs text-slate-500">Since launch.</p>
-	                </article>
-	                <article class="rounded-2xl border border-slate-200/80 bg-slate-50 px-5 py-4 shadow-sm">
-	                    <div class="flex items-center justify-between">
-	                        <div>
-	                            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Awaiting review</p>
-	                            <p class="mt-2 text-2xl font-semibold text-[#16136a]">{{ number_format($metrics['pending']) }}</p>
-	                        </div>
-	                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-[#16136a]">
-	                            <i class="ri-timer-line text-lg" aria-hidden="true"></i>
-	                        </span>
-	                    </div>
-	                    <p class="mt-2 text-xs text-slate-500">Marked as pending.</p>
-	                </article>
-	                <article class="rounded-2xl border border-slate-200/80 bg-slate-50 px-5 py-4 shadow-sm">
-	                    <div class="flex items-center justify-between">
-	                        <div>
-	                            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Resolved this week</p>
-	                            <p class="mt-2 text-2xl font-semibold text-emerald-600">{{ number_format($metrics['resolvedThisWeek']) }}</p>
-	                        </div>
-	                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-emerald-600">
-	                            <i class="ri-checkbox-circle-line text-lg" aria-hidden="true"></i>
-	                        </span>
-	                    </div>
-	                    <p class="mt-2 text-xs text-slate-500">Handled since Monday.</p>
-	                </article>
-	            </div>
+                    <div class="space-y-2">
+                        <label for="status" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Status</label>
+                        <select id="status" name="status" class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                            <option value="">Any Status</option>
+                            @foreach ($statuses as $statVal => $statLabel)
+                                <option value="{{ $statVal }}" @if(($filters['status'] ?? '') == (string)$statVal) selected @endif>{{ $statLabel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-	            <form method="GET" class="mt-6 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end">
-	                @foreach (request()->except(['search', 'category', 'status', 'page']) as $key => $value)
-	                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-	                @endforeach
+                    <div class="flex items-end">
+                        <button type="submit" class="flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                            <i class="ri-filter-3-line"></i> Filter Inbox
+                        </button>
+                    </div>
+                </form>
+            </section>
 
-	                <div class="flex w-full flex-col gap-2 md:flex-1 md:max-w-xs">
-	                    <label for="filter_search" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
-	                    <div class="relative">
-	                        <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-	                        <input id="filter_search" type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Subject, message, student" class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
-	                    </div>
-	                </div>
-
-	                <div class="flex w-full flex-col gap-2 md:w-52">
-	                    <label for="filter_category" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Category</label>
-	                    <div class="relative">
-	                        <select id="filter_category" name="category" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-	                            <option value="">All</option>
-	                            @foreach ($categories as $value => $label)
-	                                <option value="{{ $value }}" @selected(($filters['category'] ?? '') === $value)>{{ $label }}</option>
-	                            @endforeach
-	                        </select>
-	                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-	                    </div>
-	                </div>
-
-	                <div class="flex w-full flex-col gap-2 md:w-40">
-	                    <label for="filter_status" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
-	                    <div class="relative">
-	                        <select id="filter_status" name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-	                            <option value="">All</option>
-	                            @foreach ($statuses as $value => $label)
-	                                <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
-	                            @endforeach
-	                        </select>
-	                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-	                    </div>
-	                </div>
-
-	                <div class="flex w-full items-end md:w-auto md:ml-auto">
-	                    <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-	                        <i class="ri-equalizer-line text-base"></i>
-	                        Apply
-	                    </button>
-	                </div>
-	            </form>
-
-	            <div class="mt-4 flex flex-col gap-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-	                <p class="font-semibold">Showing {{ $suggestions->firstItem() ?? 0 }}–{{ $suggestions->lastItem() ?? 0 }} of {{ $suggestions->total() }} suggestions</p>
-	                <form method="GET" class="flex items-center gap-2">
-	                    @foreach (request()->except(['per_page', 'page']) as $key => $value)
-	                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-	                    @endforeach
-	                    <label for="suggestions_per_page" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Rows per page</label>
-	                    <select id="suggestions_per_page" name="per_page" class="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a]" onchange="this.form.submit()">
-	                        @foreach ($perPageOptions as $option)
-	                            <option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }}</option>
-	                        @endforeach
-	                    </select>
-	                </form>
-	            </div>
-
-            <section class="space-y-4 rounded-2xl border border-slate-200/70 bg-white/60 p-4" x-data="adminSuggestionBulk()" x-init="initialize(@js($suggestions->pluck('id')))" x-cloak>
-                <form method="POST" action="{{ route('admin.suggestions.bulk') }}" x-ref="bulkForm">
-                    @csrf
-                    <input type="hidden" name="action" x-ref="actionInput">
-                    <input type="hidden" name="status" x-ref="statusInput">
-                    <input type="hidden" name="return_url" value="{{ request()->fullUrl() }}">
-
-                    <div class="flex flex-col gap-4 rounded-xl border border-slate-200/80 bg-slate-50/60 px-4 py-3 md:flex-row md:items-center md:justify-between">
-                        <p class="text-sm font-medium text-slate-600" x-text="bulkSummary"></p>
-                        <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4" x-show="selectedIds.length" x-cloak x-transition.opacity>
-                            <div class="flex flex-col gap-1">
-                                <label for="suggestion_bulk_status" class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Change status</label>
-                                <select id="suggestion_bulk_status" x-model="statusValue" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-[#16136a] focus:ring-[#16136a]/40 md:min-w-[12rem]">
-                                    <option value="">Select status</option>
-                                    @foreach ($statuses as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <button type="button" class="inline-flex items-center gap-2 rounded-xl bg-[#16136a] px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#16136a]/90 disabled:opacity-60" @click="submit('update_status')" :disabled="!canApplyStatus">
-                                <i class="ri-check-double-line text-sm"></i>
-                                Apply status
+            {{-- Bulk Actions & List --}}
+            <section class="space-y-6" x-data="bulkActions(@js($suggestions->pluck('id')))">
+                <div class="flex items-center justify-between px-4">
+                    <div class="flex items-center gap-4">
+                        <h2 class="text-sm font-semibold uppercase tracking-widest text-[#16136a]">Feedback Inbox</h2>
+                        <div x-show="selectedIds.length > 0" x-cloak class="flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 animate-in slide-in-from-left-4">
+                            <span class="text-[10px] font-semibold text-amber-600 uppercase tracking-widest"><span x-text="selectedIds.length"></span> Selected</span>
+                            <button x-on:click="clearSelection()" class="text-amber-400 hover:text-amber-600 transition-colors">
+                                <i class="ri-close-circle-fill"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="overflow-hidden rounded-2xl border border-slate-200/70">
-                        <div class="hidden md:block">
-                            <table class="min-w-full divide-y divide-slate-200 text-left text-[13px] text-slate-600">
-                                <thead class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                                    <tr>
-                                        <th class="w-12 px-5 py-2.5">
-                                            <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]" @change="toggleAll($event.target.checked)" :checked="allSelected">
-                                        </th>
-                                        <th class="px-5 py-2.5">Student</th>
-                                        <th class="px-5 py-2.5">Category</th>
-                                        <th class="px-5 py-2.5">Subject</th>
-                                        <th class="px-5 py-2.5">Status</th>
-                                        <th class="px-5 py-2.5">Submitted</th>
-                                        <th class="px-5 py-2.5 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-200 bg-white">
-                                    @forelse ($suggestions as $suggestion)
-                                        <tr>
-                                            <td class="px-5 py-3">
-                                                <input type="checkbox" name="ids[]" value="{{ $suggestion->id }}" class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]" @change="toggle({{ $suggestion->id }}, $event.target.checked)" :checked="selectedIds.includes({{ $suggestion->id }})">
-                                            </td>
-                                            <td class="px-5 py-3">
-                                                <div class="flex flex-col gap-0.5">
-                                                    <span class="text-[15px] font-semibold text-slate-900">{{ $suggestion->user?->fullname ?? $suggestion->user?->username ?? 'Unknown student' }}</span>
-                                                    <span class="text-[12px] text-slate-500">{{ $suggestion->user?->email }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-5 py-3 text-sm text-slate-500">{{ $categories[$suggestion->category] ?? Str::headline($suggestion->category) }}</td>
-                                            <td class="px-5 py-3 text-sm text-slate-600">
-                                                <div class="font-semibold text-slate-900">{{ $suggestion->subject }}</div>
-                                                <p class="mt-1 line-clamp-2 text-xs text-slate-500">{{ Str::limit(strip_tags($suggestion->message), 120) }}</p>
-                                            </td>
-                                            <td class="px-5 py-3">
-                                                @php
-                                                    $status = strtolower($suggestion->status ?? 'pending');
-                                                    $badgeMap = [
-                                                        'pending' => 'bg-amber-50 text-amber-700',
-                                                        'in_review' => 'bg-blue-50 text-blue-700',
-                                                        'resolved' => 'bg-emerald-50 text-emerald-700',
-                                                        'dismissed' => 'bg-rose-50 text-rose-600',
-                                                    ];
-                                                    $badgeClass = $badgeMap[$status] ?? 'bg-slate-100 text-slate-600';
-                                                @endphp
-                                                <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold {{ $badgeClass }}">
-                                                    <i class="ri-checkbox-circle-line text-sm"></i>
-                                                    {{ $statuses[$suggestion->status] ?? Str::headline($suggestion->status) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-5 py-3 text-[12px] text-slate-500">{{ $suggestion->created_at?->format('M j, Y · g:i A') ?? '—' }}</td>
-                                            <td class="px-5 py-3">
-                                                <div class="flex items-center justify-end">
-                                                    <a href="{{ route('admin.suggestions.show', $suggestion) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-[12px] font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                                        <i class="ri-eye-line text-sm"></i>
-                                                        View
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7" class="px-6 py-10 text-center text-sm text-slate-500">
-                                                <div class="flex flex-col items-center gap-3">
-                                                    <i class="ri-chat-off-line text-3xl text-slate-300"></i>
-                                                    <p class="font-semibold text-slate-600">No suggestions found</p>
-                                                    <p class="text-sm text-slate-500">Adjust filters or encourage students to share their thoughts.</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                    <form method="POST" action="{{ route('admin.suggestions.bulk') }}" x-ref="bulkForm" class="flex items-center gap-3">
+                        @csrf
+                        <input type="hidden" name="action" value="update_status">
+                        <input type="hidden" name="return_url" value="{{ request()->fullUrl() }}">
+                        <template x-for="id in selectedIds" :key="id">
+                            <input type="hidden" name="ids[]" :value="id">
+                        </template>
+
+                        <div x-show="selectedIds.length > 0" x-cloak class="flex items-center gap-3 animate-in slide-in-from-right-4">
+                            <select name="status" required class="h-10 rounded-xl border-none bg-amber-100/50 px-3 text-[10px] font-semibold uppercase tracking-widest text-amber-700 outline-none focus:ring-2 focus:ring-amber-500/20">
+                                <option value="">Bulk Status</option>
+                                @foreach ($statuses as $statVal => $statLabel)
+                                    <option value="{{ $statVal }}">{{ $statLabel }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="flex h-10 items-center gap-2 rounded-xl bg-amber-500 px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5">
+                                Apply
+                            </button>
                         </div>
 
-                        <div class="md:hidden">
-                            <div class="grid gap-4">
-                                @forelse ($suggestions as $suggestion)
-                                    <article class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
-                                        <header class="flex items-start justify-between gap-3">
-                                            <div>
-                                                <h2 class="text-base font-semibold text-slate-900">{{ $suggestion->subject }}</h2>
-                                                <p class="text-xs text-slate-500">{{ $suggestion->user?->fullname ?? $suggestion->user?->username ?? 'Unknown student' }}</p>
-                                            </div>
+                        <select name="per_page" x-on:change="window.location.href = updateQueryStringParameter(window.location.href, 'per_page', $el.value)" class="h-10 rounded-xl border-none bg-slate-100 px-3 text-[10px] font-semibold text-slate-600 outline-none">
+                            @foreach ($perPageOptions as $option)
+                                <option value="{{ $option }}" @if($option === $currentPerPage) selected @endif>{{ $option }} Rows</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+
+                <div class="grid gap-6">
+                    @forelse ($suggestions as $suggestion)
+                        <article class="group relative overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/60">
+                            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                                <div class="flex items-start gap-5 min-w-0">
+                                    <label class="mt-1 shrink-0 cursor-pointer">
+                                        <input type="checkbox" class="h-5 w-5 rounded-lg border-2 border-slate-200 text-[#16136a] transition-all focus:ring-[#16136a]/10" 
+                                            x-on:change="toggleId(@js($suggestion->id))" :checked="selectedIds.includes(@js($suggestion->id))">
+                                    </label>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-3 mb-2">
                                             @php
                                                 $status = strtolower($suggestion->status ?? 'pending');
-                                                $badgeMap = [
-                                                    'pending' => 'bg-amber-50 text-amber-700',
-                                                    'in_review' => 'bg-blue-50 text-blue-700',
-                                                    'resolved' => 'bg-emerald-50 text-emerald-700',
-                                                    'dismissed' => 'bg-rose-50 text-rose-600',
-                                                ];
-                                                $badgeClass = $badgeMap[$status] ?? 'bg-slate-100 text-slate-600';
+                                                $statusClass = match($status) {
+                                                    'pending' => 'bg-amber-100 text-amber-700',
+                                                    'in_review' => 'bg-blue-100 text-blue-700',
+                                                    'resolved' => 'bg-emerald-100 text-emerald-700',
+                                                    'dismissed' => 'bg-rose-100 text-rose-700',
+                                                    default => 'bg-slate-100 text-slate-500'
+                                                };
                                             @endphp
-                                            <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold {{ $badgeClass }}">
+                                            <span class="inline-flex items-center gap-1.5 rounded-full {{ $statusClass }} px-3 py-1 text-[9px] font-semibold uppercase tracking-widest">
                                                 {{ $statuses[$suggestion->status] ?? Str::headline($suggestion->status) }}
                                             </span>
-                                        </header>
-                                        <p class="mt-3 text-sm text-slate-600">{{ Str::limit(strip_tags($suggestion->message), 160) }}</p>
-                                        <dl class="mt-4 space-y-2 text-xs text-slate-500">
-                                            <div class="flex items-center justify-between">
-                                                <dt>Category</dt>
-                                                <dd>{{ $categories[$suggestion->category] ?? Str::headline($suggestion->category) }}</dd>
-                                            </div>
-                                            <div class="flex items-center justify-between">
-                                                <dt>Submitted</dt>
-                                                <dd>{{ $suggestion->created_at?->format('M j, Y · g:i A') ?? '—' }}</dd>
-                                            </div>
-                                        </dl>
-                                        <footer class="mt-4 flex items-center justify-between">
-                                            <input type="checkbox" name="ids[]" value="{{ $suggestion->id }}" class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]" @change="toggle({{ $suggestion->id }}, $event.target.checked)" :checked="selectedIds.includes({{ $suggestion->id }})">
-                                            <a href="{{ route('admin.suggestions.show', $suggestion) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                                <i class="ri-eye-line text-sm"></i>
-                                                View
-                                            </a>
-                                        </footer>
-                                    </article>
-                                @empty
-                                    <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
-                                        <i class="ri-chat-off-line text-3xl text-slate-300"></i>
-                                        <p class="mt-3 font-semibold text-slate-600">No suggestions available.</p>
-                                        <p class="text-sm text-slate-500">Try changing your filters.</p>
+                                            <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-widest">
+                                                {{ $categories[$suggestion->category] ?? Str::headline($suggestion->category) }}
+                                            </span>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-slate-900 group-hover:text-[#16136a] transition-colors line-clamp-1">{{ $suggestion->subject }}</h3>
+                                        <p class="mt-1 text-sm font-semibold text-slate-400 line-clamp-2 leading-relaxed">
+                                            {{ Str::limit(strip_tags($suggestion->message), 200) }}
+                                        </p>
                                     </div>
-                                @endforelse
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                                </div>
 
-                <div class="flex flex-col gap-3 border-t border-slate-200/70 pt-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-                    <p class="text-xs text-slate-500">Page {{ $suggestions->currentPage() }} of {{ $suggestions->lastPage() }}</p>
-                    <div class="flex justify-center sm:ml-auto sm:justify-end">
-                        {{ $suggestions->onEachSide(1)->links('vendor.pagination.data-limit') }}
-                    </div>
+                                <div class="flex flex-col lg:items-end gap-4 shrink-0 border-t lg:border-t-0 border-slate-50 pt-4 lg:pt-0">
+                                    <div class="flex items-center gap-3 lg:justify-end">
+                                        <div class="text-right">
+                                            <p class="text-xs font-semibold text-slate-900">{{ $suggestion->user?->fullname ?? $suggestion->user?->username ?? 'Anonymous Student' }}</p>
+                                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-tight">{{ $suggestion->created_at?->diffForHumans() }}</p>
+                                        </div>
+                                        <div class="h-10 w-10 flex items-center justify-center rounded-2xl bg-slate-100 text-slate-400 font-semibold text-xs">
+                                            {{ strtoupper(substr($suggestion->user?->fullname ?? 'S', 0, 1)) }}
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ route('admin.suggestions.show', $suggestion) }}" class="flex h-10 items-center gap-2 rounded-xl bg-slate-50 px-4 text-[10px] font-semibold uppercase tracking-widest text-slate-500 transition-all hover:bg-[#16136a] hover:text-white">
+                                            <i class="ri-eye-line text-lg"></i> Details
+                                        </a>
+                                        @if($suggestion->attachment_path)
+                                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-500" title="Has Attachment">
+                                                <i class="ri-attachment-2"></i>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @empty
+                        <div class="rounded-[2.5rem] border border-dashed border-slate-300 p-20 text-center">
+                            <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 text-slate-200">
+                                <i class="ri-chat-off-line text-5xl"></i>
+                            </div>
+                            <h3 class="mt-6 text-lg font-semibold text-slate-900">No Feedback Found</h3>
+                            <p class="mt-2 text-sm font-semibold text-slate-400">Student suggestions will appear here once they start sharing their thoughts.</p>
+                        </div>
+                    @endforelse
                 </div>
+
+                {{-- Pagination --}}
+                @if($suggestions->hasPages())
+                    <div class="mt-8 rounded-[2rem] bg-slate-50 p-4 text-center">
+                        {{ $suggestions->links() }}
+                    </div>
+                @endif
             </section>
-        </section>
+        </div>
     </div>
+
+    <script>
+        function bulkActions(allIds) {
+            return {
+                selectedIds: [],
+                toggleId(id) {
+                    const index = this.selectedIds.indexOf(id);
+                    if (index === -1) this.selectedIds.push(id);
+                    else this.selectedIds.splice(index, 1);
+                },
+                clearSelection() {
+                    this.selectedIds = [];
+                },
+                allSelected: false,
+                toggleAll(checked) {
+                    this.selectedIds = checked ? [...allIds] : [];
+                }
+            }
+        }
+
+        function updateQueryStringParameter(uri, key, value) {
+            var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+            var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+            if (uri.match(re)) {
+                return uri.replace(re, '$1' + key + "=" + value + '$2');
+            }
+            else {
+                return uri + separator + key + "=" + value;
+            }
+        }
+    </script>
 </x-layouts.admin>

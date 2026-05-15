@@ -1,331 +1,294 @@
-@php($title = 'Admin profile')
+@php($title = 'Account Settings')
 
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-6xl space-y-10 px-5 py-10 sm:px-6 lg:px-8">
-        <header class="space-y-4 rounded-[28px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#1f2a8a] to-[#16136a] p-8 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.45)]">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div class="space-y-2">
-                    <p class="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-100/90">
-                        <i class="ri-user-settings-line text-base" aria-hidden="true"></i>
-                        Admin profile
-                    </p>
-                    <h1 class="text-3xl font-semibold md:text-4xl">Manage your administrator workspace</h1>
-                    <p class="max-w-2xl text-sm text-slate-100/85">Update personal details, invite additional administrators, and capture point-in-time system insights for audits.</p>
+    <div x-data="{ 
+        activeTab: 'profile',
+        loading: true 
+    }" x-init="setTimeout(() => { loading = false }, 600)" class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        
+        {{-- Loading Skeleton --}}
+        <div x-show="loading" class="space-y-10 animate-pulse">
+            <div class="h-48 w-full rounded-[2.5rem] bg-slate-100"></div>
+            <div class="grid gap-8 lg:grid-cols-4">
+                <div class="space-y-4">
+                    <div class="h-12 rounded-2xl bg-slate-100"></div>
+                    <div class="h-12 rounded-2xl bg-slate-50"></div>
+                    <div class="h-12 rounded-2xl bg-slate-50"></div>
                 </div>
-                <div class="rounded-3xl border border-white/20 bg-white/10 px-6 py-4 text-sm text-slate-100/85 shadow-inner">
-                    <p class="font-semibold uppercase tracking-[0.25em] text-slate-100/90">Signed in as</p>
-                    <p class="mt-2 text-base font-semibold">{{ $admin->fullname ?? $admin->username }}</p>
-                    <p class="text-xs text-slate-100/80">{{ $admin->email }}</p>
-                </div>
+                <div class="lg:col-span-3 h-96 rounded-[2.5rem] bg-slate-50"></div>
             </div>
-        </header>
+        </div>
 
-        @if (session('status'))
-            <div class="flex items-start gap-3 rounded-3xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-800 shadow-sm">
-                <span class="mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#16136a]">
-                    <i class="ri-check-double-line text-lg" aria-hidden="true"></i>
-                </span>
-                <span>{{ session('status') }}</span>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-sm">
-                <p class="flex items-center gap-2 font-semibold uppercase tracking-[0.2em]">
-                    <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white text-rose-500">
-                        <i class="ri-error-warning-line text-base" aria-hidden="true"></i>
-                    </span>
-                    Please review the highlighted fields:
-                </p>
-                <ul class="mt-2 space-y-1 list-inside list-disc">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <section class="grid gap-6 lg:grid-cols-2">
-            <article class="rounded-[28px] border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <header class="space-y-2">
-                    <h2 class="flex items-center gap-3 text-xl font-semibold text-[#16136a]">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
-                            <i class="ri-user-settings-line text-lg" aria-hidden="true"></i>
+        <div x-show="!loading" x-cloak class="space-y-10">
+            {{-- Premium Header --}}
+            <header class="relative overflow-hidden rounded-[2.5rem] bg-[#16136a] p-8 text-white shadow-2xl shadow-[#16136a]/20 sm:p-12">
+                <div class="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="space-y-4">
+                        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/70">
+                            <i class="ri-settings-3-line"></i> Control Center
                         </span>
-                        <span>Profile settings</span>
-                    </h2>
-                    <p class="text-sm text-slate-500">Refresh your contact details and update your password to keep your account secure.</p>
-                </header>
-
-                <form method="POST" action="{{ route('admin.profile.update') }}" class="mt-6 space-y-5">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex flex-col gap-2">
-                            <label for="fullname" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Full name</label>
-                            <input id="fullname" name="fullname" type="text" value="{{ old('fullname', $admin->fullname) }}" autocomplete="name" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+                        <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">Account Settings</h1>
+                        <p class="max-w-xl text-sm font-semibold text-white/50 leading-relaxed">
+                            Configure your administrative profile, provision workspace access, and manage critical system snapshots.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-md">
+                        <div class="flex h-16 w-16 items-center justify-center rounded-3xl bg-white/10 text-2xl font-semibold">
+                            {{ substr($admin->fullname ?? $admin->username, 0, 1) }}
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="username" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Username</label>
-                            <input id="username" name="username" type="text" value="{{ old('username', $admin->username) }}" required autocomplete="username" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+                        <div>
+                            <p class="text-[10px] font-semibold uppercase tracking-widest text-white/40">Logged in as</p>
+                            <p class="text-lg font-semibold">{{ $admin->fullname ?? $admin->username }}</p>
+                            <p class="text-xs font-semibold text-white/40">{{ $admin->email }}</p>
                         </div>
                     </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex flex-col gap-2">
-                            <label for="email" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Email address</label>
-                            <input id="email" name="email" type="email" value="{{ old('email', $admin->email) }}" required autocomplete="email" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="phone_number" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Phone number</label>
-                            <input id="phone_number" name="phone_number" type="text" value="{{ old('phone_number', $admin->phone_number) }}" autocomplete="tel" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex flex-col gap-2">
-                            <label for="password" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">New password</label>
-                            <input id="password" name="password" type="password" autocomplete="new-password" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <p class="text-xs text-slate-400">Leave blank to keep your current password.</p>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="password_confirmation" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Confirm password</label>
-                            <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                    </div>
-
-                    <div class="flex justify-end">
-                        <button type="submit" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/25 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                            <i class="ri-save-3-line text-base"></i>
-                            Save changes
-                        </button>
-                    </div>
-                </form>
-            </article>
-
-            <article class="rounded-[28px] border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <header class="space-y-2">
-                    <h2 class="flex items-center gap-3 text-xl font-semibold text-[#16136a]">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
-                            <i class="ri-user-add-line text-lg" aria-hidden="true"></i>
-                        </span>
-                        <span>Invite administrator</span>
-                    </h2>
-                    <p class="text-sm text-slate-500">Provision a new admin account with immediate console access.</p>
-                </header>
-
-                <form method="POST" action="{{ route('admin.profile.admins.store') }}" class="mt-6 space-y-5">
-                    @csrf
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_fullname" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Full name</label>
-                            <input id="invite_fullname" name="fullname" type="text" value="{{ old('fullname') }}" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_username" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Username</label>
-                            <input id="invite_username" name="username" type="text" value="{{ old('username') }}" required class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_email" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Email address</label>
-                            <input id="invite_email" name="email" type="email" value="{{ old('email') }}" required class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_phone" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Phone number</label>
-                            <input id="invite_phone" name="phone_number" type="text" value="{{ old('phone_number') }}" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_admin_role" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Position</label>
-                            <select id="invite_admin_role" name="admin_role" required class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="" disabled {{ old('admin_role') ? '' : 'selected' }}>Select position</option>
-                                <option value="president" @selected(old('admin_role') === 'president')>President</option>
-                                <option value="financial_secretary" @selected(old('admin_role') === 'financial_secretary')>Financial Secretary</option>
-                                <option value="general_secretary" @selected(old('admin_role') === 'general_secretary')>General Secretary</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_password" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Temporary password</label>
-                            <input id="invite_password" name="password" type="password" required class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label for="invite_password_confirmation" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Confirm password</label>
-                            <input id="invite_password_confirmation" name="password_confirmation" type="password" required class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        </div>
-                    </div>
-
-                    <div class="flex justify-end">
-                        <button type="submit" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/25 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                            <i class="ri-user-add-line text-base"></i>
-                            Add administrator
-                        </button>
-                    </div>
-                </form>
-
-                @if ($others->isNotEmpty())
-                    <section class="mt-8 space-y-3">
-                        <header class="flex items-center justify-between">
-                            <h3 class="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#16136a]/10 text-[#16136a]">
-                                    <i class="ri-team-line text-sm" aria-hidden="true"></i>
-                                </span>
-                                Existing admins
-                            </h3>
-                            <span class="rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold text-[#16136a]">{{ $others->count() }}</span>
-                        </header>
-                        <ul class="space-y-3 text-sm text-slate-600">
-                            @foreach ($others as $other)
-                                <li class="rounded-2xl border border-slate-200/70 bg-slate-50/70 px-4 py-3">
-                                    <div class="flex items-center justify-between gap-3">
-                                        <div>
-                                            <p class="font-semibold text-slate-800">{{ $other->fullname ?? $other->username }}</p>
-                                            <p class="text-xs text-slate-500">{{ $other->email }}</p>
-                                        </div>
-                                        <p class="text-xs text-slate-400">Joined {{ optional($other->created_at)->diffForHumans() }}</p>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </section>
-                @endif
-            </article>
-        </section>
-
-        <section class="rounded-[28px] border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h2 class="flex items-center gap-3 text-xl font-semibold text-[#16136a]">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
-                            <i class="ri-database-2-line text-lg" aria-hidden="true"></i>
-                        </span>
-                        <span>System snapshots</span>
-                    </h2>
-                    <p class="text-sm text-slate-500">Capture configuration or database fingerprints to support backups and audits.</p>
                 </div>
-            </div>
+                <i class="ri-shield-user-line absolute -right-20 -bottom-20 text-[20rem] text-white/5 rotate-12"></i>
+            </header>
 
-            <form method="POST" action="{{ route('admin.profile.snapshots.store') }}" class="mt-6 grid gap-4 md:grid-cols-[1fr_200px_160px]">
-                @csrf
-
-                <div class="flex flex-col gap-2">
-                    <label for="snapshot_notes" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Snapshot notes</label>
-                    <input id="snapshot_notes" name="notes" type="text" value="{{ old('notes') }}" placeholder="Optional context (e.g. before deployment)" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+            @if (session('status'))
+                <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm animate-fade-in">
+                    <div class="flex items-center gap-3">
+                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <p>{{ session('status') }}</p>
+                    </div>
                 </div>
+            @endif
 
-                <div class="flex flex-col gap-2">
-                    <label for="snapshot_type" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Snapshot type</label>
-                    <select id="snapshot_type" name="type" class="h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                        <option value="system" @selected(old('type') === 'system')>System overview</option>
-                        <option value="database" @selected(old('type') === 'database')>Database structure</option>
-                    </select>
-                </div>
-
-                <div class="flex items-end justify-end">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-2xl bg-[#16136a] px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/25 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                        <i class="ri-database-2-line text-base"></i>
-                        Generate
+            <div class="grid gap-10 lg:grid-cols-4">
+                {{-- Sidebar Navigation --}}
+                <aside class="space-y-2">
+                    <button @click="activeTab = 'profile'" :class="activeTab === 'profile' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
+                        class="flex w-full items-center gap-4 rounded-2xl px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all">
+                        <i class="ri-user-settings-line text-lg"></i>
+                        My Profile
                     </button>
-                </div>
-            </form>
+                    <button @click="activeTab = 'invites'" :class="activeTab === 'invites' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
+                        class="flex w-full items-center gap-4 rounded-2xl px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all">
+                        <i class="ri-user-add-line text-lg"></i>
+                        Team Access
+                    </button>
+                    <button @click="activeTab = 'snapshots'" :class="activeTab === 'snapshots' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
+                        class="flex w-full items-center gap-4 rounded-2xl px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all">
+                        <i class="ri-database-2-line text-lg"></i>
+                        System Snapshots
+                    </button>
+                </aside>
 
-            <div class="mt-8 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-5">
-                <header class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <p class="text-sm font-semibold text-slate-700">Recent snapshots</p>
-                        <p class="text-xs text-slate-500">Stored locally under <code class="font-mono text-slate-600">storage/app/snapshots</code>.</p>
-                    </div>
-                </header>
+                {{-- Tab Content --}}
+                <main class="lg:col-span-3">
+                    {{-- Profile Section --}}
+                    <div x-show="activeTab === 'profile'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-8">
+                        <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40 lg:p-12">
+                            <h2 class="text-xl font-semibold text-[#16136a]">Profile Configuration</h2>
+                            <p class="mt-2 text-sm font-semibold text-slate-400 italic">Update your administrative credentials and security</p>
 
-                @if (empty($snapshots))
-                    <p class="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white/70 px-4 py-6 text-center text-sm text-slate-500">No snapshots captured yet. Use the form above to generate your first snapshot.</p>
-                @else
-                    <div class="mt-4 overflow-x-auto">
-                        <table class="min-w-full divide-y divide-slate-200 text-sm text-slate-600">
-                            <thead class="bg-white/70 text-xs uppercase tracking-[0.2em] text-slate-400">
-                                <tr>
-                                    <th scope="col" class="px-4 py-3 text-left">
-                                        <span class="inline-flex items-center gap-2">
-                                            <i class="ri-file-text-line text-base" aria-hidden="true"></i>
-                                            File
-                                        </span>
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-left">
-                                        <span class="inline-flex items-center gap-2">
-                                            <i class="ri-price-tag-3-line text-base" aria-hidden="true"></i>
-                                            Type
-                                        </span>
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-left">
-                                        <span class="inline-flex items-center gap-2">
-                                            <i class="ri-time-line text-base" aria-hidden="true"></i>
-                                            Generated
-                                        </span>
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-left">
-                                        <span class="inline-flex items-center gap-2">
-                                            <i class="ri-sticky-note-line text-base" aria-hidden="true"></i>
-                                            Notes
-                                        </span>
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-left">
-                                        <span class="inline-flex items-center gap-2">
-                                            <i class="ri-hard-drive-3-line text-base" aria-hidden="true"></i>
-                                            Size
-                                        </span>
-                                    </th>
-                                    <th scope="col" class="px-4 py-3 text-right">
-                                        <span class="inline-flex items-center gap-2 justify-end">
-                                            <i class="ri-settings-4-line text-base" aria-hidden="true"></i>
-                                            Actions
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200/70 bg-white/70">
-                                @foreach ($snapshots as $snapshot)
-                                    <tr class="hover:bg-emerald-50/40">
-                                        @php($type = $snapshot['content']['type'] ?? 'system')
-                                        @php($isDatabase = $type === 'database')
-                                        @php($tables = $snapshot['content']['snapshot']['tables'] ?? [])
-                                        @php($tableCount = is_array($tables) ? count($tables) : 0)
-                                        @php($extension = strtoupper(pathinfo($snapshot['filename'], PATHINFO_EXTENSION)))
-                                        @php($bytes = $snapshot['size'] ?? 0)
-                                        @php($sizeLabel = $bytes >= 1048576 ? number_format($bytes / 1048576, 2) . ' MB' : number_format($bytes / 1024, 2) . ' KB')
-                                        <td class="px-4 py-3 font-medium text-slate-800">{{ $snapshot['filename'] }}</td>
-                                        <td class="px-4 py-3">
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a]">
-                                                <i class="{{ $isDatabase ? 'ri-database-line' : 'ri-shield-check-line' }} text-base"></i>
-                                                {{ $isDatabase ? 'Database (SQL)' : 'System (JSON)' }}
-                                            </span>
-                                            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">{{ $extension }}</p>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-slate-500">{{ optional($snapshot['last_modified'])->diffForHumans() }}</td>
-                                        <td class="px-4 py-3 text-sm text-slate-500">
-                                            <p>{{ $snapshot['content']['notes'] ?? ($isDatabase ? 'Full database export' : 'System overview') }}</p>
-                                            @if ($isDatabase)
-                                                <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">{{ $tableCount }} tables</p>
-                                            @endif
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-slate-500">{{ $sizeLabel }}</td>
-                                        <td class="px-4 py-3 text-right">
-                                            <a href="{{ route('admin.profile.snapshots.download', base64_encode($snapshot['path'])) }}" class="inline-flex items-center gap-2 rounded-full border border-[#16136a]/20 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a] transition hover:-translate-y-0.5 hover:bg-white/90" download>
-                                                <i class="ri-download-2-line text-base"></i>
-                                                Download {{ $extension }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                            <form method="POST" action="{{ route('admin.profile.update') }}" class="mt-10 space-y-8">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="grid gap-6 sm:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
+                                        <input type="text" name="fullname" value="{{ old('fullname', $admin->fullname) }}" 
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Username</label>
+                                        <input type="text" name="username" value="{{ old('username', $admin->username) }}" 
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                </div>
+
+                                <div class="grid gap-6 sm:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
+                                        <input type="email" name="email" value="{{ old('email', $admin->email) }}" 
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
+                                        <input type="text" name="phone_number" value="{{ old('phone_number', $admin->phone_number) }}" 
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                </div>
+
+                                <div class="rounded-3xl bg-slate-50/50 p-8 border border-slate-100">
+                                    <h3 class="text-sm font-semibold text-[#16136a] uppercase tracking-widest">Update Password</h3>
+                                    <p class="mt-1 text-[11px] font-semibold text-slate-400">Leave blank to maintain current credentials</p>
+                                    
+                                    <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">New Password</label>
+                                            <input type="password" name="password" 
+                                                class="h-12 w-full rounded-2xl border-none bg-white px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:ring-[#16136a]/10">
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Confirm Password</label>
+                                            <input type="password" name="password_confirmation" 
+                                                class="h-12 w-full rounded-2xl border-none bg-white px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:ring-[#16136a]/10">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <button type="submit" class="flex h-14 items-center gap-3 rounded-2xl bg-[#16136a] px-10 text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                                        <i class="ri-save-3-line text-lg"></i> Update Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
                     </div>
-                @endif
+
+                    {{-- Invites Section --}}
+                    <div x-show="activeTab === 'invites'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-8">
+                        <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40 lg:p-12">
+                            <h2 class="text-xl font-semibold text-[#16136a]">Team Management</h2>
+                            <p class="mt-2 text-sm font-semibold text-slate-400 italic">Provision new administrator accounts for the GESA portal</p>
+
+                            <form method="POST" action="{{ route('admin.profile.admins.store') }}" class="mt-10 space-y-8">
+                                @csrf
+                                <div class="grid gap-6 sm:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
+                                        <input type="text" name="fullname" value="{{ old('fullname') }}" required
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Username</label>
+                                        <input type="text" name="username" value="{{ old('username') }}" required
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                </div>
+
+                                <div class="grid gap-6 sm:grid-cols-3">
+                                    <div class="space-y-2 lg:col-span-1">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
+                                        <input type="email" name="email" value="{{ old('email') }}" required
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
+                                        <input type="text" name="phone_number" value="{{ old('phone_number') }}" 
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Workspace Position</label>
+                                        <select name="admin_role" required class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                            <option value="" disabled selected>Select position</option>
+                                            <option value="president">President</option>
+                                            <option value="financial_secretary">Financial Secretary</option>
+                                            <option value="general_secretary">General Secretary</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid gap-6 sm:grid-cols-2">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Temporary Password</label>
+                                        <input type="password" name="password" required
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Confirm Password</label>
+                                        <input type="password" name="password_confirmation" required
+                                            class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end pt-4">
+                                    <button type="submit" class="flex h-14 items-center gap-3 rounded-2xl bg-[#16136a] px-10 text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                                        <i class="ri-user-add-line text-lg"></i> Provision Account
+                                    </button>
+                                </div>
+                            </form>
+
+                            {{-- Active Admins List --}}
+                            @if ($others->isNotEmpty())
+                                <div class="mt-16 space-y-6">
+                                    <h3 class="text-xs font-semibold uppercase tracking-[0.3em] text-[#16136a]">Active Workspace Team</h3>
+                                    <div class="grid gap-4 sm:grid-cols-2">
+                                        @foreach ($others as $other)
+                                            <div class="flex items-center gap-4 rounded-3xl border border-slate-100 bg-slate-50/50 p-4 transition-all hover:bg-white hover:shadow-xl hover:shadow-slate-200/50">
+                                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white font-semibold text-[#16136a] shadow-sm">
+                                                    {{ substr($other->fullname ?? $other->username, 0, 1) }}
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <p class="truncate text-sm font-semibold text-slate-900">{{ $other->fullname ?? $other->username }}</p>
+                                                    <p class="truncate text-[10px] font-semibold text-slate-400 uppercase tracking-tight">{{ $other->email }}</p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </section>
+                    </div>
+
+                    {{-- Snapshots Section --}}
+                    <div x-show="activeTab === 'snapshots'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-8">
+                        <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40 lg:p-12">
+                            <h2 class="text-xl font-semibold text-[#16136a]">System Snapshots</h2>
+                            <p class="mt-2 text-sm font-semibold text-slate-400 italic">Generate or download point-in-time workspace backups</p>
+
+                            <form method="POST" action="{{ route('admin.profile.snapshots.store') }}" class="mt-10 grid gap-6 lg:grid-cols-3 lg:items-end">
+                                @csrf
+                                <div class="space-y-2 lg:col-span-1">
+                                    <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Snapshot Context</label>
+                                    <input type="text" name="notes" placeholder="e.g. Pre-deployment backup" 
+                                        class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Capture Type</label>
+                                    <select name="type" class="h-12 w-full rounded-2xl border-none bg-slate-50 px-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                        <option value="system">System Overview (JSON)</option>
+                                        <option value="database">Database Structure (SQL)</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                                    <i class="ri-refresh-line"></i> Generate Snapshot
+                                </button>
+                            </form>
+
+                            <div class="mt-16 overflow-hidden rounded-[2rem] border border-slate-100 bg-slate-50/30">
+                                <table class="w-full text-left">
+                                    <thead>
+                                        <tr class="bg-slate-50/50">
+                                            <th class="px-6 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Fingerprint</th>
+                                            <th class="px-6 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Timestamp</th>
+                                            <th class="px-6 py-4 text-right text-[10px] font-semibold uppercase tracking-widest text-slate-400">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100">
+                                        @forelse ($snapshots as $snap)
+                                            <tr class="transition-colors hover:bg-white">
+                                                <td class="px-6 py-5">
+                                                    <p class="text-sm font-semibold text-slate-800">{{ $snap['filename'] }}</p>
+                                                    <p class="text-[10px] font-semibold text-slate-400 uppercase">{{ $snap['content']['notes'] ?? 'System Backup' }}</p>
+                                                </td>
+                                                <td class="px-6 py-5">
+                                                    <p class="text-xs font-semibold text-slate-600">{{ $snap['last_modified']?->format('M j, Y · g:i A') }}</p>
+                                                    <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-tighter">{{ $snap['last_modified']?->diffForHumans() }}</p>
+                                                </td>
+                                                <td class="px-6 py-5 text-right">
+                                                    <a href="{{ route('admin.profile.snapshots.download', base64_encode($snap['path'])) }}" 
+                                                        class="inline-flex h-10 items-center gap-2 rounded-xl bg-white px-4 text-[9px] font-semibold uppercase tracking-widest text-[#16136a] shadow-sm ring-1 ring-slate-200 transition-all hover:bg-[#16136a] hover:text-white hover:ring-transparent">
+                                                        <i class="ri-download-2-line"></i> Download
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="px-6 py-10 text-center italic text-slate-400 text-xs">No system fingerprints found</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </main>
             </div>
-        </section>
+        </div>
     </div>
 </x-layouts.admin>

@@ -1,86 +1,106 @@
-@props(['navItems'])
-
-{{-- 
-    Live Polling Sidebar Navigation
-    Badges for Verifications, Dues, and Pending Registrations are updated in real-time via AJAX polling.
-    The polling pauses when admin is actively interacting (modal open, form focused).
---}}
+@props(['navGroups'])
 
 <nav 
-    x-data="liveNavBadges()"
+    x-data="{ 
+        ...liveNavBadges(), 
+        openGroups: {
+            @foreach($navGroups as $groupLabel => $items)
+                '{{ $groupLabel }}': {{ collect($items)->contains('active', true) ? 'true' : 'false' }},
+            @endforeach
+        },
+        toggleGroup(label) {
+            this.openGroups[label] = !this.openGroups[label];
+        }
+    }"
     x-init="startPolling()"
-    {{ $attributes->class(['flex flex-col gap-1']) }}
+    {{ $attributes->class(['flex flex-col space-y-4']) }}
 >
-    @foreach ($navItems as $index => $item)
-        @php
-            $isVerificationsLink = str_contains($item['href'], 'verifications');
-            $isDuesLink = str_contains($item['href'], 'dues') && !$isVerificationsLink;
-            $isPendingRegistrationsLink = str_contains($item['href'], 'pending-registrations');
-        @endphp
-        <a 
-            href="{{ $item['href'] }}" 
-            @class([
-                'flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold transition relative',
-                'bg-[#16136a] text-white shadow-lg shadow-[#16136a]/20' => $item['active'],
-                'text-slate-600 hover:bg-[#16136a]/5 hover:text-[#16136a]' => ! $item['active'],
-            ])
-        >
-            <span @class([
-                'flex h-9 w-9 items-center justify-center rounded-xl border transition',
-                'border-white/50 bg-white/10 text-white' => $item['active'],
-                'border-[#16136a]/15 bg-white text-[#16136a]/70 hover:border-[#16136a]/40' => ! $item['active'],
-            ])>
-                <i class="{{ $item['icon'] }} text-lg" aria-hidden="true"></i>
-            </span>
-            <span class="flex-1">{{ $item['label'] }}</span>
+    @foreach ($navGroups as $groupLabel => $items)
+        <div class="space-y-1">
+            <button 
+                @click="toggleGroup('{{ $groupLabel }}')"
+                class="flex w-full items-center justify-between px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.25em] text-slate-400 transition-colors hover:text-[#16136a]"
+            >
+                <div class="flex items-center gap-2">
+                    <span>{{ $groupLabel }}</span>
+                    <span class="h-px w-8 bg-slate-100"></span>
+                </div>
+                <i 
+                    class="ri-arrow-down-s-line text-xs transition-transform duration-300"
+                    :class="{ 'rotate-180': openGroups['{{ $groupLabel }}'] }"
+                ></i>
+            </button>
             
-            {{-- Dynamic badge for Pending Registrations --}}
-            @if ($isPendingRegistrationsLink)
-                <template x-if="pendingRegistrationsCount > 0">
-                    <span 
-                        x-text="pendingRegistrationsCount > 99 ? '99+' : pendingRegistrationsCount"
-                        :class="{
-                            'bg-white/20 text-white': {{ $item['active'] ? 'true' : 'false' }},
-                            'bg-red-500 text-white animate-pulse': {{ $item['active'] ? 'false' : 'true' }}
-                        }"
-                        class="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold transition-all"
-                    ></span>
-                </template>
-            {{-- Dynamic badge for Verifications --}}
-            @elseif ($isVerificationsLink)
-                <template x-if="pendingCount > 0">
-                    <span 
-                        x-text="pendingCount > 99 ? '99+' : pendingCount"
-                        :class="{
-                            'bg-white/20 text-white': {{ $item['active'] ? 'true' : 'false' }},
-                            'bg-red-500 text-white animate-pulse': {{ $item['active'] ? 'false' : 'true' }}
-                        }"
-                        class="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold transition-all"
-                    ></span>
-                </template>
-            {{-- Dynamic badge for Dues (same count as verifications) --}}
-            @elseif ($isDuesLink)
-                <template x-if="pendingCount > 0">
-                    <span 
-                        x-text="pendingCount > 99 ? '99+' : pendingCount"
-                        :class="{
-                            'bg-white/20 text-white': {{ $item['active'] ? 'true' : 'false' }},
-                            'bg-amber-500 text-white': {{ $item['active'] ? 'false' : 'true' }}
-                        }"
-                        class="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold transition-all"
-                    ></span>
-                </template>
-            {{-- Static badges for other nav items (fallback) --}}
-            @elseif (!empty($item['badge']) && $item['badge'] > 0)
-                <span @class([
-                    'flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold',
-                    'bg-white/20 text-white' => $item['active'],
-                    'bg-red-500 text-white' => ! $item['active'],
-                ])>
-                    {{ $item['badge'] > 99 ? '99+' : $item['badge'] }}
-                </span>
-            @endif
-        </a>
+            <div 
+                x-show="openGroups['{{ $groupLabel }}']"
+                x-collapse
+                class="space-y-1"
+            >
+                @foreach ($items as $item)
+                    @php
+                        $isActive = $item['active'];
+                    @endphp
+                    <a 
+                        href="{{ $item['href'] }}" 
+                        @class([
+                            'group relative flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition-all duration-200',
+                            'bg-[#16136a] text-white shadow-md shadow-[#16136a]/10' => $isActive,
+                            'text-slate-500 hover:bg-slate-50 hover:text-[#16136a]' => !$isActive,
+                        ])
+                    >
+                        @if($isActive)
+                            <div class="absolute inset-y-2 left-0 w-1 rounded-r-full bg-white/40"></div>
+                        @endif
+
+                        <span @class([
+                            'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-all duration-200',
+                            'bg-white/10 text-white' => $isActive,
+                            'bg-slate-50 text-slate-400 border border-slate-200/50 group-hover:bg-slate-200 group-hover:text-[#16136a]' => !$isActive,
+                        ])>
+                            <i class="{{ $item['icon'] }} text-sm"></i>
+                        </span>
+                        
+                        <span class="flex-1 tracking-tight">{{ $item['label'] }}</span>
+                        
+                        {{-- Live Badges --}}
+                        @if ($item['is_pending_registrations'])
+                            <template x-if="pendingRegistrationsCount > 0">
+                                <span 
+                                    x-text="pendingRegistrationsCount > 99 ? '99+' : pendingRegistrationsCount"
+                                    :class="{
+                                        'bg-white/20 text-white': {{ $isActive ? 'true' : 'false' }},
+                                        'bg-red-500 text-white shadow-sm': {{ $isActive ? 'false' : 'true' }}
+                                    }"
+                                    class="flex h-5 min-w-5 items-center justify-center rounded-lg px-1.5 text-[9px] font-semibold tabular-nums transition-all"
+                                ></span>
+                            </template>
+                        @elseif ($item['is_verifications'])
+                            <template x-if="pendingCount > 0">
+                                <span 
+                                    x-text="pendingCount > 99 ? '99+' : pendingCount"
+                                    :class="{
+                                        'bg-white/20 text-white': {{ $isActive ? 'true' : 'false' }},
+                                        'bg-emerald-500 text-white shadow-sm': {{ $isActive ? 'false' : 'true' }}
+                                    }"
+                                    class="flex h-5 min-w-5 items-center justify-center rounded-lg px-1.5 text-[9px] font-semibold tabular-nums transition-all"
+                                ></span>
+                            </template>
+                        @elseif ($item['is_dues'])
+                            <template x-if="pendingCount > 0">
+                                <span 
+                                    x-text="pendingCount > 99 ? '99+' : pendingCount"
+                                    :class="{
+                                        'bg-white/20 text-white': {{ $isActive ? 'true' : 'false' }},
+                                        'bg-amber-500 text-white shadow-sm': {{ $isActive ? 'false' : 'true' }}
+                                    }"
+                                    class="flex h-5 min-w-5 items-center justify-center rounded-lg px-1.5 text-[9px] font-semibold tabular-nums transition-all"
+                                ></span>
+                            </template>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        </div>
     @endforeach
 </nav>
 

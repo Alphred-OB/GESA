@@ -48,13 +48,13 @@
             <!-- Icon Section -->
             <div class="mb-10 relative animate-fade-slide-delay-200">
                 <div class="float-animation inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-[#16136a] to-blue-600 shadow-xl shadow-blue-900/40 border border-white/10">
-                    <span class="text-4xl font-black italic">404</span>
+                    <span class="text-4xl font-semibold italic">404</span>
                 </div>
                 <!-- Shimmer effect -->
                 <div class="absolute inset-0 bg-white/5 blur-3xl rounded-full scale-150 -z-10 animate-pulse"></div>
             </div>
 
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight animate-fade-slide-delay-400">Lost in Space?</h1>
+            <h1 class="text-4xl md:text-5xl font-semibold mb-6 tracking-tight animate-fade-slide-delay-400">Lost in Space?</h1>
             
             <p class="text-slate-400 text-lg mb-10 leading-relaxed font-medium animate-fade-slide-delay-600">
                 The page you are looking for doesn't exist or has been moved to another coordinate.
@@ -63,7 +63,7 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-slide-delay-600">
                 <a 
                     href="{{ url('/') }}" 
-                    class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#16136a] px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
+                    class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#16136a] px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
                 >
                     <i class="ri-home-4-line text-lg transition-transform duration-500"></i>
                     Back Home
@@ -71,7 +71,7 @@
 
                 <button 
                     onclick="window.history.back()" 
-                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16136a]/40 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:bg-[#16136a]/60 hover:scale-105 active:scale-95"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16136a]/40 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:bg-[#16136a]/60 hover:scale-105 active:scale-95"
                 >
                     <i class="ri-arrow-left-line text-lg"></i>
                     Go Back

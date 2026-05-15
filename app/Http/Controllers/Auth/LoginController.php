@@ -33,27 +33,22 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request): RedirectResponse
     {
+        $request->authenticate();
+
         $identifier = $request->input('identifier');
         $password = $request->input('password');
         $remember = $request->boolean('remember');
-        $guards = ['admin', 'student'];
 
-        $userFound = false;
         $emailVerificationEnabled = config('app.email_verification_enabled', false);
 
         // Find user by email, username, or index_number
         $user = $this->findUserByIdentifier($identifier);
 
-        if ($user) {
-            $userFound = true;
-            $guard = $user->role === 'admin' ? 'admin' : 'student';
+        if ($user && \Illuminate\Support\Facades\Hash::check($password, $user->password)) {
+            // Clear rate limiter on success
+            \Illuminate\Support\Facades\RateLimiter::clear($request->throttleKey());
 
-            // Validate password
-            if (!\Illuminate\Support\Facades\Hash::check($password, $user->password)) {
-                return back()
-                    ->withErrors(['identifier' => __('The password you entered is incorrect.')])
-                    ->onlyInput('identifier');
-            }
+            $guard = $user->role === 'admin' ? 'admin' : 'student';
 
             // Check email verification (only if enabled in env)
             if ($emailVerificationEnabled && is_null($user->email_verified_at)) {
@@ -77,10 +72,13 @@ class LoginController extends Controller
             return redirect()->intended(route($dashboard));
         }
 
-        // User not found - show appropriate error message
+        // Increment rate limiter on failure
+        \Illuminate\Support\Facades\RateLimiter::hit($request->throttleKey());
+
+        // Generic error message for both "user not found" and "wrong password"
         return back()
             ->withErrors([
-                'identifier' => __('We could not find an account with that email, username, or reference number.'),
+                'identifier' => __('Invalid credentials. Please check your details and try again.'),
             ])
             ->onlyInput('identifier');
     }

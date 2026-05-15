@@ -7,7 +7,7 @@
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Pending Registrations</h1>
+            <h1 class="text-3xl font-semibold text-slate-900">Pending Registrations</h1>
             <p class="mt-2 text-sm text-slate-600">Review and approve student registration requests</p>
         </div>
     </div>
@@ -18,7 +18,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-yellow-100">Pending Review</p>
-                    <p class="mt-2 text-4xl font-bold">{{ $registrations->where('status', 'pending')->count() }}</p>
+                    <p class="mt-2 text-4xl font-semibold">{{ $registrations->where('status', 'pending')->count() }}</p>
                 </div>
                 <div class="rounded-full bg-white/20 p-4">
                     <i class="ri-time-line text-3xl"></i>
@@ -30,7 +30,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-green-100">Approved</p>
-                    <p class="mt-2 text-4xl font-bold">{{ $registrations->where('status', 'approved')->count() }}</p>
+                    <p class="mt-2 text-4xl font-semibold">{{ $registrations->where('status', 'approved')->count() }}</p>
                 </div>
                 <div class="rounded-full bg-white/20 p-4">
                     <i class="ri-checkbox-circle-line text-3xl"></i>
@@ -42,7 +42,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-red-100">Rejected</p>
-                    <p class="mt-2 text-4xl font-bold">{{ $registrations->where('status', 'rejected')->count() }}</p>
+                    <p class="mt-2 text-4xl font-semibold">{{ $registrations->where('status', 'rejected')->count() }}</p>
                 </div>
                 <div class="rounded-full bg-white/20 p-4">
                     <i class="ri-close-circle-line text-3xl"></i>

@@ -11,7 +11,7 @@
                 <i class="ri-arrow-left-line text-xl"></i>
             </a>
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Review Registration</h1>
+                <h1 class="text-3xl font-semibold text-slate-900">Review Registration</h1>
                 <p class="mt-1 text-sm text-slate-600">{{ $registration->first_name }} {{ $registration->last_name }}</p>
             </div>
         </div>

@@ -23,12 +23,12 @@
         <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <form action="{{ route('admin.dues.maintenance.registry') }}" method="GET" class="grid gap-4 md:grid-cols-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Search Student</label>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Search Student</label>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Name, ID..." 
                         class="w-full rounded-xl border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Class</label>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Class</label>
                     <select name="class" class="w-full rounded-xl border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">All Classes</option>
                         @foreach($classes as $c)
@@ -37,7 +37,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Year</label>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Year</label>
                     <select name="year" class="w-full rounded-xl border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">All Years</option>
                         @foreach($years as $y)
@@ -96,7 +96,7 @@
                                     GHS {{ number_format($student->paid_balance, 2) }}
                                 </td>
                                 <td class="px-4 py-3 text-right">
-                                    <span class="text-lg font-bold {{ $student->outstanding_balance > 0 ? 'text-rose-600' : 'text-slate-400' }}">
+                                    <span class="text-lg font-semibold {{ $student->outstanding_balance > 0 ? 'text-rose-600' : 'text-slate-400' }}">
                                         GHS {{ number_format($student->outstanding_balance, 2) }}
                                     </span>
                                 </td>

@@ -76,11 +76,13 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])
         ->name('login');
     Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])
+        ->middleware('throttle:5,1')
         ->name('auth.login.submit');
 
     Route::get('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])
         ->name('password.request');
     Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])
+        ->middleware('throttle:3,1')
         ->name('password.email');
 
     Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\NewPasswordController::class, 'create'])
@@ -91,32 +93,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'create'])
         ->name('auth.register');
     Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'store'])
+        ->middleware('throttle:3,1')
         ->name('auth.register.submit');
 
-    // EMERGENCY CACHE CLEARER - Visit this URL once, then DELETE this route!
-    Route::get('/emergency-clear-cache-now', function() {
-        try {
-            Artisan::call('route:clear');
-            Artisan::call('config:clear');
-            Artisan::call('view:clear');
-            Artisan::call('cache:clear');
-            
-            return response()->json([
-                'status' => 'success',
-                'message' => 'All caches cleared successfully! OTP verification is now active.',
-                'next_steps' => [
-                    '1. Test fresher registration - it should now require OTP',
-                    '2. DELETE this /emergency-clear-cache-now route from routes/web.php',
-                    '3. Redeploy without this route'
-                ]
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    });
+    // REMOVED: Emergency cache clearer should not be in production routes.
 
     // Fresher Registration (for students without student email access)
     Route::get('/register/fresher', [\App\Http\Controllers\Auth\FresherRegisterController::class, 'create'])
@@ -192,6 +172,10 @@ Route::get('/student/events', [\App\Http\Controllers\Student\StudentEventControl
     ->middleware(['auth:student', 'student.dues-gate'])
     ->name('student.events.index');
 
+Route::get('/student/events/{event}', [\App\Http\Controllers\Student\StudentEventController::class, 'show'])
+    ->middleware(['auth:student', 'student.dues-gate'])
+    ->name('student.events.show');
+
 Route::get('/student/events/{event}/ics', [\App\Http\Controllers\Student\StudentEventController::class, 'ics'])
     ->middleware(['auth:student', 'student.dues-gate'])
     ->name('student.events.ics');
@@ -215,6 +199,19 @@ Route::get('/student/payments/paystack/callback', [StudentPaystackPaymentControl
 Route::get('/student/dues/{due}/receipt', [StudentPaystackPaymentController::class, 'receipt'])
     ->middleware('auth:student')
     ->name('student.payments.paystack.receipt');
+
+// RushPay Integration
+Route::post('/student/dues/{due}/rushpay', [\App\Http\Controllers\Student\StudentRushPayPaymentController::class, 'initialize'])
+    ->middleware('auth:student')
+    ->name('student.payments.rushpay.initialize');
+
+Route::get('/student/payments/rushpay/checkout/{reference}', [\App\Http\Controllers\Student\StudentRushPayPaymentController::class, 'checkout'])
+    ->middleware('auth:student')
+    ->name('student.payments.rushpay.checkout');
+
+Route::get('/student/payments/rushpay/callback', [\App\Http\Controllers\Student\StudentRushPayPaymentController::class, 'callback'])
+    ->middleware('auth:student')
+    ->name('student.payments.rushpay.callback');
 
 Route::get('/student/dues/{due}/manual', [\App\Http\Controllers\Student\StudentManualPaymentController::class, 'show'])
     ->middleware('auth:student')
@@ -328,8 +325,10 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         ->name('pending-registrations.show');
     Route::post('pending-registrations/{registration}/approve', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'approve'])
         ->name('pending-registrations.approve');
-    Route::post('pending-registrations/{registration}/reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'reject'])
+    Route::post('/pending-registrations/{registration}/reject', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'reject'])
         ->name('pending-registrations.reject');
+    Route::get('/pending-registrations/{registration}/document', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'viewDocument'])
+        ->name('pending-registrations.view-document');
     
     // Bulk actions for pending registrations
     Route::post('pending-registrations/bulk-approve', [\App\Http\Controllers\Admin\AdminPendingRegistrationController::class, 'bulkApprove'])
@@ -381,8 +380,11 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 
 });
 
-// Critical: Secret route to clear caches when terminal access is unavailable
+// SECURED: System optimize route now requires admin authentication.
 Route::get('/system-optimize', function() {
+    if (app()->environment('production')) {
+        abort(404);
+    }
     try {
         \Illuminate\Support\Facades\Artisan::call('view:clear');
         \Illuminate\Support\Facades\Artisan::call('config:clear');
@@ -392,4 +394,4 @@ Route::get('/system-optimize', function() {
     } catch (\Exception $e) {
         return "Error: " . $e->getMessage();
     }
-});
+})->middleware('auth:admin');

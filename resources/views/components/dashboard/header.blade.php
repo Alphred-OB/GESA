@@ -19,146 +19,118 @@
     }
 @endphp
 
-<header x-data="{ loadingShell: true }" x-init="setTimeout(() => { loadingShell = false }, 600)" class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95">
-    <div x-show="loadingShell" x-transition.opacity.duration.200ms class="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-slate-200/80 animate-pulse"></div>
-            <div class="h-4 w-40 rounded-full bg-slate-200/80 animate-pulse"></div>
-        </div>
-        <div class="flex items-center gap-3">
-            <div class="hidden h-9 w-9 rounded-full bg-slate-200/80 animate-pulse md:block"></div>
-            <div class="h-9 w-32 rounded-full bg-slate-200/80 animate-pulse"></div>
-        </div>
-    </div>
+<header class="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
+    {{-- High-Signal Brand Strip --}}
+    <div class="h-[3px] bg-[#16136a] w-full absolute top-0"></div>
 
-    <div x-show="!loadingShell" x-cloak class="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex w-full max-w-full items-center justify-between px-8 py-3.5">
+        {{-- Left: Branding --}}
         <div class="flex items-center gap-3">
             @if ($isAdminRoute)
-                <button type="button" x-data="{}" x-on:click="$dispatch('admin-sidebar:open')" class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white p-2 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#16136a]/40 hover:text-[#16136a] md:hidden" aria-label="Open navigation" aria-controls="admin-mobile-sidebar">
-                    <i class="ri-menu-line text-[20px]" aria-hidden="true"></i>
+                <button type="button" x-data="{}" x-on:click="$dispatch('admin-sidebar:open')" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/60 bg-white text-slate-600 shadow-sm transition hover:text-[#16136a] md:hidden">
+                    <i class="ri-menu-2-line text-lg"></i>
                 </button>
             @endif
-            <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="inline-flex items-center gap-3 text-[#16136a]">
-                <img src="{{ asset('logo.png') }}" alt="GESA Portal" class="h-10 w-10 rounded-xl border border-[#16136a]/20 object-contain" loading="lazy">
-                <span class="text-lg font-semibold">{{ $isAdminRoute ? 'GESA Admin Console' : 'GESA Student Portal' }}</span>
+            <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="group flex items-center gap-3">
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-white p-1 shadow-sm ring-1 ring-slate-200 transition-all group-hover:ring-[#16136a]/20">
+                    <img src="{{ asset('logo.png') }}" alt="GESA" class="h-full w-full object-contain" loading="lazy">
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span class="text-base font-semibold tracking-tighter text-slate-900">GESA</span>
+                    <span class="text-[9px] font-semibold uppercase tracking-[0.25em] text-[#16136a]/60">{{ $isAdminRoute ? 'Admin Console' : 'Student Portal' }}</span>
+                </div>
             </a>
         </div>
 
-        <div class="flex items-center gap-3">
+        {{-- Right: Navigation & User --}}
+        <div class="flex items-center gap-4">
+            {{-- Quick Nav Dropdown --}}
             <div class="relative hidden md:block" data-dropdown>
-                <button type="button" data-dropdown-toggle="nav-menu" class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white p-2 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#16136a]/40 hover:text-[#16136a]" aria-label="Open menu">
-                    <i class="ri-menu-line text-[20px]" aria-hidden="true"></i>
+                <button type="button" data-dropdown-toggle="nav-menu" class="inline-flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-50 hover:text-[#16136a]">
+                    <i class="ri-menu-line text-lg"></i>
                 </button>
-                <div id="nav-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-52 translate-y-1 rounded-2xl border border-slate-200/80 bg-white py-3 text-sm text-slate-600 opacity-0 shadow-xl transition duration-200 ease-out">
-                    <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-layout-grid-line text-base text-[#16136a]" aria-hidden="true"></i>
+                <div id="nav-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-56 translate-y-2 rounded-2xl border border-slate-200/80 bg-white py-2 text-[13px] font-semibold text-slate-600 opacity-0 shadow-2xl ring-1 ring-black/[0.03] transition-all duration-300">
+                    <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-slate-400">Navigation</div>
+                    <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
+                        <i class="ri-dashboard-line text-base opacity-40"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('student.announcements.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-megaphone-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Announcements
+                    <a href="{{ route('student.announcements.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
+                        <i class="ri-notification-3-line text-base opacity-40"></i>
+                        Notices
                     </a>
-                    <a href="{{ route('student.events.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-calendar-event-line text-base text-[#16136a]" aria-hidden="true"></i>
+                    <a href="{{ route('student.events.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
+                        <i class="ri-calendar-event-line text-base opacity-40"></i>
                         Events
                     </a>
-                    <a href="{{ route('student.dues.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-bill-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Dues
+                    <a href="{{ route('student.dues.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
+                        <i class="ri-wallet-3-line text-base opacity-40"></i>
+                        Dues & Fees
                     </a>
-                    <a href="{{ route('student.resources.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-book-open-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Resources
-                    </a>
-                    <a href="{{ route('student.suggestions.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-lightbulb-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Suggestion box
+                    <a href="{{ route('student.resources.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
+                        <i class="ri-folder-open-line text-base opacity-40"></i>
+                        Library
                     </a>
                 </div>
             </div>
-            <div class="relative hidden max-w-[240px] md:block" data-dropdown>
-                <button type="button" data-dropdown-toggle="profile-menu" class="flex items-center gap-3 rounded-full border border-slate-200/70 bg-white px-2 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#16136a]/40 hover:text-[#16136a]">
-                    <span class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-[#16136a]/10 text-base font-semibold text-[#16136a]">
+
+            {{-- Profile Pill --}}
+            <div class="relative hidden md:block" data-dropdown>
+                <button type="button" data-dropdown-toggle="profile-menu" class="group flex items-center gap-3 rounded-xl border border-slate-200/60 bg-white px-2.5 py-1.5 shadow-sm transition-all hover:border-[#16136a]/30 hover:shadow-md">
+                    <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded bg-slate-100 text-[10px] font-semibold text-[#16136a] ring-1 ring-slate-200 transition-all group-hover:bg-[#16136a] group-hover:text-white">
                         @if ($avatarUrl)
-                            <img src="{{ $avatarUrl }}" alt="{{ $displayName }} avatar" class="h-full w-full object-cover" loading="lazy">
+                            <img src="{{ $avatarUrl }}" alt="{{ $displayName }}" class="h-full w-full object-cover">
                         @else
                             {{ $avatarInitials }}
                         @endif
                     </span>
-                    <span class="max-w-[140px] truncate">{{ $displayName }}</span>
-                    <i class="ri-arrow-down-s-line text-base text-slate-400" aria-hidden="true"></i>
+                    <span class="max-w-[120px] truncate text-xs font-semibold tracking-tight text-slate-700">{{ $displayName }}</span>
+                    <i class="ri-arrow-down-s-line text-slate-400"></i>
                 </button>
-                <div id="profile-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-48 translate-y-1 rounded-2xl border border-slate-200/80 bg-white py-2 text-sm text-slate-600 opacity-0 shadow-xl transition duration-200 ease-out">
-                    <a href="{{ route('student.profile') }}" class="flex items-center gap-2 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-user-3-line text-base" aria-hidden="true"></i>
-                        View profile
+                <div id="profile-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-52 translate-y-2 rounded-2xl border border-slate-200/80 bg-white py-2 text-[13px] font-semibold text-slate-600 opacity-0 shadow-2xl ring-1 ring-black/[0.03] transition-all duration-300">
+                    <a href="{{ route('student.profile') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
+                        <i class="ri-user-settings-line text-base opacity-40"></i>
+                        Profile Settings
                     </a>
+                    <div class="my-1 border-t border-slate-100"></div>
                     <form method="POST" action="{{ route('auth.logout') }}">
                         @csrf
-                        <button type="submit" class="flex w-full items-center gap-2 px-4 py-2 text-left transition hover:bg-slate-100 focus:bg-slate-100">
-                            <i class="ri-logout-box-r-line text-base" aria-hidden="true"></i>
-                            Log out
+                        <button type="submit" class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-red-500 transition hover:bg-red-50">
+                            <i class="ri-logout-circle-line text-base opacity-40"></i>
+                            Log Out
                         </button>
                     </form>
                 </div>
             </div>
+
+            {{-- Mobile Menu --}}
             <div class="relative md:hidden" data-dropdown>
-                <button type="button" data-dropdown-toggle="mobile-nav-menu" class="inline-flex items-center justify-center rounded-xl border border-slate-200/70 p-2 text-slate-600 transition hover:-translate-y-0.5 hover:text-[#16136a]" aria-label="Open menu">
-                    <i class="ri-menu-line text-[20px]" aria-hidden="true"></i>
+                <button type="button" data-dropdown-toggle="mobile-nav-menu" class="inline-flex h-9 w-9 items-center justify-center rounded-xl text-slate-600 transition hover:text-[#16136a]">
+                    <i class="ri-menu-4-line text-lg"></i>
                 </button>
-                <div id="mobile-nav-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-64 translate-y-1 rounded-2xl border border-slate-200/80 bg-white py-3 text-sm text-slate-600 opacity-0 shadow-xl transition duration-200 ease-out">
-                    <div class="flex items-center gap-3 px-4 pb-3">
-                            <span class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-[#16136a]/10 text-base font-semibold text-[#16136a]">
-                                @if ($avatarUrl)
-                                    <img src="{{ $avatarUrl }}" alt="{{ $displayName }} avatar" class="h-full w-full object-cover" loading="lazy">
-                                @else
-                                    {{ $avatarInitials }}
-                                @endif
-                            </span>
-                        <div class="flex min-w-0 flex-1 flex-col">
-                            <span class="max-w-[140px] truncate text-sm font-semibold text-slate-900">{{ $displayName }}</span>
-                            <span class="text-xs text-slate-500">{{ $user->email ?? 'student@acses.edu' }}</span>
+                <div id="mobile-nav-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-64 translate-y-2 rounded-2xl border border-slate-200/80 bg-white py-2 text-[13px] font-semibold text-slate-600 opacity-0 shadow-2xl transition-all duration-300">
+                    <div class="flex items-center gap-3 border-b border-slate-100 px-4 py-4 mb-2">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a]/5 text-sm font-semibold text-[#16136a]">
+                            {{ $avatarInitials }}
+                        </span>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate text-sm font-semibold text-slate-900">{{ $displayName }}</span>
+                            <span class="truncate text-[10px] text-slate-400 font-semibold uppercase tracking-widest">{{ $user->email ?? 'Student Account' }}</span>
                         </div>
                     </div>
-                    <div class="border-t border-slate-200/80 pb-2">
-                        <a href="{{ route('student.profile') }}" class="flex items-center gap-3 px-4 py-2 text-[#16136a] transition hover:bg-slate-100 focus:bg-slate-100">
-                            <i class="ri-user-3-line text-base" aria-hidden="true"></i>
-                            View profile
-                        </a>
-                    </div>
-                    <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-layout-grid-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Dashboard
+                    <a href="{{ route('student.dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50">
+                        <i class="ri-dashboard-line opacity-40"></i> Dashboard
                     </a>
-                    <a href="{{ route('student.announcements.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-megaphone-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Announcements
+                    <a href="{{ route('student.profile') }}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50">
+                        <i class="ri-user-line opacity-40"></i> View Profile
                     </a>
-                    <a href="{{ route('student.events.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-calendar-event-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Events
-                    </a>
-                    <a href="{{ route('student.dues.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-bill-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Dues
-                    </a>
-                    <a href="{{ route('student.resources.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-book-open-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Resources
-                    </a>
-                    <a href="{{ route('student.suggestions.index') }}" class="flex items-center gap-3 px-4 py-2 transition hover:bg-slate-100 focus:bg-slate-100">
-                        <i class="ri-lightbulb-line text-base text-[#16136a]" aria-hidden="true"></i>
-                        Suggestion box
-                    </a>
-                    <div class="mt-2 border-t border-slate-200 pt-2">
-                        <form method="POST" action="{{ route('auth.logout') }}">
-                            @csrf
-                            <button type="submit" class="flex w-full items-center gap-3 px-4 py-2 text-left transition hover:bg-slate-100 focus:bg-slate-100">
-                                <i class="ri-logout-box-r-line text-base" aria-hidden="true"></i>
-                                Log out
-                            </button>
-                        </form>
-                    </div>
+                    <div class="my-2 border-t border-slate-100"></div>
+                    <form method="POST" action="{{ route('auth.logout') }}">
+                        @csrf
+                        <button type="submit" class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-red-500">
+                            <i class="ri-logout-box-line opacity-40"></i> Log Out
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -4,33 +4,33 @@
 @endphp
 
 <x-layouts.auth title="Verify Email" card-width="max-w-lg">
-    <div class="space-y-8">
+    <div class="auth-card-hover space-y-8 p-10">
         <div class="space-y-4 text-center">
-            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#16136a]/10 text-[#16136a]">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M4 4h16v16H4z" />
-                    <path d="M4 7h16" />
-                    <path d="m4 7 8 6 8-6" />
-                </svg>
+            <div class="stagger-1 mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-[#16136a]/5 text-[#16136a] shadow-inner backdrop-blur-sm">
+                <i class="ri-mail-check-line text-4xl"></i>
             </div>
 
             <div class="space-y-2">
-                <h1 class="text-2xl font-semibold text-slate-900">Verify your email</h1>
-                <p class="text-sm text-slate-600">
-                    Enter the 6-digit code we sent to <span class="font-medium text-slate-900">{{ $pending['email'] ?? 'your email' }}</span> to activate your account.
+                <h1 class="stagger-2 text-3xl font-semibold tracking-tight text-slate-900">Verify your email</h1>
+                <p class="stagger-3 text-base text-slate-500 leading-relaxed">
+                    Enter the 6-digit code we sent to <br>
+                    <span class="font-semibold text-[#16136a]">{{ $pending['email'] ?? 'your email' }}</span>
                 </p>
                 @if (session('status'))
-                    <p class="rounded-lg border border-[#16136a]/20 bg-[#16136a]/10 px-4 py-2 text-sm text-[#16136a]">
-                        {{ session('status') }}
-                    </p>
+                    <div class="stagger-1 mx-auto mt-4 max-w-xs rounded-xl border border-green-100 bg-green-50/50 px-4 py-3 text-sm font-medium text-green-700 animate-fade-slide-up">
+                        <div class="flex items-center justify-center gap-2">
+                            <i class="ri-checkbox-circle-fill"></i>
+                            <span>{{ session('status') }}</span>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>
 
-        <form method="POST" action="{{ route('auth.verify.submit') }}" class="space-y-4">
+        <form method="POST" action="{{ route('auth.verify.submit') }}" class="space-y-6" data-auth-form>
             @csrf
-            <div class="space-y-2" data-otp-container data-otp-target="#verification-code">
-                <label for="verification-code" class="block text-sm font-medium text-slate-700">Verification code</label>
+            <div class="stagger-4 space-y-4" data-otp-container data-otp-target="#verification-code">
+                <label for="verification-code" class="block text-center text-sm font-semibold uppercase tracking-widest text-slate-500">Verification Code</label>
                 <input id="verification-code" name="code" type="hidden" value="{{ $oldCode }}" required>
                 <div class="flex justify-center gap-3">
                     @foreach ($codeDigits as $index => $digit)
@@ -40,34 +40,43 @@
                             maxlength="1"
                             autocomplete="{{ $index === 0 ? 'one-time-code' : 'off' }}"
                             data-otp-input
-                            class="h-14 w-12 rounded-xl border border-slate-300 bg-white text-center text-lg font-semibold tracking-widest text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30"
+                            class="h-16 w-12 rounded-2xl border border-slate-200 bg-slate-50/10 text-center text-2xl font-semibold text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10"
                             aria-label="Verification digit {{ $index + 1 }}"
                             value="{{ $digit }}"
                         >
                     @endforeach
                 </div>
                 @error('code')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
+                    <p class="text-center text-sm font-semibold text-red-500 animate-fade-slide-up">{{ $message }}</p>
                 @enderror
             </div>
 
-            <button type="submit" class="w-full rounded-xl bg-[#16136a] py-3 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/25 transition hover:-translate-y-0.5 hover:bg-[#18188a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                Confirm email
+            <button type="submit" class="stagger-5 auth-button-press group relative flex w-full items-center justify-center overflow-hidden rounded-2xl bg-[#16136a] px-4 py-4 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-2xl hover:shadow-[#16136a]/30">
+                <div class="flex items-center space-x-2 transition-transform duration-300 group-hover:scale-105">
+                    <span>Activate Account</span>
+                    <i class="ri-shield-check-line text-lg"></i>
+                </div>
             </button>
         </form>
 
-        <div class="space-y-2 text-center text-sm text-slate-600">
-            <p>Didn’t get the code? It might take a moment. You can request a new one below.</p>
-            <form method="POST" action="{{ route('auth.verify.resend') }}" class="flex items-center justify-center gap-2">
+        <div class="stagger-5 space-y-6 text-center">
+            <p class="text-sm text-slate-500 leading-relaxed px-4">
+                Didn’t get the code? It might take a moment.
+            </p>
+            <form method="POST" action="{{ route('auth.verify.resend') }}" class="flex items-center justify-center">
                 @csrf
-                <button type="submit" class="rounded-xl bg-[#16136a]/10 px-4 py-2 text-sm font-semibold text-[#16136a] transition hover:-translate-y-0.5 hover:bg-[#16136a]/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                    Resend verification code
+                <button type="submit" class="group flex items-center gap-2 rounded-2xl bg-[#16136a]/5 px-6 py-3 text-sm font-semibold text-[#16136a] transition-all duration-300 hover:bg-[#16136a]/10 hover:scale-105 active:scale-95">
+                    <i class="ri-refresh-line transition-transform duration-500 group-hover:rotate-180"></i>
+                    <span>Resend Code</span>
                 </button>
             </form>
         </div>
 
-        <div class="text-center text-sm text-slate-500">
-            <a href="{{ route('login') }}" class="font-semibold text-[#16136a] hover:underline">Back to sign in</a>
+        <div class="stagger-5 border-t border-slate-200/50 pt-8 text-center">
+            <a href="{{ route('login') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-[#16136a] transition-all duration-300 hover:text-[#18188a] hover:scale-105">
+                <i class="ri-arrow-left-line transition-transform duration-300 group-hover:-translate-x-1"></i>
+                <span>Back to sign in</span>
+            </a>
         </div>
     </div>
 </x-layouts.auth>

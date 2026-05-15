@@ -19,45 +19,43 @@ class StudentAccountService
 
     public function stats(): array
     {
-        $base = User::query()
+        // Optimized: Single query to get all counts in one go
+        $statsData = User::query()
             ->where('role', 'student')
-            ->where('is_graduated', false);
-
-        $totalStudents = (clone $base)->count();
-
-        $rawClassTotals = (clone $base)
-            ->select('class', DB::raw('COUNT(*) as total'))
-            ->whereNotNull('class')
-            ->groupBy('class')
+            ->select([
+                'is_graduated',
+                'class',
+                'year',
+                DB::raw('COUNT(*) as total')
+            ])
+            ->groupBy('is_graduated', 'class', 'year')
             ->get();
 
+        $totalStudents = 0;
+        $totalGraduated = 0;
         $classTotals = [];
-        foreach ($rawClassTotals as $row) {
-            $className = trim((string) $row->class);
-            if ($className === '') {
-                continue;
-            }
-
-            $classTotals[$className] = (int) $row->total;
-        }
-
-        $rawClassYearTotals = (clone $base)
-            ->select('class', 'year', DB::raw('COUNT(*) as total'))
-            ->whereNotNull('class')
-            ->whereNotNull('year')
-            ->groupBy('class', 'year')
-            ->get();
-
         $classYearTotals = [];
-        foreach ($rawClassYearTotals as $row) {
+        $graduatedClassTotals = [];
+
+        foreach ($statsData as $row) {
             $className = trim((string) $row->class);
             $year = (int) $row->year;
+            $count = (int) $row->total;
 
-            if ($className === '' || $year <= 0) {
-                continue;
+            if ($row->is_graduated) {
+                $totalGraduated += $count;
+                if ($className !== '') {
+                    $graduatedClassTotals[$className] = ($graduatedClassTotals[$className] ?? 0) + $count;
+                }
+            } else {
+                $totalStudents += $count;
+                if ($className !== '') {
+                    $classTotals[$className] = ($classTotals[$className] ?? 0) + $count;
+                    if ($year > 0) {
+                        $classYearTotals[$className][$year] = ($classYearTotals[$className][$year] ?? 0) + $count;
+                    }
+                }
             }
-
-            $classYearTotals[$className][$year] = (int) $row->total;
         }
 
         $allClasses = collect(self::DEFAULT_CLASSES)
@@ -70,10 +68,8 @@ class StudentAccountService
             ->values();
 
         $classBreakdown = $allClasses->map(function (string $className) use ($classTotals, $classYearTotals) {
-            $yearBuckets = self::DEFAULT_YEARS;
             $years = [];
-
-            foreach ($yearBuckets as $year) {
+            foreach (self::DEFAULT_YEARS as $year) {
                 $years[$year] = $classYearTotals[$className][$year] ?? 0;
             }
 
@@ -83,28 +79,6 @@ class StudentAccountService
                 'years' => $years,
             ];
         })->values();
-
-        $graduatedBase = User::query()
-            ->where('role', 'student')
-            ->where('is_graduated', true);
-
-        $totalGraduated = (clone $graduatedBase)->count();
-
-        $rawGraduatedClassTotals = (clone $graduatedBase)
-            ->select('class', DB::raw('COUNT(*) as total'))
-            ->whereNotNull('class')
-            ->groupBy('class')
-            ->get();
-
-        $graduatedClassTotals = [];
-        foreach ($rawGraduatedClassTotals as $row) {
-            $className = trim((string) $row->class);
-            if ($className === '') {
-                continue;
-            }
-
-            $graduatedClassTotals[$className] = (int) $row->total;
-        }
 
         $graduatedClasses = collect(self::DEFAULT_CLASSES)
             ->merge(array_keys($graduatedClassTotals))

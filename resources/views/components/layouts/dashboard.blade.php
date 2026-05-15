@@ -12,19 +12,24 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
+    {{-- Google Fonts: Outfit (Google Sans Alternative) --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-H0O1fTRnQaG6Ajbt8kKlsntv0J6IkSKdVXlZKDGj5nIwR4ayQM1MHgt+1YJt+JgvG5GdZBdp71++GLVxN7R2eA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900" x-data="{ adminSidebarOpen: false }" x-on:admin-sidebar:toggle.window="adminSidebarOpen = !adminSidebarOpen" x-on:admin-sidebar:open.window="adminSidebarOpen = true" x-on:admin-sidebar:close.window="adminSidebarOpen = false" x-on:keydown.escape.window="adminSidebarOpen = false" :class="{ 'overflow-hidden': adminSidebarOpen }">
-    <div class="flex min-h-screen w-full">
+    <div class="min-h-screen w-full">
         @isset($sidebar)
             {{ $sidebar }}
         @endisset
 
-        <div class="relative z-20 flex min-h-screen flex-1 flex-col">
+        <div class="relative z-20 flex min-h-screen flex-col @isset($sidebar) lg:pl-[280px] @endisset">
             @if ($header)
                 <div class="sticky top-0 z-40 shrink-0 bg-white shadow-sm md:bg-white/95 md:backdrop-blur supports-[backdrop-filter]:md:bg-white/75">
                     {{ $header }}

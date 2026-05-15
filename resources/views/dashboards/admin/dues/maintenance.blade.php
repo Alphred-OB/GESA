@@ -57,7 +57,7 @@
                         <i class="ri-user-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ number_format($totalStudents) }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ number_format($totalStudents) }}</p>
                         <p class="text-xs text-slate-500">Total Active Students</p>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                         <i class="ri-file-list-3-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ $uniqueDues->count() }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ $uniqueDues->count() }}</p>
                         <p class="text-xs text-slate-500">Unique Dues Types</p>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                         <i class="ri-alert-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-slate-800">{{ count($missingDues) }}</p>
+                        <p class="text-2xl font-semibold text-slate-800">{{ count($missingDues) }}</p>
                         <p class="text-xs text-slate-500">Dues With Missing Students</p>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                     </div>
                     
                     <div class="bg-white/50 border border-indigo-100 rounded-xl p-3">
-                        <label class="block text-[10px] font-bold text-indigo-500 uppercase mb-2">1. Select a Due Type to Edit in Matrix:</label>
+                        <label class="block text-[10px] font-semibold text-indigo-500 uppercase mb-2">1. Select a Due Type to Edit in Matrix:</label>
                         <div class="flex flex-wrap gap-2">
                             @foreach($uniqueDues->unique('description') as $dueType)
                                 <a href="{{ route('admin.dues.maintenance.edit-amounts', ['academic_year' => $dueType->academic_year, 'description' => $dueType->description]) }}" 

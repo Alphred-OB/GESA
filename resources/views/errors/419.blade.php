@@ -54,7 +54,7 @@
                 <div class="absolute inset-0 bg-white/5 blur-3xl rounded-full scale-150 -z-10 animate-pulse"></div>
             </div>
 
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight animate-fade-slide-delay-400">Page Expired</h1>
+            <h1 class="text-4xl md:text-5xl font-semibold mb-6 tracking-tight animate-fade-slide-delay-400">Page Expired</h1>
             
             <p class="text-slate-400 text-lg mb-10 leading-relaxed font-medium animate-fade-slide-delay-600">
                 Your session has timed out due to inactivity or your browser's security token has expired.
@@ -63,7 +63,7 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-slide-delay-600">
                 <button 
                     onclick="window.location.reload()" 
-                    class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#16136a] px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
+                    class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#16136a] px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
                 >
                     <i class="ri-refresh-line text-lg group-hover:rotate-180 transition-transform duration-500"></i>
                     Refresh Page
@@ -71,7 +71,7 @@
 
                 <a 
                     href="{{ route('login') }}" 
-                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16136a]/40 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:bg-[#16136a]/60 hover:scale-105 active:scale-95"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16136a]/40 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:bg-[#16136a]/60 hover:scale-105 active:scale-95"
                 >
                     <i class="ri-login-box-line text-lg"></i>
                     Go to Login

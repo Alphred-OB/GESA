@@ -13,49 +13,63 @@
         </div>
     </x-slot:hero>
 
-    <div class="mx-auto w-full max-w-3xl rounded-3xl bg-white/95 p-10 shadow-xl ring-1 ring-black/5 backdrop-blur">
-        <div class="space-y-6">
-            <div class="rounded-xl border border-green-200 bg-green-50 p-6">
-                <div class="flex gap-4">
-                    <i class="ri-checkbox-circle-fill text-3xl text-green-600 flex-shrink-0"></i>
+    <div class="auth-card-hover mx-auto w-full max-w-3xl rounded-3xl bg-white/95 p-10 shadow-xl ring-1 ring-black/5 backdrop-blur">
+        <div class="space-y-8">
+            <div class="stagger-1 rounded-2xl border border-blue-200 bg-blue-50/50 p-8 backdrop-blur-sm transition-all duration-300 hover:bg-blue-50">
+                <div class="flex gap-6">
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 shadow-inner">
+                        <i class="ri-time-line text-3xl"></i>
+                    </div>
                     <div class="space-y-3">
-                        <h2 class="text-lg font-semibold text-green-900">Your account is ready!</h2>
-                        <ul class="space-y-3 text-sm text-green-800 list-none">
-                            <li class="flex gap-3">
-                                <i class="ri-checkbox-circle-fill text-green-600"></i>
-                                <span>Your account has been <strong>automatically approved</strong> and is ready to use.</span>
+                        <h2 class="text-xl font-semibold text-blue-900">Registration Submitted</h2>
+                        <p class="text-sm text-blue-800 leading-relaxed font-medium">
+                            Your application is now being reviewed by the GESA administration. This process usually takes <span class="font-semibold underline">24-48 hours</span>.
+                        </p>
+                        <ul class="space-y-3 text-sm text-blue-800 list-none pt-2">
+                            <li class="flex gap-3 items-start transition-transform duration-300 hover:translate-x-1">
+                                <i class="ri-checkbox-circle-fill text-blue-600 mt-0.5"></i>
+                                <span>We have received your documents and information.</span>
                             </li>
-                            <li class="flex gap-3">
-                                <i class="ri-money-dollar-circle-fill text-green-600"></i>
-                                <span>Your <strong>dues have been assigned</strong> based on your class and year.</span>
+                            <li class="flex gap-3 items-start transition-transform duration-300 hover:translate-x-1">
+                                <i class="ri-mail-send-line text-blue-600 mt-0.5"></i>
+                                <span>You will receive an <strong>email notification</strong> once your account is approved.</span>
                             </li>
-                            <li class="flex gap-3">
-                                <i class="ri-login-circle-fill text-green-600"></i>
-                                <span>You can now <strong>log in</strong> using your email, username, or reference number with your password.</span>
+                            <li class="flex gap-3 items-start transition-transform duration-300 hover:translate-x-1">
+                                <i class="ri-shield-user-line text-blue-600 mt-0.5"></i>
+                                <span>Your account is currently in <strong>pending status</strong> for security verification.</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="rounded-xl border border-blue-200 bg-blue-50 p-6">
-                <div class="flex gap-4">
-                    <i class="ri-lightbulb-line text-3xl text-blue-600 flex-shrink-0"></i>
-                    <div class="space-y-2">
-                        <h3 class="font-semibold text-blue-900">Quick Tips</h3>
-                        <ul class="text-sm text-blue-800 space-y-2">
-                            <li>• Check your dashboard to view and pay your outstanding dues</li>
-                            <li>• Keep your login credentials safe and secure</li>
-                            <li>• Contact GESA executives if you need any assistance</li>
-                        </ul>
+            <div class="stagger-2 rounded-2xl border border-slate-200 bg-slate-50/30 p-8 transition-all duration-300 hover:bg-white/50">
+                <div class="flex gap-6">
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-600 shadow-inner">
+                        <i class="ri-lightbulb-line text-3xl"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-slate-900">What's Next?</h3>
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div class="p-4 rounded-xl bg-white/50 border border-slate-100 transition-all hover:shadow-sm">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Step 1</p>
+                                <p class="text-sm font-medium text-slate-700">Check your email for the approval confirmation.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-white/50 border border-slate-100 transition-all hover:shadow-sm">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Step 2</p>
+                                <p class="text-sm font-medium text-slate-700">Once approved, log in with your credentials.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-center pt-4">
-                <a href="{{ route('login') }}" class="inline-flex items-center space-x-2 rounded-xl bg-[#16136a] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/30 transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-[#18188a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                    <i class="ri-login-circle-line text-lg"></i>
-                    <span>Login to Your Account</span>
+            <div class="stagger-3 flex justify-center pt-4">
+                <a href="{{ route('login') }}" class="auth-button-press group relative flex items-center justify-center overflow-hidden rounded-2xl bg-[#16136a] px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-2xl hover:shadow-[#16136a]/30">
+                    <div class="flex items-center space-x-3 transition-transform duration-300 group-hover:scale-105">
+                        <i class="ri-arrow-left-line"></i>
+                        <span>Return to Login</span>
+                    </div>
                 </a>
             </div>
         </div>

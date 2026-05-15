@@ -52,7 +52,7 @@
 
                 <div class="grid gap-5 md:grid-cols-3">
                     <div class="flex flex-col gap-2">
-                        <label for="due_date" class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Due Date</label>
+                        <label for="due_date" class="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Due Date</label>
                         <input type="date" id="due_date" name="due_date" value="{{ old('due_date', date('Y-11-30')) }}" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:ring-4 focus:ring-[#16136a]/10">
                         @error('due_date')
                             <span class="text-xs text-rose-600">{{ $message }}</span>
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <label for="target_group" class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Target Group</label>
+                        <label for="target_group" class="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Target Group</label>
                         <div class="relative">
                             <select id="target_group" name="target_group" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50/50 pl-4 pr-10 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:ring-4 focus:ring-[#16136a]/10">
                                 <option value="all" @selected(old('target_group') === 'all')>Everyone (Students & Admins)</option>
@@ -77,7 +77,7 @@
                         <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Base amount (GHS)</span>
                         <div class="flex gap-2">
                             <input type="number" step="0.01" min="0" name="base_amount" x-model="baseAmount" placeholder="0.00" class="h-11 flex-1 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                            <button type="button" @click="applyToAll()" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[#16136a]/20 bg-[#16136a]/5 px-4 text-xs font-bold text-[#16136a] transition hover:bg-[#16136a] hover:text-white" title="Apply this amount to all classes below">
+                            <button type="button" @click="applyToAll()" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[#16136a]/20 bg-[#16136a]/5 px-4 text-xs font-semibold text-[#16136a] transition hover:bg-[#16136a] hover:text-white" title="Apply this amount to all classes below">
                                 <i class="ri-refresh-line"></i>
                                 <span class="hidden sm:inline">Apply to all</span>
                             </button>
@@ -112,7 +112,7 @@
                             <tbody class="divide-y divide-slate-200 bg-white">
                                 @foreach ($matrix['classes'] as $class)
                                     <tr class="hover:bg-slate-50/50 transition-colors">
-                                        <th scope="row" class="whitespace-nowrap px-3 py-4 text-xs font-bold text-[#16136a] uppercase tracking-wide">{{ $class }}</th>
+                                        <th scope="row" class="whitespace-nowrap px-3 py-4 text-xs font-semibold text-[#16136a] uppercase tracking-wide">{{ $class }}</th>
                                         @foreach ($matrix['years'] as $year)
                                             <td class="px-2 py-3">
                                                 <div class="relative group">
@@ -121,7 +121,7 @@
                                                         x-model="amounts['{{ $class }}']['{{ $year }}']"
                                                         placeholder="Base" 
                                                         class="h-10 w-full min-w-[100px] rounded-xl border border-slate-200 bg-white pl-3 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                                    <span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-300 group-focus-within:text-[#16136a]/40 transition-colors">GHS</span>
+                                                    <span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-slate-300 group-focus-within:text-[#16136a]/40 transition-colors">GHS</span>
                                                 </div>
                                                 @error("amounts.$class.$year")
                                                     <span class="text-xs text-rose-600">{{ $message }}</span>

@@ -1,13 +1,23 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
-import courseRegistrationBulkModule from './modules/adminCourseRegistrationBulk';
-import adminSuggestionBulk from './modules/adminSuggestionBulk';
-import Cropper from 'cropperjs';
-import 'cropperjs/dist/cropper.css';
+import persist from '@alpinejs/persist';
 
+Alpine.plugin(persist);
 window.Alpine = Alpine;
-Alpine.data('courseRegistrationBulk', courseRegistrationBulkModule);
-Alpine.data('adminSuggestionBulk', adminSuggestionBulk);
+
+// Code-split admin modules and heavy libraries
+if (document.querySelector('[data-course-registration-bulk]')) {
+    import('./modules/adminCourseRegistrationBulk').then(module => {
+        Alpine.data('courseRegistrationBulk', module.default);
+    });
+}
+
+if (document.querySelector('[data-admin-suggestion-bulk]')) {
+    import('./modules/adminSuggestionBulk').then(module => {
+        Alpine.data('adminSuggestionBulk', module.default);
+    });
+}
+
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -72,6 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const ruleItems = container.querySelectorAll('[data-password-rule]');
 
         const evaluateStrength = (value) => {
+            // Hide container if empty, show when user starts typing
+            if (!value || value.length === 0) {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(10px)';
+                container.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    if (!passwordInput.value) {
+                        container.classList.add('hidden');
+                    }
+                }, 300);
+                return;
+            }
+
+            container.classList.remove('hidden');
+            // Force a reflow to trigger transition
+            void container.offsetHeight;
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+            container.style.pointerEvents = 'auto';
+
             const tests = {
                 length: value.length >= 8,
                 mixed: /[a-z]/.test(value) && /[A-Z]/.test(value),
@@ -117,7 +147,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        evaluateStrength(passwordInput.value ?? '');
+        // Initial state check
+        if (!passwordInput.value) {
+            container.classList.add('hidden');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(10px)';
+        } else {
+            evaluateStrength(passwordInput.value);
+        }
+
         passwordInput.addEventListener('input', (event) => {
             const target = event.target;
             evaluateStrength(target ? target.value ?? '' : '');
@@ -420,23 +458,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 editorImage.src = reader.result;
                 showEditor();
 
-                const CropperCtor = typeof Cropper === 'function' ? Cropper : Cropper?.default;
+                // Dynamic import for Cropper and its styles
+                Promise.all([
+                    import('cropperjs'),
+                    import('cropperjs/dist/cropper.css')
+                ]).then(([CropperModule]) => {
+                    const CropperCtor = CropperModule.default || CropperModule;
+                    
+                    if (typeof CropperCtor !== 'function') {
+                        console.error('Cropper library failed to load.');
+                        setHelper('Unable to initialise the cropper. Please refresh and try again.');
+                        return;
+                    }
 
-                if (typeof CropperCtor !== 'function') {
-                    console.error('Cropper library failed to load.');
-                    setHelper('Unable to initialise the cropper. Please refresh and try again.');
-                    return;
-                }
+                    cropperInstance = new CropperCtor(editorImage, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                        responsive: true,
+                        background: false,
+                    });
 
-                cropperInstance = new CropperCtor(editorImage, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                    autoCropArea: 1,
-                    responsive: true,
-                    background: false,
+                    setHelper('Adjust the crop to frame your face, then choose "Use crop".');
+                }).catch(err => {
+                    console.error('Failed to load Cropper:', err);
+                    setHelper('Failed to load image editor. Please check your connection.');
                 });
-
-                setHelper('Adjust the crop to frame your face, then choose "Use crop".');
             });
 
             reader.readAsDataURL(file);
@@ -695,4 +742,16 @@ document.addEventListener('DOMContentLoaded', () => {
             startAutoplay();
         });
     }
+
+    // Global Auth Form Handler
+    const authForms = document.querySelectorAll('[data-auth-form]');
+    authForms.forEach(form => {
+        form.addEventListener('submit', () => {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.classList.add('is-loading');
+                submitBtn.setAttribute('disabled', 'true');
+            }
+        });
+    });
 });

@@ -28,6 +28,7 @@ class StudentDashboardController extends Controller
             'calendarWeeks' => $this->dashboardService->calendarMatrix(),
             'calendarMonthLabel' => Carbon::today()->isoFormat('MMMM YYYY'),
             'timelineEntries' => $this->dashboardService->academicTimeline(),
+            'announcements' => $this->dashboardService->latestAnnouncements($student),
         ]);
     }
 }

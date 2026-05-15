@@ -1,95 +1,87 @@
 @php($title = 'Sign In')
 
 <x-layouts.auth :title="$title">
-    <x-slot:hero>
-        <div class="mx-auto w-full max-w-lg text-center">
-            <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg">
-                <img src="{{ asset('logo.png') }}" alt="GESA Portal Logo" class="h-full w-full object-contain" loading="lazy">
-            </div>
-            <h1 class="text-2xl font-semibold text-white">Welcome back</h1>
-            <p class="mt-2 text-sm text-white/80">Enter your credentials to continue</p>
-        </div>
-    </x-slot:hero>
-
-    <div class="rounded-3xl bg-white/90 p-8 shadow-xl ring-1 ring-black/5 backdrop-blur">
-        <div class="mb-8 text-center lg:text-left">
-            <h2 class="text-2xl font-semibold text-slate-900">Login to your account</h2>
-            <p class="mt-2 text-sm text-slate-600">Enter your credentials to continue</p>
+    <div class="p-8 md:p-12 auth-card-hover">
+        <div class="mb-10 text-center stagger-1">
+            <h2 class="text-3xl font-semibold tracking-tight text-slate-900">Sign in</h2>
+            <p class="mt-2 text-base text-slate-500">Welcome back! Please enter your details.</p>
         </div>
 
         @if(session('status'))
-            <div class="mb-6 rounded-xl border border-[#16136a]/30 bg-[#16136a]/10 px-4 py-3 text-sm text-[#16136a]">
+            <div class="stagger-1 mb-6 rounded-2xl border border-blue-100 bg-blue-50/50 px-4 py-3 text-sm text-blue-700">
                 {{ session('status') }}
             </div>
         @endif
 
         <form method="POST" action="{{ route('auth.login.submit') }}" class="space-y-6" data-auth-form>
             @csrf
-            <div class="space-y-2">
-                <label for="identifier" class="block text-sm font-medium text-slate-700">Email, Username, or Reference Number</label>
-                <div class="relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                        <i class="ri-user-line text-lg" aria-hidden="true"></i>
+            <div class="stagger-2 space-y-2">
+                <label for="identifier" class="block text-sm font-semibold text-slate-700">Email or Username</label>
+                <div class="group auth-input-group relative">
+                    <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
+                        <i class="ri-user-smile-line text-lg" aria-hidden="true"></i>
                     </span>
-                    <input id="identifier" name="identifier" type="text" value="{{ old('identifier') }}" required autofocus autocomplete="username" class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-3 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="Email, username, or reference number" />
+                    <input id="identifier" name="identifier" type="text" value="{{ old('identifier') }}" required autofocus autocomplete="username" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="Enter your email or username" />
                 </div>
                 @error('identifier')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs font-medium text-red-500 animate-fade-slide-up">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="space-y-2">
+            <div class="stagger-3 space-y-2">
                 <div class="flex items-center justify-between">
-                    <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
-                    <a href="{{ route('password.request') }}" class="text-sm font-semibold text-[#16136a] transition hover:underline">Forgot password?</a>
+                    <label for="password" class="block text-sm font-semibold text-slate-700">Password</label>
+                    <a href="{{ route('password.request') }}" class="text-xs font-semibold text-[#16136a] transition-all duration-300 hover:text-[#18188a] hover:underline hover:scale-105 active:scale-95">Forgot password?</a>
                 </div>
-                <div class="relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                        <i class="ri-lock-password-line text-lg" aria-hidden="true"></i>
+                <div class="group auth-input-group relative">
+                    <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
+                        <i class="ri-lock-2-line text-lg" aria-hidden="true"></i>
                     </span>
-                    <input id="password" name="password" type="password" required autocomplete="current-password" class="block w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-12 text-sm text-slate-900 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" placeholder="Enter your password" />
-                    <button type="button" data-password-toggle="#password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 transition hover:text-slate-600" aria-label="Toggle password visibility">
+                    <input id="password" name="password" type="password" required autocomplete="current-password" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="••••••••" />
+                    <button type="button" data-password-toggle="#password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-all duration-300 hover:text-[#16136a] hover:scale-110 active:scale-90" aria-label="Toggle password visibility">
                         <i data-eye class="ri-eye-line text-lg" aria-hidden="true"></i>
                         <i data-eye-off class="ri-eye-off-line hidden text-lg" aria-hidden="true"></i>
                     </button>
                 </div>
                 @error('password')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs font-medium text-red-500 animate-fade-slide-up">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="flex items-center justify-between">
-                <label for="remember" class="flex items-center space-x-2 text-sm text-slate-600">
-                    <input id="remember" name="remember" type="checkbox" value="1" class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]">
-                    <span>Remember me</span>
+            <div class="stagger-4 flex items-center justify-between">
+                <label for="remember" class="group flex cursor-pointer items-center space-x-3 text-sm text-slate-600">
+                    <div class="relative flex items-center transition-transform duration-300 group-hover:scale-110">
+                        <input id="remember" name="remember" type="checkbox" value="1" class="peer h-5 w-5 cursor-pointer appearance-none rounded-lg border border-slate-300 bg-white/50 transition-all checked:border-[#16136a] checked:bg-[#16136a] focus:outline-none focus:ring-4 focus:ring-[#16136a]/10">
+                        <i class="ri-check-line pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-semibold text-white opacity-0 transition-opacity peer-checked:opacity-100"></i>
+                    </div>
+                    <span class="font-medium transition-colors duration-300 group-hover:text-slate-900">Remember me</span>
                 </label>
-                <span aria-hidden="true"></span>
             </div>
 
-            <button type="submit" class="flex w-full items-center justify-center space-x-2 rounded-xl bg-[#16136a] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/30 transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-[#18188a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#16136a]">
-                <i class="ri-login-circle-line text-lg" aria-hidden="true"></i>
-                <span>Login</span>
+            <button type="submit" class="stagger-5 auth-button-press group relative flex w-full items-center justify-center overflow-hidden rounded-2xl bg-[#16136a] px-4 py-4 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-2xl hover:shadow-[#16136a]/30 disabled:pointer-events-none disabled:opacity-80">
+                <!-- Default State -->
+                <div class="flex items-center space-x-2 transition-all duration-300 group-[.is-loading]:translate-y-10 group-[.is-loading]:opacity-0" data-auth-submit-default>
+                    <span>Sign in</span>
+                    <i class="ri-arrow-right-line transition-transform duration-300 group-hover:translate-x-1"></i>
+                </div>
+
+                <!-- Loading State -->
+                <div class="absolute inset-0 flex translate-y-10 items-center justify-center space-x-3 opacity-0 transition-all duration-300 group-[.is-loading]:translate-y-0 group-[.is-loading]:opacity-100" data-auth-submit-loading>
+                    <div class="flex items-center space-x-1.5">
+                        <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-white [animation-delay:-0.3s]"></span>
+                        <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-white [animation-delay:-0.15s]"></span>
+                        <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-white"></span>
+                    </div>
+                    <span class="text-xs uppercase tracking-widest">Authenticating</span>
+                </div>
             </button>
         </form>
 
-        <div class="mt-6 space-y-3 text-center text-sm text-slate-600">
+        <div class="stagger-5 mt-10 border-t border-slate-200/50 pt-8 text-center text-sm text-slate-500">
             <p>
-                Don’t have an account?
-                <a href="{{ route('auth.register') }}" class="font-semibold text-[#16136a] hover:underline">Sign up</a>
+                Don’t have an account yet?
+                <a href="{{ route('auth.register') }}" class="font-semibold text-[#16136a] transition-all duration-300 hover:text-[#18188a] hover:underline hover:scale-105 inline-block">Create an account</a>
             </p>
-            <p>
-                Need help?
-                <a href="mailto:gesaumat24@gmail.com" class="font-semibold text-[#16136a] hover:underline">Contact support</a>
-            </p>
-        </div>
-    </div>
-
-    <div id="auth-loading-overlay" class="hidden fixed inset-0 z-40 items-center justify-center bg-white/80 backdrop-blur-sm">
-        <div class="flex flex-col items-center space-y-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#16136a]/20">
-                <i class="ri-loader-4-line animate-spin text-2xl text-[#16136a]" aria-hidden="true"></i>
-            </div>
-            <p class="text-sm font-medium text-slate-700">Signing you in…</p>
         </div>
     </div>
 </x-layouts.auth>

@@ -51,7 +51,7 @@
                 <div class="absolute inset-0 bg-red-500/10 blur-3xl rounded-full scale-150 -z-10 animate-pulse"></div>
             </div>
 
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight animate-fade-slide-delay-400">Server Error</h1>
+            <h1 class="text-4xl md:text-5xl font-semibold mb-6 tracking-tight animate-fade-slide-delay-400">Server Error</h1>
             
             <p class="text-slate-400 text-lg mb-10 leading-relaxed font-medium animate-fade-slide-delay-600">
                 Something went wrong on our end. We're already looking into it. Please try again in a moment.
@@ -60,7 +60,7 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-slide-delay-600">
                 <button 
                     onclick="window.location.reload()" 
-                    class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
+                    class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
                 >
                     <i class="ri-refresh-line text-lg group-hover:rotate-180 transition-transform duration-500"></i>
                     Try Again
@@ -68,7 +68,7 @@
 
                 <a 
                     href="{{ url('/') }}" 
-                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all hover:bg-white/20 hover:scale-105 active:scale-95"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:bg-white/20 hover:scale-105 active:scale-95"
                 >
                     <i class="ri-home-4-line text-lg"></i>
                     Go Home

@@ -74,7 +74,7 @@
                             <tbody class="divide-y divide-slate-200 bg-white">
                                 @foreach ($allClasses as $class)
                                     <tr class="hover:bg-slate-50/50 transition-colors">
-                                        <th scope="row" class="whitespace-nowrap px-3 py-4 text-xs font-bold text-[#16136a] uppercase tracking-wide align-middle">
+                                        <th scope="row" class="whitespace-nowrap px-3 py-4 text-xs font-semibold text-[#16136a] uppercase tracking-wide align-middle">
                                             {{ $class }}
                                         </th>
                                         @foreach ($allYears as $year)
@@ -87,7 +87,7 @@
                                                            name="amounts[{{ $class }}][{{ $year }}]"
                                                            value="{{ $cellData['amount'] ?? $defaultAmount }}"
                                                            class="h-10 w-full min-w-[90px] rounded-lg border border-slate-200 bg-white px-2 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30">
-                                                    <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-300">GHS</span>
+                                                    <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-slate-300">GHS</span>
                                                 </div>
                                                 
                                                 {{-- Stats --}}
@@ -118,7 +118,7 @@
             <div class="sticky bottom-4 z-10 flex justify-center pt-4">
                 <button type="submit" 
                         onclick="return confirm('Save all amount changes?\n\nThis will update ALL dues (including paid and pending) with the amounts shown in the matrix.\n\nFuture students will also get these amounts.')"
-                        class="inline-flex items-center gap-3 rounded-2xl bg-purple-600 px-10 py-4 text-lg font-bold text-white shadow-xl shadow-purple-500/30 transition hover:bg-purple-700 hover:shadow-2xl hover:shadow-purple-500/40 active:scale-[0.98]">
+                        class="inline-flex items-center gap-3 rounded-2xl bg-purple-600 px-10 py-4 text-lg font-semibold text-white shadow-xl shadow-purple-500/30 transition hover:bg-purple-700 hover:shadow-2xl hover:shadow-purple-500/40 active:scale-[0.98]">
                     <i class="ri-save-3-fill text-2xl"></i>
                     SAVE ALL CHANGES
                 </button>

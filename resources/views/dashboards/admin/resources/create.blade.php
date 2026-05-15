@@ -1,201 +1,196 @@
-@php($title = $title ?? 'Add academic resource')
-
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-4xl space-y-8 px-5 py-10 sm:px-6 lg:px-8">
-        <header class="flex flex-col gap-3 rounded-3xl border border-[#16136a]/15 bg-white/90 p-6 text-center shadow-lg shadow-[#16136a]/10 sm:text-left md:flex-row md:items-center md:justify-between">
-            <div class="space-y-2">
-                <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#16136a]">
-                    <i class="ri-book-3-line text-base" aria-hidden="true"></i>
-                    Academic resources
-                </p>
-                <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Create a new resource</h1>
-                <p class="text-sm text-slate-600">Upload files or share links and target them to the right class and year cohorts.</p>
-            </div>
-            <a href="{{ route('admin.resources.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                <i class="ri-arrow-go-back-line text-base" aria-hidden="true"></i>
-                Back to list
-            </a>
-        </header>
-
-        @if ($errors->any())
-            <div class="rounded-3xl border border-rose-200/60 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-inner">
-                <div class="flex items-start gap-3">
-                    <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-rose-100 text-rose-600">
-                        <i class="ri-error-warning-line text-lg" aria-hidden="true"></i>
-                    </span>
-                    <div>
-                        <p class="font-semibold">Please resolve the highlighted fields.</p>
-                        <ul class="mt-2 list-disc pl-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+    <div class="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            {{-- Header --}}
+            <header class="text-center">
+                <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#16136a]/5 text-[#16136a]">
+                    <i class="ri-book-3-line text-3xl"></i>
                 </div>
-            </div>
-        @endif
+                <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $title }}</h1>
+                <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Share knowledge across the engineering cohort</p>
+            </header>
 
-        <form method="POST" action="{{ route('admin.resources.store') }}" enctype="multipart/form-data" class="space-y-8" x-data="resourceForm({
-                resourceType: '{{ old('resource_type', $resource->resource_type) }}'
-            })">
-            @csrf
-
-            <section class="space-y-6 rounded-3xl border border-slate-200/70 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <h2 class="text-lg font-semibold text-[#16136a]">Resource details</h2>
-                <div class="grid gap-5 md:grid-cols-2">
-                    <div>
-                        <label for="title" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Title</label>
-                        <div class="relative mt-2">
-                            <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <i class="ri-edit-line text-lg" aria-hidden="true"></i>
-                            </span>
-                            <input id="title" name="title" type="text" value="{{ old('title', $resource->title) }}" class="w-full rounded-2xl border border-slate-200 pl-11 pr-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/40" required>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="content_type" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Content type</label>
-                        <div class="relative mt-2">
-                            <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <i class="ri-stack-line text-lg" aria-hidden="true"></i>
-                            </span>
-                            <select id="content_type" name="content_type" class="w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/40" required>
-                                @foreach ($contentTypes as $type)
-                                    <option value="{{ $type }}" @selected(old('content_type', $resource->content_type) === $type)>{{ Str::headline($type) }}</option>
+            @if ($errors->any())
+                <div class="rounded-[2rem] border border-rose-100 bg-rose-50/50 p-6 text-sm font-semibold text-rose-700 shadow-sm">
+                    <div class="flex items-start gap-3">
+                        <i class="ri-error-warning-line text-2xl"></i>
+                        <div>
+                            <p class="text-xs uppercase tracking-widest">Validation Errors</p>
+                            <ul class="mt-2 list-disc pl-5 text-[11px]">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
                                 @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="description" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Description</label>
-                        <div class="relative mt-2">
-                            <span class="pointer-events-none absolute left-4 top-4 text-slate-400">
-                                <i class="ri-file-text-line text-lg" aria-hidden="true"></i>
-                            </span>
-                            <textarea id="description" name="description" rows="3" class="w-full rounded-2xl border border-slate-200 pl-11 pr-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">{{ old('description', $resource->description) }}</textarea>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </section>
+            @endif
 
-            <section class="space-y-6 rounded-3xl border border-slate-200/70 bg-white p-6 shadow-lg shadow-[#16136a]/10" x-cloak>
-                <h2 class="text-lg font-semibold text-[#16136a]">Delivery type</h2>
-                <div class="grid gap-5 md:grid-cols-2">
-                    <div class="space-y-3">
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Resource type</span>
-                        @php($resourceTypeIcons = [
-                            'link' => 'ri-external-link-line',
-                            'file' => 'ri-file-3-line',
-                            'video' => 'ri-play-circle-line',
-                            'handout' => 'ri-book-open-line',
-                            'past_question' => 'ri-question-line',
-                            'default' => 'ri-stack-line',
-                        ])
-                        <input type="hidden" name="resource_type" x-model="resourceType">
-                        <div class="grid gap-2 sm:grid-cols-3">
+            <form method="POST" action="{{ route('admin.resources.store') }}" enctype="multipart/form-data" class="space-y-8" 
+                x-data="resourceForm({ resourceType: '{{ old('resource_type', $resource->resource_type) }}' })">
+                @csrf
+
+                {{-- Basic Details --}}
+                <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12">
+                    <h2 class="mb-8 text-sm font-semibold uppercase tracking-widest text-[#16136a]">Resource Core Information</h2>
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div class="space-y-2">
+                            <label for="title" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Asset Title</label>
+                            <div class="relative">
+                                <i class="ri-edit-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input id="title" name="title" type="text" value="{{ old('title', $resource->title) }}" required maxlength="150" 
+                                    class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
+                                    placeholder="e.g. Applied Thermodynamics Handout">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="content_type" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Content Category</label>
+                            <div class="relative">
+                                <i class="ri-stack-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <select id="content_type" name="content_type" class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                    @foreach ($contentTypes as $type)
+                                        <option value="{{ $type }}" @selected(old('content_type', $resource->content_type) === $type)>{{ Str::headline($type) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 space-y-2">
+                            <label for="description" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Asset Summary</label>
+                            <div class="relative">
+                                <i class="ri-file-text-line absolute left-4 top-6 text-slate-400"></i>
+                                <textarea id="description" name="description" rows="3" class="w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 py-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="Briefly describe what this resource covers...">{{ old('description', $resource->description) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {{-- Delivery & Payload --}}
+                <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12">
+                    <h2 class="mb-8 text-sm font-semibold uppercase tracking-widest text-[#16136a]">Delivery Mode</h2>
+                    
+                    <div class="space-y-8">
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <input type="hidden" name="resource_type" x-model="resourceType">
                             @foreach ($resourceTypes as $type)
-                                <button type="button" class="inline-flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-semibold transition" :class="resourceType === '{{ $type }}' ? 'border-[#16136a] bg-[#16136a]/10 text-[#16136a]' : 'border-slate-200 text-slate-600 hover:border-[#16136a]/40 hover:text-[#16136a]'" @click="resourceType = '{{ $type }}'">
-                                    <i class="{{ $resourceTypeIcons[$type] ?? $resourceTypeIcons['default'] }} text-lg" aria-hidden="true"></i>
-                                    <span class="capitalize">{{ Str::headline($type) }}</span>
+                                <button type="button" 
+                                    @click="resourceType = '{{ $type }}'"
+                                    :class="resourceType === '{{ $type }}' ? 'bg-[#16136a] text-white' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'"
+                                    class="flex h-16 items-center justify-center gap-3 rounded-2xl text-xs font-semibold uppercase tracking-widest transition-all">
+                                    <i class="ri-{{ $type === 'file' ? 'file-3-line' : 'links-line' }} text-xl"></i>
+                                    {{ Str::headline($type) }}
                                 </button>
                             @endforeach
                         </div>
-                    </div>
-                    <div class="space-y-3" x-show="resourceType !== 'file'" x-cloak>
-                        <label for="cta_url" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Link URL</label>
-                        <div class="relative mt-2">
-                            <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <i class="ri-links-line text-lg" aria-hidden="true"></i>
-                            </span>
-                            <input id="cta_url" name="cta_url" type="url" value="{{ old('cta_url', $resource->cta_url) }}" placeholder="https://" class="w-full rounded-2xl border border-slate-200 pl-11 pr-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+
+                        {{-- Link Inputs --}}
+                        <div x-show="resourceType !== 'file'" x-cloak class="grid gap-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <label for="cta_url" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Destination URL</label>
+                                <div class="relative">
+                                    <i class="ri-links-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <input id="cta_url" name="cta_url" type="url" value="{{ old('cta_url', $resource->cta_url) }}" placeholder="https://" 
+                                        class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="cta_label" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Button Label</label>
+                                <div class="relative">
+                                    <i class="ri-edit-box-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <input id="cta_label" name="cta_label" type="text" value="{{ old('cta_label', $resource->cta_label) }}" placeholder="e.g. Open Portal" 
+                                        class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
+                                </div>
+                            </div>
                         </div>
-                        <label for="cta_label" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Link label</label>
-                        <div class="relative mt-2">
-                            <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <i class="ri-edit-box-line text-lg" aria-hidden="true"></i>
-                            </span>
-                            <input id="cta_label" name="cta_label" type="text" value="{{ old('cta_label', $resource->cta_label) }}" placeholder="e.g. Open resource" class="w-full rounded-2xl border border-slate-200 pl-11 pr-4 py-3 text-sm text-slate-900 shadow-sm focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/40">
+
+                        {{-- File Upload --}}
+                        <div x-show="resourceType === 'file'" x-cloak class="space-y-4">
+                            <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Asset Upload</label>
+                            <label for="file" class="group flex min-h-[200px] cursor-pointer flex-col items-center justify-center gap-4 rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-slate-50/50 transition-all hover:border-[#16136a]/40 hover:bg-white">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#16136a] shadow-xl shadow-slate-200/50 transition-transform group-hover:scale-110">
+                                    <i class="ri-upload-cloud-2-line text-2xl"></i>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-sm font-semibold text-slate-900">Choose Resource File</p>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Max 50MB · PDF, DOCX, ZIP</p>
+                                </div>
+                                <input id="file" name="file" type="file" class="hidden" x-ref="fileInput" @change="handleFileChange($event)">
+                            </label>
+
+                            <div x-show="filePreview" x-cloak class="flex items-center gap-4 rounded-3xl border border-emerald-100 bg-emerald-50/50 p-4">
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-emerald-500 shadow-sm">
+                                    <i class="ri-file-check-line text-xl"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-xs font-semibold text-emerald-900" x-text="filePreview?.name"></p>
+                                    <p class="text-[10px] font-semibold text-emerald-600 uppercase" x-text="filePreview?.sizeLabel"></p>
+                                </div>
+                                <button type="button" @click="clearFile()" class="h-10 w-10 flex items-center justify-center rounded-xl bg-white text-rose-500 shadow-sm hover:bg-rose-500 hover:text-white transition-all">
+                                    <i class="ri-close-line text-lg"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="md:col-span-2" x-show="resourceType === 'file'" x-cloak>
-                        <label for="file" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Upload file</label>
-                        <label for="file" class="mt-2 flex w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[#16136a]/40 bg-[#16136a]/5 px-6 py-6 text-sm text-slate-600 hover:border-[#16136a]/60">
-                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#16136a] shadow">
-                                <i class="ri-upload-cloud-2-line text-xl" aria-hidden="true"></i>
-                            </span>
-                            <span class="font-semibold text-[#16136a]">Choose resource file</span>
-                            <span class="text-xs text-slate-500">Maximum 50MB · pdf, doc(x), ppt(x), xls(x), zip, mp4, mov, avi</span>
-                            <input id="file" name="file" type="file" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.mp4,.mov,.avi" x-ref="fileInput" @change="handleFileChange($event)">
+                </section>
+
+                {{-- Targeting --}}
+                <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12">
+                    <h2 class="mb-8 text-sm font-semibold uppercase tracking-widest text-[#16136a]">Audience Visibility</h2>
+                    <div class="grid gap-8 md:grid-cols-2">
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Target Classes</label>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($classOptions as $class)
+                                    <label class="relative cursor-pointer">
+                                        <input type="checkbox" name="target_classes[]" value="{{ $class }}" class="peer sr-only" @change="toggleClass('{{ $class }}')" @checked(in_array($class, old('target_classes', $resource->target_classes ?? [])))>
+                                        <div class="flex h-11 items-center px-5 rounded-xl bg-slate-50 text-[10px] font-semibold uppercase tracking-widest text-slate-400 transition-all peer-checked:bg-[#16136a] peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-[#16136a]/20">
+                                            {{ $class }}
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Target Years</label>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($yearOptions as $year)
+                                    <label class="relative cursor-pointer">
+                                        <input type="checkbox" name="target_years[]" value="{{ $year }}" class="peer sr-only" @change="toggleYear('{{ $year }}')" @checked(in_array($year, old('target_years', $resource->target_years ?? [])))>
+                                        <div class="flex h-11 items-center px-5 rounded-xl bg-slate-50 text-[10px] font-semibold uppercase tracking-widest text-slate-400 transition-all peer-checked:bg-[#16136a] peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-[#16136a]/20">
+                                            Year {{ $year }}
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex items-center justify-between rounded-3xl border border-slate-100 bg-slate-50/50 p-6">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-tight text-[#16136a]">Release to Students</p>
+                            <p class="mt-1 text-[10px] font-semibold text-slate-400">Immediate visibility upon saving</p>
+                        </div>
+                        <label class="relative inline-flex cursor-pointer items-center">
+                            <input type="hidden" name="visibility" value="hidden">
+                            <input type="checkbox" name="visibility" value="student" class="peer sr-only" @checked(old('visibility', $resource->visibility) === 'student')>
+                            <div class="h-8 w-14 rounded-full bg-slate-200 transition-all peer-checked:bg-[#16136a] peer-focus:ring-4 peer-focus:ring-[#16136a]/10"></div>
+                            <div class="absolute left-1 top-1 h-6 w-6 rounded-full bg-white shadow-sm transition-all peer-checked:translate-x-6"></div>
                         </label>
-                        <div x-show="filePreview" x-cloak class="mt-3 flex w-full items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                            <div class="flex-shrink-0">
-                                <template x-if="filePreview.isImage">
-                                    <img :src="filePreview.url" alt="" class="h-10 w-10 rounded-lg object-cover">
-                                </template>
-                                <template x-if="!filePreview.isImage">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-[#16136a] shadow">
-                                        <i class="ri-file-3-line text-lg" aria-hidden="true"></i>
-                                    </div>
-                                </template>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <p class="truncate text-sm font-semibold text-slate-800" x-text="filePreview.name"></p>
-                                <p class="mt-0.5 text-xs text-slate-500" x-text="`${filePreview.sizeLabel} · ${filePreview.type || 'Unknown file type'}`"></p>
-                            </div>
-                            <button type="button" @click="clearFile()" class="text-xs font-semibold text-rose-600 transition hover:text-rose-700">
-                                Remove
-                            </button>
-                        </div>
-                        <p class="mt-1 text-xs text-slate-500">Maximum 50MB. Supports documents, archives, and video files.</p>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section class="space-y-6 rounded-3xl border border-slate-200/70 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                <h2 class="text-lg font-semibold text-[#16136a]">Audience targeting</h2>
-                <div class="grid gap-6 md:grid-cols-2">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Target classes</span>
-                        <p class="mt-1 text-xs text-slate-500">Leave all unchecked to show to every class.</p>
-                        <div class="mt-3 flex flex-wrap gap-2">
-                            @foreach ($classOptions as $class)
-                                <label class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition" :class="selectedClasses.includes('{{ $class }}') ? 'border-[#16136a] bg-[#16136a]/10 text-[#16136a]' : 'border-slate-200 text-slate-600 hover:border-[#16136a]/40 hover:text-[#16136a]'">
-                                    <input type="checkbox" name="target_classes[]" value="{{ $class }}" class="sr-only" @change="toggleClass('{{ $class }}')" @checked(in_array($class, old('target_classes', $resource->target_classes ?? [])))>
-                                    <span class="inline-flex items-center gap-2">
-                                        <i class="ri-team-line text-base" aria-hidden="true"></i>
-                                        <span>{{ $class }}</span>
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Target years</span>
-                        <p class="mt-1 text-xs text-slate-500">Leave all unchecked to show to all academic levels.</p>
-                        <div class="mt-3 flex flex-wrap gap-2">
-                            @foreach ($yearOptions as $year)
-                                <label class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition" :class="selectedYears.includes('{{ $year }}') ? 'border-[#16136a] bg-[#16136a]/10 text-[#16136a]' : 'border-slate-200 text-slate-600 hover:border-[#16136a]/40 hover:text-[#16136a]'">
-                                    <input type="checkbox" name="target_years[]" value="{{ $year }}" class="sr-only" @change="toggleYear('{{ $year }}')" @checked(in_array($year, old('target_years', $resource->target_years ?? [])))>
-                                    <span class="inline-flex items-center gap-2">
-                                        <i class="ri-graduation-cap-line text-base" aria-hidden="true"></i>
-                                        <span>Year {{ $year }}</span>
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
+                <div class="flex flex-col gap-4 pt-4 sm:flex-row">
+                    <button type="submit" class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
+                        <i class="ri-save-line text-lg"></i>
+                        Save Resource
+                    </button>
+                    <a href="{{ route('admin.resources.index') }}" class="flex h-14 items-center justify-center rounded-2xl bg-slate-50 px-8 text-sm font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">
+                        Cancel
+                    </a>
                 </div>
-            </section>
-
-            <div class="flex items-center justify-end gap-3">
-                <a href="{{ route('admin.resources.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                    Cancel
-                </a>
-                <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-[#16136a] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:shadow-xl">
-                    <i class="ri-save-line text-base" aria-hidden="true"></i>
-                    Save resource
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -206,56 +201,28 @@
                 selectedYears: @js(old('target_years', $resource->target_years ?? [])),
                 filePreview: null,
                 toggleClass(value) {
-                    this.selectedClasses = this.toggleArray(this.selectedClasses, value);
+                    const index = this.selectedClasses.indexOf(value);
+                    if (index === -1) this.selectedClasses.push(value);
+                    else this.selectedClasses.splice(index, 1);
                 },
                 toggleYear(value) {
-                    this.selectedYears = this.toggleArray(this.selectedYears, value);
-                },
-                toggleArray(list, value) {
-                    const index = list.indexOf(value);
-                    if (index === -1) {
-                        list.push(value);
-                    } else {
-                        list.splice(index, 1);
-                    }
-                    return list;
+                    const index = this.selectedYears.indexOf(value);
+                    if (index === -1) this.selectedYears.push(value);
+                    else this.selectedYears.splice(index, 1);
                 },
                 handleFileChange(event) {
-                    const files = event.target.files || [];
-                    const file = files[0];
-                    if (!file) {
-                        this.clearFile();
-                        return;
-                    }
-
+                    const file = event.target.files[0];
+                    if (!file) return this.clearFile();
                     const sizeKb = file.size / 1024;
-                    const sizeLabel = sizeKb > 1024
-                        ? `${(sizeKb / 1024).toFixed(1)} MB`
-                        : `${Math.round(sizeKb)} KB`;
-
-                    if (this.filePreview && this.filePreview.url) {
-                        URL.revokeObjectURL(this.filePreview.url);
-                    }
-
-                    const isImage = (file.type || '').startsWith('image/');
-
                     this.filePreview = {
                         name: file.name,
-                        sizeLabel,
-                        type: file.type || 'Unknown type',
-                        isImage,
-                        url: isImage ? URL.createObjectURL(file) : null,
+                        sizeLabel: sizeKb > 1024 ? `${(sizeKb / 1024).toFixed(1)} MB` : `${Math.round(sizeKb)} KB`
                     };
                 },
                 clearFile() {
-                    if (this.$refs.fileInput) {
-                        this.$refs.fileInput.value = '';
-                    }
-                    if (this.filePreview && this.filePreview.url) {
-                        URL.revokeObjectURL(this.filePreview.url);
-                    }
+                    if (this.$refs.fileInput) this.$refs.fileInput.value = '';
                     this.filePreview = null;
-                },
+                }
             }));
         });
     </script>

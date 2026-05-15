@@ -17,6 +17,9 @@ class UpdateEventRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:150'],
             'location' => ['nullable', 'string', 'max:150'],
+            'type' => ['required', 'string', 'in:physical,online,hybrid'],
+            'meeting_link' => ['nullable', 'url', 'max:255'],
+            'meeting_passcode' => ['nullable', 'string', 'max:50'],
             'description' => ['nullable', 'string'],
             'start_at' => ['required', 'date'],
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],

@@ -21,166 +21,184 @@
         ->values();
 @endphp
 
-<div class="grid gap-6 lg:grid-cols-2">
-    <div class="space-y-2">
-        <label for="username" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Username</label>
-        <div class="relative">
-            <i class="ri-at-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input id="username" type="text" name="username" value="{{ old('username', $student->username) }}" required class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-        </div>
-        @error('username')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="fullname" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Full name</label>
-        <div class="relative">
-            <i class="ri-user-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input id="fullname" type="text" name="fullname" value="{{ old('fullname', $student->fullname) }}" required class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-        </div>
-        @error('fullname')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="email" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Email</label>
-        <div class="relative">
-            <i class="ri-mail-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input id="email" type="email" name="email" value="{{ old('email', $student->email) }}" required class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-        </div>
-        @error('email')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="phone_number" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Phone number</label>
-        <div class="relative">
-            <i class="ri-phone-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}" class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-        </div>
-        @error('phone_number')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="index_number" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Reference number</label>
-        <div class="relative">
-            <i class="ri-hashtag pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input id="index_number" type="text" name="index_number" value="{{ old('index_number', $student->index_number) }}" class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-        </div>
-        @error('index_number')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="class" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Class</label>
-        <div class="relative">
-            <i class="ri-community-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <select id="class" name="class" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-11 pr-12 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                <option value="">Select class</option>
-                @foreach ($classOptions as $option)
-                    <option value="{{ $option }}" @selected((string) old('class', $student->class) === (string) $option)>{{ $option }}</option>
-                @endforeach
-            </select>
-            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        </div>
-        @error('class')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="year" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Year</label>
-        <div class="relative">
-            <i class="ri-calendar-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <select id="year" name="year" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-11 pr-12 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                <option value="">Select</option>
-                @forelse ($yearOptions as $option)
-                    <option value="{{ $option }}" @selected((string) old('year', $student->year) === (string) $option)>Year {{ $option }}</option>
-                @empty
-                    @for ($y = 1; $y <= 6; $y++)
-                        <option value="{{ $y }}" @selected(old('year', $student->year) == $y)>Year {{ $y }}</option>
-                    @endfor
-                @endforelse
-            </select>
-            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        </div>
-        @error('year')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <div class="space-y-2" x-data="{
-            password: '',
-            message: '',
-            helper: '',
-            badgeClass: '',
-            evaluate() {
-                const value = this.password || '';
-                if (! value.length) {
-                    this.message = '';
-                    this.helper = '';
-                    this.badgeClass = '';
-                    return;
-                }
-
-                let score = 0;
-                if (value.length >= 8) score += 30;
-                if (/[A-Z]/.test(value)) score += 15;
-                if (/[a-z]/.test(value)) score += 15;
-                if (/[0-9]/.test(value)) score += 20;
-                if (/[^A-Za-z0-9]/.test(value)) score += 20;
-                if (value.length >= 12) score += 10;
-
-                if (score >= 85) {
-                    this.message = 'Strong';
-                    this.helper = 'Looks secure. Keep it safe!';
-                    this.badgeClass = 'bg-emerald-100 text-emerald-700';
-                } else if (score >= 60) {
-                    this.message = 'Good';
-                    this.helper = 'Add length or symbols for extra strength.';
-                    this.badgeClass = 'bg-amber-100 text-amber-700';
-                } else {
-                    this.message = 'Weak';
-                    this.helper = 'Use 8+ chars with mixed case, numbers & symbols.';
-                    this.badgeClass = 'bg-rose-100 text-rose-700';
-                }
-            }
-        }" x-init="$watch('password', () => evaluate())">
-        <label for="password" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-            Password
-            @if ($isEdit)
-                <span class="text-slate-400">(leave blank to keep existing)</span>
-            @endif
-        </label>
-        <div class="relative">
-            <i class="ri-lock-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input x-model="password" id="password" type="password" name="password" class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" @unless($isEdit) required @endunless>
-        </div>
-        @error('password')
-            <p class="text-xs text-rose-600">{{ $message }}</p>
-        @enderror
-        <div class="flex items-center gap-2 text-xs" x-show="message" x-cloak>
-            <span class="inline-flex items-center gap-1 rounded-full px-3 py-1 font-semibold" :class="badgeClass">
-                <i class="ri-shield-keyhole-line text-sm"></i>
-                <span x-text="message"></span>
+<div class="space-y-10">
+    {{-- Personal & Contact --}}
+    <section class="space-y-6">
+        <div class="flex items-center gap-3 border-b border-slate-50 pb-4">
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 text-[#16136a]">
+                <i class="ri-user-line text-lg"></i>
             </span>
-            <span class="text-slate-500" x-text="helper"></span>
+            <h3 class="text-sm font-semibold text-[#16136a]">Personal & Contact Details</h3>
         </div>
-    </div>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+            <div class="space-y-2">
+                <label for="fullname" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Full Name</label>
+                <div class="group relative">
+                    <i class="ri-user-3-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input id="fullname" type="text" name="fullname" value="{{ old('fullname', $student->fullname) }}" required placeholder="e.g. John Doe" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+                @error('fullname') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
 
-    <div class="space-y-2">
-        <label for="password_confirmation" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Confirm password</label>
-        <div class="relative">
-            <i class="ri-lock-password-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input id="password_confirmation" type="password" name="password_confirmation" class="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" @unless($isEdit) required @endunless>
+            <div class="space-y-2">
+                <label for="email" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Email Address</label>
+                <div class="group relative">
+                    <i class="ri-mail-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input id="email" type="email" name="email" value="{{ old('email', $student->email) }}" required placeholder="name@domain.com" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+                @error('email') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="space-y-2">
+                <label for="phone_number" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Phone Number</label>
+                <div class="group relative">
+                    <i class="ri-phone-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}" placeholder="e.g. +233..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+                @error('phone_number') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="space-y-2">
+                <label for="username" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Username / ID</label>
+                <div class="group relative">
+                    <i class="ri-at-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input id="username" type="text" name="username" value="{{ old('username', $student->username) }}" required placeholder="e.g. john_doe" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+                @error('username') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
         </div>
-    </div>
+    </section>
+
+    {{-- Academic Info --}}
+    <section class="space-y-6">
+        <div class="flex items-center gap-3 border-b border-slate-50 pb-4">
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 text-[#16136a]">
+                <i class="ri-graduation-cap-line text-lg"></i>
+            </span>
+            <h3 class="text-sm font-semibold text-[#16136a]">Academic Information</h3>
+        </div>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+            <div class="space-y-2">
+                <label for="index_number" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Index Number</label>
+                <div class="group relative">
+                    <i class="ri-hashtag absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input id="index_number" type="text" name="index_number" value="{{ old('index_number', $student->index_number) }}" placeholder="Student Reference ID" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+                @error('index_number') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="space-y-2">
+                <label for="class" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Class / Program</label>
+                <div class="relative group">
+                    <i class="ri-building-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <select id="class" name="class" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-12 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                        <option value="">Select class</option>
+                        @foreach ($classOptions as $option)
+                            <option value="{{ $option }}" @selected((string) old('class', $student->class) === (string) $option)>{{ $option }}</option>
+                        @endforeach
+                    </select>
+                    <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                </div>
+                @error('class') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="space-y-2">
+                <label for="year" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Current Year</label>
+                <div class="relative group">
+                    <i class="ri-calendar-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <select id="year" name="year" class="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-12 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                        <option value="">Select Year</option>
+                        @forelse ($yearOptions as $option)
+                            <option value="{{ $option }}" @selected((string) old('year', $student->year) === (string) $option)>Year {{ $option }}</option>
+                        @empty
+                            @for ($y = 1; $y <= 4; $y++)
+                                <option value="{{ $y }}" @selected(old('year', $student->year) == $y)>Year {{ $y }}</option>
+                            @endfor
+                        @endforelse
+                    </select>
+                    <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                </div>
+                @error('year') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+            </div>
+        </div>
+    </section>
+
+    {{-- Security --}}
+    <section class="space-y-6">
+        <div class="flex items-center gap-3 border-b border-slate-50 pb-4">
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 text-[#16136a]">
+                <i class="ri-lock-2-line text-lg"></i>
+            </span>
+            <h3 class="text-sm font-semibold text-[#16136a]">Account Security</h3>
+        </div>
+        
+        <div class="grid gap-6 md:grid-cols-2">
+            <div class="space-y-2" x-data="{
+                    password: '',
+                    message: '',
+                    helper: '',
+                    badgeClass: '',
+                    evaluate() {
+                        const value = this.password || '';
+                        if (! value.length) {
+                            this.message = '';
+                            this.helper = '';
+                            this.badgeClass = '';
+                            return;
+                        }
+
+                        let score = 0;
+                        if (value.length >= 8) score += 30;
+                        if (/[A-Z]/.test(value)) score += 15;
+                        if (/[a-z]/.test(value)) score += 15;
+                        if (/[0-9]/.test(value)) score += 20;
+                        if (/[^A-Za-z0-9]/.test(value)) score += 20;
+                        if (value.length >= 12) score += 10;
+
+                        if (score >= 85) {
+                            this.message = 'Strong';
+                            this.helper = 'Very secure.';
+                            this.badgeClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+                        } else if (score >= 60) {
+                            this.message = 'Good';
+                            this.helper = 'Add symbols.';
+                            this.badgeClass = 'bg-amber-50 text-amber-600 border-amber-100';
+                        } else {
+                            this.message = 'Weak';
+                            this.helper = 'Add length/case.';
+                            this.badgeClass = 'bg-rose-50 text-rose-600 border-rose-100';
+                        }
+                    }
+                }" x-init="$watch('password', () => evaluate())">
+                <label for="password" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                    Account Password
+                    @if ($isEdit) <span class="text-slate-300 font-medium lowercase italic">(Leave blank to keep)</span> @endif
+                </label>
+                <div class="group relative">
+                    <i class="ri-shield-keyhole-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input x-model="password" id="password" type="password" name="password" @unless($isEdit) required @endunless placeholder="••••••••" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+                @error('password') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
+                
+                <div class="mt-2 flex items-center gap-2" x-show="message" x-cloak>
+                    <span class="inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest" :class="badgeClass">
+                        <span x-text="message"></span>
+                    </span>
+                    <span class="text-[10px] font-semibold text-slate-400" x-text="helper"></span>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="password_confirmation" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Confirm Password</label>
+                <div class="group relative">
+                    <i class="ri-lock-password-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                    <input id="password_confirmation" type="password" name="password_confirmation" @unless($isEdit) required @endunless placeholder="••••••••" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                </div>
+            </div>
+        </div>
+    </section>
 
     @if ($isEdit)
         <input type="hidden" name="is_seller" value="{{ $student->is_seller ? 1 : 0 }}">

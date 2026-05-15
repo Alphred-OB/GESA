@@ -201,6 +201,31 @@ class StudentDashboardService
             });
     }
 
+    public function latestAnnouncements(User $user): Collection
+    {
+        return Announcement::query()
+            ->published()
+            ->forStudent($user)
+            ->with('author')
+            ->latest('published_at')
+            ->limit(3)
+            ->get()
+            ->map(function (Announcement $announcement) {
+                return [
+                    'id' => $announcement->id,
+                    'title' => $announcement->title,
+                    'excerpt' => $announcement->excerpt,
+                    'type' => Str::headline($announcement->type ?? 'General'),
+                    'priority' => $announcement->priority ?? 'medium',
+                    'published_at' => $announcement->published_at,
+                    'time_ago' => $announcement->published_at?->diffForHumans() ?? 'Recently',
+                    'author_name' => $announcement->author?->fullname ?? 'GESA Office',
+                    'author_avatar' => $announcement->author?->profile_picture,
+                    'slug' => $announcement->slug,
+                ];
+            });
+    }
+
     public function supportResources(User $student = null): Collection
     {
         $class = $student?->class ?: null;
@@ -299,7 +324,7 @@ class StudentDashboardService
             'state' => $state,
             'cta' => 'Review dues',
             'cta_url' => route('student.dues.index'),
-            'icon_svg' => '<path d="M4 2h16v20l-4-2-4 2-4-2-4 2z" /><path d="M16 6H8" /><path d="M16 10H8" /><path d="M10 14H8" />',
+            'icon' => 'ri-bill-line',
         ];
     }
 
@@ -335,7 +360,7 @@ class StudentDashboardService
             'state' => $state,
             'cta' => 'View announcements',
             'cta_url' => route('student.announcements.index'),
-            'icon_svg' => '<path d="M4 11V5a2 2 0 0 1 2-2h1l4-2v18l-4-2H6a2 2 0 0 1-2-2v-2" /><path d="M18 7a3 3 0 0 1 0 6" /><path d="M18 3a7 7 0 0 1 0 14" />',
+            'icon' => 'ri-megaphone-line',
         ];
     }
 
@@ -421,7 +446,7 @@ class StudentDashboardService
             'state' => $state,
             'cta' => 'Open resources',
             'cta_url' => route('student.resources.index'),
-            'icon_svg' => '<path d="M6 3h11a1 1 0 0 1 1 1v14l-3-2-3 2-3-2-3 2V4a1 1 0 0 1 1-1z" /><path d="M9 7h6" /><path d="M9 11h4" />',
+            'icon' => 'ri-folder-open-line',
         ];
     }
 

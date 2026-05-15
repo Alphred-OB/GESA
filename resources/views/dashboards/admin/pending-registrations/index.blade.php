@@ -31,13 +31,13 @@
                 let route = '';
 
                 if (action === 'approve') {
-                    confirmMsg = `Are you sure you want to approve ${this.selected.length} selected registrations?`;
+                    confirmMsg = `Approve ${this.selected.length} selected registrations?`;
                     route = '{{ route("admin.pending-registrations.bulk-approve") }}';
                 } else if (action === 'reject') {
-                    confirmMsg = `Are you sure you want to reject ${this.selected.length} selected registrations?`;
+                    confirmMsg = `Reject ${this.selected.length} selected registrations?`;
                     route = '{{ route("admin.pending-registrations.bulk-reject") }}';
                 } else if (action === 'delete') {
-                    confirmMsg = `Are you sure you want to PERMANENTLY DELETE ${this.selected.length} selected registrations? This action cannot be undone.`;
+                    confirmMsg = `PERMANENTLY DELETE ${this.selected.length} selected registrations?`;
                     route = '{{ route("admin.pending-registrations.bulk-delete") }}';
                     method = 'DELETE';
                 }
@@ -50,417 +50,282 @@
                 }
             }
         }"
-        class="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8"
+        class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
     >
-        <div class="space-y-10">
-            {{-- Header --}}
-            <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 text-center shadow-lg shadow-[#16136a]/5 sm:text-left md:flex-row md:items-center md:justify-between">
-                <div class="space-y-2">
-                    <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                        <i class="ri-user-add-line text-base" aria-hidden="true"></i>
-                        Pending Registrations
-                    </p>
-                    <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Review Registration Requests</h1>
-                    <p class="text-sm text-slate-600">Review and approve student registration requests from freshers and students without email access.</p>
-                </div>
-            </header>
-
-            {{-- Main Content Section --}}
-            <section class="space-y-6 rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                {{-- Stats Cards --}}
-                <div class="grid gap-4 md:grid-cols-3">
-                    <article class="rounded-2xl border border-yellow-200 bg-yellow-50/30 p-5 transition hover:shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-yellow-600">Pending</p>
-                                <p class="mt-2 text-3xl font-bold text-slate-800">
-                                    {{ \App\Models\PendingRegistration::where('status', 'pending')->count() }}
-                                </p>
-                            </div>
-                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-100 text-yellow-700">
-                                <i class="ri-time-line text-2xl"></i>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="rounded-2xl border border-green-200 bg-green-50/30 p-5 transition hover:shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-green-600">Approved</p>
-                                <p class="mt-2 text-3xl font-bold text-slate-800">
-                                    {{ \App\Models\PendingRegistration::where('status', 'approved')->count() }}
-                                </p>
-                            </div>
-                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-700">
-                                <i class="ri-checkbox-circle-line text-2xl"></i>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="rounded-2xl border border-red-200 bg-red-50/30 p-5 transition hover:shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-red-600">Rejected</p>
-                                <p class="mt-2 text-3xl font-bold text-slate-800">
-                                    {{ \App\Models\PendingRegistration::where('status', 'rejected')->count() }}
-                                </p>
-                            </div>
-                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-700">
-                                <i class="ri-close-circle-line text-2xl"></i>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-
-                {{-- Filter and Search --}}
-                <form method="GET" class="space-y-3 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4 md:flex md:flex-wrap md:items-end md:gap-3 md:space-y-0">
-                    <div class="flex w-full flex-col gap-2 md:w-64">
-                        <label class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
-                        <div class="relative">
-                            <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Name, email, index..." class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
-                        </div>
+        <div class="space-y-8">
+            {{-- Header & Stats --}}
+            <div class="grid gap-6 lg:grid-cols-12 lg:items-end">
+                <header class="lg:col-span-5 space-y-3">
+                    <div class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]">
+                        <i class="ri-user-add-line text-xs"></i>
+                        Registration Queue
                     </div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Review Requests</h1>
+                    <p class="max-w-md text-sm font-medium text-slate-500">Manage student accounts waiting for administrative approval and verification.</p>
+                </header>
 
-                    <div class="flex w-full flex-col gap-2 md:w-52">
-                        <label class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Status</label>
+                <div class="lg:col-span-7 grid grid-cols-3 gap-4">
+                    <div class="rounded-3xl border border-amber-100 bg-amber-50/50 p-4 shadow-sm transition-all hover:shadow-md">
+                        <p class="text-[10px] font-semibold uppercase tracking-widest text-amber-600 mb-1">Waiting</p>
+                        <p class="text-2xl font-semibold text-slate-900">{{ \App\Models\PendingRegistration::where('status', 'pending')->count() }}</p>
+                    </div>
+                    <div class="rounded-3xl border border-emerald-100 bg-emerald-50/50 p-4 shadow-sm transition-all hover:shadow-md">
+                        <p class="text-[10px] font-semibold uppercase tracking-widest text-emerald-600 mb-1">Approved</p>
+                        <p class="text-2xl font-semibold text-slate-900">{{ \App\Models\PendingRegistration::where('status', 'approved')->count() }}</p>
+                    </div>
+                    <div class="rounded-3xl border border-rose-100 bg-rose-50/50 p-4 shadow-sm transition-all hover:shadow-md">
+                        <p class="text-[10px] font-semibold uppercase tracking-widest text-rose-600 mb-1">Rejected</p>
+                        <p class="text-2xl font-semibold text-slate-900">{{ \App\Models\PendingRegistration::where('status', 'rejected')->count() }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Bulk Action Panel --}}
+            <div 
+                x-show="selected.length > 0"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                class="rounded-[2rem] border border-[#16136a]/20 bg-[#16136a] p-4 flex flex-wrap items-center justify-between gap-4 shadow-2xl shadow-[#16136a]/20"
+                x-cloak
+            >
+                <div class="flex items-center gap-4 px-2">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-sm font-semibold text-[#16136a] shadow-lg" x-text="selected.length"></div>
+                    <div>
+                        <p class="text-sm font-semibold text-white">Batch Management</p>
+                        <p class="text-[10px] text-white/50 font-semibold uppercase tracking-widest">Apply actions to selected</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button @click="submitBulk('approve')" class="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-500 px-5 text-xs font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                        <i class="ri-check-line text-lg"></i> Approve Selected
+                    </button>
+                    <button @click="submitBulk('reject')" class="inline-flex h-11 items-center gap-2 rounded-xl bg-amber-500 px-5 text-xs font-semibold text-white shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                        <i class="ri-close-line text-lg"></i> Reject Selected
+                    </button>
+                    <button @click="submitBulk('delete')" class="inline-flex h-11 items-center gap-2 rounded-xl bg-rose-500 px-5 text-xs font-semibold text-white shadow-lg shadow-rose-500/20 transition-all hover:-translate-y-0.5 active:scale-95">
+                        <i class="ri-delete-bin-line text-lg"></i> Delete
+                    </button>
+                    <div class="mx-2 h-6 w-px bg-white/10"></div>
+                    <button @click="selected = []; allSelected = false" class="px-4 text-xs font-semibold text-white/50 hover:text-white transition-colors">Cancel</button>
+                </div>
+            </div>
+
+            <form id="bulk-action-form" method="POST" class="hidden">
+                @csrf
+                <input type="hidden" id="bulk-method" name="_method" value="POST">
+                <template x-for="id in selected" :key="id">
+                    <input type="hidden" name="ids[]" :value="id">
+                </template>
+            </form>
+
+            {{-- Main Directory Card --}}
+            <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-2 shadow-xl shadow-slate-200/40">
+                {{-- Toolbar --}}
+                <div class="flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between">
+                    <form method="GET" class="flex flex-1 flex-wrap items-center gap-3">
+                        <div class="relative flex-1 min-w-[200px]">
+                            <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, or reference..." class="h-12 w-full rounded-2xl border border-slate-100 bg-slate-50/50 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                        </div>
+                        
                         <div class="relative">
-                            <select name="status" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
+                            <select name="status" class="h-12 appearance-none rounded-2xl border border-slate-100 bg-slate-50/50 pl-5 pr-10 text-sm font-semibold text-slate-600 outline-none transition-all focus:border-[#16136a] focus:bg-white">
                                 <option value="">All Status</option>
-                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                <option value="pending" @selected(request('status') === 'pending')>Waiting</option>
+                                <option value="approved" @selected(request('status') === 'approved')>Approved</option>
+                                <option value="rejected" @selected(request('status') === 'rejected')>Rejected</option>
                             </select>
-                            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         </div>
-                    </div>
 
-                    <div class="flex w-full flex-col gap-2 md:w-52">
-                        <label class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Program</label>
-                        <div class="relative">
-                            <select name="class" class="h-11 w-full appearance-none rounded-2xl border border-slate-200 bg-white pl-4 pr-10 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
-                                <option value="">All Programs</option>
-                                <option value="Geomatic Engineering" {{ request('class') === 'Geomatic Engineering' ? 'selected' : '' }}>Geomatic Engineering</option>
-                                <option value="Land Administration" {{ request('class') === 'Land Administration' ? 'selected' : '' }}>Land Administration</option>
-                                <option value="Spatial Planning" {{ request('class') === 'Spatial Planning' ? 'selected' : '' }}>Spatial Planning</option>
-                            </select>
-                            <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <div class="flex items-end md:ml-auto md:w-auto">
-                        <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                            <i class="ri-equalizer-line text-base"></i> Apply
+                        <button type="submit" class="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95">
+                            Apply Filters
                         </button>
-                    </div>
-                </form>
-
-                {{-- Bulk Action Confirmation Form --}}
-                <form id="bulk-action-form" method="POST" style="display: none;">
-                    @csrf
-                    <input type="hidden" id="bulk-method" name="_method" value="POST">
-                    <template x-for="id in selected" :key="id">
-                        <input type="hidden" name="ids[]" :value="id">
-                    </template>
-                </form>
-
-                {{-- Bulk Action Panel (Inline) --}}
-                <div 
-                    x-show="selected.length > 0"
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    class="rounded-2xl border border-[#16136a]/20 bg-[#16136a]/5 p-4 flex flex-wrap items-center justify-between gap-4"
-                >
-                    <div class="flex items-center gap-3">
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a] text-sm font-bold text-white shadow-lg shadow-[#16136a]/20" x-text="selected.length"></div>
-                        <div>
-                            <p class="text-sm font-bold text-[#16136a]">Bulk Actions</p>
-                            <p class="text-xs text-slate-500 font-medium">Apply action to all selected registrations</p>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button 
-                            @click="submitBulk('approve')" 
-                            class="inline-flex h-10 items-center gap-2 rounded-xl bg-green-600 px-5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 active:translate-y-0"
-                        >
-                            <i class="ri-check-line text-sm"></i> Approve
-                        </button>
-                        <button 
-                            @click="submitBulk('reject')" 
-                            class="inline-flex h-10 items-center gap-2 rounded-xl bg-orange-500 px-5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-orange-600 active:translate-y-0"
-                        >
-                            <i class="ri-close-line text-sm"></i> Reject
-                        </button>
-                        <button 
-                            @click="submitBulk('delete')" 
-                            class="inline-flex h-10 items-center gap-2 rounded-xl bg-red-600 px-5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red-700 active:translate-y-0"
-                        >
-                            <i class="ri-delete-bin-line text-sm"></i> Delete
-                        </button>
-                        
-                        <div class="h-8 w-px bg-slate-200 mx-2 hidden sm:block"></div>
-                        
-                        <button @click="selected = []; allSelected = false" class="h-10 px-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 transition hover:text-slate-600">
-                            Cancel
-                        </button>
-                    </div>
+                    </form>
                 </div>
 
-                {{-- Success/Error Messages --}}
                 @if(session('success'))
-                    <div class="rounded-2xl bg-green-50 border border-green-200 p-4">
-                        <div class="flex items-center gap-3">
-                            <i class="ri-checkbox-circle-fill text-2xl text-green-600"></i>
-                            <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
-                        </div>
+                    <div class="mx-4 mb-4 rounded-2xl bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-600 border border-emerald-100 flex items-center gap-3">
+                        <i class="ri-checkbox-circle-fill text-xl"></i>
+                        {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="rounded-2xl bg-red-50 border border-red-200 p-4">
-                        <div class="flex items-center gap-3">
-                            <i class="ri-error-warning-fill text-2xl text-red-600"></i>
-                            <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
-                        </div>
+                    <div class="mx-4 mb-4 rounded-2xl bg-rose-50 px-5 py-4 text-sm font-semibold text-rose-600 border border-rose-100 flex items-center gap-3">
+                        <i class="ri-error-warning-fill text-xl"></i>
+                        {{ session('error') }}
                     </div>
                 @endif
 
-                {{-- Registrations Table --}}
-                <div class="overflow-hidden rounded-2xl border border-slate-200/70">
-                    <div class="hidden md:block">
-                        <table class="min-w-full divide-y divide-slate-200 text-left text-[13px] text-slate-600">
-                            <thead class="bg-slate-50/80 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-                                <tr>
-                                    <th class="px-5 py-2.5">
-                                        <div class="flex items-center">
-                                            <input 
-                                                type="checkbox" 
-                                                @click="toggleAll()" 
-                                                :checked="allSelected"
-                                                class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]"
-                                            >
-                                        </div>
-                                    </th>
-                                    <th class="px-5 py-2.5">Student</th>
-                                    <th class="px-5 py-2.5">Program</th>
-                                    <th class="px-5 py-2.5">Contact</th>
-                                    <th class="px-5 py-2.5">Status</th>
-                                    <th class="px-5 py-2.5">Submitted</th>
-                                    <th class="px-5 py-2.5 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200 bg-white">
-                                @forelse($registrations as $registration)
-                                    <tr 
-                                        :class="selected.includes({{ $registration->id }}) ? 'bg-[#16136a]/5' : 'hover:bg-slate-50'" 
-                                        class="transition-colors"
-                                    >
-                                        <td class="px-5 py-3">
-                                            <div class="flex items-center">
-                                                <input 
-                                                    type="checkbox" 
-                                                    :checked="selected.includes({{ $registration->id }})"
-                                                    @click="toggle({{ $registration->id }})"
-                                                    class="h-4 w-4 rounded border-slate-300 text-[#16136a] focus:ring-[#16136a]"
-                                                >
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-3">
-                                            <div class="flex items-center gap-3">
-                                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a] text-white font-semibold text-sm">
-                                                    {{ substr($registration->first_name, 0, 1) }}{{ substr($registration->last_name, 0, 1) }}
-                                                </div>
-                                                <div>
-                                                    <p class="font-semibold text-slate-900 text-[15px]">{{ $registration->first_name }} {{ $registration->last_name }}</p>
-                                                    <p class="text-xs text-slate-500">{{ $registration->index_number }}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-3">
-                                            <p class="text-sm font-medium text-slate-900">{{ $registration->class }}</p>
-                                            <p class="text-xs text-slate-500">Year {{ $registration->year }}</p>
-                                        </td>
-                                        <td class="px-5 py-3">
-                                            <p class="text-sm text-slate-900">{{ $registration->email }}</p>
-                                            @if($registration->phone_number)
-                                                <p class="text-xs text-slate-500">{{ $registration->phone_number }}</p>
-                                            @endif
-                                        </td>
-                                        <td class="px-5 py-3">
-                                            @if($registration->status === 'pending')
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-                                                    <i class="ri-time-line"></i> Pending
-                                                </span>
-                                            @elseif($registration->status === 'approved')
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
-                                                    <i class="ri-checkbox-circle-line"></i> Approved
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800">
-                                                    <i class="ri-close-circle-line"></i> Rejected
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="px-5 py-3">
-                                            <p class="text-sm text-slate-900">{{ $registration->created_at->format('M d, Y') }}</p>
-                                            <p class="text-xs text-slate-500">{{ $registration->created_at->diffForHumans() }}</p>
-                                        </td>
-                                        <td class="px-5 py-3 text-right">
-                                            <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-1.5 text-[12px] font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                                <i class="ri-eye-line text-sm"></i> Review
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="px-6 py-10 text-center text-sm text-slate-500">
-                                            <div class="flex flex-col items-center gap-3">
-                                                <i class="ri-inbox-line text-5xl text-slate-300"></i>
-                                                <p class="font-semibold text-slate-600">No registrations found</p>
-                                                <p>Try adjusting your filters</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {{-- Mobile View --}}
-                    <div class="md:hidden">
-                        <div class="grid gap-4 p-4">
+                {{-- Table (Desktop) --}}
+                <div class="hidden md:block">
+                    <table class="w-full">
+                        <thead class="bg-slate-50/50 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                            <tr>
+                                <th class="w-12 px-6 py-4">
+                                    <input type="checkbox" @click="toggleAll()" :checked="allSelected" class="h-4 w-4 rounded border-slate-200 text-[#16136a] focus:ring-[#16136a]">
+                                </th>
+                                <th class="px-6 py-4 text-left">Student Information</th>
+                                <th class="px-6 py-4 text-left">Academic Program</th>
+                                <th class="px-6 py-4 text-left">Status</th>
+                                <th class="px-6 py-4 text-left">Applied</th>
+                                <th class="px-6 py-4 text-right">Review</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
                             @forelse($registrations as $registration)
-                                <article 
-                                    @click="toggle({{ $registration->id }})"
-                                    :class="selected.includes({{ $registration->id }}) ? 'border-[#16136a] bg-[#16136a]/5' : 'border-slate-200/70 bg-white'"
-                                    class="relative rounded-2xl border p-5 shadow-sm transition"
-                                >
-                                    {{-- Checkbox for mobile --}}
-                                    <div class="absolute right-4 top-4">
-                                        <input 
-                                            type="checkbox" 
-                                            :checked="selected.includes({{ $registration->id }})"
-                                            class="h-5 w-5 rounded-full border-slate-300 text-[#16136a] focus:ring-[#16136a]"
-                                        >
-                                    </div>
-
-                                    <div class="flex items-start justify-between mb-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a] text-white font-semibold text-sm">
-                                                {{ substr($registration->first_name, 0, 1) }}{{ substr($registration->last_name, 0, 1) }}
+                                <tr class="group transition-colors hover:bg-slate-50/50">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" :checked="selected.includes({{ $registration->id }})" @click="toggle({{ $registration->id }})" class="h-4 w-4 rounded border-slate-200 text-[#16136a] focus:ring-[#16136a]">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-sm font-semibold text-[#16136a] transition-colors group-hover:bg-[#16136a] group-hover:text-white">
+                                                {{ strtoupper(substr($registration->first_name, 0, 1)) }}
                                             </div>
-                                            <div>
-                                                <h2 class="text-base font-semibold text-slate-900">{{ $registration->first_name }} {{ $registration->last_name }}</h2>
-                                                <p class="text-xs text-slate-500">{{ $registration->index_number }}</p>
+                                            <div class="min-w-0">
+                                                <p class="truncate text-sm font-semibold text-slate-900">{{ $registration->first_name }} {{ $registration->last_name }}</p>
+                                                <p class="truncate text-[11px] font-medium text-slate-400">{{ $registration->email }}</p>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="mb-3">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-semibold text-slate-700">{{ $registration->class }}</p>
+                                        <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Year {{ $registration->year }}</p>
+                                    </td>
+                                    <td class="px-6 py-4">
                                         @if($registration->status === 'pending')
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-[11px] font-semibold text-yellow-800">
-                                                <i class="ri-time-line"></i> Pending
+                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-amber-600">
+                                                <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                Waiting
                                             </span>
                                         @elseif($registration->status === 'approved')
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[11px] font-semibold text-green-800">
-                                                <i class="ri-check-line"></i> Approved
+                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-emerald-600">
+                                                <i class="ri-checkbox-circle-fill"></i>
+                                                Approved
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-[11px] font-semibold text-red-800">
-                                                <i class="ri-close-line"></i> Rejected
+                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-rose-600">
+                                                <i class="ri-close-circle-fill"></i>
+                                                Rejected
                                             </span>
                                         @endif
-                                    </div>
-
-                                    <dl class="space-y-2 text-xs text-slate-500 border-t border-slate-100 pt-3">
-                                        <div class="flex justify-between">
-                                            <dt class="font-medium text-slate-600">Program</dt>
-                                            <dd>{{ $registration->class }}</dd>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <dt class="font-medium text-slate-600">Year</dt>
-                                            <dd>Year {{ $registration->year }}</dd>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <dt class="font-medium text-slate-600">Email</dt>
-                                            <dd>{{ $registration->email }}</dd>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <dt class="font-medium text-slate-600">Submitted</dt>
-                                            <dd>{{ $registration->created_at->format('M d, Y') }}</dd>
-                                        </div>
-                                    </dl>
-
-                                    <div class="mt-4 flex justify-end gap-2">
-                                        <a 
-                                            @click.stop 
-                                            href="{{ route('admin.pending-registrations.show', $registration) }}" 
-                                            class="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]"
-                                        >
-                                            <i class="ri-eye-line text-sm"></i> Review Request
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-semibold text-slate-700">{{ $registration->created_at->diffForHumans() }}</p>
+                                        <p class="text-[10px] font-medium text-slate-400">{{ $registration->created_at->format('M d, Y') }}</p>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-slate-400 transition-all hover:bg-[#16136a] hover:text-white hover:shadow-lg hover:shadow-[#16136a]/20">
+                                            <i class="ri-arrow-right-line"></i>
                                         </a>
-                                    </div>
-                                </article>
+                                    </td>
+                                </tr>
                             @empty
-                                <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
-                                    <i class="ri-inbox-line text-3xl text-slate-300"></i>
-                                    <p class="mt-3 font-semibold text-slate-600">No registrations found</p>
-                                    <p class="text-sm text-slate-500">Adjust filters to see more</p>
-                                </div>
+                                <tr>
+                                    <td colspan="6" class="px-6 py-20 text-center">
+                                        <div class="flex flex-col items-center gap-3">
+                                            <div class="flex h-20 w-20 items-center justify-center rounded-[2rem] bg-slate-50 text-slate-200">
+                                                <i class="ri-inbox-line text-4xl"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-base font-semibold text-slate-900">Queue is empty</p>
+                                                <p class="text-sm font-medium text-slate-400">No pending registrations found.</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforelse
-                        </div>
-                    </div>
-
-                    @if($registrations->hasPages())
-                        <div class="flex flex-col gap-3 border-t border-slate-200/70 pt-4 px-5 pb-4 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-                            <p class="text-xs text-slate-500">Page {{ $registrations->currentPage() }} of {{ $registrations->lastPage() }}</p>
-                            <div class="flex justify-center sm:ml-auto sm:justify-end">
-                                {{ $registrations->onEachSide(1)->links('vendor.pagination.data-limit') }}
-                            </div>
-                        </div>
-                    @endif
+                        </tbody>
+                    </table>
                 </div>
+
+                {{-- Mobile View --}}
+                <div class="grid gap-4 p-4 md:hidden">
+                    @forelse($registrations as $registration)
+                        <article class="relative flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm transition-all active:scale-[0.98]">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16136a] text-sm font-semibold text-white">
+                                        {{ strtoupper(substr($registration->first_name, 0, 1)) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h3 class="truncate text-base font-semibold text-slate-900">{{ $registration->first_name }} {{ $registration->last_name }}</h3>
+                                        <p class="truncate text-xs font-medium text-slate-400">{{ $registration->email }}</p>
+                                    </div>
+                                </div>
+                                <input type="checkbox" :checked="selected.includes({{ $registration->id }})" @click.stop="toggle({{ $registration->id }})" class="h-6 w-6 rounded-full border-slate-200 text-[#16136a] focus:ring-[#16136a]">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
+                                <div>
+                                    <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-300">Program</p>
+                                    <p class="text-xs font-semibold text-slate-700">{{ $registration->class }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-300">Status</p>
+                                    @if($registration->status === 'pending')
+                                        <span class="text-[10px] font-semibold uppercase text-amber-500">Waiting</span>
+                                    @elseif($registration->status === 'approved')
+                                        <span class="text-[10px] font-semibold uppercase text-emerald-500">Approved</span>
+                                    @else
+                                        <span class="text-[10px] font-semibold uppercase text-rose-500">Rejected</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="flex h-12 items-center justify-center gap-2 rounded-2xl bg-slate-50 text-sm font-semibold text-[#16136a] transition-all hover:bg-slate-100">
+                                Review Request
+                                <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </article>
+                    @empty
+                        <div class="flex flex-col items-center gap-3 py-10">
+                            <div class="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-slate-50 text-slate-200">
+                                <i class="ri-inbox-line text-3xl"></i>
+                            </div>
+                            <p class="text-sm font-semibold text-slate-900">Empty Queue</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Pagination --}}
+                @if($registrations->hasPages())
+                    <div class="border-t border-slate-50 p-6">
+                        {{ $registrations->links('vendor.pagination.data-limit') }}
+                    </div>
+                @endif
             </section>
         </div>
     </div>
 
-    {{-- Live Registration Toast Notification --}}
+    {{-- Live Notification --}}
     <div 
         x-data="liveRegistrationToast()"
         x-show="showToast"
         x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 translate-y-2"
-        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
         x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 translate-y-0"
-        x-transition:leave-end="opacity-0 translate-y-2"
-        class="fixed bottom-6 right-6 z-50 max-w-sm"
+        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+        x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+        class="fixed bottom-8 right-8 z-50 w-full max-w-sm"
         style="display: none;"
     >
-        <div class="flex items-start gap-4 rounded-2xl border border-blue-200 bg-blue-50 p-4 shadow-xl shadow-blue-900/10">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500 text-white">
-                <i class="ri-user-add-line text-lg"></i>
-            </div>
-            <div class="flex-1">
-                <p class="font-semibold text-blue-800">New Registration</p>
-                <p class="mt-1 text-sm text-blue-700" x-text="toastMessage">A new student has registered.</p>
-            </div>
-            <div class="flex shrink-0 items-center gap-2">
-                <button 
-                    @click="refreshPage()"
-                    class="inline-flex items-center gap-1.5 rounded-xl bg-blue-500 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-blue-600"
-                >
+        <div class="overflow-hidden rounded-[2rem] border border-blue-100 bg-white p-2 shadow-2xl shadow-blue-900/20">
+            <div class="flex items-center gap-4 bg-blue-50/50 p-4 rounded-[1.5rem]">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
+                    <i class="ri-user-add-line text-xl"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-blue-900">New Request</p>
+                    <p class="truncate text-xs font-semibold text-blue-600" x-text="toastMessage"></p>
+                </div>
+                <button @click="refreshPage()" class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm transition-all hover:bg-blue-600 hover:text-white">
                     <i class="ri-refresh-line"></i>
-                    Refresh
-                </button>
-                <button 
-                    @click="hideToast()" 
-                    class="rounded-lg p-1.5 text-blue-500 transition hover:bg-blue-100"
-                    aria-label="Dismiss notification"
-                >
-                    <i class="ri-close-line text-lg"></i>
                 </button>
             </div>
         </div>
@@ -470,48 +335,19 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('liveRegistrationToast', () => ({
             showToast: false,
-            toastMessage: 'A new student has registered.',
+            toastMessage: '',
             autoHideTimeout: null,
-            
             init() {
-                // Listen for new registration events from sidebar polling
                 window.addEventListener('new-registration-arrived', (e) => {
-                    this.showNewRegistrationToast(e.detail);
+                    const detail = e.detail;
+                    const firstNew = detail.data?.[0];
+                    this.toastMessage = firstNew ? `${firstNew.name} applied` : `${detail.count} new requests`;
+                    this.showToast = true;
+                    if (this.autoHideTimeout) clearTimeout(this.autoHideTimeout);
+                    this.autoHideTimeout = setTimeout(() => this.showToast = false, 8000);
                 });
             },
-            
-            showNewRegistrationToast(detail) {
-                const count = detail.count;
-                const firstNew = detail.data?.[0];
-                
-                if (firstNew) {
-                    this.toastMessage = `${firstNew.name} (${firstNew.class}, Year ${firstNew.year}) just registered`;
-                } else {
-                    this.toastMessage = `${count} new registration${count > 1 ? 's' : ''} pending review`;
-                }
-                
-                this.showToast = true;
-                
-                // Auto-hide after 10 seconds
-                if (this.autoHideTimeout) {
-                    clearTimeout(this.autoHideTimeout);
-                }
-                this.autoHideTimeout = setTimeout(() => {
-                    this.hideToast();
-                }, 10000);
-            },
-            
-            refreshPage() {
-                window.location.reload();
-            },
-            
-            hideToast() {
-                this.showToast = false;
-                if (this.autoHideTimeout) {
-                    clearTimeout(this.autoHideTimeout);
-                    this.autoHideTimeout = null;
-                }
-            }
+            refreshPage() { window.location.reload(); }
         }));
     });
     </script>

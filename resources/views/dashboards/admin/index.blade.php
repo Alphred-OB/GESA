@@ -1,98 +1,146 @@
-@php($title = 'Admin Dashboard')
-
 <x-layouts.admin :title="$title">
-    <div class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
-        <div class="space-y-10">
-            <section class="relative isolate animate-fade-slide overflow-hidden rounded-[28px] border border-[#16136a]/15 bg-gradient-to-br from-[#16136a] via-[#16136a] to-[#16136a] p-6 text-white shadow-[0_24px_60px_-30px_rgba(22,19,106,0.4)] sm:p-10">
-                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                    <div class="space-y-3">
-                        <p class="text-[10px] font-semibold uppercase tracking-[0.35em] text-emerald-100/80 sm:text-xs">GESA Admin Console</p>
-                        <h1 class="text-2xl font-semibold sm:text-3xl md:text-4xl">{{ $hero['greeting'] ?? 'Welcome' }}, {{ $adminName ?? 'Administrator' }}</h1>
-                        <p class="max-w-2xl text-xs text-emerald-100/85 sm:text-sm">{{ $hero['message'] ?? 'Monitor student activity, approvals, and support trends from a single view.' }}</p>
-                    </div>
-                    <div class="rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-xs text-emerald-50 shadow-inner sm:rounded-3xl sm:px-6 sm:py-4 sm:text-sm">
-                        <p class="font-semibold uppercase tracking-[0.25em] text-emerald-200">Last updated</p>
-                        <p class="mt-1 leading-relaxed sm:mt-2 sm:leading-6">{{ $hero['lastUpdated'] ?? now()->isoFormat('MMMM D, YYYY [at] h:mm A') }}</p>
-                    </div>
-                </div>
-            </section>
+    <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <!-- Dashboard Header -->
+        <header class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div class="space-y-1">
+                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Overview</p>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                    Welcome, <span class="text-[#16136a]">{{ explode(' ', $adminName)[0] }}</span>
+                </h1>
+                <p class="max-w-xl text-sm font-medium text-slate-500 leading-relaxed">
+                    {{ $hero['message'] }}
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-2 rounded-2xl bg-slate-50 px-4 py-2 border border-slate-200">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest">{{ now()->format('l, M d') }}</span>
+            </div>
+        </header>
 
-            <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-                @foreach ($overviewCards as $card)
-                    <article class="animate-fade-slide rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                        <div class="flex items-start justify-between">
-                            <div class="space-y-2">
-                                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">{{ $card['label'] }}</p>
-                                <p class="text-2xl font-semibold text-[#16136a]">{{ $card['value'] }}</p>
-                                <p class="text-sm text-slate-500">{{ $card['description'] }}</p>
-                            </div>
-                            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16136a]/10 text-[#16136a]">
-                                <i class="{{ $card['icon'] ?? 'ri-checkbox-blank-circle-fill' }} text-2xl" aria-hidden="true"></i>
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <!-- Left Column: Primary Stats -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- KPI Row -->
+                <div class="grid gap-6 sm:grid-cols-2">
+                    <!-- Registrations -->
+                    <article class="rounded-[24px] border border-slate-200 bg-white p-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Pending Approvals</h3>
+                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                                <i class="ri-user-follow-line text-xl"></i>
                             </span>
                         </div>
-
-                        @if (!empty($card['link']))
-                            <a href="{{ $card['link'] }}" class="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a]/70 transition hover:text-[#16136a]">
-                                {{ $card['cta'] ?? 'View details' }}
-                                <i class="ri-arrow-right-up-line text-sm" aria-hidden="true"></i>
-                            </a>
-                        @endif
+                        <div class="mt-4">
+                            <p class="text-4xl font-semibold tabular-nums tracking-tight text-slate-900">{{ number_format($registrationSummary['pending'] ?? 0) }}</p>
+                            <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                                <p class="text-xs font-semibold text-slate-400">+{{ $registrationSummary['submitted_today'] ?? 0 }} today</p>
+                                <a href="{{ route('admin.pending-registrations.index') }}" class="text-xs font-semibold text-[#16136a] hover:underline">Manage</a>
+                            </div>
+                        </div>
                     </article>
-                @endforeach
-            </section>
 
-            <section class="grid gap-6 lg:grid-cols-2">
-            <aside class="space-y-6">
-                <article class="animate-fade-slide rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                    <header class="flex items-center justify-between">
-                        <h2 class="text-lg font-semibold text-[#16136a]">Upcoming events</h2>
-                        <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a]/60 hover:text-[#16136a]">View all</a>
-                    </header>
-                    <ul class="mt-4 space-y-4">
-                        @forelse ($upcomingEvents as $event)
-                            <li class="rounded-2xl border border-slate-200/70 bg-white/70 p-4">
-                                <p class="text-sm font-semibold text-slate-800">{{ $event['title'] }}</p>
-                                <p class="mt-1 text-xs uppercase tracking-[0.25em] text-[#16136a]/70">{{ $event['schedule'] ?? 'TBA' }}</p>
-                                <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                                    <span class="inline-flex items-center rounded-full bg-[#16136a]/10 px-3 py-1 font-semibold uppercase tracking-[0.2em] text-[#16136a]">{{ $event['category'] }}</span>
-                                    @if (!empty($event['location']))
-                                        <span class="inline-flex items-center gap-1">
-                                            <i class="ri-map-pin-2-fill text-base" aria-hidden="true"></i>
-                                            {{ $event['location'] }}
-                                        </span>
-                                    @endif
+                    <!-- Students -->
+                    <article class="rounded-[24px] border border-slate-200 bg-white p-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Students</h3>
+                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#16136a]">
+                                <i class="ri-group-line text-xl"></i>
+                            </span>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-4xl font-semibold tabular-nums tracking-tight text-slate-900">{{ number_format($overviewCards[0]['value'] ?? 0) }}</p>
+                            <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                                <p class="text-xs font-semibold text-slate-400">Total Enrollment</p>
+                                <a href="{{ route('admin.students.index') }}" class="text-xs font-semibold text-[#16136a] hover:underline">View All</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Lists Section -->
+                <div class="grid gap-6 md:grid-cols-2">
+                    <!-- Events -->
+                    <div class="rounded-[24px] border border-slate-200 bg-white p-6">
+                        <div class="mb-6 flex items-center justify-between">
+                            <h3 class="font-semibold text-slate-900">Upcoming Events</h3>
+                            <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold text-slate-400 hover:text-[#16136a]">View Schedule</a>
+                        </div>
+                        <div class="space-y-3">
+                            @forelse ($upcomingEvents as $event)
+                                <div class="flex items-center gap-4 rounded-xl border border-slate-50 bg-slate-50/50 p-3">
+                                    <div class="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-lg bg-white border border-slate-200 text-[#16136a]">
+                                        <span class="text-[9px] font-semibold uppercase opacity-40">{{ Str::of($event['schedule'])->explode(' ')->first() }}</span>
+                                        <span class="text-sm font-semibold">{{ Str::of($event['schedule'])->explode(' ')->get(1) }}</span>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-sm font-semibold text-slate-800">{{ $event['title'] }}</p>
+                                        <p class="truncate text-[11px] text-slate-400">{{ $event['location'] ?? 'Online' }}</p>
+                                    </div>
                                 </div>
-                            </li>
-                        @empty
-                            <li class="rounded-2xl border border-dashed border-slate-300 bg-white/60 p-6 text-center text-sm text-slate-500">No events scheduled yet. Create your first event to populate this list.</li>
-                        @endforelse
-                    </ul>
+                            @empty
+                                <p class="py-4 text-center text-xs text-slate-400">No events scheduled</p>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="rounded-[24px] border border-slate-200 bg-white p-6">
+                        <div class="mb-6 flex items-center justify-between">
+                            <h3 class="font-semibold text-slate-900">Recent Suggestions</h3>
+                            <a href="{{ route('admin.suggestions.index') }}" class="text-xs font-semibold text-slate-400 hover:text-[#16136a]">View All</a>
+                        </div>
+                        <div class="space-y-3">
+                            @forelse ($recentSuggestions as $suggestion)
+                                <div class="flex items-center gap-3 rounded-xl border border-slate-50 bg-white p-3">
+                                    <div @class([
+                                        'h-2 w-2 shrink-0 rounded-full',
+                                        'bg-amber-400' => $suggestion['status'] === 'Pending',
+                                        'bg-emerald-400' => $suggestion['status'] === 'Resolved',
+                                    ])></div>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-sm font-semibold text-slate-800">{{ $suggestion['subject'] }}</p>
+                                        <p class="truncate text-[11px] text-slate-400">{{ $suggestion['owner'] }}</p>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="py-4 text-center text-xs text-slate-400">No recent messages</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Sidebar Actions -->
+            <div class="space-y-6">
+                <!-- Academic Info -->
+                <article class="rounded-[24px] border border-slate-200 bg-white p-6">
+                    <h3 class="text-sm font-semibold text-slate-900 mb-6">Quick Links</h3>
+                    <div class="space-y-3">
+                        <a href="{{ route('admin.timeline.index') }}" class="flex items-center justify-between rounded-xl bg-slate-50 p-4 transition hover:bg-slate-100">
+                            <div class="flex items-center gap-3">
+                                <i class="ri-timer-flash-line text-lg text-[#16136a]"></i>
+                                <span class="text-sm font-semibold text-slate-700">Academic Timeline</span>
+                            </div>
+                            <i class="ri-arrow-right-s-line text-slate-300"></i>
+                        </a>
+                        <a href="{{ route('admin.profile') }}" class="flex items-center justify-between rounded-xl bg-slate-50 p-4 transition hover:bg-slate-100">
+                            <div class="flex items-center gap-3">
+                                <i class="ri-settings-4-line text-lg text-slate-400"></i>
+                                <span class="text-sm font-semibold text-slate-700">Account Settings</span>
+                            </div>
+                            <i class="ri-arrow-right-s-line text-slate-300"></i>
+                        </a>
+                    </div>
                 </article>
 
-                <article class="rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
-                    <header class="flex items-center justify-between">
-                        <h2 class="text-lg font-semibold text-[#16136a]">Latest suggestions</h2>
-                        <a href="{{ route('admin.resources.index') }}" class="text-xs font-semibold uppercase tracking-[0.2em] text-[#16136a]/60 hover:text-[#16136a]">View resources</a>
-                    </header>
-                    <ul class="mt-4 space-y-4 text-sm text-slate-600">
-                        @forelse ($recentSuggestions as $suggestion)
-                            <li class="rounded-2xl border border-slate-200/70 bg-white/70 p-4">
-                                <div class="flex items-center justify-between">
-                                    <p class="font-semibold text-slate-800">{{ $suggestion['subject'] }}</p>
-                                    <span class="text-xs text-slate-400">{{ $suggestion['submitted_at'] }}</span>
-                                </div>
-                                <div class="mt-2 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-slate-400">
-                                    <span class="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-500">{{ $suggestion['category'] }}</span>
-                                    <span class="rounded-full bg-[#16136a]/10 px-3 py-1 font-semibold text-[#16136a]">{{ $suggestion['status'] }}</span>
-                                </div>
-                                <p class="mt-2 text-xs text-slate-500">Submitted by {{ $suggestion['owner'] }}</p>
-                            </li>
-                        @empty
-                            <li class="rounded-2xl border border-dashed border-slate-300 bg-white/60 p-6 text-center text-sm text-slate-500">No recent suggestions. Encourage students to share feedback.</li>
-                        @endforelse
-                    </ul>
+                <!-- Status Card -->
+                <article class="rounded-[24px] bg-[#16136a] p-6 text-white">
+                    <h3 class="text-xs font-semibold uppercase tracking-widest opacity-50 mb-4">Academic Year</h3>
+                    <p class="text-lg font-semibold">2023/2024</p>
+                    <p class="mt-1 text-sm opacity-70">First Semester</p>
                 </article>
-            </aside>
-        </section>
+            </div>
+        </div>
     </div>
 </x-layouts.admin>

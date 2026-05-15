@@ -54,7 +54,24 @@ class AdminDueController extends Controller
     public function verifications(Request $request): View
     {
         $request->merge(['status' => 'pending_verification']);
-        return $this->index($request);
+        
+        $filters = $request->only(['search', 'academic_year', 'class', 'year']);
+        $filters['status'] = 'pending_verification';
+        
+        $perPage = (int) $request->integer('per_page', 25);
+        
+        $dues = $this->service->list($filters, $perPage);
+        $totals = $this->service->totals($filters);
+        $filtersMeta = $this->service->filterOptions();
+
+        return view('dashboards.admin.dues.verifications', [
+            'title' => 'Payment Verifications',
+            'dues' => $dues,
+            'totals' => $totals,
+            'filters' => $filters,
+            'filtersMeta' => $filtersMeta,
+            'currentPerPage' => $perPage,
+        ]);
     }
 
     /**
