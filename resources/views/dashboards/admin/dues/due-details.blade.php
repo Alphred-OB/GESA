@@ -7,11 +7,11 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <a href="{{ route('admin.dues.maintenance.index') }}" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50">
-                        <i class="ri-arrow-left-line text-lg"></i>
+                        <x-heroicon-o-arrow-left class="size-5" />
                     </a>
                     <div>
                         <p class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
-                            <i class="ri-file-list-3-line text-base" aria-hidden="true"></i>
+                            <x-heroicon-o-document-text class="size-5" aria-hidden="true" />
                             Due Details
                         </p>
                         <h1 class="text-xl font-semibold text-[#16136a] mt-1">{{ $description }}</h1>
@@ -25,20 +25,20 @@
                 {{-- Edit Amounts Button --}}
                 <a href="{{ route('admin.dues.maintenance.edit-amounts', ['academic_year' => $academicYear, 'description' => $description]) }}" 
                    class="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700">
-                    <i class="ri-price-tag-3-line"></i>
+                    <x-heroicon-o-tag class="size-5" />
                     Edit Amounts by Class/Year
                 </a>
                 
                 {{-- Merge Button --}}
                 <a href="{{ route('admin.dues.maintenance.merge-form', ['source_academic_year' => $academicYear, 'source_description' => $description]) }}" 
                    class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                    <i class="ri-git-merge-line"></i>
+                    <x-heroicon-o-arrows-pointing-in class="size-5" />
                     Merge Into Another
                 </a>
                 
                 @if (!$safeToDelete)
                     <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-700">
-                        <i class="ri-lock-line mr-1"></i>
+                        <x-heroicon-o-lock-closed class="mr-1 size-5" />
                         {{ $stats['paid'] + $stats['pending'] }} payment(s) - use Merge
                     </div>
                 @endif
@@ -49,7 +49,7 @@
         @if (session('status'))
             <div class="rounded-2xl border border-green-200 bg-green-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
                 </div>
             </div>
@@ -58,7 +58,7 @@
         @if (session('error'))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
             </div>
@@ -91,7 +91,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                            <i class="ri-user-unfollow-line text-lg"></i>
+                            <x-heroicon-o-user-minus class="size-5" />
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold text-slate-800">Students Missing This Due</h2>
@@ -103,7 +103,7 @@
                         <input type="hidden" name="academic_year" value="{{ $academicYear }}">
                         <input type="hidden" name="description" value="{{ $description }}">
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700">
-                            <i class="ri-add-circle-line"></i>
+                            <x-heroicon-o-plus-circle class="size-5" />
                             Assign to All Missing ({{ $missingStudents->count() }})
                         </button>
                     </form>
@@ -160,7 +160,7 @@
                     
                     {{-- Search --}}
                     <div class="relative items-center">
-                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search name, ref..." 
                             class="w-full rounded-xl border-slate-200 pl-10 text-sm focus:ring-[#16136a]/20 focus:border-[#16136a]">
                     </div>
@@ -191,13 +191,13 @@
 
                     <div class="flex gap-2">
                         <button type="submit" class="flex-1 rounded-xl bg-slate-800 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-900 transition flex items-center justify-center gap-2">
-                            <i class="ri-filter-3-line"></i>
+                            <x-heroicon-o-funnel class="size-5" />
                             Filter
                         </button>
                         @if(request()->hasAny(['search', 'class', 'year']))
                             <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $academicYear, 'description' => $description]) }}" 
                                 class="rounded-xl bg-white border border-slate-200 px-3 py-2 text-slate-500 hover:bg-slate-50 transition" title="Clear Filters">
-                                <i class="ri-refresh-line"></i>
+                                <x-heroicon-o-arrow-path class="size-5" />
                             </a>
                         @endif
                     </div>
@@ -278,15 +278,15 @@
                                     <td class="px-4 py-3">
                                         @if ($due->payment_status === 'paid')
                                             <span class="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-                                                <i class="ri-check-line mr-1"></i> Paid
+                                                <x-heroicon-o-check class="mr-1 size-5" /> Paid
                                             </span>
                                         @elseif ($due->payment_status === 'pending_verification')
                                             <span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
-                                                <i class="ri-time-line mr-1"></i> Pending
+                                                <x-heroicon-o-clock class="mr-1 size-5" /> Pending
                                             </span>
                                         @else
                                             <span class="inline-flex items-center rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-700">
-                                                <i class="ri-error-warning-line mr-1"></i> Owing
+                                                <x-heroicon-o-exclamation-triangle class="mr-1 size-5" /> Owing
                                             </span>
                                         @endif
                                     </td>
@@ -300,14 +300,14 @@
                                         <div class="flex items-center justify-end gap-2">
                                             @if ($due->payment_status === 'pending_verification')
                                                 <a href="{{ route('admin.dues.verify-payment', $due) }}" class="rounded-lg bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-200" title="Verify Payment">
-                                                    <i class="ri-checkbox-circle-line"></i>
+                                                    <x-heroicon-o-check-circle class="size-5" />
                                                 </a>
                                             @endif
                                             
 
                                             @if ($due->payment_status === 'paid')
                                                 <a href="{{ route('admin.dues.receipt', $due) }}" class="rounded-lg bg-emerald-100 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-200" title="View Receipt">
-                                                    <i class="ri-file-download-line"></i>
+                                                    <x-heroicon-o-document-arrow-down class="size-5" />
                                                 </a>
                                             @endif
 
@@ -318,7 +318,7 @@
                                                 description: '{{ addslashes($due->description) }}',
                                                 due_date: '{{ $due->due_date }}'
                                             })" class="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-200" title="Edit Due">
-                                                <i class="ri-edit-line"></i>
+                                                <x-heroicon-o-pencil class="size-5" />
                                             </button>
                                         </div>
                                     </td>
@@ -343,7 +343,7 @@
                     <div class="rounded-3xl border border-[#16136a]/20 bg-[#16136a] p-4 text-white shadow-2xl flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
                             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                                <i class="ri-checkbox-multiple-line text-lg"></i>
+                                <x-heroicon-o-queue-list class="size-5" />
                             </div>
                             <div>
                                 <p class="text-sm font-semibold"><span x-text="selectedDues.length"></span> Students Selected</p>
@@ -353,7 +353,7 @@
                         <div class="flex items-center gap-2">
                             <button @click="showBulkModal = true; document.body.classList.add('overflow-hidden')" 
                                 class="rounded-xl bg-white px-5 py-2.5 text-xs font-semibold text-[#16136a] shadow-lg transition hover:bg-slate-100">
-                                <i class="ri-edit-box-line mr-1"></i>
+                                <x-heroicon-o-pencil-square class="mr-1 size-5" />
                                 Edit Selection
                             </button>
                             <button @click="selectedDues = []; allSelected = false" class="rounded-xl bg-slate-100/10 px-4 py-2.5 text-xs font-semibold hover:bg-white/10 transition">
@@ -373,7 +373,7 @@
                                 <div class="flex items-center justify-between">
                                     <h3 class="font-semibold uppercase tracking-widest text-sm">Bulk Update Dues</h3>
                                     <button @click="showBulkModal = false; document.body.classList.remove('overflow-hidden')" class="rounded-lg p-1 hover:bg-white/10">
-                                        <i class="ri-close-line text-xl"></i>
+                                        <x-heroicon-o-x-mark class="size-6" />
                                     </button>
                                 </div>
                                 <p class="text-xs text-indigo-100 mt-1">Updating <span class="font-semibold underline" x-text="selectedDues.length"></span> selected records</p>
@@ -386,7 +386,7 @@
                                 </template>
                                 
                                 <div class="p-3 bg-amber-50 border border-amber-100 rounded-xl text-[10px] text-amber-700">
-                                    <i class="ri-information-line"></i>
+                                    <x-heroicon-o-information-circle class="size-5" />
                                     This will update the <strong>amount</strong> and/or <strong>due date</strong> for all selected students, including those who have already paid.
                                 </div>
 
@@ -428,7 +428,7 @@
                                 <div class="flex items-center justify-between">
                                     <h3 class="font-semibold">Edit Due Amount</h3>
                                     <button @click="closeEditModal()" class="rounded-lg p-1 hover:bg-white/10">
-                                        <i class="ri-close-line text-xl"></i>
+                                        <x-heroicon-o-x-mark class="size-6" />
                                     </button>
                                 </div>
                                 <p class="text-xs text-white/70" x-text="editingDue.student"></p>
@@ -448,7 +448,7 @@
                                             class="w-full rounded-xl border-slate-200 pl-12 pr-4 py-2.5 text-sm focus:border-[#16136a] focus:ring-[#16136a]/20">
                                     </div>
                                     <p class="mt-1 text-[10px] text-amber-600">
-                                        <i class="ri-error-warning-line"></i>
+                                        <x-heroicon-o-exclamation-triangle class="size-5" />
                                         Note: Changing paid dues will NOT affect payment logs, only the recorded amount.
                                     </p>
                                 </div>
@@ -477,7 +477,7 @@
         {{-- Back Button --}}
         <div class="flex justify-center">
             <a href="{{ route('admin.dues.maintenance.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line"></i>
+                <x-heroicon-o-arrow-left class="size-5" />
                 Back to Maintenance
             </a>
         </div>

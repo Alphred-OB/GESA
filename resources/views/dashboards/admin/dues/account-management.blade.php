@@ -6,11 +6,11 @@
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <div class="flex items-center gap-3">
                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-100 text-rose-600">
-                    <i class="ri-user-settings-line text-2xl"></i>
+                    <x-heroicon-o-cog-6-tooth class="size-7" />
                 </div>
                 <div>
                     <p class="inline-flex items-center gap-2 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-rose-700">
-                        <i class="ri-shield-user-line text-base" aria-hidden="true"></i>
+                        <x-heroicon-o-shield-check class="size-5" aria-hidden="true" />
                         Account Management
                     </p>
                     <h1 class="text-2xl font-semibold text-[#16136a] mt-1">Manage Student Accounts</h1>
@@ -25,7 +25,7 @@
         @if (session('status'))
             <div class="rounded-2xl border border-green-200 bg-green-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
                 </div>
             </div>
@@ -34,7 +34,7 @@
         @if (session('error'))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-100 text-yellow-600">
-                        <i class="ri-time-line text-lg"></i>
+                        <x-heroicon-o-clock class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ $stats['total_pending'] }}</p>
@@ -56,7 +56,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                        <i class="ri-mail-close-line text-lg"></i>
+                        <x-heroicon-o-envelope class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ $stats['pending_unverified'] }}</p>
@@ -67,7 +67,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
-                        <i class="ri-mail-check-line text-lg"></i>
+                        <x-heroicon-o-envelope-open class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ $stats['pending_verified'] }}</p>
@@ -78,7 +78,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 text-green-600">
-                        <i class="ri-user-line text-lg"></i>
+                        <x-heroicon-o-user class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ $stats['total_users'] }}</p>
@@ -92,7 +92,7 @@
         <section class="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
             <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
-                    <i class="ri-search-2-line text-lg"></i>
+                    <x-heroicon-o-magnifying-glass class="size-5" />
                 </div>
                 <div>
                     <h2 class="text-lg font-semibold text-slate-800">Search Accounts</h2>
@@ -115,7 +115,7 @@
                     </select>
                 </div>
                 <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-700">
-                    <i class="ri-search-line"></i>
+                    <x-heroicon-o-magnifying-glass class="size-5" />
                     Search
                 </button>
             </form>
@@ -128,7 +128,7 @@
                 <section class="space-y-4 rounded-3xl border border-yellow-200 bg-white p-6 shadow-lg">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-100 text-yellow-600">
-                            <i class="ri-time-line text-lg"></i>
+                            <x-heroicon-o-clock class="size-5" />
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold text-slate-800">Pending Registrations</h2>
@@ -180,11 +180,11 @@
                                                 
                                                 @if ($reg->email_verified_at)
                                                     <span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                                                        <i class="ri-mail-check-line mr-1"></i> Verified
+                                                        <x-heroicon-o-envelope-open class="mr-1 size-5" /> Verified
                                                     </span>
                                                 @else
                                                     <span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
-                                                        <i class="ri-mail-close-line mr-1"></i> Unverified
+                                                        <x-heroicon-o-envelope class="mr-1 size-5" /> Unverified
                                                     </span>
                                                 @endif
                                             </div>
@@ -201,7 +201,7 @@
                                                         onsubmit="return confirm('Force verify email for {{ $reg->first_name }} {{ $reg->last_name }}?')">
                                                         @csrf
                                                         <button type="submit" class="inline-flex items-center gap-1 rounded-lg bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-200">
-                                                            <i class="ri-mail-check-line"></i>
+                                                            <x-heroicon-o-envelope-open class="size-5" />
                                                             Verify Email
                                                         </button>
                                                     </form>
@@ -213,7 +213,7 @@
                                                         onsubmit="return confirm('Force approve {{ $reg->first_name }} {{ $reg->last_name }}? This will create their user account and sync dues.')">
                                                         @csrf
                                                         <button type="submit" class="inline-flex items-center gap-1 rounded-lg bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-700 transition hover:bg-green-200">
-                                                            <i class="ri-checkbox-circle-line"></i>
+                                                            <x-heroicon-o-check-circle class="size-5" />
                                                             Force Approve
                                                         </button>
                                                     </form>
@@ -225,7 +225,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200">
-                                                        <i class="ri-delete-bin-line"></i>
+                                                        <x-heroicon-o-trash class="size-5" />
                                                         Delete
                                                     </button>
                                                 </form>
@@ -244,7 +244,7 @@
                 <section class="space-y-4 rounded-3xl border border-green-200 bg-white p-6 shadow-lg">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 text-green-600">
-                            <i class="ri-user-line text-lg"></i>
+                            <x-heroicon-o-user class="size-5" />
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold text-slate-800">Active User Accounts</h2>
@@ -289,7 +289,7 @@
                                                 {{-- View Profile --}}
                                                 <a href="{{ route('admin.students.show', $user) }}" 
                                                     class="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
-                                                    <i class="ri-eye-line"></i>
+                                                    <x-heroicon-o-eye class="size-5" />
                                                     View
                                                 </a>
 
@@ -299,7 +299,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200">
-                                                        <i class="ri-delete-bin-line"></i>
+                                                        <x-heroicon-o-trash class="size-5" />
                                                         Delete
                                                     </button>
                                                 </form>
@@ -316,7 +316,7 @@
             {{-- No Results --}}
             @if ($pendingRegistrations->count() === 0 && $users->count() === 0)
                 <div class="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
-                    <i class="ri-search-line text-4xl text-slate-300"></i>
+                    <x-heroicon-o-magnifying-glass class="text-4xl text-slate-300 size-5" />
                     <p class="mt-3 font-semibold text-slate-600">No results found</p>
                     <p class="text-sm text-slate-500">Try a different search query</p>
                 </div>
@@ -324,7 +324,7 @@
         @else
             {{-- No Search Prompt --}}
             <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
-                <i class="ri-user-search-line text-5xl text-slate-300"></i>
+                <x-heroicon-o-user class="text-5xl text-slate-300 size-5" />
                 <p class="mt-4 font-semibold text-slate-600">Search for an account</p>
                 <p class="text-sm text-slate-500 max-w-md mx-auto mt-2">
                     Enter a name, email, username, or index number to find pending registrations or active user accounts.
@@ -335,7 +335,7 @@
         {{-- Back to Maintenance --}}
         <div class="flex justify-center">
             <a href="{{ route('admin.dues.maintenance.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line"></i>
+                <x-heroicon-o-arrow-left class="size-5" />
                 Back to Dues Maintenance
             </a>
         </div>

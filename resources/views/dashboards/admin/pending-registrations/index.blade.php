@@ -57,7 +57,7 @@
             <div class="grid gap-6 lg:grid-cols-12 lg:items-end">
                 <header class="lg:col-span-5 space-y-3">
                     <div class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]">
-                        <i class="ri-user-add-line text-xs"></i>
+                        <x-heroicon-o-user-plus class="size-3.5" />
                         Registration Queue
                     </div>
                     <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Review Requests</h1>
@@ -99,13 +99,13 @@
 
                 <div class="flex flex-wrap items-center gap-2">
                     <button @click="submitBulk('approve')" class="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-500 px-5 text-xs font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-check-line text-lg"></i> Approve Selected
+                        <x-heroicon-o-check class="size-5" /> Approve Selected
                     </button>
                     <button @click="submitBulk('reject')" class="inline-flex h-11 items-center gap-2 rounded-xl bg-amber-500 px-5 text-xs font-semibold text-white shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-close-line text-lg"></i> Reject Selected
+                        <x-heroicon-o-x-mark class="size-5" /> Reject Selected
                     </button>
                     <button @click="submitBulk('delete')" class="inline-flex h-11 items-center gap-2 rounded-xl bg-rose-500 px-5 text-xs font-semibold text-white shadow-lg shadow-rose-500/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-delete-bin-line text-lg"></i> Delete
+                        <x-heroicon-o-trash class="size-5" /> Delete
                     </button>
                     <div class="mx-2 h-6 w-px bg-white/10"></div>
                     <button @click="selected = []; allSelected = false" class="px-4 text-xs font-semibold text-white/50 hover:text-white transition-colors">Cancel</button>
@@ -126,7 +126,7 @@
                 <div class="flex flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between">
                     <form method="GET" class="flex flex-1 flex-wrap items-center gap-3">
                         <div class="relative flex-1 min-w-[200px]">
-                            <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, or reference..." class="h-12 w-full rounded-2xl border border-slate-100 bg-slate-50/50 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
                         </div>
                         
@@ -137,7 +137,7 @@
                                 <option value="approved" @selected(request('status') === 'approved')>Approved</option>
                                 <option value="rejected" @selected(request('status') === 'rejected')>Rejected</option>
                             </select>
-                            <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         </div>
 
                         <button type="submit" class="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95">
@@ -148,14 +148,14 @@
 
                 @if(session('success'))
                     <div class="mx-4 mb-4 rounded-2xl bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-600 border border-emerald-100 flex items-center gap-3">
-                        <i class="ri-checkbox-circle-fill text-xl"></i>
+                        <x-heroicon-s-check-circle class="size-6" />
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
                     <div class="mx-4 mb-4 rounded-2xl bg-rose-50 px-5 py-4 text-sm font-semibold text-rose-600 border border-rose-100 flex items-center gap-3">
-                        <i class="ri-error-warning-fill text-xl"></i>
+                        <x-heroicon-s-exclamation-triangle class="size-6" />
                         {{ session('error') }}
                     </div>
                 @endif
@@ -204,12 +204,12 @@
                                             </span>
                                         @elseif($registration->status === 'approved')
                                             <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-emerald-600">
-                                                <i class="ri-checkbox-circle-fill"></i>
+                                                <x-heroicon-s-check-circle class="size-5" />
                                                 Approved
                                             </span>
                                         @else
                                             <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-rose-600">
-                                                <i class="ri-close-circle-fill"></i>
+                                                <x-heroicon-s-x-circle class="size-5" />
                                                 Rejected
                                             </span>
                                         @endif
@@ -220,7 +220,7 @@
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-slate-400 transition-all hover:bg-[#16136a] hover:text-white hover:shadow-lg hover:shadow-[#16136a]/20">
-                                            <i class="ri-arrow-right-line"></i>
+                                            <x-heroicon-o-arrow-right class="size-5" />
                                         </a>
                                     </td>
                                 </tr>
@@ -229,7 +229,7 @@
                                     <td colspan="6" class="px-6 py-20 text-center">
                                         <div class="flex flex-col items-center gap-3">
                                             <div class="flex h-20 w-20 items-center justify-center rounded-[2rem] bg-slate-50 text-slate-200">
-                                                <i class="ri-inbox-line text-4xl"></i>
+                                                <x-heroicon-o-inbox class="text-4xl size-5" />
                                             </div>
                                             <div>
                                                 <p class="text-base font-semibold text-slate-900">Queue is empty</p>
@@ -279,13 +279,13 @@
 
                             <a href="{{ route('admin.pending-registrations.show', $registration) }}" class="flex h-12 items-center justify-center gap-2 rounded-2xl bg-slate-50 text-sm font-semibold text-[#16136a] transition-all hover:bg-slate-100">
                                 Review Request
-                                <i class="ri-arrow-right-line"></i>
+                                <x-heroicon-o-arrow-right class="size-5" />
                             </a>
                         </article>
                     @empty
                         <div class="flex flex-col items-center gap-3 py-10">
                             <div class="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-slate-50 text-slate-200">
-                                <i class="ri-inbox-line text-3xl"></i>
+                                <x-heroicon-o-inbox class="size-8" />
                             </div>
                             <p class="text-sm font-semibold text-slate-900">Empty Queue</p>
                         </div>
@@ -318,14 +318,14 @@
         <div class="overflow-hidden rounded-[2rem] border border-blue-100 bg-white p-2 shadow-2xl shadow-blue-900/20">
             <div class="flex items-center gap-4 bg-blue-50/50 p-4 rounded-[1.5rem]">
                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
-                    <i class="ri-user-add-line text-xl"></i>
+                    <x-heroicon-o-user-plus class="size-6" />
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-blue-900">New Request</p>
                     <p class="truncate text-xs font-semibold text-blue-600" x-text="toastMessage"></p>
                 </div>
                 <button @click="refreshPage()" class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm transition-all hover:bg-blue-600 hover:text-white">
-                    <i class="ri-refresh-line"></i>
+                    <x-heroicon-o-arrow-path class="size-5" />
                 </button>
             </div>
         </div>

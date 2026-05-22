@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Expired | GESA Portal</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes float {
@@ -48,7 +48,7 @@
             <!-- Icon Section -->
             <div class="mb-10 relative animate-fade-slide-delay-200">
                 <div class="float-animation inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-[#16136a] to-blue-600 shadow-xl shadow-blue-900/40 border border-white/10">
-                    <i class="ri-time-line text-5xl text-white"></i>
+                    <x-heroicon-o-clock class="text-5xl text-white size-5" />
                 </div>
                 <!-- Shimmer effect -->
                 <div class="absolute inset-0 bg-white/5 blur-3xl rounded-full scale-150 -z-10 animate-pulse"></div>
@@ -65,7 +65,7 @@
                     onclick="window.location.reload()" 
                     class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#16136a] px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
                 >
-                    <i class="ri-refresh-line text-lg group-hover:rotate-180 transition-transform duration-500"></i>
+                    <x-heroicon-o-arrow-path class="size-5 group-hover:rotate-180 transition-transform duration-500" />
                     Refresh Page
                 </button>
 
@@ -73,7 +73,7 @@
                     href="{{ route('login') }}" 
                     class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16136a]/40 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:bg-[#16136a]/60 hover:scale-105 active:scale-95"
                 >
-                    <i class="ri-login-box-line text-lg"></i>
+                    <x-heroicon-o-arrow-left-on-rectangle class="size-5" />
                     Go to Login
                 </a>
             </div>

@@ -169,7 +169,7 @@
                 </div>
             </div>
             <button type="button" class="rounded-full bg-slate-100 p-2 text-slate-400 transition hover:bg-slate-200 hover:text-[#16136a]" aria-label="Close sidebar" @click="adminSidebarOpen = false">
-                <i class="ri-close-line text-lg"></i>
+                <x-heroicon-o-x-mark class="size-5" />
             </button>
         </div>
 
@@ -182,7 +182,7 @@
             <form method="POST" action="{{ route('auth.logout') }}">
                 @csrf
                 <button type="submit" class="flex w-full items-center justify-center gap-3 rounded-2xl bg-red-50 py-3 text-sm font-semibold text-red-600 transition-all active:scale-95">
-                    <i class="ri-logout-box-r-line"></i>
+                    <x-heroicon-o-arrow-right-on-rectangle class="size-5" />
                     <span>Sign Out</span>
                 </button>
             </form>

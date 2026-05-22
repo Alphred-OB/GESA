@@ -7,7 +7,7 @@
                     <div class="space-y-4 max-w-2xl">
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 ring-1 ring-white/20 backdrop-blur-md">
-                                <i class="ri-lightbulb-flash-line"></i> Feedback
+                                <x-heroicon-o-light-bulb class="size-5" /> Feedback
                             </span>
                         </div>
                         <div class="space-y-2">
@@ -28,7 +28,7 @@
 
                 <!-- Subtle background depth -->
                 <div class="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-white/5 blur-3xl"></div>
-                <i class="ri-lightbulb-flash-line absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none"></i>
+                <x-heroicon-o-light-bulb class="absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none size-5" />
             </section>
 
             @if (session('status'))

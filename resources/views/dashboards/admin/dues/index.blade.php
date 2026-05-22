@@ -16,15 +16,15 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
                     <a href="{{ route('admin.dues.export', request()->query()) }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-white px-6 text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:shadow-md">
-                        <i class="ri-download-2-line text-lg transition-transform group-hover:-translate-y-0.5"></i>
+                        <x-heroicon-o-arrow-down-tray class="size-5 transition-transform group-hover:-translate-y-0.5" />
                         Export Excel
                     </a>
                     <a href="{{ route('admin.dues.statistics', request()->query()) }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-white px-6 text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:shadow-md">
-                        <i class="ri-bar-chart-box-line text-lg transition-transform group-hover:scale-110"></i>
+                        <x-heroicon-o-chart-bar-square class="size-5 transition-transform group-hover:scale-110" />
                         Analytics
                     </a>
                     <a href="{{ route('admin.dues.create') }}" class="flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-8 text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
-                        <i class="ri-add-line text-xl"></i>
+                        <x-heroicon-o-plus class="size-6" />
                         Issue Dues
                     </a>
                 </div>

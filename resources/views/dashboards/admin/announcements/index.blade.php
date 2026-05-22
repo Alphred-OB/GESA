@@ -9,7 +9,7 @@
         <header class="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div class="space-y-1">
                 <div class="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]/50">
-                    <i class="ri-notification-3-line"></i>
+                    <x-heroicon-o-bell class="size-5" />
                     Message Center
                 </div>
                 <h1 class="text-3xl font-semibold tracking-tight text-slate-900">Announcements</h1>
@@ -17,7 +17,7 @@
             </div>
             <div class="flex w-full md:w-auto">
                 <a href="{{ route('admin.announcements.create') }}" class="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95 md:h-auto md:w-auto md:py-3.5 md:tracking-[0.2em]">
-                    <i class="ri-add-line text-lg"></i>
+                    <x-heroicon-o-plus class="size-5" />
                     <span class="whitespace-nowrap">New Announcement</span>
                 </a>
             </div>
@@ -29,7 +29,7 @@
                 <div class="flex flex-col gap-2">
                     <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Search</label>
                     <div class="relative">
-                        <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search..." class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium transition focus:border-[#16136a] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#16136a]/5" />
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                                 <option value="{{ $value }}" @selected(($filters['type'] ?? '') === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -56,13 +56,13 @@
                                 <option value="{{ $value }}" @selected(($filters['priority'] ?? '') === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2 pt-2 lg:pt-0">
                     <button type="submit" class="flex-1 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#16136a] px-5 text-[11px] font-semibold uppercase tracking-widest text-white transition hover:bg-[#16136a]/90 active:scale-95 lg:flex-none">
-                        <i class="ri-filter-3-line text-base"></i>
+                        <x-heroicon-o-funnel class="size-5" />
                         Refine
                     </button>
                     @if(request()->anyFilled(['search', 'type', 'priority', 'target_type']))
@@ -115,7 +115,7 @@
                                 </td>
                                 <td class="px-6 py-5">
                                     <div class="flex items-center gap-2">
-                                        <i class="ri-user-received-line text-slate-400"></i>
+                                        <x-heroicon-o-user class="text-slate-400 size-5" />
                                         <span class="text-xs font-semibold text-slate-600">{{ $targetTypes[$announcement->target_type] ?? $announcement->target_type }}</span>
                                     </div>
                                 </td>
@@ -128,13 +128,13 @@
                                 <td class="px-8 py-5">
                                     <div class="flex justify-end gap-2 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                                         <a href="{{ route('admin.announcements.edit', $announcement) }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition-all hover:border-[#16136a] hover:text-[#16136a] hover:shadow-md">
-                                            <i class="ri-edit-line"></i>
+                                            <x-heroicon-o-pencil class="size-5" />
                                         </a>
                                         <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Archive this announcement?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 transition-all hover:border-rose-400 hover:text-rose-500 hover:shadow-md">
-                                                <i class="ri-delete-bin-line"></i>
+                                                <x-heroicon-o-trash class="size-5" />
                                             </button>
                                         </form>
                                     </div>
@@ -145,7 +145,7 @@
                                 <td colspan="6" class="px-8 py-20">
                                     <div class="flex flex-col items-center justify-center text-center">
                                         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-                                            <i class="ri-notification-off-line text-3xl"></i>
+                                            <x-heroicon-o-bell-slash class="size-8" />
                                         </div>
                                         <h3 class="mt-4 text-lg font-semibold text-slate-900">Silence is golden</h3>
                                         <p class="mt-2 text-sm text-slate-500 max-w-xs">No announcements yet. Start a new update to reach your audience.</p>
@@ -168,13 +168,13 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <a href="{{ route('admin.announcements.edit', $announcement) }}" class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400">
-                                    <i class="ri-edit-line text-sm"></i>
+                                    <x-heroicon-o-pencil class="size-4" />
                                 </a>
                                 <form method="POST" action="{{ route('admin.announcements.destroy', $announcement) }}" onsubmit="return confirm('Archive this announcement?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400">
-                                        <i class="ri-delete-bin-line text-sm"></i>
+                                        <x-heroicon-o-trash class="size-4" />
                                     </button>
                                 </form>
                             </div>
@@ -198,7 +198,7 @@
 
                         <div class="flex items-center justify-between border-t border-slate-50 pt-3">
                             <div class="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
-                                <i class="ri-user-received-line"></i>
+                                <x-heroicon-o-user class="size-5" />
                                 {{ $targetTypes[$announcement->target_type] ?? $announcement->target_type }}
                             </div>
                             <div class="text-right">

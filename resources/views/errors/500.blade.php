@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>500 Server Error | GESA Portal</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes float {
@@ -45,7 +45,7 @@
             <!-- Icon Section -->
             <div class="mb-10 relative animate-fade-slide-delay-200">
                 <div class="float-animation inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-red-600 to-orange-600 shadow-xl shadow-red-900/40 border border-white/10">
-                    <i class="ri-error-warning-line text-5xl text-white"></i>
+                    <x-heroicon-o-exclamation-triangle class="text-5xl text-white size-5" />
                 </div>
                 <!-- Shimmer effect -->
                 <div class="absolute inset-0 bg-red-500/10 blur-3xl rounded-full scale-150 -z-10 animate-pulse"></div>
@@ -62,7 +62,7 @@
                     onclick="window.location.reload()" 
                     class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
                 >
-                    <i class="ri-refresh-line text-lg group-hover:rotate-180 transition-transform duration-500"></i>
+                    <x-heroicon-o-arrow-path class="size-5 group-hover:rotate-180 transition-transform duration-500" />
                     Try Again
                 </button>
 
@@ -70,7 +70,7 @@
                     href="{{ url('/') }}" 
                     class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:bg-white/20 hover:scale-105 active:scale-95"
                 >
-                    <i class="ri-home-4-line text-lg"></i>
+                    <x-heroicon-o-home class="size-5" />
                     Go Home
                 </a>
             </div>

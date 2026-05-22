@@ -6,7 +6,7 @@
         <header class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <div class="flex items-center gap-3">
                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
-                    <i class="ri-user-search-line text-2xl"></i>
+                    <x-heroicon-o-user class="size-7" />
                 </div>
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-500">Student Tracer</p>
@@ -14,7 +14,7 @@
                 </div>
             </div>
             <a href="{{ route('admin.dues.maintenance.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line"></i>
+                <x-heroicon-o-arrow-left class="size-5" />
                 Back to Maintenance
             </a>
         </header>
@@ -118,7 +118,7 @@
         </section>
 
         <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-            <i class="ri-information-line mr-1"></i>
+            <x-heroicon-o-information-circle class="mr-1 size-5" />
             <strong>Diagnosis:</strong> If a student has an incorrect balance, check if they have multiple <strong>Active</strong> dues for the same academic year, or if they have unpaid dues from <strong>Previous</strong> academic years that are still marked as active.
         </div>
     </div>

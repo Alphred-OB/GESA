@@ -28,7 +28,7 @@
         <div class="flex items-center gap-3">
             @if ($isAdminRoute)
                 <button type="button" x-data="{}" x-on:click="$dispatch('admin-sidebar:open')" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/60 bg-white text-slate-600 shadow-sm transition hover:text-[#16136a] md:hidden">
-                    <i class="ri-menu-2-line text-lg"></i>
+                    <x-heroicon-o-bars-3 class="size-5" />
                 </button>
             @endif
             <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="group flex items-center gap-3">
@@ -47,28 +47,28 @@
             {{-- Quick Nav Dropdown --}}
             <div class="relative hidden md:block" data-dropdown>
                 <button type="button" data-dropdown-toggle="nav-menu" class="inline-flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-50 hover:text-[#16136a]">
-                    <i class="ri-menu-line text-lg"></i>
+                    <x-heroicon-o-bars-3 class="size-5" />
                 </button>
                 <div id="nav-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-56 translate-y-2 rounded-2xl border border-slate-200/80 bg-white py-2 text-[13px] font-semibold text-slate-600 opacity-0 shadow-2xl ring-1 ring-black/[0.03] transition-all duration-300">
                     <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-slate-400">Navigation</div>
                     <a href="{{ $isAdminRoute ? route('admin.dashboard') : route('student.dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
-                        <i class="ri-dashboard-line text-base opacity-40"></i>
+                        <x-heroicon-o-squares-2x2 class="size-5 opacity-40" />
                         Dashboard
                     </a>
                     <a href="{{ route('student.announcements.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
-                        <i class="ri-notification-3-line text-base opacity-40"></i>
+                        <x-heroicon-o-bell class="size-5 opacity-40" />
                         Notices
                     </a>
                     <a href="{{ route('student.events.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
-                        <i class="ri-calendar-event-line text-base opacity-40"></i>
+                        <x-heroicon-o-calendar-days class="size-5 opacity-40" />
                         Events
                     </a>
                     <a href="{{ route('student.dues.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
-                        <i class="ri-wallet-3-line text-base opacity-40"></i>
+                        <x-heroicon-o-wallet class="size-5 opacity-40" />
                         Dues & Fees
                     </a>
                     <a href="{{ route('student.resources.index') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
-                        <i class="ri-folder-open-line text-base opacity-40"></i>
+                        <x-heroicon-o-folder-open class="size-5 opacity-40" />
                         Library
                     </a>
                 </div>
@@ -85,18 +85,18 @@
                         @endif
                     </span>
                     <span class="max-w-[120px] truncate text-xs font-semibold tracking-tight text-slate-700">{{ $displayName }}</span>
-                    <i class="ri-arrow-down-s-line text-slate-400"></i>
+                    <x-heroicon-o-chevron-down class="text-slate-400 size-5" />
                 </button>
                 <div id="profile-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-52 translate-y-2 rounded-2xl border border-slate-200/80 bg-white py-2 text-[13px] font-semibold text-slate-600 opacity-0 shadow-2xl ring-1 ring-black/[0.03] transition-all duration-300">
                     <a href="{{ route('student.profile') }}" class="flex items-center gap-3 px-4 py-2.5 transition hover:bg-slate-50 hover:text-[#16136a]">
-                        <i class="ri-user-settings-line text-base opacity-40"></i>
+                        <x-heroicon-o-cog-6-tooth class="size-5 opacity-40" />
                         Profile Settings
                     </a>
                     <div class="my-1 border-t border-slate-100"></div>
                     <form method="POST" action="{{ route('auth.logout') }}">
                         @csrf
                         <button type="submit" class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-red-500 transition hover:bg-red-50">
-                            <i class="ri-logout-circle-line text-base opacity-40"></i>
+                            <x-heroicon-o-arrow-right-on-rectangle class="size-5 opacity-40" />
                             Log Out
                         </button>
                     </form>
@@ -106,7 +106,7 @@
             {{-- Mobile Menu --}}
             <div class="relative md:hidden" data-dropdown>
                 <button type="button" data-dropdown-toggle="mobile-nav-menu" class="inline-flex h-9 w-9 items-center justify-center rounded-xl text-slate-600 transition hover:text-[#16136a]">
-                    <i class="ri-menu-4-line text-lg"></i>
+                    <x-heroicon-o-bars-3-bottom-right class="size-5" />
                 </button>
                 <div id="mobile-nav-menu" data-dropdown-menu class="invisible absolute right-0 mt-3 w-64 translate-y-2 rounded-2xl border border-slate-200/80 bg-white py-2 text-[13px] font-semibold text-slate-600 opacity-0 shadow-2xl transition-all duration-300">
                     <div class="flex items-center gap-3 border-b border-slate-100 px-4 py-4 mb-2">
@@ -119,16 +119,16 @@
                         </div>
                     </div>
                     <a href="{{ route('student.dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50">
-                        <i class="ri-dashboard-line opacity-40"></i> Dashboard
+                        <x-heroicon-o-squares-2x2 class="opacity-40 size-5" /> Dashboard
                     </a>
                     <a href="{{ route('student.profile') }}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50">
-                        <i class="ri-user-line opacity-40"></i> View Profile
+                        <x-heroicon-o-user class="opacity-40 size-5" /> View Profile
                     </a>
                     <div class="my-2 border-t border-slate-100"></div>
                     <form method="POST" action="{{ route('auth.logout') }}">
                         @csrf
                         <button type="submit" class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-red-500">
-                            <i class="ri-logout-box-line opacity-40"></i> Log Out
+                            <x-heroicon-o-arrow-right-on-rectangle class="opacity-40 size-5" /> Log Out
                         </button>
                     </form>
                 </div>

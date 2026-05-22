@@ -2,7 +2,7 @@
     <div class="auth-card-hover space-y-8 p-10">
         <div class="space-y-4 text-center">
             <div class="stagger-1 mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-[#16136a]/5 text-[#16136a] shadow-inner backdrop-blur-sm">
-                <i class="ri-mail-check-line text-4xl"></i>
+                <x-heroicon-o-envelope-open class="text-4xl size-5" />
             </div>
             <div class="space-y-2">
                 <h1 class="stagger-2 text-3xl font-semibold tracking-tight text-slate-900">Verify Your Email</h1>
@@ -43,7 +43,7 @@
             <button type="submit" class="stagger-5 auth-button-press group relative flex w-full items-center justify-center overflow-hidden rounded-2xl bg-[#16136a] px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-2xl hover:shadow-[#16136a]/30">
                 <div class="flex items-center space-x-3 transition-transform duration-300 group-hover:scale-105">
                     <span>Verify Account</span>
-                    <i class="ri-shield-check-line text-lg"></i>
+                    <x-heroicon-o-shield-check class="size-5" />
                 </div>
             </button>
         </form>
@@ -55,7 +55,7 @@
             <form method="POST" action="{{ route('auth.fresher-register.resend') }}">
                 @csrf
                 <button type="submit" class="group flex items-center gap-2 mx-auto rounded-2xl bg-[#16136a]/5 px-6 py-3 text-sm font-semibold text-[#16136a] transition-all duration-300 hover:bg-[#16136a]/10 hover:scale-105 active:scale-95">
-                    <i class="ri-refresh-line transition-transform duration-500 group-hover:rotate-180"></i>
+                    <x-heroicon-o-arrow-path class="transition-transform duration-500 group-hover:rotate-180 size-5" />
                     <span>Resend Code</span>
                 </button>
             </form>
@@ -63,7 +63,7 @@
 
         <div class="stagger-5 border-t border-slate-200/50 pt-8 text-center">
             <a href="{{ route('login') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-[#16136a] transition-all duration-300 hover:text-[#18188a] hover:scale-105">
-                <i class="ri-arrow-left-line transition-transform duration-300 group-hover:-translate-x-1"></i>
+                <x-heroicon-o-arrow-left class="transition-transform duration-300 group-hover:-translate-x-1 size-5" />
                 <span>Back to Login</span>
             </a>
         </div>

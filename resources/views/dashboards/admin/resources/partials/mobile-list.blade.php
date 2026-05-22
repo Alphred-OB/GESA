@@ -20,38 +20,38 @@
         @endphp
         @if (empty($classes) && empty($years))
             <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700">
-                <i class="ri-user-shared-line text-sm"></i>
+                <x-heroicon-o-user class="size-4" />
                 All students
             </span>
         @endif
         @foreach ($classes as $class)
             <span class="inline-flex items-center gap-1 rounded-full bg-[#16136a]/10 px-3 py-1 font-semibold text-[#16136a]">
-                <i class="ri-stack-line text-sm"></i>
+                <x-heroicon-o-rectangle-stack class="size-4" />
                 {{ $class }}
             </span>
         @endforeach
         @foreach ($years as $year)
             <span class="inline-flex items-center gap-1 rounded-full bg-slate-200 px-3 py-1 font-semibold text-slate-700">
-                <i class="ri-graduation-cap-line text-sm"></i>
+                <x-heroicon-o-academic-cap class="size-4" />
                 Year {{ $year }}
             </span>
         @endforeach
     </div>
     <footer class="flex items-center justify-between border-t border-slate-200 pt-4">
         <span class="inline-flex items-center gap-2 rounded-full {{ $resource->visibility === 'student' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600' }} px-3 py-1 text-xs font-semibold">
-            <i class="ri-eye-{{ $resource->visibility === 'student' ? '2-line' : 'close-line' }} text-sm"></i>
+            <x-heroicon-o-eye-{{ class="$resource->visibility === 'student' ? '2-line' : 'close-line' }} size-4" />
             {{ $resource->visibility === 'student' ? 'Visible' : 'Hidden' }}
         </span>
         <div class="flex items-center gap-2">
             <a href="{{ route('admin.resources.edit', $resource) }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                <i class="ri-edit-line text-sm"></i>
+                <x-heroicon-o-pencil class="size-4" />
                 Edit
             </a>
             <form method="POST" action="{{ route('admin.resources.destroy', $resource) }}" class="inline-flex" onsubmit="return confirm('Delete this resource?');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-50">
-                    <i class="ri-delete-bin-line text-sm"></i>
+                    <x-heroicon-o-trash class="size-4" />
                     Delete
                 </button>
             </form>

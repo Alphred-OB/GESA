@@ -7,7 +7,7 @@
                     <div class="space-y-4 max-w-2xl">
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 ring-1 ring-white/20 backdrop-blur-md">
-                                <i class="ri-calendar-event-line"></i> Campus Life
+                                <x-heroicon-o-calendar-days class="size-5" /> Campus Life
                             </span>
                         </div>
                         <div class="space-y-2">
@@ -21,7 +21,7 @@
 
                 <!-- Subtle background depth -->
                 <div class="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-white/5 blur-3xl"></div>
-                <i class="ri-calendar-event-line absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none"></i>
+                <x-heroicon-o-calendar-days class="absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none size-5" />
             </section>
 
             <div class="grid gap-10 lg:grid-cols-4">
@@ -45,7 +45,7 @@
                                             <option value="{{ $category['slug'] }}" @selected($activeCategory === $category['slug'])> {{ $category['label'] }}</option>
                                         @endforeach
                                     </select>
-                                    <i class="ri-arrow-down-s-line pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <x-heroicon-o-chevron-down class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 </div>
                             </div>
                         @endif
@@ -69,10 +69,10 @@
                                 {{-- View Switcher --}}
                                 <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1 ring-1 ring-slate-200">
                                     <button @click="view = 'grid'" :class="view === 'grid' ? 'bg-white text-[#16136a] shadow-sm' : 'text-slate-400 hover:text-slate-600'" class="flex h-9 w-9 items-center justify-center rounded-xl transition-all">
-                                        <i class="ri-grid-fill text-lg"></i>
+                                        <x-heroicon-s-squares-2x2 class="size-5" />
                                     </button>
                                     <button @click="view = 'table'" :class="view === 'table' ? 'bg-white text-[#16136a] shadow-sm' : 'text-slate-400 hover:text-slate-600'" class="flex h-9 w-9 items-center justify-center rounded-xl transition-all">
-                                        <i class="ri-table-line text-lg"></i>
+                                        <x-heroicon-o-table-cells class="size-5" />
                                     </button>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                         @if ($events->isEmpty())
                             <article class="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 py-20 text-center">
                                 <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white text-slate-300 shadow-sm ring-1 ring-slate-100">
-                                    <i class="ri-calendar-event-line text-3xl"></i>
+                                    <x-heroicon-o-calendar-days class="size-8" />
                                 </div>
                                 <p class="text-sm font-semibold text-[#16136a]">No events scheduled.</p>
                                 <p class="mt-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Check back later or adjust filters</p>
@@ -97,7 +97,7 @@
                                             @else
                                                 <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#16136a]/5 via-slate-100 to-[#16136a]/5">
                                                     <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#16136a]/10 text-[#16136a]">
-                                                        <i class="ri-image-line text-2xl"></i>
+                                                        <x-heroicon-o-photo class="size-7" />
                                                     </span>
                                                 </div>
                                             @endif
@@ -122,7 +122,7 @@
 
                                             <div class="mt-8 flex flex-col gap-2 pt-6 border-t border-slate-50">
                                                 <div class="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
-                                                    <i class="ri-time-line text-[#16136a]"></i>
+                                                    <x-heroicon-o-clock class="text-[#16136a] size-5" />
                                                     <span>{{ optional($event['start_at'])->format('g:i A') }} @if ($event['end_at']) - {{ optional($event['end_at'])->format('g:i A') }} @endif</span>
                                                 </div>
                                             </div>
@@ -169,7 +169,7 @@
                                                 </td>
                                                 <td class="px-8 py-6 text-right">
                                                     <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-[#16136a] ring-1 ring-slate-100 transition-all group-hover:bg-[#16136a] group-hover:text-white group-hover:shadow-lg group-hover:shadow-[#16136a]/20">
-                                                        <i class="ri-arrow-right-line text-lg"></i>
+                                                        <x-heroicon-o-arrow-right class="size-5" />
                                                     </div>
                                                 </td>
                                             </tr>
@@ -202,8 +202,8 @@
                         <div class="flex items-center justify-between mb-8">
                             <h3 class="text-sm font-semibold uppercase tracking-[0.2em] text-[#16136a]">{{ $today->format('F Y') }}</h3>
                             <div class="flex gap-1">
-                                <button class="h-8 w-8 rounded-xl bg-slate-50 text-slate-400 hover:text-[#16136a] transition"><i class="ri-arrow-left-s-line"></i></button>
-                                <button class="h-8 w-8 rounded-xl bg-slate-50 text-slate-400 hover:text-[#16136a] transition"><i class="ri-arrow-right-s-line"></i></button>
+                                <button class="h-8 w-8 rounded-xl bg-slate-50 text-slate-400 hover:text-[#16136a] transition"><x-heroicon-o-chevron-left class="size-5" /></button>
+                                <button class="h-8 w-8 rounded-xl bg-slate-50 text-slate-400 hover:text-[#16136a] transition"><x-heroicon-o-chevron-right class="size-5" /></button>
                             </div>
                         </div>
 
@@ -260,7 +260,7 @@
 
                     {{-- Quick Action Card --}}
                     <article class="rounded-xl bg-[#16136a] p-8 text-white shadow-2xl shadow-[#16136a]/30">
-                        <i class="ri-calendar-check-line text-4xl opacity-30"></i>
+                        <x-heroicon-o-calendar-days class="text-4xl opacity-30 size-5" />
                         <h3 class="mt-6 text-xl font-semibold italic tracking-tight">Sync to Device</h3>
                         <p class="mt-4 text-xs font-semibold text-white/60 leading-relaxed uppercase tracking-wider">
                             Never miss an event. Sync the GESA academic calendar directly to your phone or laptop.
@@ -268,7 +268,7 @@
                         <div class="mt-8 pt-8 border-t border-white/10">
                             <button data-calendar-trigger data-calendar-webcal="webcal://example.com/calendar.ics" class="flex w-full items-center justify-between group">
                                 <span class="text-[10px] font-semibold uppercase tracking-[0.3em] opacity-60 group-hover:opacity-100 transition-opacity">Add to Calendar</span>
-                                <i class="ri-download-cloud-2-line text-xl transition-transform group-hover:-translate-y-1"></i>
+                                <x-heroicon-o-cloud-arrow-down class="size-6 transition-transform group-hover:-translate-y-1" />
                             </button>
                         </div>
                     </article>

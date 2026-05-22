@@ -57,7 +57,7 @@
                                 <option value="{{ $value }}" @selected(old('type', $announcement->type ?? 'general') === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </label>
                 <label class="flex flex-col gap-2">
@@ -68,7 +68,7 @@
                                 <option value="{{ $value }}" @selected(old('priority', $announcement->priority ?? 'normal') === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </label>
                 <label class="flex flex-col gap-2 sm:col-span-2 lg:col-span-1">
@@ -79,7 +79,7 @@
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                     @error('target_type')
                         <span class="text-[10px] font-semibold text-rose-500 uppercase tracking-tighter">{{ $message }}</span>
@@ -163,14 +163,14 @@
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-[#16136a] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-white shadow-sm">
                                 <span x-text="getLabel(id).split('(')[0].trim()"></span>
                                 <button type="button" @click="remove(id)" class="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/40">
-                                    <i class="ri-close-line"></i>
+                                    <x-heroicon-o-x-mark class="size-5" />
                                 </button>
                             </span>
                         </template>
                     </div>
                     
                     <div class="relative">
-                        <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         <input 
                             type="text" 
                             x-model="search" 
@@ -216,7 +216,7 @@
 
     <footer class="flex flex-col items-center justify-between gap-6 rounded-[24px] border border-slate-200/60 bg-white p-6 shadow-sm md:flex-row">
         <div class="flex items-center gap-3 text-slate-400">
-            <i class="ri-information-line text-xl"></i>
+            <x-heroicon-o-information-circle class="size-6" />
             <p class="text-[11px] font-semibold uppercase tracking-widest leading-relaxed">
                 Messages cannot be changed after sending. <br> Please double-check before you click send.
             </p>

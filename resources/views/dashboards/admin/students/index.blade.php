@@ -6,7 +6,7 @@
         <header class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="space-y-3">
                 <div class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]">
-                    <i class="ri-team-line text-xs"></i>
+                    <x-heroicon-o-users class="size-3.5" />
                     Student Directory
                 </div>
                 <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Manage Students</h1>
@@ -15,18 +15,18 @@
             
             <div class="flex flex-wrap items-center gap-3">
                 <a href="{{ route('admin.students.create') }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                    <i class="ri-user-add-line text-lg"></i>
+                    <x-heroicon-o-user-plus class="size-5" />
                     New Student
                 </a>
                 <form method="POST" action="{{ route('admin.students.promote-years') }}" onsubmit="return confirm('Promote all students to the next academic year?');">
                     @csrf
                     <button type="submit" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-6 text-sm font-semibold text-amber-700 transition-all hover:bg-amber-100 active:scale-95">
-                        <i class="ri-arrow-up-circle-line text-lg"></i>
+                        <x-heroicon-o-arrow-up-circle class="size-5" />
                         Promote Year
                     </button>
                 </form>
                 <a href="{{ route('admin.students.export', request()->query()) }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 active:scale-95">
-                    <i class="ri-download-2-line text-lg"></i>
+                    <x-heroicon-o-arrow-down-tray class="size-5" />
                     Export
                 </a>
             </div>
@@ -39,7 +39,7 @@
                 <div class="relative z-10 space-y-6">
                     <div class="flex items-center justify-between">
                         <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
-                            <i class="ri-team-line text-2xl text-white"></i>
+                            <x-heroicon-o-users class="size-7 text-white" />
                         </span>
                         <div class="text-right">
                             <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/50">Current Total</p>
@@ -51,7 +51,7 @@
                         <p class="mt-2 text-sm font-medium text-white/60">Active Student Accounts</p>
                     </div>
                 </div>
-                <i class="ri-user-star-line absolute -bottom-6 -right-6 text-[120px] text-white/5 opacity-10"></i>
+                <x-heroicon-o-star class="absolute -bottom-6 -right-6 text-[120px] text-white/5 opacity-10 size-5" />
             </article>
 
             {{-- Class Breakdown Grid --}}
@@ -64,7 +64,7 @@
                                 <p class="text-2xl font-semibold text-slate-900">{{ number_format($classStat['total']) }}</p>
                             </div>
                             <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 text-slate-400 group-hover:bg-[#16136a]/5 group-hover:text-[#16136a]">
-                                <i class="ri-building-line text-sm"></i>
+                                <x-heroicon-o-building-office-2 class="size-4" />
                             </span>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
@@ -91,7 +91,7 @@
                         <h3 class="text-xl font-semibold text-emerald-900">{{ number_format($stats['graduated_total'] ?? 0) }} Total Graduates</h3>
                     </div>
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
-                        <i class="ri-graduation-cap-line text-xl"></i>
+                        <x-heroicon-o-academic-cap class="size-6" />
                     </span>
                 </div>
                 <div class="flex flex-wrap gap-3">
@@ -117,7 +117,7 @@
 
                 <div class="lg:col-span-4">
                     <div class="relative group">
-                        <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
+                        <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a] size-5" />
                         <input type="search" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search by name, email, or ID..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5" />
                     </div>
                 </div>
@@ -130,7 +130,7 @@
                                 <option value="{{ $classOption }}" @selected(($filters['class'] ?? '') === $classOption)>{{ $classOption }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -142,7 +142,7 @@
                                 <option value="{{ $yearOption }}" @selected(($filters['year'] ?? '') == $yearOption)>Year {{ $yearOption }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -153,13 +153,13 @@
                             <option value="active" @selected(($filters['status'] ?? '') === 'active')>Active</option>
                             <option value="pending" @selected(($filters['status'] ?? '') === 'pending')>Pending</option>
                         </select>
-                        <i class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
                     <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-4 text-sm font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/10 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-equalizer-line"></i>
+                        <x-heroicon-o-adjustments-horizontal class="size-5" />
                         Filter
                     </button>
                 </div>
@@ -206,12 +206,12 @@
                                         <div class="flex justify-center">
                                             @if($student->email_verified_at)
                                                 <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-600">
-                                                    <i class="ri-checkbox-circle-fill"></i>
+                                                    <x-heroicon-s-check-circle class="size-5" />
                                                     Active
                                                 </span>
                                             @else
                                                 <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-600">
-                                                    <i class="ri-time-fill"></i>
+                                                    <x-heroicon-s-clock class="size-5" />
                                                     Pending
                                                 </span>
                                             @endif
@@ -220,16 +220,16 @@
                                     <td class="px-6 py-4 text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             <a href="{{ route('admin.students.show', $student) }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 transition-all hover:border-[#16136a] hover:bg-[#16136a]/5 hover:text-[#16136a]" title="View Profile">
-                                                <i class="ri-eye-line text-base"></i>
+                                                <x-heroicon-o-eye class="size-5" />
                                             </a>
                                             <a href="{{ route('admin.students.edit', $student) }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 transition-all hover:border-[#16136a] hover:bg-[#16136a]/5 hover:text-[#16136a]" title="Edit Account">
-                                                <i class="ri-pencil-line text-base"></i>
+                                                <x-heroicon-o-pencil class="size-5" />
                                             </a>
                                             <form method="POST" action="{{ route('admin.students.destroy', $student) }}" class="inline" onsubmit="return confirm('Permanently delete this student account?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="flex h-9 w-9 items-center justify-center rounded-xl border border-rose-100 text-rose-300 transition-all hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600" title="Delete Student">
-                                                    <i class="ri-delete-bin-line text-base"></i>
+                                                    <x-heroicon-o-trash class="size-5" />
                                                 </button>
                                             </form>
                                         </div>
@@ -240,7 +240,7 @@
                                     <td colspan="4" class="px-6 py-20 text-center">
                                         <div class="flex flex-col items-center gap-4">
                                             <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-                                                <i class="ri-team-line text-4xl"></i>
+                                                <x-heroicon-o-users class="text-4xl size-5" />
                                             </div>
                                             <div>
                                                 <p class="text-lg font-semibold text-slate-900">No students found</p>
@@ -294,17 +294,17 @@
                                 <p class="text-[10px] font-semibold text-slate-300">ID: {{ $student->username }}</p>
                                 <div class="flex gap-2">
                                     <a href="{{ route('admin.students.show', $student) }}" class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a]/5 text-[#16136a] transition-all active:scale-95">
-                                        <i class="ri-eye-line text-lg"></i>
+                                        <x-heroicon-o-eye class="size-5" />
                                     </a>
                                     <a href="{{ route('admin.students.edit', $student) }}" class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a]/5 text-[#16136a] transition-all active:scale-95">
-                                        <i class="ri-pencil-line text-lg"></i>
+                                        <x-heroicon-o-pencil class="size-5" />
                                     </a>
                                 </div>
                             </div>
                         </article>
                     @empty
                         <div class="flex flex-col items-center gap-3 py-10 text-center">
-                            <i class="ri-team-line text-4xl text-slate-200"></i>
+                            <x-heroicon-o-users class="text-4xl text-slate-200 size-5" />
                             <p class="text-sm font-semibold text-slate-400">No students found</p>
                         </div>
                     @endforelse

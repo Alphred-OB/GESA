@@ -10,7 +10,7 @@
                 </div>
                 <div class="space-y-1">
                     <div class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#16136a]">
-                        <i class="ri-user-3-line text-xs"></i>
+                        <x-heroicon-o-user class="size-3.5" />
                         Student Profile
                     </div>
                     <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $student->fullname ?? $student->username }}</h1>
@@ -20,14 +20,14 @@
             
             <div class="flex items-center gap-3">
                 <a href="{{ route('admin.students.edit', $student) }}" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                    <i class="ri-pencil-line text-lg"></i>
+                    <x-heroicon-o-pencil class="size-5" />
                     Edit Account
                 </a>
                 <form method="POST" action="{{ route('admin.students.destroy', $student) }}" onsubmit="return confirm('Permanently delete this student account?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-rose-100 bg-rose-50 px-6 text-sm font-semibold text-rose-600 transition-all hover:bg-rose-100 active:scale-95">
-                        <i class="ri-delete-bin-line text-lg"></i>
+                        <x-heroicon-o-trash class="size-5" />
                         Delete
                     </button>
                 </form>
@@ -39,7 +39,7 @@
             <article class="md:col-span-8 rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
                 <div class="mb-8 flex items-center gap-3">
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-[#16136a]">
-                        <i class="ri-fingerprint-line text-xl"></i>
+                        <x-heroicon-o-finger-print class="size-6" />
                     </span>
                     <h2 class="text-lg font-semibold text-[#16136a]">Identity & Contact</h2>
                 </div>
@@ -65,12 +65,12 @@
 
                 <div class="mt-10 flex flex-wrap gap-4 pt-8 border-t border-slate-50">
                     <a href="mailto:{{ $student->email }}" class="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-50 px-5 text-sm font-semibold text-slate-600 transition-all hover:bg-[#16136a]/5 hover:text-[#16136a]">
-                        <i class="ri-mail-send-line text-lg"></i>
+                        <x-heroicon-o-paper-airplane class="size-5" />
                         Send Email
                     </a>
                     @if($student->phone_number)
                         <a href="tel:{{ $student->phone_number }}" class="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-50 px-5 text-sm font-semibold text-slate-600 transition-all hover:bg-[#16136a]/5 hover:text-[#16136a]">
-                            <i class="ri-phone-line text-lg"></i>
+                            <x-heroicon-o-phone class="size-5" />
                             Call Student
                         </a>
                     @endif
@@ -82,7 +82,7 @@
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
                     <div class="mb-6 flex items-center gap-3">
                         <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-[#16136a]">
-                            <i class="ri-graduation-cap-line text-xl"></i>
+                            <x-heroicon-o-academic-cap class="size-6" />
                         </span>
                         <h2 class="text-lg font-semibold text-[#16136a]">Academic</h2>
                     </div>
@@ -102,12 +102,12 @@
                             <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">Account Status</p>
                             @if($student->email_verified_at)
                                 <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-600">
-                                    <i class="ri-checkbox-circle-fill"></i>
+                                    <x-heroicon-s-check-circle class="size-5" />
                                     Active Account
                                 </span>
                             @else
                                 <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-600">
-                                    <i class="ri-time-fill"></i>
+                                    <x-heroicon-s-clock class="size-5" />
                                     Pending Setup
                                 </span>
                             @endif
@@ -119,14 +119,14 @@
                     <h3 class="text-xs font-semibold uppercase tracking-widest text-white/50 mb-4">System History</h3>
                     <div class="space-y-4">
                         <div class="flex items-center gap-3">
-                            <i class="ri-calendar-event-line text-white/40"></i>
+                            <x-heroicon-o-calendar-days class="text-white/40 size-5" />
                             <div class="min-w-0">
                                 <p class="text-[10px] font-semibold uppercase tracking-widest text-white/40 leading-none mb-1">Created On</p>
                                 <p class="truncate text-xs font-semibold">{{ $student->created_at?->format('M j, Y · g:i A') ?? '—' }}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            <i class="ri-history-line text-white/40"></i>
+                            <x-heroicon-o-clock class="text-white/40 size-5" />
                             <div class="min-w-0">
                                 <p class="text-[10px] font-semibold uppercase tracking-widest text-white/40 leading-none mb-1">Last Update</p>
                                 <p class="truncate text-xs font-semibold">{{ $student->updated_at?->format('M j, Y · g:i A') ?? '—' }}</p>
@@ -140,7 +140,7 @@
             <article class="md:col-span-12 rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
                 <div class="mb-8 flex items-center gap-3">
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-[#16136a]">
-                        <i class="ri-settings-4-line text-xl"></i>
+                        <x-heroicon-o-cog-8-tooth class="size-6" />
                     </span>
                     <h2 class="text-lg font-semibold text-[#16136a]">Administrative Actions</h2>
                 </div>
@@ -148,7 +148,7 @@
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <a href="{{ route('admin.students.edit', $student) }}" class="group flex flex-col gap-3 rounded-3xl border border-slate-100 bg-slate-50/30 p-5 transition-all hover:border-[#16136a]/30 hover:bg-white hover:shadow-lg">
                         <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm group-hover:bg-[#16136a] group-hover:text-white transition-colors">
-                            <i class="ri-pencil-line"></i>
+                            <x-heroicon-o-pencil class="size-5" />
                         </span>
                         <div>
                             <p class="text-sm font-semibold text-slate-900">Modify Account</p>
@@ -158,7 +158,7 @@
 
                     <a href="{{ route('admin.students.index') }}" class="group flex flex-col gap-3 rounded-3xl border border-slate-100 bg-slate-50/30 p-5 transition-all hover:border-[#16136a]/30 hover:bg-white hover:shadow-lg">
                         <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm group-hover:bg-[#16136a] group-hover:text-white transition-colors">
-                            <i class="ri-list-unordered"></i>
+                            <x-heroicon-o-list-bullet class="size-5" />
                         </span>
                         <div>
                             <p class="text-sm font-semibold text-slate-900">Student Directory</p>
@@ -168,7 +168,7 @@
 
                     <div class="group flex flex-col gap-3 rounded-3xl border border-slate-100 bg-slate-50/30 p-5 transition-all hover:border-[#16136a]/30 hover:bg-white hover:shadow-lg">
                         <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm group-hover:bg-[#16136a] group-hover:text-white transition-colors">
-                            <i class="ri-lock-password-line"></i>
+                            <x-heroicon-o-lock-closed class="size-5" />
                         </span>
                         <div>
                             <p class="text-sm font-semibold text-slate-900">Reset Password</p>
@@ -181,7 +181,7 @@
                         @method('DELETE')
                         <button type="submit" class="group flex flex-col items-start gap-3 rounded-3xl border border-rose-50 bg-rose-50/20 p-5 transition-all hover:border-rose-200 hover:bg-white hover:shadow-lg">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm group-hover:bg-rose-600 group-hover:text-white transition-colors text-rose-400">
-                                <i class="ri-delete-bin-line"></i>
+                                <x-heroicon-o-trash class="size-5" />
                             </span>
                             <div class="text-left">
                                 <p class="text-sm font-semibold text-rose-900">Delete Account</p>

@@ -75,7 +75,7 @@
         <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 shadow-lg shadow-[#16136a]/5 sm:flex-row sm:items-center sm:justify-between">
             <div class="space-y-2">
                 <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                    <i class="ri-file-edit-line text-base" aria-hidden="true"></i>
+                    <x-heroicon-o-document class="size-5" aria-hidden="true" />
                     Course registrations
                 </p>
                 <h1 class="text-2xl font-semibold text-[#16136a] sm:text-3xl">Review student submissions</h1>
@@ -86,7 +86,7 @@
         @if (session('status'))
             <div class="rounded-3xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700 shadow-sm">
                 <div class="flex items-start gap-3">
-                    <i class="ri-check-double-line text-lg" aria-hidden="true"></i>
+                    <x-heroicon-o-check-circle class="size-5" aria-hidden="true" />
                     <p>{{ session('status') }}</p>
                 </div>
             </div>
@@ -95,7 +95,7 @@
         @if ($errors->any())
             <div class="rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 shadow-sm">
                 <div class="flex items-start gap-3">
-                    <i class="ri-error-warning-line text-lg" aria-hidden="true"></i>
+                    <x-heroicon-o-exclamation-triangle class="size-5" aria-hidden="true" />
                     <p>{{ $errors->first() }}</p>
                 </div>
             </div>
@@ -111,7 +111,7 @@
                 <div class="flex w-full flex-col gap-2 md:w-64">
                     <label for="filter_search" class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Search</label>
                     <div class="relative">
-                        <i class="ri-search-line pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-magnifying-glass class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         <input id="filter_search" type="search" name="search" value="{{ $search }}" placeholder="Name, email, class" class="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30" />
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                                 <option value="{{ $statusOption }}" @selected($activeStatus === $statusOption)>{{ Str::headline($statusOption) }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@
                                 <option value="{{ $option }}" @selected($activeClass === $option)>{{ $option }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -151,13 +151,13 @@
                                 <option value="{{ $option }}" @selected($activeYear === $option)>{{ $option }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
                 <div class="flex items-end md:ml-auto md:w-auto">
                     <button type="submit" class="inline-flex h-11 min-w-[140px] items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-5 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90">
-                        <i class="ri-equalizer-line text-base"></i>
+                        <x-heroicon-o-adjustments-horizontal class="size-5" />
                         Apply
                     </button>
                 </div>
@@ -192,11 +192,11 @@
                         </div>
                         <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
                             <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-[#16136a] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#16136a]/90 disabled:opacity-60" @click="submit('update_status')" :disabled="!canApplyStatus">
-                                <i class="ri-check-double-line text-sm" aria-hidden="true"></i>
+                                <x-heroicon-o-check-circle class="size-4" aria-hidden="true" />
                                 Apply status
                             </button>
                             <button type="button" class="inline-flex items-center gap-2 rounded-lg border border-[#16136a]/40 px-4 py-2 text-sm font-medium text-[#16136a] transition hover:bg-[#16136a]/10 disabled:opacity-60" @click="submit('download_documents')" :disabled="!selectedIds.length">
-                                <i class="ri-download-2-line text-sm" aria-hidden="true"></i>
+                                <x-heroicon-o-arrow-down-tray class="size-4" aria-hidden="true" />
                                 Download PDFs
                             </button>
                         </div>
@@ -249,12 +249,7 @@
                                             'submitted' => 'bg-sky-50 text-sky-700',
                                             default => 'bg-amber-50 text-amber-700',
                                         } }}">
-                                            <i class="{{ match($registration->status) {
-                                                'approved' => 'ri-checkbox-circle-line',
-                                                'rejected' => 'ri-close-circle-line',
-                                                'submitted' => 'ri-time-line',
-                                                default => 'ri-draft-line',
-                                            } }} text-sm"></i>
+                                            <x-heroicon-o-star class="{{ match($registration->status) { 'approved' => 'ri-checkbox-circle-line', 'rejected' => 'ri-close-circle-line', 'submitted' => 'ri-time-line', default => 'ri-draft-line', } }} size-4" />
                                             {{ Str::headline($registration->status) }}
                                         </span>
                                     </td>
@@ -264,12 +259,12 @@
                                     <td class="px-6 py-4 text-right">
                                         @if (!empty($registration->document_paths))
                                             <a href="{{ route('admin.course-registrations.show', $registration) }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                                <i class="ri-download-2-line text-sm"></i>
+                                                <x-heroicon-o-arrow-down-tray class="size-4" />
                                                 Download
                                             </a>
                                         @else
                                             <span title="No PDF uploaded" class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-300">
-                                                <i class="ri-download-2-line text-sm"></i>
+                                                <x-heroicon-o-arrow-down-tray class="size-4" />
                                                 Download
                                             </span>
                                         @endif
@@ -279,7 +274,7 @@
                                 <tr>
                                     <td colspan="5" class="px-6 py-10 text-center text-sm text-slate-500">
                                         <div class="flex flex-col items-center gap-3">
-                                            <i class="ri-file-forbid-line text-3xl text-slate-300"></i>
+                                            <x-heroicon-o-document-minus class="size-8 text-slate-300" />
                                             <p class="font-semibold text-slate-600">No course registrations found.</p>
                                             <p>Adjust filters or check back when students upload their PDFs.</p>
                                         </div>
@@ -309,12 +304,7 @@
                                             'submitted' => 'bg-sky-50 text-sky-700',
                                             default => 'bg-amber-50 text-amber-700',
                                         } }}">
-                                            <i class="{{ match($registration->status) {
-                                                'approved' => 'ri-checkbox-circle-line',
-                                                'rejected' => 'ri-close-circle-line',
-                                                'submitted' => 'ri-time-line',
-                                                default => 'ri-draft-line',
-                                            } }} text-sm"></i>
+                                            <x-heroicon-o-star class="{{ match($registration->status) { 'approved' => 'ri-checkbox-circle-line', 'rejected' => 'ri-close-circle-line', 'submitted' => 'ri-time-line', default => 'ri-draft-line', } }} size-4" />
                                             {{ Str::headline($registration->status) }}
                                         </dd>
                                     </div>
@@ -326,12 +316,12 @@
                                 <footer class="mt-4 flex items-center justify-end">
                                     @if (!empty($registration->document_paths))
                                         <a href="{{ route('admin.course-registrations.show', $registration) }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                            <i class="ri-download-2-line text-sm"></i>
+                                            <x-heroicon-o-arrow-down-tray class="size-4" />
                                             Download
                                         </a>
                                     @else
                                         <span title="No PDF uploaded" class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-300">
-                                            <i class="ri-download-2-line text-sm"></i>
+                                            <x-heroicon-o-arrow-down-tray class="size-4" />
                                             Download
                                         </span>
                                     @endif
@@ -339,7 +329,7 @@
                             </article>
                         @empty
                             <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center text-sm text-slate-500">
-                                <i class="ri-file-forbid-line text-3xl text-slate-300"></i>
+                                <x-heroicon-o-document-minus class="size-8 text-slate-300" />
                                 <p class="mt-3 font-semibold text-slate-600">No course registrations found.</p>
                                 <p>Adjust filters or check back later.</p>
                             </div>

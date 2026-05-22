@@ -8,7 +8,7 @@
     <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
             <a href="{{ route('admin.pending-registrations.index') }}" class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line text-xl"></i>
+                <x-heroicon-o-arrow-left class="size-6" />
             </a>
             <div>
                 <h1 class="text-3xl font-semibold text-slate-900">Review Registration</h1>
@@ -19,15 +19,15 @@
         {{-- Status Badge --}}
         @if($registration->status === 'pending')
             <span class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-sm font-semibold text-yellow-800">
-                <i class="ri-time-line"></i> Pending Review
+                <x-heroicon-o-clock class="size-5" /> Pending Review
             </span>
         @elseif($registration->status === 'approved')
             <span class="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-800">
-                <i class="ri-checkbox-circle-line"></i> Approved
+                <x-heroicon-o-check-circle class="size-5" /> Approved
             </span>
         @else
             <span class="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-800">
-                <i class="ri-close-circle-line"></i> Rejected
+                <x-heroicon-o-x-circle class="size-5" /> Rejected
             </span>
         @endif
     </div>
@@ -38,7 +38,7 @@
             {{-- Personal Details --}}
             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                 <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="ri-user-line text-[#16136a]"></i>
+                    <x-heroicon-o-user class="text-[#16136a] size-5" />
                     Personal Information
                 </h2>
                 
@@ -65,7 +65,7 @@
             {{-- Contact Information --}}
             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                 <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="ri-contacts-line text-[#16136a]"></i>
+                    <x-heroicon-o-users class="text-[#16136a] size-5" />
                     Contact Information
                 </h2>
                 
@@ -84,7 +84,7 @@
             {{-- Academic Information --}}
             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                 <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="ri-graduation-cap-line text-[#16136a]"></i>
+                    <x-heroicon-o-academic-cap class="text-[#16136a] size-5" />
                     Academic Information
                 </h2>
                 
@@ -103,7 +103,7 @@
             {{-- Reason for Registration --}}
             <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                 <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="ri-question-line text-[#16136a]"></i>
+                    <x-heroicon-o-question-mark-circle class="text-[#16136a] size-5" />
                     Why can't access student email?
                 </h2>
                 
@@ -116,7 +116,7 @@
             @if($registration->student_id_path)
                 <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                     <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                        <i class="ri-image-line text-[#16136a]"></i>
+                        <x-heroicon-o-photo class="text-[#16136a] size-5" />
                         Student ID Card
                     </h2>
                     
@@ -133,7 +133,7 @@
                         target="_blank" 
                         class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#16136a] hover:underline"
                     >
-                        <i class="ri-external-link-line"></i>
+                        <x-heroicon-o-arrow-top-right-on-square class="size-5" />
                         View Full Size
                     </a>
                 </div>
@@ -143,7 +143,7 @@
             @if($registration->admin_notes && $registration->status !== 'pending')
                 <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                     <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                        <i class="ri-file-text-line text-[#16136a]"></i>
+                        <x-heroicon-o-document-text class="text-[#16136a] size-5" />
                         Admin Notes
                     </h2>
                     
@@ -166,7 +166,7 @@
             <div class="rounded-2xl bg-gradient-to-br from-[#16136a] to-[#1a1a8a] p-6 text-white shadow-lg">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
-                        <i class="ri-calendar-line text-2xl"></i>
+                        <x-heroicon-o-calendar class="size-7" />
                     </div>
                     <div>
                         <p class="text-xs font-medium text-white/80">Submitted</p>
@@ -199,7 +199,7 @@
                             type="submit" 
                             class="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
                         >
-                            <i class="ri-checkbox-circle-line text-lg"></i>
+                            <x-heroicon-o-check-circle class="size-5" />
                             Approve Registration
                         </button>
                     </form>
@@ -233,7 +233,7 @@
                             class="w-full flex items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
                             onclick="return confirm('Are you sure you want to reject this registration?')"
                         >
-                            <i class="ri-close-circle-line text-lg"></i>
+                            <x-heroicon-o-x-circle class="size-5" />
                             Reject Registration
                         </button>
                     </form>

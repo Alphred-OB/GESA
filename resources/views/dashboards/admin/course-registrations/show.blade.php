@@ -17,7 +17,7 @@
         <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/80 p-6 shadow-lg shadow-[#16136a]/5 md:flex-row md:items-center md:justify-between">
             <div class="space-y-2">
                 <a href="{{ route('admin.course-registrations.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#16136a]/70 transition hover:text-[#16136a]">
-                    <i class="ri-arrow-go-back-line"></i>
+                    <x-heroicon-o-arrow-uturn-left class="size-5" />
                     Back to registrations
                 </a>
                 <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">{{ $student?->fullname ?? $student?->username ?? 'Unknown student' }}</h1>
@@ -34,7 +34,7 @@
         @if (session('status'))
             <div class="rounded-3xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700 shadow-sm">
                 <div class="flex items-start gap-3">
-                    <i class="ri-check-double-line text-lg" aria-hidden="true"></i>
+                    <x-heroicon-o-check-circle class="size-5" aria-hidden="true" />
                     <p>{{ session('status') }}</p>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                                 <li class="flex flex-col gap-3 rounded-2xl border border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                                     <div class="flex items-center gap-3">
                                     <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#16136a]/10 text-[#16136a]">
-                                            <i class="ri-file-pdf-line text-lg"></i>
+                                            <x-heroicon-o-document class="size-5" />
                                         </span>
                                         <div class="space-y-1">
                                             <a href="{{ $doc['url'] }}" target="_blank" rel="noopener" class="font-semibold text-[#16136a] hover:underline">{{ $doc['name'] }}</a>
@@ -63,11 +63,11 @@
                                     </div>
                                     <div class="flex gap-2">
                                         <a href="{{ $doc['url'] }}" download class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                            <i class="ri-download-2-line text-sm"></i>
+                                            <x-heroicon-o-arrow-down-tray class="size-4" />
                                             Download
                                         </a>
                                         <a href="{{ $doc['url'] }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]">
-                                            <i class="ri-eye-line text-sm"></i>
+                                            <x-heroicon-o-eye class="size-4" />
                                             Preview
                                         </a>
                                     </div>
@@ -76,7 +76,7 @@
                         </ul>
                     @else
                         <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-5 py-10 text-center text-sm text-slate-500">
-                            <i class="ri-file-forbid-line text-3xl text-slate-300"></i>
+                            <x-heroicon-o-document-minus class="size-8 text-slate-300" />
                             <p class="mt-3 font-semibold text-slate-600">No PDF uploaded yet.</p>
                             <p>The student has not provided a registration document.</p>
                         </div>
@@ -129,7 +129,7 @@
                             Cancel
                         </a>
                         <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-[#16136a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:shadow-xl">
-                            <i class="ri-save-3-line text-base" aria-hidden="true"></i>
+                            <x-heroicon-o-arrow-down-on-square class="size-5" aria-hidden="true" />
                             Save decision
                         </button>
                     </div>

@@ -9,7 +9,7 @@
             <header class="flex flex-col gap-4 rounded-xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 md:flex-row md:items-center md:justify-between">
                 <div class="space-y-2">
                     <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                        <i class="ri-money-dollar-circle-line text-base"></i>
+                        <x-heroicon-o-currency-dollar class="size-5" />
                         Manual Payment
                     </p>
                     <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">{{ $due->description }}</h1>
@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <a href="{{ route('student.dues.index') }}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                        <i class="ri-arrow-left-line"></i>
+                        <x-heroicon-o-arrow-left class="size-5" />
                         Cancel
                     </a>
                 </div>
@@ -39,7 +39,7 @@
                         <div class="bg-slate-50/50 px-8 py-6 border-b border-slate-100 flex items-center justify-between">
                             <h2 class="flex items-center gap-3 text-lg font-semibold text-[#16136a]">
                                 <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-lg shadow-[#16136a]/20">
-                                    <i class="ri-list-check-3"></i>
+                                    <x-heroicon-o-clipboard-document-check class="size-5" />
                                 </span>
                                 Payment Instructions
                             </h2>
@@ -53,7 +53,7 @@
                             <div class="mb-8 rounded-xl bg-indigo-50/50 p-5 border border-indigo-100/50">
                                 <div class="flex gap-4">
                                     <div class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
-                                        <i class="ri-information-fill text-sm"></i>
+                                        <x-heroicon-s-information-circle class="size-4" />
                                     </div>
                                     <p class="text-sm font-medium leading-relaxed text-indigo-900/80 italic">
                                         {{ $settings['manual_payment_instructions'] }}
@@ -74,7 +74,7 @@
                                         </div>
                                         <span :class="selectedNetwork === 'mtn' ? 'text-yellow-900' : 'text-slate-500'" class="text-[11px] font-semibold uppercase tracking-widest">MTN</span>
                                         <div x-show="selectedNetwork === 'mtn'" class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-yellow-400 border-2 border-white flex items-center justify-center">
-                                            <i class="ri-check-line text-yellow-900 text-xs font-semibold"></i>
+                                            <x-heroicon-o-check class="text-yellow-900 size-3.5 font-semibold" />
                                         </div>
                                     </button>
 
@@ -87,7 +87,7 @@
                                         </div>
                                         <span :class="selectedNetwork === 'telecel' ? 'text-red-700' : 'text-slate-500'" class="text-[11px] font-semibold uppercase tracking-widest">Telecel</span>
                                         <div x-show="selectedNetwork === 'telecel'" class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 border-2 border-white flex items-center justify-center">
-                                            <i class="ri-check-line text-white text-xs font-semibold"></i>
+                                            <x-heroicon-o-check class="text-white size-3.5 font-semibold" />
                                         </div>
                                     </button>
 
@@ -100,7 +100,7 @@
                                         </div>
                                         <span :class="selectedNetwork === 'at' ? 'text-blue-700' : 'text-slate-500'" class="text-[11px] font-semibold uppercase tracking-widest">AT</span>
                                         <div x-show="selectedNetwork === 'at'" class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center">
-                                            <i class="ri-check-line text-white text-xs font-semibold"></i>
+                                            <x-heroicon-o-check class="text-white size-3.5 font-semibold" />
                                         </div>
                                     </button>
                                 </div>
@@ -112,7 +112,7 @@
                                 {{-- MTN Content --}}
                                 <div x-show="selectedNetwork === 'mtn'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
                                     <div class="flex items-center gap-3 border-b border-yellow-100 pb-4">
-                                        <i class="ri-smartphone-line text-2xl text-yellow-500"></i>
+                                        <x-heroicon-o-device-phone-mobile class="size-7 text-yellow-500" />
                                         <h3 class="text-base font-semibold text-yellow-900">Pay via MTN MoMoPay</h3>
                                     </div>
                                     <div class="space-y-4">
@@ -142,7 +142,7 @@
                                 {{-- Telecel Content --}}
                                 <div x-show="selectedNetwork === 'telecel'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="space-y-6">
                                     <div class="flex items-center gap-3 border-b border-red-100 pb-4">
-                                        <i class="ri-smartphone-line text-2xl text-red-500"></i>
+                                        <x-heroicon-o-device-phone-mobile class="size-7 text-red-500" />
                                         <h3 class="text-base font-semibold text-red-900">Pay via Telecel Merchant</h3>
                                     </div>
                                     <div class="space-y-4">
@@ -172,7 +172,7 @@
                                 {{-- AT Content --}}
                                 <div x-show="selectedNetwork === 'at'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="space-y-6">
                                     <div class="flex items-center gap-3 border-b border-blue-100 pb-4">
-                                        <i class="ri-smartphone-line text-2xl text-blue-500"></i>
+                                        <x-heroicon-o-device-phone-mobile class="size-7 text-blue-500" />
                                         <h3 class="text-base font-semibold text-blue-900">Pay via AT Merchant</h3>
                                     </div>
                                     <div class="space-y-4">
@@ -217,8 +217,8 @@
                                         <div class="mt-2 flex items-center justify-between">
                                             <span class="text-3xl font-mono font-semibold tracking-wider text-yellow-400 transition group-hover:text-yellow-300 group-hover:scale-[1.02] inline-block">{{ $settings['merchant_number'] }}</span>
                                             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 transition group-hover:bg-white/10">
-                                                <i x-show="!copySuccess" class="ri-file-copy-line text-white/60"></i>
-                                                <i x-show="copySuccess" x-transition class="ri-check-line text-emerald-400"></i>
+                                                <x-heroicon-o-document x-show="!copySuccess" class="text-white/60 size-5" />
+                                                <x-heroicon-o-check x-show="copySuccess" x-transition class="text-emerald-400 size-5" />
                                             </div>
                                         </div>
                                         <p x-show="copySuccess" x-transition class="mt-2 text-[10px] font-semibold uppercase tracking-widest text-emerald-400">Number Copied to clipboard!</p>
@@ -246,7 +246,7 @@
                     <div class="bg-indigo-50/50 px-8 py-7 border-b border-indigo-100/50 flex items-center justify-between">
                         <h2 class="flex items-center gap-4 text-xl font-semibold text-[#16136a]">
                             <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-lg shadow-[#16136a]/20">
-                                <i class="ri-upload-cloud-fill text-xl"></i>
+                                <x-heroicon-s-cloud-arrow-up class="size-6" />
                             </span>
                             Final Step: Submit Proof
                         </h2>
@@ -276,7 +276,7 @@
                                     
                                     <div class="text-center p-8 transition-all duration-300" :class="preview ? 'opacity-0 scale-95' : 'opacity-100 scale-100'">
                                         <div class="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-xl bg-white shadow-xl shadow-slate-200/50 text-[#16136a] group-hover:scale-110 transition-transform">
-                                            <i class="ri-camera-lens-line text-4xl"></i>
+                                            <x-heroicon-o-camera class="text-4xl size-5" />
                                         </div>
                                         <p class="text-base font-semibold text-slate-700">Select payment screenshot</p>
                                         <p class="mt-2 text-[11px] font-medium text-slate-400 uppercase tracking-[0.2em]">MAX FILE SIZE: 2MB</p>
@@ -287,7 +287,7 @@
                                             <img :src="preview" class="h-full w-full object-cover">
                                             <div class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white">
                                                 <div class="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center mb-3">
-                                                    <i class="ri-refresh-line text-2xl"></i>
+                                                    <x-heroicon-o-arrow-path class="size-7" />
                                                 </div>
                                                 <p class="text-xs font-semibold uppercase tracking-widest">Change Image</p>
                                                 <p class="mt-2 text-[10px] font-semibold text-white/60 truncate px-4" x-text="filename"></p>
@@ -298,7 +298,7 @@
                             </div>
                             @error('payment_proof')
                                 <p class="flex items-center justify-center gap-2 text-xs font-semibold text-rose-500 bg-rose-50 p-3 rounded-xl">
-                                    <i class="ri-error-warning-fill"></i>
+                                    <x-heroicon-s-exclamation-triangle class="size-5" />
                                     {{ $message }}
                                 </p>
                             @enderror
@@ -307,7 +307,7 @@
                         <button type="submit" class="group relative w-full overflow-hidden rounded-xl bg-[#16136a] px-10 py-5 shadow-2xl shadow-[#16136a]/30 transition-all hover:bg-[#1c198a] hover:scale-[1.01] active:scale-95">
                             <div class="flex items-center justify-center gap-4">
                                 <span class="text-sm font-semibold uppercase tracking-[0.25em] text-white">Submit Payment for Approval</span>
-                                <i class="ri-shield-check-fill text-xl text-white group-hover:rotate-12 transition-transform"></i>
+                                <x-heroicon-s-shield-check class="size-6 text-white group-hover:rotate-12 transition-transform" />
                             </div>
                         </button>
                     </form>

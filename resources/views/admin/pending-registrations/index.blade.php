@@ -21,7 +21,7 @@
                     <p class="mt-2 text-4xl font-semibold">{{ $registrations->where('status', 'pending')->count() }}</p>
                 </div>
                 <div class="rounded-full bg-white/20 p-4">
-                    <i class="ri-time-line text-3xl"></i>
+                    <x-heroicon-o-clock class="size-8" />
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
                     <p class="mt-2 text-4xl font-semibold">{{ $registrations->where('status', 'approved')->count() }}</p>
                 </div>
                 <div class="rounded-full bg-white/20 p-4">
-                    <i class="ri-checkbox-circle-line text-3xl"></i>
+                    <x-heroicon-o-check-circle class="size-8" />
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                     <p class="mt-2 text-4xl font-semibold">{{ $registrations->where('status', 'rejected')->count() }}</p>
                 </div>
                 <div class="rounded-full bg-white/20 p-4">
-                    <i class="ri-close-circle-line text-3xl"></i>
+                    <x-heroicon-o-x-circle class="size-8" />
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Search</label>
                     <div class="relative">
-                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         <input 
                             type="text" 
                             name="search" 
@@ -91,7 +91,7 @@
 
                 <div class="flex items-end">
                     <button type="submit" class="w-full rounded-xl bg-[#16136a] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#18188a]">
-                        <i class="ri-filter-3-line mr-2"></i>Apply Filters
+                        <x-heroicon-o-funnel class="mr-2 size-5" />Apply Filters
                     </button>
                 </div>
             </div>
@@ -102,7 +102,7 @@
     @if(session('success'))
         <div class="rounded-xl bg-green-50 border border-green-200 p-4">
             <div class="flex items-center gap-3">
-                <i class="ri-checkbox-circle-fill text-2xl text-green-600"></i>
+                <x-heroicon-s-check-circle class="size-7 text-green-600" />
                 <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
             </div>
         </div>
@@ -111,7 +111,7 @@
     @if(session('error'))
         <div class="rounded-xl bg-red-50 border border-red-200 p-4">
             <div class="flex items-center gap-3">
-                <i class="ri-error-warning-fill text-2xl text-red-600"></i>
+                <x-heroicon-s-exclamation-triangle class="size-7 text-red-600" />
                 <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
             </div>
         </div>
@@ -158,15 +158,15 @@
                             <td class="px-6 py-4">
                                 @if($registration->status === 'pending')
                                     <span class="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-                                        <i class="ri-time-line"></i> Pending
+                                        <x-heroicon-o-clock class="size-5" /> Pending
                                     </span>
                                 @elseif($registration->status === 'approved')
                                     <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
-                                        <i class="ri-checkbox-circle-line"></i> Approved
+                                        <x-heroicon-o-check-circle class="size-5" /> Approved
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800">
-                                        <i class="ri-close-circle-line"></i> Rejected
+                                        <x-heroicon-o-x-circle class="size-5" /> Rejected
                                     </span>
                                 @endif
                             </td>
@@ -179,14 +179,14 @@
                                     href="{{ route('admin.pending-registrations.show', $registration) }}" 
                                     class="inline-flex items-center gap-2 rounded-lg bg-[#16136a] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#18188a]"
                                 >
-                                    <i class="ri-eye-line"></i> Review
+                                    <x-heroicon-o-eye class="size-5" /> Review
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="6" class="px-6 py-12 text-center">
-                                <i class="ri-inbox-line text-5xl text-slate-300 mb-3"></i>
+                                <x-heroicon-o-inbox class="text-5xl text-slate-300 mb-3 size-5" />
                                 <p class="text-slate-500">No pending registrations found</p>
                             </td>
                         </tr>

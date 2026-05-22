@@ -19,7 +19,7 @@
             <div class="flex flex-col items-center gap-6 rounded-xl bg-white p-12 shadow-2xl text-center">
                 <div class="relative">
                     <div class="h-24 w-24 animate-spin rounded-full border-8 border-slate-100 border-t-[#16136a]"></div>
-                    <i class="ri-refresh-line absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl text-[#16136a]"></i>
+                    <x-heroicon-o-arrow-path class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-8 text-[#16136a]" />
                 </div>
                 <div>
                     <h2 class="text-2xl font-semibold text-[#16136a]">Saving Changes</h2>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <button type="button" data-avatar-trigger class="absolute -bottom-2 -right-2 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[#16136a] shadow-xl transition-transform hover:scale-110 active:scale-95">
-                            <i class="ri-camera-lens-line text-2xl"></i>
+                            <x-heroicon-o-camera class="size-7" />
                         </button>
                     </div>
 
@@ -54,19 +54,19 @@
                         </span>
                         <h1 class="text-4xl font-semibold tracking-tight sm:text-6xl">{{ $student->fullname }}</h1>
                         <div class="flex flex-wrap justify-center lg:justify-start gap-6 text-sm font-semibold text-white/50">
-                            <span class="flex items-center gap-2"><i class="ri-hashtag text-indigo-300"></i> {{ $student->index_number }}</span>
-                            <span class="flex items-center gap-2"><i class="ri-book-open-line text-slate-300"></i> {{ $student->class }}</span>
-                            <span class="flex items-center gap-2"><i class="ri-medal-line text-amber-300"></i> Year {{ $student->year }}</span>
+                            <span class="flex items-center gap-2"><x-heroicon-o-hashtag class="text-indigo-300 size-5" /> {{ $student->index_number }}</span>
+                            <span class="flex items-center gap-2"><x-heroicon-o-book-open class="text-slate-300 size-5" /> {{ $student->class }}</span>
+                            <span class="flex items-center gap-2"><x-heroicon-o-trophy class="text-amber-300 size-5" /> Year {{ $student->year }}</span>
                         </div>
                     </div>
                 </div>
-                <i class="ri-user-smile-line absolute -right-20 -bottom-20 text-[25rem] text-white/5 rotate-12"></i>
+                <x-heroicon-o-user class="absolute -right-20 -bottom-20 text-[25rem] text-white/5 rotate-12 size-5" />
             </header>
 
             @if (session('status'))
                 <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-6 text-sm font-semibold text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-4">
-                        <i class="ri-checkbox-circle-line text-2xl"></i>
+                        <x-heroicon-o-check-circle class="size-7" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -78,15 +78,15 @@
                 <aside class="space-y-3">
                     <button type="button" @click="activeTab = 'personal'" :class="activeTab === 'personal' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
                         class="flex w-full items-center gap-4 rounded-xl px-8 py-5 text-xs font-semibold uppercase tracking-widest transition-all">
-                        <i class="ri-user-heart-line text-xl"></i> Personal
+                        <x-heroicon-o-user class="size-6" /> Personal
                     </button>
                     <button type="button" @click="activeTab = 'security'" :class="activeTab === 'security' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
                         class="flex w-full items-center gap-4 rounded-xl px-8 py-5 text-xs font-semibold uppercase tracking-widest transition-all">
-                        <i class="ri-shield-keyhole-line text-xl"></i> Security
+                        <x-heroicon-o-shield-check class="size-6" /> Security
                     </button>
                     <button type="button" @click="activeTab = 'support'" :class="activeTab === 'support' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
                         class="flex w-full items-center gap-4 rounded-xl px-8 py-5 text-xs font-semibold uppercase tracking-widest transition-all">
-                        <i class="ri-customer-service-2-line text-xl"></i> Support
+                        <x-heroicon-o-chat-bubble-left-ellipsis class="size-6" /> Support
                     </button>
                 </aside>
 
@@ -102,7 +102,7 @@
                                 <div class="space-y-2">
                                     <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Full Identity</label>
                                     <div class="relative">
-                                        <i class="ri-user-6-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                                        <x-heroicon-o-user class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 size-5" />
                                         <input type="text" name="fullname" value="{{ old('fullname', $student->fullname) }}" readonly
                                             class="h-14 w-full rounded-xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-400 cursor-not-allowed">
                                     </div>
@@ -111,7 +111,7 @@
                                 <div class="space-y-2">
                                     <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Portal Username</label>
                                     <div class="relative">
-                                        <i class="ri-at-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                                        <x-heroicon-o-at-symbol class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 size-5" />
                                         <input type="text" value="{{ $student->username }}" disabled
                                             class="h-14 w-full rounded-xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-400 cursor-not-allowed">
                                     </div>
@@ -121,13 +121,13 @@
                             <div class="mt-8 space-y-2">
                                 <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Primary Email</label>
                                 <div class="relative">
-                                    <i class="ri-mail-send-line absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400"></i>
+                                    <x-heroicon-o-paper-airplane class="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400 size-5" />
                                     <input type="email" name="pending_email" value="{{ old('pending_email', $student->pending_email ?? $student->email) }}" 
                                         class="h-14 w-full rounded-xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                                 </div>
                                 @if($student->pending_email)
                                     <div class="mt-3 rounded-xl bg-amber-50 p-4 border border-amber-100 flex items-center gap-3">
-                                        <i class="ri-time-line text-amber-500 text-lg"></i>
+                                        <x-heroicon-o-clock class="text-amber-500 size-5" />
                                         <p class="text-xs font-semibold text-amber-700">Verification link sent to <span class="underline">{{ $student->pending_email }}</span></p>
                                     </div>
                                 @endif
@@ -150,7 +150,7 @@
 
                             <div class="mt-16 flex justify-end pt-8 border-t border-slate-50">
                                 <button type="submit" class="flex h-16 items-center gap-4 rounded-xl bg-[#16136a] px-12 text-[11px] font-semibold uppercase tracking-[0.3em] text-white shadow-2xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                                    <i class="ri-save-3-line text-xl"></i> Persist Changes
+                                    <x-heroicon-o-arrow-down-on-square class="size-6" /> Persist Changes
                                 </button>
                             </div>
                         </section>
@@ -188,7 +188,7 @@
 
                             <div class="mt-12 rounded-xl bg-indigo-50/30 p-8 border border-indigo-100/50">
                                 <div class="flex items-start gap-4">
-                                    <i class="ri-shield-star-line text-3xl text-[#16136a]"></i>
+                                    <x-heroicon-o-shield-check class="size-8 text-[#16136a]" />
                                     <div>
                                         <h3 class="text-sm font-semibold uppercase tracking-widest text-[#16136a]">Security Policy</h3>
                                         <p class="mt-2 text-xs font-semibold text-slate-400 leading-relaxed uppercase tracking-tighter">
@@ -211,7 +211,7 @@
                                 <div class="space-y-6">
                                     <div class="flex items-center gap-6 p-6 rounded-xl bg-slate-50/50 border border-slate-100">
                                         <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-lg">
-                                            <i class="ri-phone-line text-2xl"></i>
+                                            <x-heroicon-o-phone class="size-7" />
                                         </div>
                                         <div>
                                             <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">President</p>
@@ -220,7 +220,7 @@
                                     </div>
                                     <div class="flex items-center gap-6 p-6 rounded-xl bg-slate-50/50 border border-slate-100">
                                         <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-lg">
-                                            <i class="ri-money-dollar-circle-line text-2xl"></i>
+                                            <x-heroicon-o-currency-dollar class="size-7" />
                                         </div>
                                         <div>
                                             <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Fin. Secretary</p>
@@ -230,7 +230,7 @@
                                 </div>
 
                                 <div class="rounded-xl bg-indigo-600 p-8 text-white shadow-xl shadow-indigo-600/20">
-                                    <i class="ri-mail-open-line text-5xl opacity-30"></i>
+                                    <x-heroicon-o-envelope class="text-5xl opacity-30 size-5" />
                                     <h3 class="mt-6 text-xl font-semibold italic">Email Correspondence</h3>
                                     <p class="mt-4 text-sm font-semibold text-white/60 leading-relaxed uppercase tracking-wider">
                                         Official inquiries: gesaumat24@gmail.com
@@ -256,7 +256,7 @@
                         <p class="text-sm font-semibold text-slate-400 uppercase tracking-widest leading-relaxed">Adjust your profile image to fit the executive frame</p>
                     </div>
                     <button type="button" data-avatar-cancel class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 text-slate-400 transition-transform hover:rotate-90 hover:text-rose-500">
-                        <i class="ri-close-line text-2xl"></i>
+                        <x-heroicon-o-x-mark class="size-7" />
                     </button>
                 </div>
                 
@@ -267,7 +267,7 @@
                 <div class="mt-10 flex justify-end gap-4">
                     <button type="button" data-avatar-cancel class="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Cancel</button>
                     <button type="button" data-avatar-apply class="flex h-14 items-center gap-3 rounded-xl bg-[#16136a] px-10 text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-check-line text-lg"></i> Apply Portrait
+                        <x-heroicon-o-check class="size-5" /> Apply Portrait
                     </button>
                 </div>
             </div>

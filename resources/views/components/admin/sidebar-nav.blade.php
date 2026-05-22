@@ -25,10 +25,9 @@
                     <span>{{ $groupLabel }}</span>
                     <span class="h-px w-8 bg-slate-100"></span>
                 </div>
-                <i 
-                    class="ri-arrow-down-s-line text-xs transition-transform duration-300"
+                <x-heroicon-o-chevron-down class="size-3.5 transition-transform duration-300"
                     :class="{ 'rotate-180': openGroups['{{ $groupLabel }}'] }"
-                ></i>
+                 />
             </button>
             
             <div 

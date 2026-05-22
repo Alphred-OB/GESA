@@ -11,7 +11,7 @@
             <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 md:flex-row md:items-center md:justify-between">
                 <div class="space-y-2">
                     <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                        <i class="ri-settings-4-line text-base"></i>
+                        <x-heroicon-o-cog-8-tooth class="size-5" />
                         Configuration
                     </p>
                     <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">Payment Settings</h1>
@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <a href="{{ route('admin.dues.index') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                        <i class="ri-arrow-left-line"></i>
+                        <x-heroicon-o-arrow-left class="size-5" />
                         Back to dues
                     </a>
                 </div>
@@ -28,7 +28,7 @@
             @if (session('status'))
                 <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p class="text-sm font-medium">{{ session('status') }}</p>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
 
                     <div class="mt-10 flex justify-end">
                         <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition hover:-translate-y-1 hover:bg-[#16136a]/90">
-                            <i class="ri-save-line text-lg"></i>
+                            <x-heroicon-o-arrow-down-on-square class="size-5" />
                             Save Settings
                         </button>
                     </div>

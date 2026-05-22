@@ -6,11 +6,11 @@
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <div class="flex items-center gap-3">
                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
-                    <i class="ri-tools-line text-2xl"></i>
+                    <x-heroicon-o-wrench class="size-7" />
                 </div>
                 <div>
                     <p class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
-                        <i class="ri-settings-3-line text-base" aria-hidden="true"></i>
+                        <x-heroicon-o-cog-6-tooth class="size-5" aria-hidden="true" />
                         Developer Tools
                     </p>
                     <h1 class="text-2xl font-semibold text-[#16136a] mt-1">Dues Maintenance</h1>
@@ -25,7 +25,7 @@
         @if (session('status'))
             <div class="rounded-2xl border border-green-200 bg-green-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
                 </div>
             </div>
@@ -34,7 +34,7 @@
         @if (session('error'))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
             </div>
@@ -43,7 +43,7 @@
         @if (isset($loadError))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ $loadError }}</p>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
-                        <i class="ri-user-line text-lg"></i>
+                        <x-heroicon-o-user class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ number_format($totalStudents) }}</p>
@@ -65,7 +65,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
-                        <i class="ri-file-list-3-line text-lg"></i>
+                        <x-heroicon-o-document-text class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ $uniqueDues->count() }}</p>
@@ -76,7 +76,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                        <i class="ri-alert-line text-lg"></i>
+                        <x-heroicon-o-exclamation-triangle class="size-5" />
                     </div>
                     <div>
                         <p class="text-2xl font-semibold text-slate-800">{{ count($missingDues) }}</p>
@@ -98,7 +98,7 @@
                     <form action="{{ route('admin.dues.maintenance.sync-all') }}" method="POST" onsubmit="return confirm('This will sync dues for ALL students. Continue?')">
                         @csrf
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 w-full justify-center">
-                            <i class="ri-refresh-line"></i>
+                            <x-heroicon-o-arrow-path class="size-5" />
                             Sync All Students
                         </button>
                     </form>
@@ -113,7 +113,7 @@
                         <p class="text-sm text-emerald-700">View "what the student sees" - a master list of all students and their net balances.</p>
                     </div>
                     <a href="{{ route('admin.dues.maintenance.registry') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 w-full justify-center">
-                        <i class="ri-team-line"></i>
+                        <x-heroicon-o-users class="size-5" />
                         Open Registry
                     </a>
                 </div>
@@ -130,7 +130,7 @@
                         <input type="text" name="query" placeholder="Name, Index #, or ID" 
                             class="flex-1 rounded-xl border-purple-200 bg-white px-4 py-2 text-sm focus:border-purple-500 focus:ring-purple-500">
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-purple-700">
-                            <i class="ri-search-line"></i>
+                            <x-heroicon-o-magnifying-glass class="size-5" />
                             Trace
                         </button>
                     </form>
@@ -145,7 +145,7 @@
                         <p class="text-sm text-indigo-700">Manage default amounts by class/year for new student registrations.</p>
                     </div>
                     <a href="{{ route('admin.dues.maintenance.config') }}" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 w-full justify-center">
-                        <i class="ri-settings-4-line"></i>
+                        <x-heroicon-o-cog-8-tooth class="size-5" />
                         Open Config Manager
                     </a>
                 </div>
@@ -159,7 +159,7 @@
                         <p class="text-sm text-rose-700">Delete stuck accounts, force approve pending registrations, bypass verification.</p>
                     </div>
                     <a href="{{ route('admin.dues.maintenance.accounts') }}" class="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 w-full justify-center">
-                        <i class="ri-user-settings-line"></i>
+                        <x-heroicon-o-cog-6-tooth class="size-5" />
                         Open Account Manager
                     </a>
                 </div>
@@ -171,7 +171,7 @@
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-200 text-indigo-700">
-                                <i class="ri-grid-line"></i>
+                                <x-heroicon-o-squares-2x2 class="size-5" />
                             </div>
                             <h3 class="font-semibold text-indigo-900 leading-tight text-base">Matrix Amount Adjuster</h3>
                         </div>
@@ -184,7 +184,7 @@
                             @foreach($uniqueDues->unique('description') as $dueType)
                                 <a href="{{ route('admin.dues.maintenance.edit-amounts', ['academic_year' => $dueType->academic_year, 'description' => $dueType->description]) }}" 
                                    class="inline-flex items-center gap-2 rounded-lg bg-white border border-indigo-100 px-3 py-2 text-xs font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-600 hover:text-white hover:border-indigo-600">
-                                    <i class="ri-table-line"></i>
+                                    <x-heroicon-o-table-cells class="size-5" />
                                     {{ $dueType->description }} ({{ $dueType->academic_year }})
                                 </a>
                             @endforeach
@@ -195,7 +195,7 @@
                     </div>
 
                     <p class="text-[10px] text-indigo-600/70 italic">
-                        <i class="ri-information-line align-middle"></i>
+                        <x-heroicon-o-information-circle class="align-middle size-5" />
                         The Matrix View allows you to change any amount and apply it to "PAID" students instantly.
                     </p>
                 </div>
@@ -206,7 +206,7 @@
         <section class="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
             <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
-                    <i class="ri-list-check-2 text-lg"></i>
+                    <x-heroicon-o-clipboard-document-check class="size-5" />
                 </div>
                 <div>
                     <h2 class="text-lg font-semibold text-slate-800">All Due Types</h2>
@@ -272,7 +272,7 @@
                                 </td>
                                 <td class="px-4 py-3 text-right" onclick="event.stopPropagation()">
                                     <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $due->academic_year, 'description' => $due->description]) }}" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
-                                        <i class="ri-eye-line"></i>
+                                        <x-heroicon-o-eye class="size-5" />
                                         View Details
                                     </a>
                                 </td>
@@ -294,7 +294,7 @@
             <section class="space-y-4 rounded-3xl border border-amber-200 bg-white p-6 shadow-lg">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                        <i class="ri-user-unfollow-line text-lg"></i>
+                        <x-heroicon-o-user-minus class="size-5" />
                     </div>
                     <div>
                         <h2 class="text-lg font-semibold text-slate-800">Students Missing Dues</h2>
@@ -337,7 +337,7 @@
                                     <td class="px-4 py-3 text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $due['academic_year'], 'description' => $due['description']]) }}" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
-                                                <i class="ri-eye-line"></i>
+                                                <x-heroicon-o-eye class="size-5" />
                                                 View
                                             </a>
                                             <form action="{{ route('admin.dues.maintenance.sync-missing') }}" method="POST" class="inline">
@@ -345,7 +345,7 @@
                                                 <input type="hidden" name="academic_year" value="{{ $due['academic_year'] }}">
                                                 <input type="hidden" name="description" value="{{ $due['description'] }}">
                                                 <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-700 transition hover:bg-amber-200">
-                                                    <i class="ri-add-circle-line"></i>
+                                                    <x-heroicon-o-plus-circle class="size-5" />
                                                     Assign to Missing
                                                 </button>
                                             </form>
@@ -360,7 +360,7 @@
         @else
             <div class="rounded-2xl border border-green-200 bg-green-50 p-5">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">All students have all active dues assigned. No missing dues found!</p>
                 </div>
             </div>
@@ -372,7 +372,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-red-600">
-                            <i class="ri-file-copy-2-line text-lg"></i>
+                            <x-heroicon-o-document class="size-5" />
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold text-slate-800">Duplicate Dues Found</h2>
@@ -384,14 +384,14 @@
                             onsubmit="return confirm('This will trim trailing/leading spaces from all due descriptions. This helps group similar-looking dues. Continue?')">
                             @csrf
                             <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
-                                <i class="ri-brush-line"></i>
+                                <x-heroicon-o-paint-brush class="size-5" />
                                 Normalize Names
                             </button>
                         </form>
                         <form action="{{ route('admin.dues.maintenance.delete-all-duplicates') }}" method="POST" onsubmit="return confirm('This will delete ALL duplicate dues, keeping only one per student (prioritizing paid ones). Continue?')">
                             @csrf
                             <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">
-                                <i class="ri-delete-bin-line"></i>
+                                <x-heroicon-o-trash class="size-5" />
                                 Delete All Duplicates
                             </button>
                         </form>
@@ -432,7 +432,7 @@
                                             @csrf
                                             <input type="hidden" name="due_ids" value="{{ $dup['due_ids'] }}">
                                             <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200">
-                                                <i class="ri-delete-bin-line"></i>
+                                                <x-heroicon-o-trash class="size-5" />
                                                 Remove Duplicates
                                             </button>
                                         </form>
@@ -446,7 +446,7 @@
         @else
             <div class="rounded-2xl border border-green-200 bg-green-50 p-5">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">No duplicate dues found. Each student has unique dues.</p>
                 </div>
             </div>
@@ -458,7 +458,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
-                            <i class="ri-user-unfollow-line text-lg"></i>
+                            <x-heroicon-o-user-minus class="size-5" />
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold text-slate-800">Orphaned Dues Found</h2>
@@ -468,13 +468,13 @@
                     <form action="{{ route('admin.dues.maintenance.delete-all-orphaned') }}" method="POST" onsubmit="return confirm('⚠️ DELETE ALL {{ $orphanedCount }} ORPHANED DUES?\n\nThis will remove dues belonging to deleted students. This action cannot be undone. Continue?')">
                         @csrf
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-700">
-                            <i class="ri-delete-bin-line"></i>
+                            <x-heroicon-o-trash class="size-5" />
                             Delete All Orphaned
                         </button>
                     </form>
                 </div>
                 <div class="rounded-xl border border-orange-100 bg-orange-50/50 p-4 text-sm text-orange-800">
-                    <i class="ri-information-line mr-1"></i>
+                    <x-heroicon-o-information-circle class="mr-1 size-5" />
                     Orphaned dues occur when a student account is deleted but their dues records remain. These records show up as "Unknown" in reports.
                 </div>
             </section>
@@ -483,7 +483,7 @@
         {{-- Back to Dues --}}
         <div class="flex justify-center">
             <a href="{{ route('admin.dues.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line"></i>
+                <x-heroicon-o-arrow-left class="size-5" />
                 Back to Dues Management
             </a>
         </div>

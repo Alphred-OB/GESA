@@ -3,12 +3,12 @@
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
             <span class="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-slate-300">
-                <i class="ri-arrow-left-line text-xs" aria-hidden="true"></i>
+                <x-heroicon-o-arrow-left class="size-3.5" aria-hidden="true" />
                 Prev
             </span>
         @else
             <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]" aria-label="Go to previous page">
-                <i class="ri-arrow-left-line text-xs" aria-hidden="true"></i>
+                <x-heroicon-o-arrow-left class="size-3.5" aria-hidden="true" />
                 Prev
             </a>
         @endif
@@ -43,12 +43,12 @@
         @if ($paginator->hasMorePages())
             <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-slate-600 transition hover:border-[#16136a]/40 hover:text-[#16136a]" aria-label="Go to next page">
                 Next
-                <i class="ri-arrow-right-line text-xs" aria-hidden="true"></i>
+                <x-heroicon-o-arrow-right class="size-3.5" aria-hidden="true" />
             </a>
         @else
             <span class="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-slate-300">
                 Next
-                <i class="ri-arrow-right-line text-xs" aria-hidden="true"></i>
+                <x-heroicon-o-arrow-right class="size-3.5" aria-hidden="true" />
             </span>
         @endif
     </nav>

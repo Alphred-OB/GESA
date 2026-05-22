@@ -25,7 +25,7 @@
                 <div class="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                     <div class="space-y-4">
                         <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/70">
-                            <i class="ri-settings-3-line"></i> Control Center
+                            <x-heroicon-o-cog-6-tooth class="size-5" /> Control Center
                         </span>
                         <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">Account Settings</h1>
                         <p class="max-w-xl text-sm font-semibold text-white/50 leading-relaxed">
@@ -43,13 +43,13 @@
                         </div>
                     </div>
                 </div>
-                <i class="ri-shield-user-line absolute -right-20 -bottom-20 text-[20rem] text-white/5 rotate-12"></i>
+                <x-heroicon-o-shield-check class="absolute -right-20 -bottom-20 text-[20rem] text-white/5 rotate-12 size-5" />
             </header>
 
             @if (session('status'))
                 <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm animate-fade-in">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -60,17 +60,17 @@
                 <aside class="space-y-2">
                     <button @click="activeTab = 'profile'" :class="activeTab === 'profile' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
                         class="flex w-full items-center gap-4 rounded-2xl px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all">
-                        <i class="ri-user-settings-line text-lg"></i>
+                        <x-heroicon-o-cog-6-tooth class="size-5" />
                         My Profile
                     </button>
                     <button @click="activeTab = 'invites'" :class="activeTab === 'invites' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
                         class="flex w-full items-center gap-4 rounded-2xl px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all">
-                        <i class="ri-user-add-line text-lg"></i>
+                        <x-heroicon-o-user-plus class="size-5" />
                         Team Access
                     </button>
                     <button @click="activeTab = 'snapshots'" :class="activeTab === 'snapshots' ? 'bg-[#16136a] text-white shadow-xl shadow-[#16136a]/20' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'" 
                         class="flex w-full items-center gap-4 rounded-2xl px-6 py-4 text-xs font-semibold uppercase tracking-widest transition-all">
-                        <i class="ri-database-2-line text-lg"></i>
+                        <x-heroicon-o-circle-stack class="size-5" />
                         System Snapshots
                     </button>
                 </aside>
@@ -133,7 +133,7 @@
 
                                 <div class="flex justify-end">
                                     <button type="submit" class="flex h-14 items-center gap-3 rounded-2xl bg-[#16136a] px-10 text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                                        <i class="ri-save-3-line text-lg"></i> Update Profile
+                                        <x-heroicon-o-arrow-down-on-square class="size-5" /> Update Profile
                                     </button>
                                 </div>
                             </form>
@@ -198,7 +198,7 @@
 
                                 <div class="flex justify-end pt-4">
                                     <button type="submit" class="flex h-14 items-center gap-3 rounded-2xl bg-[#16136a] px-10 text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                                        <i class="ri-user-add-line text-lg"></i> Provision Account
+                                        <x-heroicon-o-user-plus class="size-5" /> Provision Account
                                     </button>
                                 </div>
                             </form>
@@ -246,7 +246,7 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-[10px] font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                                    <i class="ri-refresh-line"></i> Generate Snapshot
+                                    <x-heroicon-o-arrow-path class="size-5" /> Generate Snapshot
                                 </button>
                             </form>
 
@@ -273,7 +273,7 @@
                                                 <td class="px-6 py-5 text-right">
                                                     <a href="{{ route('admin.profile.snapshots.download', base64_encode($snap['path'])) }}" 
                                                         class="inline-flex h-10 items-center gap-2 rounded-xl bg-white px-4 text-[9px] font-semibold uppercase tracking-widest text-[#16136a] shadow-sm ring-1 ring-slate-200 transition-all hover:bg-[#16136a] hover:text-white hover:ring-transparent">
-                                                        <i class="ri-download-2-line"></i> Download
+                                                        <x-heroicon-o-arrow-down-tray class="size-5" /> Download
                                                     </a>
                                                 </td>
                                             </tr>

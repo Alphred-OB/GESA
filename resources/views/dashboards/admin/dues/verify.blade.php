@@ -17,7 +17,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-4">
                     <a href="{{ route('admin.dues.verifications') }}" class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm transition-all hover:bg-[#16136a] hover:text-white hover:shadow-lg hover:shadow-[#16136a]/20">
-                        <i class="ri-arrow-left-line text-xl"></i>
+                        <x-heroicon-o-arrow-left class="size-6" />
                     </a>
                     <div>
                         <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Vette Payment</h1>
@@ -72,7 +72,7 @@
                         <div class="border-b border-slate-50 bg-slate-50/30 px-8 py-6 flex items-center justify-between">
                             <h2 class="text-sm font-semibold uppercase tracking-widest text-[#16136a]">Transaction Evidence</h2>
                             <a href="{{ Storage::disk('public')->url($due->payment_proof) }}" target="_blank" class="text-[10px] font-semibold uppercase tracking-widest text-[#16136a] hover:underline">
-                                View Original <i class="ri-external-link-line ml-1"></i>
+                                View Original <x-heroicon-o-arrow-top-right-on-square class="ml-1 size-5" />
                             </a>
                         </div>
                         
@@ -91,7 +91,7 @@
                                     </div>
                                 @else
                                     <div class="text-center p-12">
-                                        <i class="ri-image-line text-6xl text-slate-200"></i>
+                                        <x-heroicon-o-photo class="text-6xl text-slate-200 size-5" />
                                         <p class="mt-4 text-sm font-semibold text-slate-400">No evidence uploaded</p>
                                     </div>
                                 @endif
@@ -178,7 +178,7 @@
                     {{-- Vetting Guidelines --}}
                     <div class="rounded-[2.5rem] border border-blue-100 bg-blue-50/30 p-8">
                         <h3 class="text-[10px] font-semibold uppercase tracking-widest text-blue-800 mb-4 flex items-center gap-2">
-                            <i class="ri-information-line text-lg"></i>
+                            <x-heroicon-o-information-circle class="size-5" />
                             Vetting Guidelines
                         </h3>
                         <ul class="space-y-3">

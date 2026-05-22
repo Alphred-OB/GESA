@@ -49,7 +49,7 @@
                             <p class="mt-2 text-xs font-semibold text-white/40 italic">All suggestions have been reviewed</p>
                         @endif
                     </div>
-                    <i class="ri-mail-unread-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                    <x-heroicon-o-envelope class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 size-5" />
                 </div>
 
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
@@ -68,7 +68,7 @@
             @if (session('status'))
                 <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                     <div class="md:col-span-2 space-y-2">
                         <label for="search" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Search Content</label>
                         <div class="relative">
-                            <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                             <input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" 
                                 class="h-12 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
                                 placeholder="Keywords, student names, subjects...">
@@ -116,7 +116,7 @@
 
                     <div class="flex items-end">
                         <button type="submit" class="flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                            <i class="ri-filter-3-line"></i> Filter Inbox
+                            <x-heroicon-o-funnel class="size-5" /> Filter Inbox
                         </button>
                     </div>
                 </form>
@@ -130,7 +130,7 @@
                         <div x-show="selectedIds.length > 0" x-cloak class="flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 animate-in slide-in-from-left-4">
                             <span class="text-[10px] font-semibold text-amber-600 uppercase tracking-widest"><span x-text="selectedIds.length"></span> Selected</span>
                             <button x-on:click="clearSelection()" class="text-amber-400 hover:text-amber-600 transition-colors">
-                                <i class="ri-close-circle-fill"></i>
+                                <x-heroicon-s-x-circle class="size-5" />
                             </button>
                         </div>
                     </div>
@@ -210,11 +210,11 @@
                                     </div>
                                     <div class="flex items-center gap-2">
                                         <a href="{{ route('admin.suggestions.show', $suggestion) }}" class="flex h-10 items-center gap-2 rounded-xl bg-slate-50 px-4 text-[10px] font-semibold uppercase tracking-widest text-slate-500 transition-all hover:bg-[#16136a] hover:text-white">
-                                            <i class="ri-eye-line text-lg"></i> Details
+                                            <x-heroicon-o-eye class="size-5" /> Details
                                         </a>
                                         @if($suggestion->attachment_path)
                                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-500" title="Has Attachment">
-                                                <i class="ri-attachment-2"></i>
+                                                <x-heroicon-o-paper-clip class="size-5" />
                                             </span>
                                         @endif
                                     </div>
@@ -224,7 +224,7 @@
                     @empty
                         <div class="rounded-[2.5rem] border border-dashed border-slate-300 p-20 text-center">
                             <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 text-slate-200">
-                                <i class="ri-chat-off-line text-5xl"></i>
+                                <x-heroicon-o-chat-bubble-left class="text-5xl size-5" />
                             </div>
                             <h3 class="mt-6 text-lg font-semibold text-slate-900">No Feedback Found</h3>
                             <p class="mt-2 text-sm font-semibold text-slate-400">Student suggestions will appear here once they start sharing their thoughts.</p>

@@ -16,7 +16,7 @@
                     </div>
                     <div class="h-10 w-px bg-slate-200 mx-2"></div>
                     <a href="{{ route('admin.dues.index') }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-white px-6 text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:shadow-md">
-                        <i class="ri-history-line text-lg transition-transform group-hover:rotate-12"></i>
+                        <x-heroicon-o-clock class="size-5 transition-transform group-hover:rotate-12" />
                         View All Dues
                     </a>
                 </div>
@@ -30,7 +30,7 @@
                         <p class="mt-4 text-4xl font-semibold">{{ $dues->total() }}</p>
                         <p class="mt-2 text-xs font-semibold text-white/40 italic">Pending manual review</p>
                     </div>
-                    <i class="ri-shield-user-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                    <x-heroicon-o-shield-check class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 size-5" />
                 </div>
 
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
@@ -56,7 +56,7 @@
                     <div class="md:col-span-2">
                         <label class="mb-2 block text-[10px] font-semibold uppercase tracking-widest text-slate-400">Search Transaction</label>
                         <div class="relative">
-                            <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                             <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Name, index number, or reference..." class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                             Filter
                         </button>
                         <a href="{{ route('admin.dues.verifications') }}" class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">
-                            <i class="ri-refresh-line text-xl"></i>
+                            <x-heroicon-o-arrow-path class="size-6" />
                         </a>
                     </div>
                 </form>
@@ -139,7 +139,7 @@
                                     <td class="px-8 py-5 text-right">
                                         <a href="{{ route('admin.dues.verify-payment', $due) }}" class="inline-flex h-10 items-center gap-2 rounded-xl bg-[#16136a] px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
                                             Vette Payment
-                                            <i class="ri-arrow-right-line"></i>
+                                            <x-heroicon-o-arrow-right class="size-5" />
                                         </a>
                                     </td>
                                 </tr>
@@ -148,7 +148,7 @@
                                     <td colspan="6" class="px-8 py-20 text-center">
                                         <div class="flex flex-col items-center gap-4">
                                             <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-50 text-slate-200">
-                                                <i class="ri-checkbox-multiple-line text-5xl"></i>
+                                                <x-heroicon-o-queue-list class="text-5xl size-5" />
                                             </div>
                                             <div>
                                                 <p class="text-lg font-semibold text-slate-900">All caught up!</p>
@@ -187,7 +187,7 @@
                             </div>
                             <a href="{{ route('admin.dues.verify-payment', $due) }}" class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#16136a] text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20">
                                 Vette Payment
-                                <i class="ri-arrow-right-line"></i>
+                                <x-heroicon-o-arrow-right class="size-5" />
                             </a>
                         </article>
                     @endforeach

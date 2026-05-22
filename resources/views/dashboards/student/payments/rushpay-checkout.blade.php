@@ -5,7 +5,7 @@
             <div class="relative mx-auto h-24 w-24">
                 <div class="absolute inset-0 animate-ping rounded-full bg-[#16136a]/10"></div>
                 <div class="relative flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-xl shadow-[#16136a]/10 ring-1 ring-slate-100">
-                    <i class="ri-shield-check-line text-4xl text-[#16136a]"></i>
+                    <x-heroicon-o-shield-check class="text-4xl text-[#16136a] size-5" />
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                     <div id="rushpay-button-container" class="w-full">
                         <button id="start-payment-btn" class="flex w-full items-center justify-center gap-3 rounded-xl bg-[#16136a] py-5 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-1 hover:bg-[#1c1c8a] active:scale-95 disabled:opacity-50">
                             <span id="btn-text">Initializing Widget...</span>
-                            <i id="btn-icon" class="ri-loader-4-line animate-spin text-lg"></i>
+                            <x-heroicon-o-arrow-path id="btn-icon" class="animate-spin size-5" />
                         </button>
                     </div>
                 </div>

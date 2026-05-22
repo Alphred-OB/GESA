@@ -28,7 +28,7 @@
                         <div class="flex items-center justify-between">
                             <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Pending Approvals</h3>
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-                                <i class="ri-user-follow-line text-xl"></i>
+                                <x-heroicon-o-user class="size-6" />
                             </span>
                         </div>
                         <div class="mt-4">
@@ -45,7 +45,7 @@
                         <div class="flex items-center justify-between">
                             <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Students</h3>
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#16136a]">
-                                <i class="ri-group-line text-xl"></i>
+                                <x-heroicon-o-users class="size-6" />
                             </span>
                         </div>
                         <div class="mt-4">
@@ -119,17 +119,17 @@
                     <div class="space-y-3">
                         <a href="{{ route('admin.timeline.index') }}" class="flex items-center justify-between rounded-xl bg-slate-50 p-4 transition hover:bg-slate-100">
                             <div class="flex items-center gap-3">
-                                <i class="ri-timer-flash-line text-lg text-[#16136a]"></i>
+                                <x-heroicon-o-clock class="size-5 text-[#16136a]" />
                                 <span class="text-sm font-semibold text-slate-700">Academic Timeline</span>
                             </div>
-                            <i class="ri-arrow-right-s-line text-slate-300"></i>
+                            <x-heroicon-o-chevron-right class="text-slate-300 size-5" />
                         </a>
                         <a href="{{ route('admin.profile') }}" class="flex items-center justify-between rounded-xl bg-slate-50 p-4 transition hover:bg-slate-100">
                             <div class="flex items-center gap-3">
-                                <i class="ri-settings-4-line text-lg text-slate-400"></i>
+                                <x-heroicon-o-cog-8-tooth class="size-5 text-slate-400" />
                                 <span class="text-sm font-semibold text-slate-700">Account Settings</span>
                             </div>
-                            <i class="ri-arrow-right-s-line text-slate-300"></i>
+                            <x-heroicon-o-chevron-right class="text-slate-300 size-5" />
                         </a>
                     </div>
                 </article>

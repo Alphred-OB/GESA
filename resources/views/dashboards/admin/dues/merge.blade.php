@@ -6,11 +6,11 @@
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <div class="flex items-center gap-3">
                 <a href="{{ route('admin.dues.maintenance.index') }}" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50">
-                    <i class="ri-arrow-left-line text-lg"></i>
+                    <x-heroicon-o-arrow-left class="size-5" />
                 </a>
                 <div>
                     <p class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">
-                        <i class="ri-git-merge-line text-base" aria-hidden="true"></i>
+                        <x-heroicon-o-arrows-pointing-in class="size-5" aria-hidden="true" />
                         Merge Dues
                     </p>
                     <h1 class="text-xl font-semibold text-[#16136a] mt-1">Merge "{{ $sourceDesc }}" Into Another Due</h1>
@@ -22,7 +22,7 @@
         @if (session('error'))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
             </div>
             @if (($sourceStats->paid ?? 0) > 0 || ($sourceStats->pending ?? 0) > 0)
                 <div class="mt-4 p-3 rounded-xl bg-amber-100 text-amber-800 text-sm">
-                    <i class="ri-information-line mr-1"></i>
+                    <x-heroicon-o-information-circle class="mr-1 size-5" />
                     <strong>{{ ($sourceStats->paid ?? 0) + ($sourceStats->pending ?? 0) }} payment(s)</strong> will be transferred to the target due.
                     Collected: <strong>GHS {{ number_format($sourceStats->collected ?? 0, 2) }}</strong>
                 </div>
@@ -68,10 +68,10 @@
             
             @if ($potentialTargets->isEmpty())
                 <div class="text-center py-8 text-slate-500">
-                    <i class="ri-inbox-line text-4xl text-slate-300"></i>
+                    <x-heroicon-o-inbox class="text-4xl text-slate-300 size-5" />
                     <p class="mt-2">No other dues found in {{ $sourceYear }} to merge into.</p>
                     <a href="{{ route('admin.dues.maintenance.index') }}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200">
-                        <i class="ri-arrow-left-line"></i>
+                        <x-heroicon-o-arrow-left class="size-5" />
                         Back to Maintenance
                     </a>
                 </div>
@@ -101,11 +101,11 @@
 
                     <div class="mt-6 flex gap-3">
                         <a href="{{ route('admin.dues.maintenance.index') }}" class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                            <i class="ri-close-line"></i>
+                            <x-heroicon-o-x-mark class="size-5" />
                             Cancel
                         </a>
                         <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700">
-                            <i class="ri-git-merge-line"></i>
+                            <x-heroicon-o-arrows-pointing-in class="size-5" />
                             Merge Into Selected Due
                         </button>
                     </div>
@@ -115,7 +115,7 @@
 
         {{-- What Will Happen --}}
         <div class="rounded-2xl border border-blue-200 bg-blue-50 p-5 text-sm text-blue-800">
-            <h4 class="font-semibold mb-2"><i class="ri-information-line mr-1"></i> What happens when you merge:</h4>
+            <h4 class="font-semibold mb-2"><x-heroicon-o-information-circle class="mr-1 size-5" /> What happens when you merge:</h4>
             <ul class="list-disc ml-5 space-y-1">
                 <li><strong>Paid students:</strong> Their payment info is transferred to the target due</li>
                 <li><strong>Pending students:</strong> Their pending status is transferred to the target due</li>

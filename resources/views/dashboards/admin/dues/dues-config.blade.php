@@ -4,11 +4,11 @@
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <div class="flex items-center gap-3">
                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600">
-                    <i class="ri-settings-4-line text-2xl"></i>
+                    <x-heroicon-o-cog-8-tooth class="size-7" />
                 </div>
                 <div>
                     <p class="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-indigo-700">
-                        <i class="ri-database-2-line text-base" aria-hidden="true"></i>
+                        <x-heroicon-o-circle-stack class="size-5" aria-hidden="true" />
                         Config Manager
                     </p>
                     <h1 class="text-2xl font-semibold text-[#16136a] mt-1">Default Dues Configuration</h1>
@@ -24,7 +24,7 @@
         @if (session('status'))
             <div class="rounded-2xl border border-green-200 bg-green-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
                 </div>
             </div>
@@ -33,7 +33,7 @@
         @if (session('error'))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
             </div>
@@ -44,7 +44,7 @@
             {{-- Back to Maintenance --}}
             <a href="{{ route('admin.dues.maintenance.index') }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:bg-slate-50 transition flex items-center gap-4">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
-                    <i class="ri-arrow-left-line text-lg"></i>
+                    <x-heroicon-o-arrow-left class="size-5" />
                 </div>
                 <div>
                     <h3 class="font-semibold text-slate-900">Back to Maintenance</h3>
@@ -60,7 +60,7 @@
                     <input type="hidden" name="only_owing" value="1">
                     <div class="flex items-center gap-4">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-200 text-emerald-700">
-                            <i class="ri-refresh-line text-lg"></i>
+                            <x-heroicon-o-arrow-path class="size-5" />
                         </div>
                         <div class="flex-1">
                             <h3 class="font-semibold text-emerald-900">Resync All Owing Dues</h3>
@@ -71,7 +71,7 @@
                             </label>
                         </div>
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
-                            <i class="ri-refresh-line"></i>
+                            <x-heroicon-o-arrow-path class="size-5" />
                             Resync
                         </button>
                     </div>
@@ -85,7 +85,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
-                            <i class="ri-money-dollar-circle-line text-lg"></i>
+                            <x-heroicon-o-currency-dollar class="size-5" />
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold text-slate-800">{{ $description }}</h2>
@@ -102,7 +102,7 @@
                                 <span class="text-[10px] font-semibold uppercase text-slate-500">Incl. Paid</span>
                             </label>
                             <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
-                                <i class="ri-refresh-line"></i>
+                                <x-heroicon-o-arrow-path class="size-5" />
                                 Resync This Due
                             </button>
                         </div>
@@ -138,7 +138,7 @@
                                                     }"
                                                     class="hidden group-hover:inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase text-slate-500 hover:bg-blue-100 hover:text-blue-600 transition"
                                                     title="Resync ONLY this class (including paid)">
-                                                    <i class="ri-refresh-line"></i>
+                                                    <x-heroicon-o-arrow-path class="size-5" />
                                                     Resync
                                                 </button>
                                             </div>
@@ -173,7 +173,7 @@
 
                     <div class="flex justify-end mt-4 pt-4 border-t border-slate-100">
                         <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                            <i class="ri-save-line"></i>
+                            <x-heroicon-o-arrow-down-on-square class="size-5" />
                             Save Configuration for {{ $description }}
                         </button>
                     </div>
@@ -181,14 +181,14 @@
             </section>
         @empty
             <div class="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
-                <i class="ri-information-line text-4xl text-amber-500 mb-2"></i>
+                <x-heroicon-o-information-circle class="text-4xl text-amber-500 mb-2 size-5" />
                 <h3 class="font-semibold text-amber-900">No Configurations Found</h3>
                 <p class="text-sm text-amber-700 mt-1">
                     Default configurations are created when you create a new due from the Dues Management page.
                     Once created, they will appear here for editing.
                 </p>
                 <a href="{{ route('admin.dues.create') }}" class="inline-flex items-center gap-2 mt-4 rounded-xl bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700">
-                    <i class="ri-add-line"></i>
+                    <x-heroicon-o-plus class="size-5" />
                     Create a New Due
                 </a>
             </div>
@@ -197,7 +197,7 @@
         {{-- Info Box --}}
         <div class="rounded-2xl border border-blue-200 bg-blue-50 p-5">
             <div class="flex items-start gap-3">
-                <i class="ri-information-line text-xl text-blue-600 mt-0.5"></i>
+                <x-heroicon-o-information-circle class="size-6 text-blue-600 mt-0.5" />
                 <div class="text-sm text-blue-800">
                     <p class="font-semibold mb-1">How This Works</p>
                     <ul class="list-disc list-inside space-y-1 text-blue-700">
@@ -213,7 +213,7 @@
         {{-- Back to Dues --}}
         <div class="flex justify-center">
             <a href="{{ route('admin.dues.maintenance.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line"></i>
+                <x-heroicon-o-arrow-left class="size-5" />
                 Back to Maintenance
             </a>
         </div>

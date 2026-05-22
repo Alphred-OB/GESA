@@ -16,7 +16,7 @@
                     </div>
                     <div class="h-10 w-px bg-slate-200 mx-2"></div>
                     <a href="{{ route('admin.timeline.create') }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-add-line text-lg transition-transform group-hover:rotate-90"></i>
+                        <x-heroicon-o-plus class="size-5 transition-transform group-hover:rotate-90" />
                         New Milestone
                     </a>
                 </div>
@@ -31,7 +31,7 @@
                         <p class="mt-4 text-4xl font-semibold text-emerald-400">{{ $activeCount }}</p>
                         <p class="mt-2 text-xs font-semibold text-white/40 italic">Live for student visibility</p>
                     </div>
-                    <i class="ri-flag-2-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                    <x-heroicon-o-flag class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 size-5" />
                 </div>
 
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
@@ -57,7 +57,7 @@
             @if (session('status'))
                 <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -89,9 +89,9 @@
                                         'bg-slate-100 text-slate-400' => !$entry->is_published
                                     ])>
                                         @if($entry->isPast())
-                                            <i class="ri-checkbox-circle-line text-2xl"></i>
+                                            <x-heroicon-o-check-circle class="size-7" />
                                         @else
-                                            <i class="ri-flag-2-line text-2xl"></i>
+                                            <x-heroicon-o-flag class="size-7" />
                                         @endif
                                     </div>
                                     <div class="min-w-0">
@@ -110,16 +110,16 @@
                                         </div>
                                         <div class="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2">
                                             <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                                                <i class="ri-calendar-event-line text-[#16136a]"></i>
+                                                <x-heroicon-o-calendar-days class="text-[#16136a] size-5" />
                                                 {{ $entry->starts_at?->format('F d, Y') }}
                                             </div>
                                             <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                                                <i class="ri-government-line text-[#16136a]"></i>
+                                                <x-heroicon-o-building-library class="text-[#16136a] size-5" />
                                                 {{ $entry->academic_year ?? 'Not Assigned' }}
                                             </div>
                                             @if($entry->isPast())
                                                 <div class="flex items-center gap-2 text-xs font-semibold text-emerald-500 italic">
-                                                    <i class="ri-history-line"></i>
+                                                    <x-heroicon-o-clock class="size-5" />
                                                     Archived (Past Event)
                                                 </div>
                                             @endif
@@ -129,14 +129,14 @@
 
                                 <div class="flex items-center gap-3 lg:justify-end">
                                     <a href="{{ route('admin.timeline.edit', $entry) }}" class="flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-slate-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-slate-600 transition-all hover:bg-[#16136a] hover:text-white sm:flex-initial">
-                                        <i class="ri-edit-line text-lg"></i>
+                                        <x-heroicon-o-pencil class="size-5" />
                                         Edit Entry
                                     </a>
                                     <form method="POST" action="{{ route('admin.timeline.destroy', $entry) }}" onsubmit="return confirm('Delete this milestone permanentely?');" class="flex flex-1 sm:flex-initial">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-rose-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-rose-500 transition-all hover:bg-rose-500 hover:text-white sm:w-auto">
-                                            <i class="ri-delete-bin-line text-lg"></i>
+                                            <x-heroicon-o-trash class="size-5" />
                                             Delete
                                         </button>
                                     </form>
@@ -148,12 +148,12 @@
                     @empty
                         <div class="rounded-[2.5rem] border border-dashed border-slate-300 p-20 text-center">
                             <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 text-slate-200">
-                                <i class="ri-time-line text-5xl"></i>
+                                <x-heroicon-o-clock class="text-5xl size-5" />
                             </div>
                             <h3 class="mt-6 text-lg font-semibold text-slate-900">No Milestones Published</h3>
                             <p class="mt-2 text-sm font-semibold text-slate-400">Plan and publish your academic sessions to guide students.</p>
                             <a href="{{ route('admin.timeline.create') }}" class="mt-8 inline-flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-8 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20">
-                                <i class="ri-add-line text-lg"></i>
+                                <x-heroicon-o-plus class="size-5" />
                                 Add First Entry
                             </a>
                         </div>

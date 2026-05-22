@@ -4,9 +4,9 @@
             {{-- God-Tier Header / Breadcrumb --}}
             <nav class="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
                 <a href="{{ route('student.dashboard') }}" class="transition hover:text-[#16136a]">Core</a>
-                <i class="ri-arrow-right-s-line text-xs"></i>
+                <x-heroicon-o-chevron-right class="size-3.5" />
                 <a href="{{ route('student.events.index') }}" class="transition hover:text-[#16136a]">Events Feed</a>
-                <i class="ri-arrow-right-s-line text-xs"></i>
+                <x-heroicon-o-chevron-right class="size-3.5" />
                 <span class="text-[#16136a] truncate max-w-[200px]">{{ $event->title }}</span>
             </nav>
 
@@ -21,15 +21,15 @@
                                 </span>
                                 @if($event->type === 'online')
                                     <span class="rounded-xl bg-emerald-50 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-emerald-600 ring-1 ring-emerald-100">
-                                        <i class="ri-global-line mr-1"></i> Online
+                                        <x-heroicon-o-globe-alt class="mr-1 size-5" /> Online
                                     </span>
                                 @elseif($event->type === 'hybrid')
                                     <span class="rounded-xl bg-amber-50 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-amber-600 ring-1 ring-amber-100">
-                                        <i class="ri-git-branch-line mr-1"></i> Hybrid
+                                        <x-heroicon-o-code-bracket class="mr-1 size-5" /> Hybrid
                                     </span>
                                 @else
                                     <span class="rounded-xl bg-blue-50 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-blue-600 ring-1 ring-blue-100">
-                                        <i class="ri-map-pin-line mr-1"></i> Physical
+                                        <x-heroicon-o-map-pin class="mr-1 size-5" /> Physical
                                     </span>
                                 @endif
                             </div>
@@ -42,7 +42,7 @@
                                 <div class="flex flex-wrap items-center gap-x-8 gap-y-4 pt-2">
                                     <div class="flex items-center gap-3">
                                         <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a]/5 text-[#16136a] ring-1 ring-slate-100">
-                                            <i class="ri-calendar-event-line"></i>
+                                            <x-heroicon-o-calendar-days class="size-5" />
                                         </div>
                                         <div class="flex flex-col">
                                             <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-900">{{ $event->start_at?->format('M j, Y') }}</span>
@@ -53,7 +53,7 @@
                                     @if($event->location && in_array($event->type, ['physical', 'hybrid']))
                                         <div class="flex items-center gap-3">
                                             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a]/5 text-[#16136a] ring-1 ring-slate-100">
-                                                <i class="ri-map-pin-2-line"></i>
+                                                <x-heroicon-o-map-pin class="size-5" />
                                             </div>
                                             <div class="flex flex-col">
                                                 <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-900">Location</span>
@@ -81,7 +81,7 @@
                             <div class="mt-12">
                                 <a href="{{ $event->cta_url }}" target="_blank" class="inline-flex items-center gap-2 rounded-full bg-[#16136a] px-8 py-4 text-xs font-semibold uppercase tracking-widest text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-xl hover:shadow-[#16136a]/20">
                                     <span>Register / External Link</span>
-                                    <i class="ri-external-link-line"></i>
+                                    <x-heroicon-o-arrow-top-right-on-square class="size-5" />
                                 </a>
                             </div>
                         @endif
@@ -94,14 +94,14 @@
                     {{-- Meeting details card (if online or hybrid) --}}
                     @if(in_array($event->type, ['online', 'hybrid']) && $event->meeting_link)
                         <article class="rounded-xl border border-emerald-100 bg-emerald-50 p-8 shadow-sm">
-                            <i class="ri-video-chat-line text-4xl text-emerald-600/30"></i>
+                            <x-heroicon-o-video-camera class="text-4xl text-emerald-600/30 size-5" />
                             <h3 class="mt-6 text-xl font-semibold italic tracking-tight text-emerald-900">Virtual Meeting</h3>
                             <p class="mt-4 text-[10px] font-semibold text-emerald-700/70 leading-relaxed uppercase tracking-widest">
                                 This event includes an online component. Click below to join the virtual session.
                             </p>
                             @if($event->meeting_passcode)
                                 <div class="mt-6 flex items-center gap-3 rounded-xl bg-white/60 p-4 ring-1 ring-emerald-200">
-                                    <i class="ri-key-2-line text-emerald-600"></i>
+                                    <x-heroicon-o-key class="text-emerald-600 size-5" />
                                     <div>
                                         <p class="text-[9px] font-semibold uppercase tracking-widest text-emerald-800/60">Meeting Passcode</p>
                                         <p class="text-sm font-semibold text-emerald-900">{{ $event->meeting_passcode }}</p>
@@ -111,7 +111,7 @@
                             <div class="mt-6">
                                 <a href="{{ $event->meeting_link }}" target="_blank" class="flex items-center justify-between group rounded-xl bg-emerald-600 px-6 py-4 text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700 hover:-translate-y-1">
                                     <span class="text-[10px] font-semibold uppercase tracking-[0.2em]">Join Meeting</span>
-                                    <i class="ri-arrow-right-up-line text-xl"></i>
+                                    <x-heroicon-o-arrow-up-right class="size-6" />
                                 </a>
                             </div>
                         </article>
@@ -119,7 +119,7 @@
 
                     {{-- Calendar Add Card --}}
                     <article class="rounded-xl bg-[#16136a] p-8 text-white shadow-2xl shadow-[#16136a]/30">
-                        <i class="ri-calendar-check-line text-4xl opacity-30"></i>
+                        <x-heroicon-o-calendar-days class="text-4xl opacity-30 size-5" />
                         <h3 class="mt-6 text-xl font-semibold italic tracking-tight">Sync Event</h3>
                         <p class="mt-4 text-[10px] font-semibold text-white/60 leading-relaxed uppercase tracking-wider">
                             Add this specific event to your personal calendar.
@@ -127,24 +127,24 @@
                         <div class="mt-8 pt-8 border-t border-white/10 space-y-4">
                             <a href="{{ $calendarLinks['google'] }}" target="_blank" class="flex items-center justify-between group">
                                 <div class="flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                                    <i class="ri-google-fill text-lg"></i>
+                                    <x-heroicon-s-star class="size-5" />
                                     <span class="text-[10px] font-semibold uppercase tracking-[0.2em]">Google Calendar</span>
                                 </div>
-                                <i class="ri-arrow-right-line transition-transform group-hover:translate-x-1"></i>
+                                <x-heroicon-o-arrow-right class="transition-transform group-hover:translate-x-1 size-5" />
                             </a>
                             <a href="{{ $calendarLinks['outlook'] }}" target="_blank" class="flex items-center justify-between group">
                                 <div class="flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                                    <i class="ri-windows-fill text-lg"></i>
+                                    <x-heroicon-s-star class="size-5" />
                                     <span class="text-[10px] font-semibold uppercase tracking-[0.2em]">Outlook</span>
                                 </div>
-                                <i class="ri-arrow-right-line transition-transform group-hover:translate-x-1"></i>
+                                <x-heroicon-o-arrow-right class="transition-transform group-hover:translate-x-1 size-5" />
                             </a>
                             <a href="{{ $calendarLinks['webcal'] }}" class="flex items-center justify-between group">
                                 <div class="flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                                    <i class="ri-apple-fill text-lg"></i>
+                                    <x-heroicon-s-star class="size-5" />
                                     <span class="text-[10px] font-semibold uppercase tracking-[0.2em]">Apple Calendar</span>
                                 </div>
-                                <i class="ri-arrow-right-line transition-transform group-hover:translate-x-1"></i>
+                                <x-heroicon-o-arrow-right class="transition-transform group-hover:translate-x-1 size-5" />
                             </a>
                         </div>
                     </article>

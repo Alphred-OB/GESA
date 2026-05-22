@@ -4,7 +4,7 @@
             {{-- Header --}}
             <header class="text-center">
                 <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#16136a]/5 text-[#16136a]">
-                    <i class="ri-edit-line text-3xl"></i>
+                    <x-heroicon-o-pencil class="size-8" />
                 </div>
                 <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $title }}</h1>
                 <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Update existing academic asset</p>
@@ -13,7 +13,7 @@
             @if ($errors->any())
                 <div class="rounded-[2rem] border border-rose-100 bg-rose-50/50 p-6 text-sm font-semibold text-rose-700 shadow-sm">
                     <div class="flex items-start gap-3">
-                        <i class="ri-error-warning-line text-2xl"></i>
+                        <x-heroicon-o-exclamation-triangle class="size-7" />
                         <div>
                             <p class="text-xs uppercase tracking-widest">Validation Errors</p>
                             <ul class="mt-2 list-disc pl-5 text-[11px]">
@@ -38,7 +38,7 @@
                         <div class="space-y-2">
                             <label for="title" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Asset Title</label>
                             <div class="relative">
-                                <i class="ri-edit-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-pencil class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="title" name="title" type="text" value="{{ old('title', $resource->title) }}" required maxlength="150" 
                                     class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
                                     placeholder="e.g. Applied Thermodynamics Handout">
@@ -48,7 +48,7 @@
                         <div class="space-y-2">
                             <label for="content_type" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Content Category</label>
                             <div class="relative">
-                                <i class="ri-stack-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-rectangle-stack class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <select id="content_type" name="content_type" class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                                     @foreach ($contentTypes as $type)
                                         <option value="{{ $type }}" @selected(old('content_type', $resource->content_type) === $type)>{{ Str::headline($type) }}</option>
@@ -60,7 +60,7 @@
                         <div class="md:col-span-2 space-y-2">
                             <label for="description" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Asset Summary</label>
                             <div class="relative">
-                                <i class="ri-file-text-line absolute left-4 top-6 text-slate-400"></i>
+                                <x-heroicon-o-document-text class="absolute left-4 top-6 text-slate-400 size-5" />
                                 <textarea id="description" name="description" rows="3" class="w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 py-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="Briefly describe what this resource covers...">{{ old('description', $resource->description) }}</textarea>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <div class="space-y-2">
                                 <label for="cta_url" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Destination URL</label>
                                 <div class="relative">
-                                    <i class="ri-links-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <x-heroicon-o-link class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                     <input id="cta_url" name="cta_url" type="url" value="{{ old('cta_url', $resource->cta_url) }}" placeholder="https://" 
                                         class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                                 </div>
@@ -98,7 +98,7 @@
                             <div class="space-y-2">
                                 <label for="cta_label" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Button Label</label>
                                 <div class="relative">
-                                    <i class="ri-edit-box-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <x-heroicon-o-pencil-square class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                     <input id="cta_label" name="cta_label" type="text" value="{{ old('cta_label', $resource->cta_label) }}" placeholder="e.g. Open Portal" 
                                         class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                                 </div>
@@ -110,7 +110,7 @@
                             @if($resource->file_path)
                                 <div class="mb-6 flex items-center gap-4 rounded-3xl border border-[#16136a]/10 bg-[#16136a]/5 p-4">
                                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#16136a] text-white">
-                                        <i class="ri-file-history-line text-xl"></i>
+                                        <x-heroicon-o-document class="size-6" />
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Current File</p>
@@ -123,7 +123,7 @@
                             <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Replace Asset</label>
                             <label for="file" class="group flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-4 rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-slate-50/50 transition-all hover:border-[#16136a]/40 hover:bg-white">
                                 <div class="flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#16136a] shadow-xl shadow-slate-200/50 transition-transform group-hover:scale-110">
-                                    <i class="ri-upload-cloud-2-line text-2xl"></i>
+                                    <x-heroicon-o-cloud-arrow-up class="size-7" />
                                 </div>
                                 <div class="text-center">
                                     <p class="text-sm font-semibold text-slate-900">Upload New Version</p>
@@ -134,14 +134,14 @@
 
                             <div x-show="filePreview" x-cloak class="flex items-center gap-4 rounded-3xl border border-emerald-100 bg-emerald-50/50 p-4">
                                 <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-emerald-500 shadow-sm">
-                                    <i class="ri-file-check-line text-xl"></i>
+                                    <x-heroicon-o-document-check class="size-6" />
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <p class="truncate text-xs font-semibold text-emerald-900" x-text="filePreview?.name"></p>
                                     <p class="text-[10px] font-semibold text-emerald-600 uppercase" x-text="filePreview?.sizeLabel"></p>
                                 </div>
                                 <button type="button" @click="clearFile()" class="h-10 w-10 flex items-center justify-center rounded-xl bg-white text-rose-500 shadow-sm hover:bg-rose-500 hover:text-white transition-all">
-                                    <i class="ri-close-line text-lg"></i>
+                                    <x-heroicon-o-x-mark class="size-5" />
                                 </button>
                             </div>
                         </div>
@@ -196,7 +196,7 @@
 
                 <div class="flex flex-col gap-4 pt-4 sm:flex-row">
                     <button type="submit" class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
-                        <i class="ri-save-line text-lg"></i>
+                        <x-heroicon-o-arrow-down-on-square class="size-5" />
                         Update Asset
                     </button>
                     <a href="{{ route('admin.resources.index') }}" class="flex h-14 items-center justify-center rounded-2xl bg-slate-50 px-8 text-sm font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">

@@ -18,7 +18,7 @@
             <div class="mb-4 rounded-3xl border border-emerald-200/60 bg-emerald-50 px-5 py-4 text-sm text-emerald-800 shadow-inner">
                 <div class="flex items-start gap-3">
                     <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                        <i class="ri-check-line text-lg" aria-hidden="true"></i>
+                        <x-heroicon-o-check class="size-5" aria-hidden="true" />
                     </span>
                     <p>{{ session('role_status') }}</p>
                 </div>

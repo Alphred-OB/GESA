@@ -40,7 +40,7 @@
                             <p class="mt-2 text-xs font-semibold text-white/40 italic">Your personal account is clear</p>
                         @endif
                     </div>
-                    <i class="ri-wallet-3-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                    <x-heroicon-o-wallet class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 size-5" />
                 </div>
 
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
@@ -59,7 +59,7 @@
             @if (session('status'))
                 <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     <div class="md:col-span-2 space-y-2">
                         <label for="search" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Search Records</label>
                         <div class="relative">
-                            <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                             <input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" 
                                 class="h-12 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
                                 placeholder="Reference number or description...">
@@ -90,7 +90,7 @@
 
                     <div class="flex items-end">
                         <button type="submit" class="flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                            <i class="ri-filter-3-line"></i> Apply Filters
+                            <x-heroicon-o-funnel class="size-5" /> Apply Filters
                         </button>
                     </div>
                 </form>
@@ -155,16 +155,16 @@
                                         @if($due->payment_status === 'owing')
                                             @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
                                                 <a href="{{ route('admin.personal-dues.manual.show', $due) }}" class="flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-6 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5">
-                                                    <i class="ri-hand-coin-line text-lg"></i> Pay Now
+                                                    <x-heroicon-o-currency-dollar class="size-5" /> Pay Now
                                                 </a>
                                             @endif
                                         @elseif($due->payment_status === 'paid')
                                             <a href="{{ route('admin.personal-dues.receipt', $due) }}" class="flex h-12 items-center gap-3 rounded-2xl bg-emerald-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-emerald-600 transition-all hover:bg-emerald-100">
-                                                <i class="ri-file-download-line text-lg"></i> Receipt
+                                                <x-heroicon-o-document-arrow-down class="size-5" /> Receipt
                                             </a>
                                         @else
                                             <div class="flex h-12 items-center gap-3 rounded-2xl bg-amber-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-amber-600 italic">
-                                                <i class="ri-time-line text-lg"></i> Verifying...
+                                                <x-heroicon-o-clock class="size-5" /> Verifying...
                                             </div>
                                         @endif
                                     </div>
@@ -174,7 +174,7 @@
                             @if ($due->payment_status === 'owing' && $due->rejection_reason)
                                 <div class="mt-6 rounded-2xl border border-rose-100 bg-rose-50/50 p-4 text-[11px] font-semibold text-rose-700">
                                     <div class="flex items-start gap-3">
-                                        <i class="ri-error-warning-line text-lg"></i>
+                                        <x-heroicon-o-exclamation-triangle class="size-5" />
                                         <div>
                                             <p class="uppercase tracking-widest text-rose-500 mb-1 text-[9px]">Payment Rejected</p>
                                             <p>{{ $due->rejection_reason }}</p>
@@ -186,7 +186,7 @@
                     @empty
                         <div class="rounded-[2.5rem] border border-dashed border-slate-300 p-20 text-center">
                             <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 text-slate-200">
-                                <i class="ri-bank-card-line text-5xl"></i>
+                                <x-heroicon-o-credit-card class="text-5xl size-5" />
                             </div>
                             <h3 class="mt-6 text-lg font-semibold text-slate-900">No Invoices Found</h3>
                             <p class="mt-2 text-sm font-semibold text-slate-400">Your personal billing history is currently clear.</p>

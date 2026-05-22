@@ -19,7 +19,7 @@
                     </div>
                     <div class="h-10 w-px bg-slate-200 mx-2"></div>
                     <a href="{{ route('admin.events.create') }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-6 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
-                        <i class="ri-add-line text-lg transition-transform group-hover:rotate-90"></i>
+                        <x-heroicon-o-plus class="size-5 transition-transform group-hover:rotate-90" />
                         New Event
                     </a>
                 </div>
@@ -39,7 +39,7 @@
                         <p class="mt-4 text-4xl font-semibold text-emerald-400">{{ $liveCount }} <span class="text-lg text-white/40 font-semibold uppercase tracking-widest">Live Now</span></p>
                         <p class="mt-2 text-xs font-semibold text-white/40 italic">Events currently in progress</p>
                     </div>
-                    <i class="ri-broadcast-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                    <x-heroicon-o-signal class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 size-5" />
                 </div>
 
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
@@ -58,7 +58,7 @@
             @if (session('status'))
                 <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     {{-- Search & Filters --}}
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <div class="relative">
-                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search events..." class="h-10 w-full min-w-[200px] rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm outline-none focus:border-[#16136a] focus:ring-1 focus:ring-[#16136a]">
                         </div>
                         <select name="status" onchange="this.form.submit()" class="h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:border-[#16136a] focus:ring-1 focus:ring-[#16136a]">
@@ -86,10 +86,10 @@
                     <div class="flex items-center gap-3">
                         <div class="flex rounded-xl bg-slate-100 p-1">
                             <button type="button" @click="eventViewMode = 'table'" :class="{ 'bg-white shadow-sm text-[#16136a]': eventViewMode === 'table', 'text-slate-500 hover:text-slate-700': eventViewMode !== 'table' }" class="flex h-8 w-10 items-center justify-center rounded-lg transition-all">
-                                <i class="ri-list-check"></i>
+                                <x-heroicon-o-clipboard-document-check class="size-5" />
                             </button>
                             <button type="button" @click="eventViewMode = 'grid'" :class="{ 'bg-white shadow-sm text-[#16136a]': eventViewMode === 'grid', 'text-slate-500 hover:text-slate-700': eventViewMode !== 'grid' }" class="flex h-8 w-10 items-center justify-center rounded-lg transition-all">
-                                <i class="ri-grid-fill"></i>
+                                <x-heroicon-s-squares-2x2 class="size-5" />
                             </button>
                         </div>
                         <div class="h-8 w-px bg-slate-200"></div>
@@ -124,7 +124,7 @@
                                                         @if ($event->banner_url)
                                                             <img src="{{ $event->banner_url }}" alt="" class="h-full w-full object-cover">
                                                         @else
-                                                            <i class="ri-calendar-event-line text-slate-400"></i>
+                                                            <x-heroicon-o-calendar-days class="text-slate-400 size-5" />
                                                         @endif
                                                     </div>
                                                     <div>
@@ -139,7 +139,7 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="flex items-center gap-1.5 text-slate-600">
-                                                    <i class="ri-map-pin-line text-slate-400"></i>
+                                                    <x-heroicon-o-map-pin class="text-slate-400 size-5" />
                                                     <span class="line-clamp-1 max-w-[150px]">{{ $event->location ?? 'TBA' }}</span>
                                                 </div>
                                             </td>
@@ -166,17 +166,17 @@
                                                 <div class="flex items-center justify-end gap-2">
                                                     @if($event->cta_url)
                                                         <a href="{{ $event->cta_url }}" target="_blank" class="p-2 text-slate-400 hover:text-blue-600 transition-colors" title="External Link">
-                                                            <i class="ri-external-link-line"></i>
+                                                            <x-heroicon-o-arrow-top-right-on-square class="size-5" />
                                                         </a>
                                                     @endif
                                                     <a href="{{ route('admin.events.edit', $event) }}" class="p-2 text-slate-400 hover:text-amber-500 transition-colors" title="Edit">
-                                                        <i class="ri-edit-line"></i>
+                                                        <x-heroicon-o-pencil class="size-5" />
                                                     </a>
                                                     <form method="POST" action="{{ route('admin.events.destroy', $event) }}" onsubmit="return confirm('Delete this event records?');" class="inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="p-2 text-slate-400 hover:text-rose-500 transition-colors" title="Delete">
-                                                            <i class="ri-delete-bin-line"></i>
+                                                            <x-heroicon-o-trash class="size-5" />
                                                         </button>
                                                     </form>
                                                 </div>
@@ -204,7 +204,7 @@
                                             <img src="{{ $event->banner_url }}" alt="" class="h-full w-full object-cover transition-transform group-hover:scale-105">
                                         @else
                                             <div class="flex h-full w-full items-center justify-center bg-slate-50 text-slate-300">
-                                                <i class="ri-calendar-event-line text-2xl"></i>
+                                                <x-heroicon-o-calendar-days class="size-7" />
                                             </div>
                                         @endif
                                     </div>
@@ -233,13 +233,13 @@
                                 <div class="mt-4 flex items-center justify-between pt-4 border-t border-slate-50">
                                     <div class="flex gap-1">
                                         <a href="{{ route('admin.events.edit', $event) }}" class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-amber-500 transition-colors">
-                                            <i class="ri-edit-line"></i>
+                                            <x-heroicon-o-pencil class="size-5" />
                                         </a>
                                         <form method="POST" action="{{ route('admin.events.destroy', $event) }}" onsubmit="return confirm('Delete this event records?');" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-rose-500 transition-colors">
-                                                <i class="ri-delete-bin-line"></i>
+                                                <x-heroicon-o-trash class="size-5" />
                                             </button>
                                         </form>
                                     </div>
@@ -253,7 +253,7 @@
                         @empty
                             <div class="col-span-full rounded-2xl border border-dashed border-slate-300 p-12 text-center">
                                 <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300">
-                                    <i class="ri-search-line text-3xl"></i>
+                                    <x-heroicon-o-magnifying-glass class="size-8" />
                                 </div>
                                 <h3 class="mt-4 text-sm font-semibold text-slate-900">No events found</h3>
                                 <p class="mt-1 text-xs text-slate-500">Try adjusting your filters.</p>

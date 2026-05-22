@@ -9,7 +9,7 @@
             <header class="flex flex-col gap-4 rounded-3xl border border-[#16136a]/15 bg-white/85 p-6 shadow-lg shadow-[#16136a]/10 md:flex-row md:items-center md:justify-between">
                 <div class="space-y-2">
                     <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                        <i class="ri-money-dollar-circle-line text-base"></i>
+                        <x-heroicon-o-currency-dollar class="size-5" />
                         Personal Due Payment
                     </p>
                     <h1 class="text-2xl font-semibold text-[#16136a] md:text-3xl">{{ $due->description }}</h1>
@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <a href="{{ route('admin.personal-dues.index') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-                        <i class="ri-arrow-left-line"></i>
+                        <x-heroicon-o-arrow-left class="size-5" />
                         Cancel
                     </a>
                 </div>
@@ -38,7 +38,7 @@
                         <div class="bg-slate-50/50 px-8 py-6 border-b border-slate-100 flex items-center justify-between">
                             <h2 class="flex items-center gap-3 text-lg font-semibold text-[#16136a]">
                                 <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#16136a] text-white shadow-lg shadow-[#16136a]/20">
-                                    <i class="ri-list-check-3"></i>
+                                    <x-heroicon-o-clipboard-document-check class="size-5" />
                                 </span>
                                 Payment Instructions
                             </h2>
@@ -49,7 +49,7 @@
                             <div class="mb-8 rounded-2xl bg-indigo-50/50 p-5 border border-indigo-100/50">
                                 <div class="flex gap-4">
                                     <div class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white">
-                                        <i class="ri-information-fill text-sm"></i>
+                                        <x-heroicon-s-information-circle class="size-4" />
                                     </div>
                                     <p class="text-sm font-medium leading-relaxed text-indigo-900/80 italic">
                                         {{ $settings['manual_payment_instructions'] }}
@@ -156,8 +156,8 @@
                                         <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-white/40">Merchant Number</p>
                                         <div class="mt-2 flex items-center justify-between">
                                             <span class="text-3xl font-mono font-semibold tracking-wider text-yellow-400">{{ $settings['merchant_number'] }}</span>
-                                            <i x-show="!copySuccess" class="ri-file-copy-line text-white/60"></i>
-                                            <i x-show="copySuccess" class="ri-check-line text-emerald-400"></i>
+                                            <x-heroicon-o-document x-show="!copySuccess" class="text-white/60 size-5" />
+                                            <x-heroicon-o-check x-show="copySuccess" class="text-emerald-400 size-5" />
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
                     <div class="bg-indigo-50/50 px-8 py-7 border-b border-indigo-100/50">
                         <h2 class="flex items-center gap-4 text-xl font-semibold text-[#16136a]">
                             <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#16136a] text-white shadow-lg shadow-[#16136a]/20">
-                                <i class="ri-upload-cloud-fill text-xl"></i>
+                                <x-heroicon-s-cloud-arrow-up class="size-6" />
                             </span>
                             Final Step: Submit Proof
                         </h2>

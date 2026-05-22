@@ -180,7 +180,7 @@
             <div class="relative z-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
                 <div class="space-y-6 max-w-3xl">
                     <span class="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald-200 ring-1 ring-emerald-500/50 backdrop-blur-md">
-                        <i class="ri-file-paper-2-line"></i> Registration
+                        <x-heroicon-o-document class="size-5" /> Registration
                     </span>
                     <div class="space-y-4">
                         <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-none text-white">Course Registration</h1>

@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -113,7 +113,7 @@
             <div class="relative flex h-20 w-20 items-center justify-center">
                 <div class="absolute inset-0 animate-ping rounded-full bg-[#16136a]/10"></div>
                 <div class="relative flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-xl ring-1 ring-slate-100">
-                    <i class="ri-loader-4-line animate-spin text-3xl text-[#16136a]"></i>
+                    <x-heroicon-o-arrow-path class="animate-spin size-8 text-[#16136a]" />
                 </div>
             </div>
             <div class="text-center">

@@ -6,7 +6,7 @@
             {{-- Header --}}
             <header class="text-center">
                 <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#16136a]/5 text-[#16136a]">
-                    <i class="ri-calendar-event-line text-3xl"></i>
+                    <x-heroicon-o-calendar-days class="size-8" />
                 </div>
                 <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $title }}</h1>
                 <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Plan the academic journey</p>
@@ -25,7 +25,7 @@
                             <div class="space-y-2">
                                 <label for="title" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Milestone Title</label>
                                 <div class="relative">
-                                    <i class="ri-flag-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <x-heroicon-o-flag class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                     <input id="title" name="title" type="text" value="{{ old('title', $entry->title) }}" required maxlength="150" 
                                         class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
                                         placeholder="e.g. End of Semester Exams">
@@ -38,7 +38,7 @@
                             <div class="space-y-2">
                                 <label for="academic_year" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Academic Year</label>
                                 <div class="relative">
-                                    <i class="ri-government-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                    <x-heroicon-o-building-library class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                     <input id="academic_year" name="academic_year" type="text" value="{{ old('academic_year', $entry->academic_year) }}" maxlength="15" 
                                         class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" 
                                         placeholder="e.g. 2024/2025">
@@ -52,7 +52,7 @@
                         <div class="space-y-2">
                             <label for="starts_at" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Event Date</label>
                             <div class="relative">
-                                <i class="ri-calendar-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-calendar class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="starts_at" name="starts_at" type="date" value="{{ old('starts_at', optional($entry->starts_at)->format('Y-m-d')) }}" required 
                                     class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                             </div>
@@ -77,7 +77,7 @@
 
                     <div class="flex flex-col gap-4 pt-4 sm:flex-row">
                         <button type="submit" class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
-                            <i class="ri-save-line text-lg"></i>
+                            <x-heroicon-o-arrow-down-on-square class="size-5" />
                             {{ $entry->exists ? 'Update Milestone' : 'Create Milestone' }}
                         </button>
                         <a href="{{ route('admin.timeline.index') }}" class="flex h-14 items-center justify-center rounded-2xl bg-slate-50 px-8 text-sm font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">

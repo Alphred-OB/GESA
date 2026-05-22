@@ -7,7 +7,7 @@
                     <div class="space-y-4 max-w-2xl">
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 ring-1 ring-white/20 backdrop-blur-md">
-                                <i class="ri-megaphone-line"></i> Global Broadcast
+                                <x-heroicon-o-megaphone class="size-5" /> Global Broadcast
                             </span>
                         </div>
                         <div class="space-y-2">
@@ -28,7 +28,7 @@
 
                 <!-- Subtle background depth -->
                 <div class="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-white/5 blur-3xl"></div>
-                <i class="ri-megaphone-line absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none"></i>
+                <x-heroicon-o-megaphone class="absolute -right-10 -bottom-10 text-[240px] text-white/[0.03] -rotate-12 select-none pointer-events-none size-5" />
             </section>
 
             <form method="GET" action="{{ route('student.announcements.index') }}" class="grid gap-4 rounded-xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-[#16136a]/10 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end">
@@ -48,7 +48,7 @@
                                 <option value="{{ $value }}" @selected($filters['type'] === $value)> {{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                                 <option value="{{ $value }}" @selected($filters['priority'] === $value)> {{ $label }}</option>
                             @endforeach
                         </select>
-                        <i class="ri-arrow-down-s-line pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <x-heroicon-o-chevron-down class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                     </div>
                 </div>
 
@@ -84,10 +84,10 @@
                         {{-- View Switcher --}}
                         <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1 ring-1 ring-slate-200">
                             <button @click="view = 'grid'" :class="view === 'grid' ? 'bg-white text-[#16136a] shadow-sm' : 'text-slate-400 hover:text-slate-600'" class="flex h-9 w-9 items-center justify-center rounded-xl transition-all">
-                                <i class="ri-grid-fill text-lg"></i>
+                                <x-heroicon-s-squares-2x2 class="size-5" />
                             </button>
                             <button @click="view = 'table'" :class="view === 'table' ? 'bg-white text-[#16136a] shadow-sm' : 'text-slate-400 hover:text-slate-600'" class="flex h-9 w-9 items-center justify-center rounded-xl transition-all">
-                                <i class="ri-table-line text-lg"></i>
+                                <x-heroicon-o-table-cells class="size-5" />
                             </button>
                         </div>
 
@@ -103,7 +103,7 @@
                 @if ($announcements->isEmpty())
                     <article class="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 py-20 text-center">
                         <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white text-slate-300 shadow-sm ring-1 ring-slate-100">
-                            <i class="ri-notification-off-line text-3xl"></i>
+                            <x-heroicon-o-bell-slash class="size-8" />
                         </div>
                         <p class="text-sm font-semibold text-[#16136a]">No notices found.</p>
                         <p class="mt-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Check back later or adjust filters</p>
@@ -133,12 +133,12 @@
                                 </div>
                                 <div class="mt-8 flex items-center justify-between pt-6 border-t border-slate-50">
                                     <div class="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
-                                        <i class="ri-calendar-line text-[#16136a]"></i>
+                                        <x-heroicon-o-calendar class="text-[#16136a] size-5" />
                                         <span>{{ $announcement->published_at?->format('M j, Y') }}</span>
                                     </div>
                                     <div class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-[#16136a] transition group-hover:gap-3">
                                         <span>Read Entry</span>
-                                        <i class="ri-arrow-right-line"></i>
+                                        <x-heroicon-o-arrow-right class="size-5" />
                                     </div>
                                 </div>
                             </article>
@@ -185,7 +185,7 @@
                                         </td>
                                         <td class="px-8 py-6 text-right">
                                             <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 text-[#16136a] ring-1 ring-slate-100 transition-all group-hover:bg-[#16136a] group-hover:text-white group-hover:shadow-lg group-hover:shadow-[#16136a]/20">
-                                                <i class="ri-arrow-right-line text-lg"></i>
+                                                <x-heroicon-o-arrow-right class="size-5" />
                                             </div>
                                         </td>
                                     </tr>

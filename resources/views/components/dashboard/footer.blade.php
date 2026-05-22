@@ -22,7 +22,7 @@
                 <a href="{{ route('student.resources.index') }}" class="text-[11px] font-semibold uppercase tracking-widest text-slate-500 transition hover:text-[#16136a]">Resources</a>
                 <span class="hidden h-4 w-px bg-slate-200 md:block"></span>
                 <a href="mailto:support@gesa.edu" class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-[#16136a] transition hover:opacity-70">
-                    <i class="ri-mail-send-line text-sm"></i>
+                    <x-heroicon-o-paper-airplane class="size-4" />
                     <span>Support</span>
                 </a>
             </nav>

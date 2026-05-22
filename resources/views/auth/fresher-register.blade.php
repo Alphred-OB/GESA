@@ -18,7 +18,7 @@
             <div class="rounded-2xl border border-yellow-200 bg-yellow-50/50 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-yellow-50">
                 <div class="flex gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-yellow-100 text-yellow-600">
-                        <i class="ri-alert-line text-2xl" aria-hidden="true"></i>
+                        <x-heroicon-o-exclamation-triangle class="size-7" aria-hidden="true" />
                     </div>
                     <div class="text-sm text-yellow-800 leading-relaxed">
                         <p class="font-semibold text-base mb-2">Notice for Freshers</p>
@@ -39,7 +39,7 @@
                             <label for="first_name" class="block text-sm font-semibold text-slate-700">First name</label>
                             <div class="group auth-input-group relative">
                                 <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                    <i class="ri-user-line text-lg" aria-hidden="true"></i>
+                                    <x-heroicon-o-user class="size-5" aria-hidden="true" />
                                 </span>
                                 <input id="first_name" name="first_name" type="text" value="{{ old('first_name') }}" required autocomplete="given-name" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="Kwame" />
                             </div>
@@ -49,7 +49,7 @@
                             <label for="last_name" class="block text-sm font-semibold text-slate-700">Last name</label>
                             <div class="group auth-input-group relative">
                                 <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                    <i class="ri-user-3-line text-lg" aria-hidden="true"></i>
+                                    <x-heroicon-o-user class="size-5" aria-hidden="true" />
                                 </span>
                                 <input id="last_name" name="last_name" type="text" value="{{ old('last_name') }}" required autocomplete="family-name" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="Mensah" />
                             </div>
@@ -92,7 +92,7 @@
                         <label for="username" class="block text-sm font-semibold text-slate-700">Username</label>
                         <div class="group auth-input-group relative">
                             <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                <i class="ri-user-star-line text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-star class="size-5" aria-hidden="true" />
                             </span>
                             <input id="username" name="username" type="text" x-model="username" @input="debounceCheck()" required autocomplete="username" 
                                 :class="{
@@ -103,13 +103,13 @@
                                 class="auth-input block w-full rounded-2xl border py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:bg-white/50 focus:outline-none focus:ring-4" placeholder="kmensah" />
                             <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <template x-if="checking">
-                                    <i class="ri-loader-4-line animate-spin text-slate-400"></i>
+                                    <x-heroicon-o-arrow-path class="animate-spin text-slate-400 size-5" />
                                 </template>
                                 <template x-if="!checking && available === true">
-                                    <i class="ri-checkbox-circle-fill text-green-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-check-circle class="text-green-500 animate-fade-slide-up size-5" />
                                 </template>
                                 <template x-if="!checking && available === false">
-                                    <i class="ri-error-warning-fill text-red-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-exclamation-triangle class="text-red-500 animate-fade-slide-up size-5" />
                                 </template>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                         <label for="index_number" class="block text-sm font-semibold text-slate-700">Reference number</label>
                         <div class="group auth-input-group relative">
                             <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                <i class="ri-hashtag text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-hashtag class="size-5" aria-hidden="true" />
                             </span>
                             <input id="index_number" name="index_number" type="text" x-model="indexNumber" @input="debounceCheck()" required inputmode="numeric" pattern="\d{9,11}" maxlength="11" data-numeric-only 
                                 :class="{
@@ -163,13 +163,13 @@
                                 class="auth-input block w-full rounded-2xl border py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:bg-white/50 focus:outline-none focus:ring-4" placeholder="9012345623" />
                             <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <template x-if="checking">
-                                    <i class="ri-loader-4-line animate-spin text-slate-400"></i>
+                                    <x-heroicon-o-arrow-path class="animate-spin text-slate-400 size-5" />
                                 </template>
                                 <template x-if="!checking && available === true">
-                                    <i class="ri-checkbox-circle-fill text-green-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-check-circle class="text-green-500 animate-fade-slide-up size-5" />
                                 </template>
                                 <template x-if="!checking && available === false">
-                                    <i class="ri-error-warning-fill text-red-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-exclamation-triangle class="text-red-500 animate-fade-slide-up size-5" />
                                 </template>
                             </div>
                         </div>
@@ -215,7 +215,7 @@
                         </label>
                         <div class="group auth-input-group relative">
                             <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                <i class="ri-mail-line text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-envelope class="size-5" aria-hidden="true" />
                             </span>
                             <input id="email" name="email" type="email" x-model="email" @input="debounceCheck()" required autocomplete="email" 
                                 :class="{
@@ -226,13 +226,13 @@
                                 class="auth-input block w-full rounded-2xl border py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:bg-white/50 focus:outline-none focus:ring-4" placeholder="kmensah@gmail.com" />
                             <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <template x-if="checking">
-                                    <i class="ri-loader-4-line animate-spin text-slate-400"></i>
+                                    <x-heroicon-o-arrow-path class="animate-spin text-slate-400 size-5" />
                                 </template>
                                 <template x-if="!checking && available === true">
-                                    <i class="ri-checkbox-circle-fill text-green-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-check-circle class="text-green-500 animate-fade-slide-up size-5" />
                                 </template>
                                 <template x-if="!checking && available === false">
-                                    <i class="ri-error-warning-fill text-red-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-exclamation-triangle class="text-red-500 animate-fade-slide-up size-5" />
                                 </template>
                             </div>
                         </div>
@@ -275,7 +275,7 @@
                         <label for="phone_number" class="block text-sm font-semibold text-slate-700">Phone number</label>
                         <div class="group auth-input-group relative">
                             <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                <i class="ri-phone-line text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-phone class="size-5" aria-hidden="true" />
                             </span>
                             <input id="phone_number" name="phone_number" type="tel" x-model="phoneNumber" @input="debounceCheck()" required inputmode="numeric" pattern="\d{9,11}" maxlength="11" data-numeric-only 
                                 :class="{
@@ -286,13 +286,13 @@
                                 class="auth-input block w-full rounded-2xl border py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:bg-white/50 focus:outline-none focus:ring-4" placeholder="0541234567" />
                             <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <template x-if="checking">
-                                    <i class="ri-loader-4-line animate-spin text-slate-400"></i>
+                                    <x-heroicon-o-arrow-path class="animate-spin text-slate-400 size-5" />
                                 </template>
                                 <template x-if="!checking && available === true">
-                                    <i class="ri-checkbox-circle-fill text-green-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-check-circle class="text-green-500 animate-fade-slide-up size-5" />
                                 </template>
                                 <template x-if="!checking && available === false">
-                                    <i class="ri-error-warning-fill text-red-500 animate-fade-slide-up"></i>
+                                    <x-heroicon-s-exclamation-triangle class="text-red-500 animate-fade-slide-up size-5" />
                                 </template>
                             </div>
                         </div>
@@ -304,7 +304,7 @@
                             <label for="class" class="block text-sm font-semibold text-slate-700">Program</label>
                             <div class="group auth-input-group relative">
                                 <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                    <i class="ri-book-open-line text-lg" aria-hidden="true"></i>
+                                    <x-heroicon-o-book-open class="size-5" aria-hidden="true" />
                                 </span>
                                 <select id="class" name="class" required class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10">
                                     <option value="" disabled {{ old('class') ? '' : 'selected' }}>Select program</option>
@@ -319,7 +319,7 @@
                             <label for="year" class="block text-sm font-semibold text-slate-700">Year</label>
                             <div class="group auth-input-group relative">
                                 <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                    <i class="ri-medal-line text-lg" aria-hidden="true"></i>
+                                    <x-heroicon-o-trophy class="size-5" aria-hidden="true" />
                                 </span>
                                 <select id="year" name="year" required class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10">
                                     <option value="" disabled {{ old('year') ? '' : 'selected' }}>Select year</option>
@@ -355,12 +355,12 @@
                         <label for="password" class="block text-sm font-semibold text-slate-700">Password</label>
                         <div class="group auth-input-group relative">
                             <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                <i class="ri-lock-password-line text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-lock-closed class="size-5" aria-hidden="true" />
                             </span>
                             <input id="password" name="password" type="password" required autocomplete="new-password" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="Create a secure password" />
                             <button type="button" data-password-toggle="#password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-all duration-300 hover:text-[#16136a] hover:scale-110 active:scale-90" aria-label="Toggle password visibility">
-                                <i data-eye class="ri-eye-line text-lg" aria-hidden="true"></i>
-                                <i data-eye-off class="ri-eye-off-line hidden text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-eye data-eye class="size-5" aria-hidden="true" />
+                                <x-heroicon-o-eye-slash data-eye-off class="hidden size-5" aria-hidden="true" />
                             </button>
                         </div>
                     </div>
@@ -376,19 +376,19 @@
                         </div>
                         <div class="grid grid-cols-2 gap-x-4 gap-y-2">
                             <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="length" data-state="fail">
-                                <i class="ri-checkbox-circle-fill text-sm"></i>
+                                <x-heroicon-s-check-circle class="size-4" />
                                 <span>Min. 8 Chars</span>
                             </div>
                             <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="mixed" data-state="fail">
-                                <i class="ri-checkbox-circle-fill text-sm"></i>
+                                <x-heroicon-s-check-circle class="size-4" />
                                 <span>Case-sensitive</span>
                             </div>
                             <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="number" data-state="fail">
-                                <i class="ri-checkbox-circle-fill text-sm"></i>
+                                <x-heroicon-s-check-circle class="size-4" />
                                 <span>Numbers</span>
                             </div>
                             <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400 transition-all duration-300 data-[state=pass]:text-[#16136a] data-[state=pass]:scale-105" data-password-rule="symbol" data-state="fail">
-                                <i class="ri-checkbox-circle-fill text-sm"></i>
+                                <x-heroicon-s-check-circle class="size-4" />
                                 <span>Symbols</span>
                             </div>
                         </div>
@@ -398,12 +398,12 @@
                         <label for="password_confirmation" class="block text-sm font-semibold text-slate-700">Confirm password</label>
                         <div class="group auth-input-group relative">
                             <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                                <i class="ri-checkbox-circle-line text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-check-circle class="size-5" aria-hidden="true" />
                             </span>
                             <input id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="Confirm your password" />
                             <button type="button" data-password-toggle="#password_confirmation" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-all duration-300 hover:text-[#16136a] hover:scale-110 active:scale-90" aria-label="Toggle password visibility">
-                                <i data-eye class="ri-eye-line text-lg" aria-hidden="true"></i>
-                                <i data-eye-off class="ri-eye-off-line hidden text-lg" aria-hidden="true"></i>
+                                <x-heroicon-o-eye data-eye class="size-5" aria-hidden="true" />
+                                <x-heroicon-o-eye-slash data-eye-off class="hidden size-5" aria-hidden="true" />
                             </button>
                         </div>
                     </div>
@@ -424,12 +424,12 @@
 
             <div class="stagger-5 flex items-center justify-between pt-8 border-t border-slate-200/50">
                 <a href="{{ route('auth.register') }}" class="group flex items-center gap-2 text-sm font-semibold text-[#16136a] transition-all duration-300 hover:text-[#18188a] hover:-translate-x-1">
-                    <i class="ri-arrow-left-line transition-transform group-hover:-translate-x-1"></i>
+                    <x-heroicon-o-arrow-left class="transition-transform group-hover:-translate-x-1 size-5" />
                     <span>Back to regular registration</span>
                 </a>
                 <button type="submit" class="auth-button-press group relative flex items-center justify-center overflow-hidden rounded-2xl bg-[#16136a] px-8 py-4 text-sm font-semibold text-white shadow-xl shadow-[#16136a]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#18188a] hover:shadow-2xl hover:shadow-[#16136a]/30">
                     <div class="flex items-center space-x-3 transition-transform duration-300 group-hover:scale-105">
-                        <i class="ri-send-plane-line text-lg" aria-hidden="true"></i>
+                        <x-heroicon-o-paper-airplane class="size-5" aria-hidden="true" />
                         <span>Submit Registration</span>
                     </div>
                 </button>

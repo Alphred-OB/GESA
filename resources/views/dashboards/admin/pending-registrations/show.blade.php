@@ -7,7 +7,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-4">
                     <a href="{{ route('admin.pending-registrations.index') }}" class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm transition-all hover:bg-[#16136a] hover:text-white hover:shadow-lg hover:shadow-[#16136a]/20">
-                        <i class="ri-arrow-left-line text-xl"></i>
+                        <x-heroicon-o-arrow-left class="size-6" />
                     </a>
                     <div>
                         <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">Review Registration</h1>
@@ -22,12 +22,12 @@
                     </span>
                 @elseif($registration->status === 'approved')
                     <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-emerald-600 ring-1 ring-emerald-100">
-                        <i class="ri-checkbox-circle-fill"></i>
+                        <x-heroicon-s-check-circle class="size-5" />
                         Registration Approved
                     </span>
                 @else
                     <span class="inline-flex items-center gap-2 rounded-full bg-rose-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-rose-600 ring-1 ring-rose-100">
-                        <i class="ri-close-circle-fill"></i>
+                        <x-heroicon-s-x-circle class="size-5" />
                         Request Rejected
                     </span>
                 @endif
@@ -88,7 +88,7 @@
                             <div class="border-b border-slate-50 bg-slate-50/30 px-8 py-6 flex items-center justify-between">
                                 <h2 class="text-sm font-semibold uppercase tracking-widest text-[#16136a]">Identity Verification</h2>
                                 <a href="{{ route('admin.pending-registrations.document', $registration) }}" target="_blank" class="text-[10px] font-semibold uppercase tracking-widest text-[#16136a] hover:underline">
-                                    View Original <i class="ri-external-link-line ml-1"></i>
+                                    View Original <x-heroicon-o-arrow-top-right-on-square class="ml-1 size-5" />
                                 </a>
                             </div>
                             
@@ -113,7 +113,7 @@
                     @if($registration->status !== 'pending')
                         <section class="rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
                             <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#16136a] shadow-sm mb-4">
-                                <i class="ri-history-line text-2xl"></i>
+                                <x-heroicon-o-clock class="size-7" />
                             </div>
                             <h3 class="text-lg font-semibold text-slate-900 uppercase tracking-tight">Review Decision</h3>
                             <p class="mt-2 text-sm font-medium text-slate-500">This request was processed on {{ $registration->reviewed_at->format('F j, Y \a\t g:i A') }}</p>
@@ -133,7 +133,7 @@
                     <div class="rounded-[2.5rem] bg-[#16136a] p-8 text-white shadow-xl shadow-[#16136a]/20">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white">
-                                <i class="ri-time-line text-2xl"></i>
+                                <x-heroicon-o-clock class="size-7" />
                             </div>
                             <div>
                                 <p class="text-[10px] font-semibold uppercase tracking-widest text-white/50">Submission Date</p>
@@ -166,7 +166,7 @@
                                         :class="decision === 'approve' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-slate-50 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600'"
                                     >
                                         <span class="uppercase tracking-widest">Approve Account</span>
-                                        <i class="ri-checkbox-circle-fill text-xl"></i>
+                                        <x-heroicon-s-check-circle class="size-6" />
                                     </button>
 
                                     <div x-show="decision === 'approve'" x-collapse>
@@ -196,7 +196,7 @@
                                         :class="decision === 'reject' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30' : 'bg-slate-50 text-slate-400 hover:bg-rose-50 hover:text-rose-600'"
                                     >
                                         <span class="uppercase tracking-widest">Reject Request</span>
-                                        <i class="ri-close-circle-fill text-xl"></i>
+                                        <x-heroicon-s-x-circle class="size-6" />
                                     </button>
 
                                     <div x-show="decision === 'reject'" x-collapse>
@@ -224,15 +224,15 @@
                         <h3 class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-4">Review Checklist</h3>
                         <ul class="space-y-3">
                             <li class="flex items-start gap-3 text-xs font-semibold text-slate-600">
-                                <i class="ri-checkbox-circle-line text-emerald-500 mt-0.5"></i>
+                                <x-heroicon-o-check-circle class="text-emerald-500 mt-0.5 size-5" />
                                 <span>Verify index number against department lists.</span>
                             </li>
                             <li class="flex items-start gap-3 text-xs font-semibold text-slate-600">
-                                <i class="ri-checkbox-circle-line text-emerald-500 mt-0.5"></i>
+                                <x-heroicon-o-check-circle class="text-emerald-500 mt-0.5 size-5" />
                                 <span>Cross-check full name and ID photo.</span>
                             </li>
                             <li class="flex items-start gap-3 text-xs font-semibold text-slate-600">
-                                <i class="ri-checkbox-circle-line text-emerald-500 mt-0.5"></i>
+                                <x-heroicon-o-check-circle class="text-emerald-500 mt-0.5 size-5" />
                                 <span>Ensure program and level are accurate.</span>
                             </li>
                         </ul>

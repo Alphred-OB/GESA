@@ -8,7 +8,7 @@
             {{-- Header --}}
             <nav class="flex items-center gap-4">
                 <a href="{{ route('admin.suggestions.index') }}" class="flex h-12 items-center gap-3 rounded-2xl bg-slate-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">
-                    <i class="ri-arrow-left-line text-lg"></i>
+                    <x-heroicon-o-arrow-left class="size-5" />
                     Back to Inbox
                 </a>
             </nav>
@@ -16,7 +16,7 @@
             <header class="text-center lg:text-left flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                 <div>
                     <div class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#16136a] mb-4">
-                        <i class="ri-chat-voice-line text-sm"></i>
+                        <x-heroicon-o-chat-bubble-left class="size-4" />
                         Student Voice
                     </div>
                     <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $suggestion->subject }}</h1>
@@ -47,7 +47,7 @@
             @if (session('status'))
                 <div class="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-700 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <i class="ri-checkbox-circle-line text-xl"></i>
+                        <x-heroicon-o-check-circle class="size-6" />
                         <p>{{ session('status') }}</p>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
             <div class="grid gap-8">
                 {{-- Suggestion Message --}}
                 <section class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-2xl shadow-slate-200/40 lg:p-12 relative overflow-hidden">
-                    <i class="ri-double-quotes-l absolute top-8 left-8 text-6xl text-[#16136a]/5"></i>
+                    <x-heroicon-o-chat-bubble-left-right class="absolute top-8 left-8 text-6xl text-[#16136a]/5 size-5" />
                     <div class="relative z-10">
                         <h2 class="mb-8 text-sm font-semibold uppercase tracking-widest text-[#16136a]">Message Content</h2>
                         <div class="prose prose-slate max-w-none">
@@ -69,7 +69,7 @@
                             <div class="mt-12 flex items-center justify-between gap-6 rounded-3xl bg-slate-50 p-6 border border-slate-100">
                                 <div class="flex items-center gap-4">
                                     <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500 text-white shadow-lg shadow-blue-500/20">
-                                        <i class="ri-attachment-line text-xl"></i>
+                                        <x-heroicon-o-paper-clip class="size-6" />
                                     </div>
                                     <div>
                                         <p class="text-sm font-semibold text-[#16136a]">Supporting Document</p>
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                                 <a href="{{ \Illuminate\Support\Facades\Storage::url($suggestion->attachment_path) }}" target="_blank" class="flex h-12 items-center gap-2 rounded-2xl bg-white px-6 text-[10px] font-semibold uppercase tracking-widest text-[#16136a] shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5">
-                                    <i class="ri-download-cloud-line text-lg"></i>
+                                    <x-heroicon-o-cloud-arrow-down class="size-5" />
                                     View File
                                 </a>
                             </div>
@@ -102,11 +102,11 @@
                             </div>
                             <div class="flex flex-wrap gap-4 pt-2">
                                 <div class="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
-                                    <i class="ri-calendar-line text-sm"></i>
+                                    <x-heroicon-o-calendar class="size-4" />
                                     {{ $suggestion->created_at?->format('M j, Y') }}
                                 </div>
                                 <div class="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
-                                    <i class="ri-price-tag-3-line text-sm"></i>
+                                    <x-heroicon-o-tag class="size-4" />
                                     {{ $categories[$suggestion->category] ?? Str::headline($suggestion->category) }}
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                                 @endforeach
                             </select>
                             <button type="submit" class="flex h-14 items-center gap-3 rounded-2xl bg-[#16136a] px-8 text-xs font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
-                                <i class="ri-save-line text-lg"></i>
+                                <x-heroicon-o-arrow-down-on-square class="size-5" />
                                 Update
                             </button>
                         </form>
@@ -129,7 +129,7 @@
 
                     @if ($suggestion->handled_at)
                         <div class="flex items-center gap-3 rounded-2xl bg-emerald-50 px-5 py-4">
-                            <i class="ri-history-line text-emerald-600 text-lg"></i>
+                            <x-heroicon-o-clock class="text-emerald-600 size-5" />
                             <p class="text-[10px] font-semibold uppercase tracking-widest text-emerald-700">
                                 Last handled {{ $suggestion->handled_at->format('M j, Y · g:i A') }}
                             </p>

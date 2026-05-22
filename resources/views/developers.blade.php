@@ -84,7 +84,7 @@
                             </div>
                             <div class="mt-auto flex justify-center border-t border-[#0b3019]/10 pt-6">
                                 <a href="https://www.linkedin.com/in/kingsley-aduhene-778538224/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0b3019] to-[#114127] px-5 py-2 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:shadow-lg">
-                                    <i class="ri-linkedin-box-fill text-base" aria-hidden="true"></i>
+                                    <x-heroicon-s-star class="size-5" aria-hidden="true" />
                                     Connect on LinkedIn
                                 </a>
                             </div>
@@ -104,7 +104,7 @@
                             </div>
                             <div class="mt-auto flex justify-center border-t border-[#0b3019]/10 pt-6">
                                 <a href="https://www.linkedin.com/in/alfredboakye/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0b3019] to-[#114127] px-5 py-2 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:shadow-lg">
-                                    <i class="ri-linkedin-box-fill text-base" aria-hidden="true"></i>
+                                    <x-heroicon-s-star class="size-5" aria-hidden="true" />
                                     Connect on LinkedIn
                                 </a>
                             </div>
@@ -124,7 +124,7 @@
                             </div>
                             <div class="mt-auto flex justify-center border-t border-[#0b3019]/10 pt-6">
                                 <a href="https://www.linkedin.com/in/obed-acquah-017687301/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0b3019] to-[#114127] px-5 py-2 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:shadow-lg">
-                                    <i class="ri-linkedin-box-fill text-base" aria-hidden="true"></i>
+                                    <x-heroicon-s-star class="size-5" aria-hidden="true" />
                                     Connect on LinkedIn
                                 </a>
                             </div>

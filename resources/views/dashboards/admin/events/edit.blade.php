@@ -4,7 +4,7 @@
             {{-- Header --}}
             <header class="text-center">
                 <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#16136a]/5 text-[#16136a]">
-                    <i class="ri-edit-line text-3xl"></i>
+                    <x-heroicon-o-pencil class="size-8" />
                 </div>
                 <h1 class="text-3xl font-semibold tracking-tight text-[#16136a]">{{ $title }}</h1>
                 <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Update existing campus activity records</p>
@@ -13,7 +13,7 @@
             @if ($errors->any())
                 <div class="rounded-[2rem] border border-rose-100 bg-rose-50/50 p-6 text-sm font-semibold text-rose-700 shadow-sm">
                     <div class="flex items-start gap-3">
-                        <i class="ri-error-warning-line text-2xl"></i>
+                        <x-heroicon-o-exclamation-triangle class="size-7" />
                         <div>
                             <p class="text-xs uppercase tracking-widest">Validation Errors</p>
                             <ul class="mt-2 list-disc pl-5 text-[11px]">
@@ -56,14 +56,14 @@
                             
                             <div class="relative z-10 flex flex-col items-center transition-transform group-hover:scale-110" x-show="!preview">
                                 <div class="flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#16136a] shadow-xl">
-                                    <i class="ri-image-add-line text-2xl"></i>
+                                    <x-heroicon-o-photo class="size-7" />
                                 </div>
                                 <p class="mt-4 text-sm font-semibold text-slate-900">Upload New Banner</p>
                                 <p class="mt-1 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Optional · 16:9 Aspect ratio</p>
                             </div>
 
                             <div class="absolute bottom-6 right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#16136a] shadow-xl" x-show="preview">
-                                <i class="ri-refresh-line text-xl"></i>
+                                <x-heroicon-o-arrow-path class="size-6" />
                             </div>
                             <input id="banner_image" name="banner_image" type="file" class="hidden" @change="handleFileChange($event)" accept="image/*">
                         </label>
@@ -82,7 +82,7 @@
                         <div class="md:col-span-2 space-y-2">
                             <label for="title" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Event Title</label>
                             <div class="relative">
-                                <i class="ri-edit-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-pencil class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="title" name="title" type="text" value="{{ old('title', $event->title) }}" required class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="e.g. Annual Design Showcase">
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                         <div class="space-y-2">
                             <label for="category" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Category</label>
                             <div class="relative">
-                                <i class="ri-price-tag-3-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-tag class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="category" name="category" type="text" value="{{ old('category', $event->category) }}" class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="e.g. Academic, Social, Workshop">
                             </div>
                         </div>
@@ -98,20 +98,20 @@
                         <div class="space-y-2">
                             <label for="type" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Event Type</label>
                             <div class="relative">
-                                <i class="ri-global-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-10"></i>
+                                <x-heroicon-o-globe-alt class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-10 size-5" />
                                 <select x-model="eventType" id="type" name="type" required class="h-14 w-full appearance-none rounded-2xl border-none bg-slate-50 pl-12 pr-10 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                                     <option value="physical" {{ old('type', $event->type) === 'physical' ? 'selected' : '' }}>Physical (In-Person)</option>
                                     <option value="online" {{ old('type', $event->type) === 'online' ? 'selected' : '' }}>Online (Virtual)</option>
                                     <option value="hybrid" {{ old('type', $event->type) === 'hybrid' ? 'selected' : '' }}>Hybrid (Both)</option>
                                 </select>
-                                <i class="ri-arrow-down-s-line absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"></i>
+                                <x-heroicon-o-chevron-down class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 size-5" />
                             </div>
                         </div>
 
                         <div class="space-y-2">
                             <label for="start_at" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Starts At</label>
                             <div class="relative">
-                                <i class="ri-time-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-clock class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="start_at" name="start_at" type="datetime-local" value="{{ old('start_at', $event->start_at?->format('Y-m-d\TH:i')) }}" required class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                         <div class="space-y-2">
                             <label for="end_at" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Ends At</label>
                             <div class="relative">
-                                <i class="ri-timer-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-clock class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="end_at" name="end_at" type="datetime-local" value="{{ old('end_at', $event->end_at?->format('Y-m-d\TH:i')) }}" class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10">
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                         <div x-show="eventType === 'physical' || eventType === 'hybrid'" class="md:col-span-2 space-y-2">
                             <label for="location" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Venue / Location</label>
                             <div class="relative">
-                                <i class="ri-map-pin-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-map-pin class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="location" name="location" type="text" value="{{ old('location', $event->location) }}" class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="e.g. Great Hall, 2nd Floor">
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                         <div x-show="eventType === 'online' || eventType === 'hybrid'" class="space-y-2">
                             <label for="meeting_link" class="text-[10px] font-semibold uppercase tracking-widest text-emerald-500 ml-1">Meeting Link (Zoom, Meet, etc)</label>
                             <div class="relative">
-                                <i class="ri-video-chat-line absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500/70"></i>
+                                <x-heroicon-o-video-camera class="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500/70 size-5" />
                                 <input id="meeting_link" name="meeting_link" type="url" value="{{ old('meeting_link', $event->meeting_link) }}" class="h-14 w-full rounded-2xl border-none bg-emerald-50/50 pl-12 pr-4 text-sm font-semibold text-emerald-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="https://zoom.us/j/...">
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                         <div x-show="eventType === 'online' || eventType === 'hybrid'" class="space-y-2">
                             <label for="meeting_passcode" class="text-[10px] font-semibold uppercase tracking-widest text-emerald-500 ml-1">Meeting Passcode</label>
                             <div class="relative">
-                                <i class="ri-key-2-line absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500/70"></i>
+                                <x-heroicon-o-key class="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500/70 size-5" />
                                 <input id="meeting_passcode" name="meeting_passcode" type="text" value="{{ old('meeting_passcode', $event->meeting_passcode) }}" class="h-14 w-full rounded-2xl border-none bg-emerald-50/50 pl-12 pr-4 text-sm font-semibold text-emerald-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="Optional">
                             </div>
                         </div>
@@ -151,14 +151,14 @@
                         <div class="md:col-span-2 space-y-2">
                             <label for="cta_url" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Registration / External Link</label>
                             <div class="relative">
-                                <i class="ri-links-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-link class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="cta_url" name="cta_url" type="url" value="{{ old('cta_url', $event->cta_url) }}" class="h-14 w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="https:// (Optional)">
                             </div>
                         </div>
                         <div class="md:col-span-2 space-y-2">
                             <label for="description" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1">Event Brief</label>
                             <div class="relative">
-                                <i class="ri-text-snippet absolute left-4 top-6 text-slate-400"></i>
+                                <x-heroicon-o-document-text class="absolute left-4 top-6 text-slate-400 size-5" />
                                 <textarea id="description" name="description" rows="5" class="w-full rounded-2xl border-none bg-slate-50 pl-12 pr-4 py-4 text-sm font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/10" placeholder="What should students know about this event?">{{ old('description', $event->description) }}</textarea>
                             </div>
                         </div>
@@ -167,7 +167,7 @@
 
                 <div class="flex flex-col gap-4 pt-4 sm:flex-row">
                     <button type="submit" class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl bg-[#16136a] text-sm font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:opacity-90 active:scale-95">
-                        <i class="ri-save-line text-lg"></i>
+                        <x-heroicon-o-arrow-down-on-square class="size-5" />
                         Update Event
                     </button>
                     <a href="{{ route('admin.events.index') }}" class="flex h-14 items-center justify-center rounded-2xl bg-slate-50 px-8 text-sm font-semibold uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">

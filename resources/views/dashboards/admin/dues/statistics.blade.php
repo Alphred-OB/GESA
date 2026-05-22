@@ -28,7 +28,7 @@
                     <p class="mt-2 text-sm font-semibold text-slate-400 uppercase tracking-widest">Revenue Insights & Collection Trends</p>
                 </div>
                 <a href="{{ route('admin.dues.index') }}" class="group flex h-12 items-center gap-3 rounded-2xl bg-white px-6 text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:shadow-md">
-                    <i class="ri-arrow-left-line text-lg transition-transform group-hover:-translate-x-1"></i>
+                    <x-heroicon-o-arrow-left class="size-5 transition-transform group-hover:-translate-x-1" />
                     Back to Records
                 </a>
             </header>
@@ -71,7 +71,7 @@
                             Apply Analysis
                         </button>
                         <a href="{{ route('admin.dues.statistics') }}" class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 transition-all hover:bg-slate-100 hover:text-slate-600">
-                            <i class="ri-refresh-line text-xl"></i>
+                            <x-heroicon-o-arrow-path class="size-6" />
                         </a>
                     </div>
                 </form>
@@ -85,7 +85,7 @@
                         <p class="mt-4 text-4xl font-semibold text-emerald-400">GHS {{ number_format((float) data_get($stats, 'totals.paid_amount', 0), 2) }}</p>
                         <p class="mt-2 text-xs font-semibold text-white/40 italic">From {{ number_format(data_get($stats, 'totals.paid_count', 0)) }} verified transactions</p>
                     </div>
-                    <i class="ri-money-dollar-circle-line absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12"></i>
+                    <x-heroicon-o-currency-dollar class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 size-5" />
                 </div>
 
                 <div class="rounded-[2.5rem] border border-slate-200/60 bg-white p-8 shadow-xl shadow-slate-200/40">
@@ -154,7 +154,7 @@
                         @else
                             <p class="text-xl font-semibold italic text-white/40">Analysis pending...</p>
                         @endif
-                        <i class="ri-vip-crown-line absolute -right-2 -bottom-2 text-8xl text-white/10"></i>
+                        <x-heroicon-o-star class="absolute -right-2 -bottom-2 text-8xl text-white/10 size-5" />
                     </article>
                 </div>
             </div>

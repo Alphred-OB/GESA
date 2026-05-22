@@ -14,7 +14,7 @@
                     <div class="space-y-4 max-w-2xl">
                         <div class="flex flex-wrap items-center gap-3">
                             <div class="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 ring-1 ring-white/20 backdrop-blur-md">
-                                <i class="ri-graduation-cap-fill"></i> {{ $hero['chips'][0] ?? 'Geomatic Engineering' }}
+                                <x-heroicon-s-academic-cap class="size-5" /> {{ $hero['chips'][0] ?? 'Geomatic Engineering' }}
                             </div>
                         </div>
                         <div class="space-y-2">
@@ -32,7 +32,7 @@
                 <!-- Subtle background depth -->
                 <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
                 <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#16136a]/50 blur-3xl"></div>
-                <i class="ri-dashboard-3-line absolute -right-10 -bottom-10 text-[280px] text-white/[0.03] -rotate-12 select-none pointer-events-none"></i>
+                <x-heroicon-o-squares-2x2 class="absolute -right-10 -bottom-10 text-[280px] text-white/[0.03] -rotate-12 select-none pointer-events-none size-5" />
             </section>
 
             {{-- Bento Grid Primary Actions --}}
@@ -49,7 +49,7 @@
                                     'flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-500',
                                     'bg-slate-50 text-[#16136a] group-hover:bg-[#16136a] group-hover:text-white',
                                 ])>
-                                    <i class="{{ $action['icon'] ?? 'ri-circle-line' }} text-2xl"></i>
+                                    <x-heroicon-o-star class="{{ $action['icon'] ?? 'ri-circle-line' }} size-7" />
                                 </div>
                             </div>
 
@@ -67,7 +67,7 @@
                                 <div class="flex items-center justify-between">
                                     <a href="{{ $action['cta_url'] ?? '#' }}" class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-[#16136a] group-hover:gap-3 transition-all">
                                         <span>{{ $action['cta'] }}</span>
-                                        <i class="ri-arrow-right-line"></i>
+                                        <x-heroicon-o-arrow-right class="size-5" />
                                     </a>
                                     <div class="h-1 w-8 rounded-full bg-slate-100 transition-all duration-500 group-hover:w-12 group-hover:bg-[#16136a]"></div>
                                 </div>
@@ -91,7 +91,7 @@
                         <div class="flex items-center justify-between border-b border-[#16136a]/10 pb-4">
                             <div class="flex items-center gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-md shadow-[#16136a]/10">
-                                    <i class="ri-megaphone-fill"></i>
+                                    <x-heroicon-s-megaphone class="size-5" />
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-semibold tracking-tight text-slate-900">Departmental Updates</h2>
@@ -100,7 +100,7 @@
                             </div>
                             <a href="{{ route('student.announcements.index') }}" class="group inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-[10px] font-semibold uppercase tracking-widest text-[#16136a] shadow-sm ring-1 ring-slate-200 transition-all hover:bg-[#16136a] hover:text-white hover:ring-[#16136a]">
                                 <span>All Notices</span>
-                                <i class="ri-arrow-right-line"></i>
+                                <x-heroicon-o-arrow-right class="size-5" />
                             </a>
                         </div>
 
@@ -157,7 +157,7 @@
                             @empty
                                 <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 py-16 text-center">
                                     <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-white text-slate-300 shadow-sm ring-1 ring-slate-100">
-                                        <i class="ri-megaphone-line text-3xl"></i>
+                                        <x-heroicon-o-megaphone class="size-8" />
                                     </div>
                                     <p class="text-sm font-semibold text-slate-400">No new updates today.</p>
                                 </div>
@@ -170,7 +170,7 @@
                         <div class="flex items-center justify-between border-b border-[#16136a]/10 pb-4">
                             <div class="flex items-center gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-md shadow-[#16136a]/10">
-                                    <i class="ri-calendar-event-fill"></i>
+                                    <x-heroicon-s-calendar-days class="size-5" />
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-semibold tracking-tight text-slate-900">Events</h2>
@@ -179,7 +179,7 @@
                             </div>
                             <a href="{{ route('student.events.index') }}" class="group inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-[10px] font-semibold uppercase tracking-widest text-[#16136a] shadow-sm ring-1 ring-slate-200 transition-all hover:bg-[#16136a] hover:text-white hover:ring-[#16136a]">
                                 <span>All Events</span>
-                                <i class="ri-arrow-right-line"></i>
+                                <x-heroicon-o-arrow-right class="size-5" />
                             </a>
                         </div>
                         <div class="grid gap-4 sm:grid-cols-2">
@@ -192,7 +192,7 @@
                                     <div class="min-w-0 flex-1 space-y-0.5">
                                         <h4 class="truncate text-base font-semibold text-slate-900 group-hover:text-[#16136a] transition-colors">{{ $event['title'] }}</h4>
                                         <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
-                                            <i class="ri-map-pin-2-fill text-[#16136a]/40"></i>
+                                            <x-heroicon-s-map-pin class="text-[#16136a]/40 size-5" />
                                             <span class="truncate">{{ $event['location'] ?? 'Campus' }}</span>
                                         </div>
                                     </div>
@@ -210,7 +210,7 @@
                         <div class="flex items-center justify-between border-b border-[#16136a]/10 pb-4">
                             <div class="flex items-center gap-3">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#16136a] text-white shadow-md shadow-[#16136a]/10">
-                                    <i class="ri-pulse-fill"></i>
+                                    <x-heroicon-s-heart class="size-5" />
                                 </div>
                                 <div>
                                     <h2 class="text-lg font-semibold tracking-tight text-slate-900">Milestones</h2>
@@ -301,7 +301,7 @@
                                  class="space-y-6">
                                 <div class="flex items-center justify-between">
                                     <span class="rounded-xl bg-white/10 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-widest ring-1 ring-white/20" x-text="tip.category"></span>
-                                    <i class="ri-lightbulb-flash-fill text-xl text-amber-300"></i>
+                                    <x-heroicon-s-light-bulb class="size-6 text-amber-300" />
                                 </div>
                                 <div class="space-y-2">
                                     <h3 class="text-lg font-semibold leading-tight" x-text="tip.title"></h3>

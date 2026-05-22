@@ -6,11 +6,11 @@
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <div class="flex items-center gap-3">
                 <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $academicYear, 'description' => $description]) }}" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50">
-                    <i class="ri-arrow-left-line text-lg"></i>
+                    <x-heroicon-o-arrow-left class="size-5" />
                 </a>
                 <div>
                     <p class="inline-flex items-center gap-2 rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-purple-700">
-                        <i class="ri-price-tag-3-line text-base" aria-hidden="true"></i>
+                        <x-heroicon-o-tag class="size-5" aria-hidden="true" />
                         Edit Amounts
                     </p>
                     <h1 class="text-xl font-semibold text-[#16136a] mt-1">{{ $description }}</h1>
@@ -23,7 +23,7 @@
         @if (session('status'))
             <div class="rounded-2xl border border-green-200 bg-green-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-checkbox-circle-fill text-xl text-green-600"></i>
+                    <x-heroicon-s-check-circle class="size-6 text-green-600" />
                     <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@
         @if (session('error'))
             <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
                 <div class="flex items-center gap-3">
-                    <i class="ri-error-warning-fill text-xl text-red-600"></i>
+                    <x-heroicon-s-exclamation-triangle class="size-6 text-red-600" />
                     <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
         {{-- Info --}}
         <div class="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-            <i class="ri-information-line mr-1"></i>
+            <x-heroicon-o-information-circle class="mr-1 size-5" />
             <strong>Instructions:</strong> Enter the amounts for each class/year, then click the big <strong style="color: #7c3aed;">SAVE ALL CHANGES</strong> button at the bottom.
             <strong>ALL dues (including paid/pending)</strong> will be updated. Future students will also get these amounts.
         </div>
@@ -119,7 +119,7 @@
                 <button type="submit" 
                         onclick="return confirm('Save all amount changes?\n\nThis will update ALL dues (including paid and pending) with the amounts shown in the matrix.\n\nFuture students will also get these amounts.')"
                         class="inline-flex items-center gap-3 rounded-2xl bg-purple-600 px-10 py-4 text-lg font-semibold text-white shadow-xl shadow-purple-500/30 transition hover:bg-purple-700 hover:shadow-2xl hover:shadow-purple-500/40 active:scale-[0.98]">
-                    <i class="ri-save-3-fill text-2xl"></i>
+                    <x-heroicon-s-arrow-down-on-square class="size-7" />
                     SAVE ALL CHANGES
                 </button>
             </div>
@@ -138,11 +138,11 @@
         {{-- Back Buttons --}}
         <div class="flex justify-center gap-3">
             <a href="{{ route('admin.dues.maintenance.details', ['academic_year' => $academicYear, 'description' => $description]) }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                <i class="ri-arrow-left-line"></i>
+                <x-heroicon-o-arrow-left class="size-5" />
                 Back to Details
             </a>
             <a href="{{ route('admin.dues.maintenance.index') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
-                <i class="ri-dashboard-line"></i>
+                <x-heroicon-o-squares-2x2 class="size-5" />
                 Maintenance Home
             </a>
         </div>

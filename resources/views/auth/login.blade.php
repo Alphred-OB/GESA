@@ -19,7 +19,7 @@
                 <label for="identifier" class="block text-sm font-semibold text-slate-700">Email or Username</label>
                 <div class="group auth-input-group relative">
                     <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                        <i class="ri-user-smile-line text-lg" aria-hidden="true"></i>
+                        <x-heroicon-o-user class="size-5" aria-hidden="true" />
                     </span>
                     <input id="identifier" name="identifier" type="text" value="{{ old('identifier') }}" required autofocus autocomplete="username" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-4 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="Enter your email or username" />
                 </div>
@@ -35,12 +35,12 @@
                 </div>
                 <div class="group auth-input-group relative">
                     <span class="auth-input-icon absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 transition-all duration-300 group-focus-within:text-[#16136a]">
-                        <i class="ri-lock-2-line text-lg" aria-hidden="true"></i>
+                        <x-heroicon-o-lock-closed class="size-5" aria-hidden="true" />
                     </span>
                     <input id="password" name="password" type="password" required autocomplete="current-password" class="auth-input block w-full rounded-2xl border border-slate-200 bg-slate-50/10 py-3.5 pl-12 pr-12 text-sm text-slate-900 shadow-sm transition-all duration-300 focus:border-[#16136a] focus:bg-white/50 focus:outline-none focus:ring-4 focus:ring-[#16136a]/10" placeholder="••••••••" />
                     <button type="button" data-password-toggle="#password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-all duration-300 hover:text-[#16136a] hover:scale-110 active:scale-90" aria-label="Toggle password visibility">
-                        <i data-eye class="ri-eye-line text-lg" aria-hidden="true"></i>
-                        <i data-eye-off class="ri-eye-off-line hidden text-lg" aria-hidden="true"></i>
+                        <x-heroicon-o-eye data-eye class="size-5" aria-hidden="true" />
+                        <x-heroicon-o-eye-slash data-eye-off class="hidden size-5" aria-hidden="true" />
                     </button>
                 </div>
                 @error('password')
@@ -52,7 +52,7 @@
                 <label for="remember" class="group flex cursor-pointer items-center space-x-3 text-sm text-slate-600">
                     <div class="relative flex items-center transition-transform duration-300 group-hover:scale-110">
                         <input id="remember" name="remember" type="checkbox" value="1" class="peer h-5 w-5 cursor-pointer appearance-none rounded-lg border border-slate-300 bg-white/50 transition-all checked:border-[#16136a] checked:bg-[#16136a] focus:outline-none focus:ring-4 focus:ring-[#16136a]/10">
-                        <i class="ri-check-line pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-semibold text-white opacity-0 transition-opacity peer-checked:opacity-100"></i>
+                        <x-heroicon-o-check class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-3.5 font-semibold text-white opacity-0 transition-opacity peer-checked:opacity-100" />
                     </div>
                     <span class="font-medium transition-colors duration-300 group-hover:text-slate-900">Remember me</span>
                 </label>
@@ -62,7 +62,7 @@
                 <!-- Default State -->
                 <div class="flex items-center space-x-2 transition-all duration-300 group-[.is-loading]:translate-y-10 group-[.is-loading]:opacity-0" data-auth-submit-default>
                     <span>Sign in</span>
-                    <i class="ri-arrow-right-line transition-transform duration-300 group-hover:translate-x-1"></i>
+                    <x-heroicon-o-arrow-right class="transition-transform duration-300 group-hover:translate-x-1 size-5" />
                 </div>
 
                 <!-- Loading State -->

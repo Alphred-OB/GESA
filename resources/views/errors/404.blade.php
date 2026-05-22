@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 Page Not Found | GESA Portal</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes float {
@@ -65,7 +65,7 @@
                     href="{{ url('/') }}" 
                     class="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-[#16136a] px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/10"
                 >
-                    <i class="ri-home-4-line text-lg transition-transform duration-500"></i>
+                    <x-heroicon-o-home class="size-5 transition-transform duration-500" />
                     Back Home
                 </a>
 
@@ -73,7 +73,7 @@
                     onclick="window.history.back()" 
                     class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#16136a]/40 backdrop-blur-md border border-white/10 px-8 py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all hover:bg-[#16136a]/60 hover:scale-105 active:scale-95"
                 >
-                    <i class="ri-arrow-left-line text-lg"></i>
+                    <x-heroicon-o-arrow-left class="size-5" />
                     Go Back
                 </button>
             </div>

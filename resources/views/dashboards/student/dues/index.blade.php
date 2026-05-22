@@ -22,7 +22,7 @@
                                <h1 class="mt-1 text-3xl sm:text-4xl font-semibold tracking-tight leading-none">Financial Overview</h1>
                            </div>
                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-white shadow-inner backdrop-blur-md ring-1 ring-white/20">
-                               <i class="ri-wallet-3-line text-xl"></i>
+                               <x-heroicon-o-wallet class="size-6" />
                            </div>
                        </header>
                        
@@ -33,11 +33,11 @@
                            </p>
                            @if($outstanding > 0)
                                <div class="mt-4 inline-flex items-center gap-2 rounded-xl bg-rose-500/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-rose-200 ring-1 ring-rose-500/30 backdrop-blur-md">
-                                   <i class="ri-error-warning-line text-sm"></i> Action Required
+                                   <x-heroicon-o-exclamation-triangle class="size-4" /> Action Required
                                </div>
                            @else
                                <div class="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-500/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-emerald-200 ring-1 ring-emerald-500/30 backdrop-blur-md">
-                                   <i class="ri-checkbox-circle-line text-sm"></i> Account Settled
+                                   <x-heroicon-o-check-circle class="size-4" /> Account Settled
                                </div>
                            @endif
                        </div>
@@ -45,7 +45,7 @@
                    
                    <!-- Subtle background depth -->
                    <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
-                   <i class="ri-wallet-3-line absolute -right-10 -bottom-10 text-[280px] text-white/[0.03] -rotate-12 select-none pointer-events-none"></i>
+                   <x-heroicon-o-wallet class="absolute -right-10 -bottom-10 text-[280px] text-white/[0.03] -rotate-12 select-none pointer-events-none size-5" />
                 </div>
 
                 <!-- Secondary Stats Stack -->
@@ -58,7 +58,7 @@
                             </p>
                             <p class="mt-3 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Total payments to date</p>
                         </div>
-                        <i class="ri-check-double-line absolute -right-6 -bottom-6 text-8xl text-emerald-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100 rotate-12"></i>
+                        <x-heroicon-o-check-circle class="absolute -right-6 -bottom-6 text-8xl text-emerald-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100 rotate-12 size-5" />
                     </div>
 
                     <div class="flex-1 relative overflow-hidden rounded-xl border border-slate-100 bg-white p-8 shadow-xl shadow-[#16136a]/5 group">
@@ -67,7 +67,7 @@
                             <p class="mt-4 text-4xl sm:text-5xl font-semibold text-[#16136a] tabular-nums tracking-tighter">{{ $totalDues }}</p>
                             <p class="mt-3 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Invoices generated</p>
                         </div>
-                        <i class="ri-file-list-3-line absolute -right-6 -bottom-6 text-8xl text-slate-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100 rotate-12"></i>
+                        <x-heroicon-o-document-text class="absolute -right-6 -bottom-6 text-8xl text-slate-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100 rotate-12 size-5" />
                     </div>
                 </div>
             </section>
@@ -77,7 +77,7 @@
                 <div class="rounded-xl border border-amber-200/50 bg-gradient-to-r from-amber-50 to-white p-8 shadow-lg shadow-amber-100/50 animate-in fade-in zoom-in-95">
                     <div class="flex items-start gap-5">
                         <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600 shadow-inner">
-                            <i class="ri-lock-2-line text-2xl"></i>
+                            <x-heroicon-o-lock-closed class="size-7" />
                         </div>
                         <div>
                             <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-600 mb-2">Portal Access Restricted</p>
@@ -91,7 +91,7 @@
                 <div class="rounded-xl border border-emerald-200/50 bg-gradient-to-r from-emerald-50 to-white p-8 shadow-lg shadow-emerald-100/50">
                     <div class="flex items-center gap-4">
                         <div class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                            <i class="ri-checkbox-circle-fill text-xl"></i>
+                            <x-heroicon-s-check-circle class="size-6" />
                         </div>
                         <p class="text-sm font-semibold text-emerald-900">{{ session('status') }}</p>
                     </div>
@@ -106,7 +106,7 @@
                     <section class="rounded-xl border border-slate-100 bg-white p-4 sm:p-6 shadow-xl shadow-[#16136a]/5 flex flex-col md:flex-row items-center justify-between gap-6">
                         <form method="GET" class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto flex-1">
                             <div class="relative w-full md:w-80">
-                                <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <x-heroicon-o-magnifying-glass class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                                 <input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" 
                                     class="h-12 w-full rounded-xl border border-slate-100 bg-slate-50/50 pl-12 pr-4 text-xs font-semibold text-slate-900 outline-none ring-2 ring-transparent transition-all focus:bg-white focus:ring-[#16136a]/20 focus:border-[#16136a]/30" 
                                     placeholder="Search invoice or reference...">
@@ -119,7 +119,7 @@
                                         <option value="{{ $val }}" @selected(($filters['status'] ?? '') === (string)$val)>{{ $lbl }}</option>
                                     @endforeach
                                 </select>
-                                <i class="ri-arrow-down-s-line absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"></i>
+                                <x-heroicon-o-chevron-down class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 size-5" />
                             </div>
 
                             <button type="submit" class="flex h-12 w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-[#16136a] px-8 text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 active:scale-95">
@@ -178,13 +178,13 @@
                                             
                                             <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
                                                 <div class="flex items-center gap-2">
-                                                    <i class="ri-hashtag text-slate-400"></i>
+                                                    <x-heroicon-o-hashtag class="text-slate-400 size-5" />
                                                     <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Ref:</span>
                                                     <span class="text-xs font-semibold text-slate-700">{{ $due->payment_reference ?? $due->reference_number ?? '—' }}</span>
                                                 </div>
                                                 @if($due->due_date)
                                                     <div class="flex items-center gap-2">
-                                                        <i class="ri-calendar-line text-slate-400"></i>
+                                                        <x-heroicon-o-calendar class="text-slate-400 size-5" />
                                                         <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Due:</span>
                                                         <span class="text-xs font-semibold text-slate-700">{{ $due->due_date->format('M j, Y') }}</span>
                                                     </div>
@@ -205,25 +205,25 @@
                                                 @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
                                                     <a href="{{ route('student.payments.manual.show', $due) }}" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#16136a] px-8 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 hover:bg-[#18188a]">
                                                         <span>Settle Now</span>
-                                                        <i class="ri-arrow-right-line text-base"></i>
+                                                        <x-heroicon-o-arrow-right class="size-5" />
                                                     </a>
                                                 @else
                                                     <form method="POST" action="{{ route('student.payments.rushpay.initialize', $due) }}" class="w-full sm:w-auto">
                                                         @csrf
                                                         <button type="submit" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#16136a] px-8 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5 hover:bg-[#18188a]">
                                                             <span>Pay Online (RushPay)</span>
-                                                            <i class="ri-secure-payment-line text-base"></i>
+                                                            <x-heroicon-o-shield-check class="size-5" />
                                                         </button>
                                                     </form>
                                                 @endif
                                             @elseif($due->payment_status === 'paid')
                                                 <a href="{{ route('student.payments.paystack.receipt', $due) }}" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-50 border border-emerald-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-emerald-700 transition-all hover:bg-emerald-100">
-                                                    <i class="ri-file-download-line text-base"></i>
+                                                    <x-heroicon-o-document-arrow-down class="size-5" />
                                                     <span>View Receipt</span>
                                                 </a>
                                             @else
                                                 <div class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-amber-700 italic">
-                                                    <i class="ri-loader-4-line animate-spin text-base"></i>
+                                                    <x-heroicon-o-arrow-path class="animate-spin size-5" />
                                                     <span>Verifying Payment</span>
                                                 </div>
                                             @endif
@@ -234,7 +234,7 @@
                                 @if ($due->payment_status === 'owing' && $due->rejection_reason)
                                     <div class="mt-8 rounded-xl border border-rose-100 bg-rose-50/80 p-5 text-sm font-semibold text-rose-900 shadow-inner">
                                         <div class="flex items-start gap-3">
-                                            <i class="ri-error-warning-line text-xl text-rose-600"></i>
+                                            <x-heroicon-o-exclamation-triangle class="size-6 text-rose-600" />
                                             <div>
                                                 <p class="uppercase tracking-widest text-rose-600 mb-1 text-[10px] font-semibold">Previous Payment Rejected</p>
                                                 <p class="leading-relaxed">{{ $due->rejection_reason }}</p>
@@ -246,7 +246,7 @@
                         @empty
                             <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-20 text-center">
                                 <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-xl bg-white text-slate-300 shadow-sm ring-1 ring-slate-100">
-                                    <i class="ri-bank-card-line text-5xl"></i>
+                                    <x-heroicon-o-credit-card class="text-5xl size-5" />
                                 </div>
                                 <h3 class="mt-8 text-2xl font-semibold tracking-tight text-slate-900">No Invoices Found</h3>
                                 <p class="mt-3 text-sm font-semibold text-slate-500">Your billing history is currently clear.</p>

@@ -4,9 +4,9 @@
             {{-- God-Tier Header / Breadcrumb --}}
             <nav class="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">
                 <a href="{{ route('student.dashboard') }}" class="transition hover:text-[#16136a]">Core</a>
-                <i class="ri-arrow-right-s-line text-xs"></i>
+                <x-heroicon-o-chevron-right class="size-3.5" />
                 <a href="{{ route('student.announcements.index') }}" class="transition hover:text-[#16136a]">Pulse</a>
-                <i class="ri-arrow-right-s-line text-xs"></i>
+                <x-heroicon-o-chevron-right class="size-3.5" />
                 <span class="text-[#16136a] truncate max-w-[200px]">{{ $announcement->title }}</span>
             </nav>
 
@@ -74,7 +74,7 @@
                 <aside class="space-y-10">
                     {{-- Quick Action Card --}}
                     <article class="rounded-xl bg-[#16136a] p-8 text-white shadow-2xl shadow-[#16136a]/30">
-                        <i class="ri-information-line text-4xl opacity-30"></i>
+                        <x-heroicon-o-information-circle class="text-4xl opacity-30 size-5" />
                         <h3 class="mt-6 text-xl font-semibold italic tracking-tight">Need Clarity?</h3>
                         <p class="mt-4 text-xs font-semibold text-white/60 leading-relaxed uppercase tracking-wider">
                             If you require more details regarding this notice, please contact the department office or your class representative.
@@ -82,7 +82,7 @@
                         <div class="mt-8 pt-8 border-t border-white/10">
                             <a href="mailto:gesaumat24@gmail.com" class="flex items-center justify-between group">
                                 <span class="text-[10px] font-semibold uppercase tracking-[0.3em] opacity-60 group-hover:opacity-100 transition-opacity">Contact Admin</span>
-                                <i class="ri-mail-send-line text-xl transition-transform group-hover:translate-x-1"></i>
+                                <x-heroicon-o-paper-airplane class="size-6 transition-transform group-hover:translate-x-1" />
                             </a>
                         </div>
                     </article>
@@ -102,7 +102,7 @@
                                             <h4 class="text-sm font-semibold text-slate-900 group-hover:text-[#16136a] transition-colors line-clamp-2 leading-snug">{{ $item->title }}</h4>
                                             <div class="flex items-center gap-1 text-[9px] font-semibold text-[#16136a] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <span>Read Entry</span>
-                                                <i class="ri-arrow-right-line"></i>
+                                                <x-heroicon-o-arrow-right class="size-5" />
                                             </div>
                                         </div>
                                     </a>

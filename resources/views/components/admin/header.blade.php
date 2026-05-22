@@ -25,13 +25,13 @@
         <div class="flex items-center gap-4">
             <!-- Mobile Menu Toggle -->
             <button type="button" x-data="{}" x-on:click="$dispatch('admin-sidebar:open')" class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white p-2 text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-[#16136a] lg:hidden" aria-label="Open navigation">
-                <i class="ri-menu-2-line text-lg"></i>
+                <x-heroicon-o-bars-3 class="size-5" />
             </button>
 
             <!-- Breadcrumb / Context Placeholder -->
             <div class="hidden lg:flex lg:items-center lg:gap-2">
                 <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Dashboard</span>
-                <i class="ri-arrow-right-s-line text-slate-300"></i>
+                <x-heroicon-o-chevron-right class="text-slate-300 size-5" />
                 <span class="text-xs font-semibold uppercase tracking-widest text-[#16136a]">Overview</span>
             </div>
         </div>
@@ -40,7 +40,7 @@
             <!-- Action Icons (Optional) -->
             <div class="hidden items-center gap-2 pr-4 border-r border-slate-200/50 md:flex">
                 <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600">
-                    <i class="ri-notification-3-line text-xl"></i>
+                    <x-heroicon-o-bell class="size-6" />
                 </button>
             </div>
 
@@ -56,7 +56,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-[13px] tracking-tight group-hover:text-[#16136a]">{{ $firstName }}</span>
-                        <i class="ri-arrow-down-s-line text-slate-400 transition group-hover:text-[#16136a]"></i>
+                        <x-heroicon-o-chevron-down class="text-slate-400 transition group-hover:text-[#16136a] size-5" />
                     </div>
                 </button>
 
@@ -78,7 +78,7 @@
                     <div class="space-y-0.5">
                         @if ($profileRoute)
                             <a href="{{ $profileRoute }}" class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-[#16136a]/5 hover:text-[#16136a]">
-                                <i class="ri-user-settings-line text-lg opacity-60"></i>
+                                <x-heroicon-o-cog-6-tooth class="size-5 opacity-60" />
                                 <span>Settings</span>
                             </a>
                         @endif
@@ -86,7 +86,7 @@
                         <form method="POST" action="{{ route('auth.logout') }}">
                             @csrf
                             <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-red-500 transition hover:bg-red-50">
-                                <i class="ri-logout-box-r-line text-lg opacity-80"></i>
+                                <x-heroicon-o-arrow-right-on-rectangle class="size-5 opacity-80" />
                                 <span>Log out</span>
                             </button>
                         </form>

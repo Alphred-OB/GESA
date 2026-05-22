@@ -4,7 +4,7 @@
     <div class="mx-auto w-full max-w-5xl space-y-10 px-5 py-10 sm:px-6 lg:px-8">
         <header class="space-y-3 rounded-3xl border border-[#16136a]/15 bg-white p-6 shadow-lg shadow-[#16136a]/10">
             <p class="inline-flex items-center gap-2 rounded-full bg-[#16136a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#16136a]">
-                <i class="ri-money-dollar-circle-line text-base" aria-hidden="true"></i>
+                <x-heroicon-o-currency-dollar class="size-5" aria-hidden="true" />
                 Issue new due
             </p>
             <h1 class="text-3xl font-semibold text-[#16136a]">Configure dues for the academic year</h1>
@@ -67,7 +67,7 @@
                                 <option value="student" @selected(old('target_group', 'student') === 'student')>Students Only</option>
                                 <option value="admin" @selected(old('target_group') === 'admin')>Admins Only</option>
                             </select>
-                            <i class="ri-group-line absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <x-heroicon-o-users class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5" />
                         </div>
                         @error('target_group')
                             <span class="text-xs text-rose-600">{{ $message }}</span>
@@ -78,7 +78,7 @@
                         <div class="flex gap-2">
                             <input type="number" step="0.01" min="0" name="base_amount" x-model="baseAmount" placeholder="0.00" class="h-11 flex-1 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus:border-[#16136a] focus:outline-none focus:ring-2 focus:ring-[#16136a]/30">
                             <button type="button" @click="applyToAll()" class="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[#16136a]/20 bg-[#16136a]/5 px-4 text-xs font-semibold text-[#16136a] transition hover:bg-[#16136a] hover:text-white" title="Apply this amount to all classes below">
-                                <i class="ri-refresh-line"></i>
+                                <x-heroicon-o-arrow-path class="size-5" />
                                 <span class="hidden sm:inline">Apply to all</span>
                             </button>
                         </div>
@@ -141,7 +141,7 @@
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <a href="{{ route('admin.dues.index') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">Cancel</a>
                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-8 py-2.5 text-sm font-semibold uppercase tracking-widest text-white shadow-lg shadow-[#16136a]/20 transition hover:-translate-y-0.5 hover:bg-[#16136a]/90 active:translate-y-0">
-                        <i class="ri-send-plane-line text-base"></i>
+                        <x-heroicon-o-paper-airplane class="size-5" />
                         Issue due
                     </button>
                 </div>

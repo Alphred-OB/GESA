@@ -82,7 +82,3 @@
     }
 }
 
-/* Force remix icons to render with normal weight to prevent them from looking bold when inheriting from parents */
-[class^="ri-"], [class*=" ri-"] {
-    font-weight: normal !important;
-}
