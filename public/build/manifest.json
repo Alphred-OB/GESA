@@ -1,0 +1,44 @@
+{
+  "node_modules/cropperjs/dist/cropper.css": {
+    "file": "assets/cropper-CMr-B4M_.css",
+    "src": "node_modules/cropperjs/dist/cropper.css"
+  },
+  "node_modules/cropperjs/dist/cropper.esm.js": {
+    "file": "assets/cropper.esm-DCOG1SZY.js",
+    "name": "cropper.esm",
+    "src": "node_modules/cropperjs/dist/cropper.esm.js",
+    "isDynamicEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-DfIGO_JH.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Da08_Abk.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/modules/adminCourseRegistrationBulk.js",
+      "resources/js/modules/adminSuggestionBulk.js",
+      "node_modules/cropperjs/dist/cropper.esm.js"
+    ]
+  },
+  "resources/js/modules/adminCourseRegistrationBulk.js": {
+    "file": "assets/adminCourseRegistrationBulk-CW1DydlZ.js",
+    "name": "adminCourseRegistrationBulk",
+    "src": "resources/js/modules/adminCourseRegistrationBulk.js",
+    "isDynamicEntry": true
+  },
+  "resources/js/modules/adminSuggestionBulk.js": {
+    "file": "assets/adminSuggestionBulk-D3w9B68Y.js",
+    "name": "adminSuggestionBulk",
+    "src": "resources/js/modules/adminSuggestionBulk.js",
+    "isDynamicEntry": true
+  }
+}
