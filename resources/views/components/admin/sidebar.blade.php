@@ -42,6 +42,12 @@
                 'icon' => 'ri-money-dollar-circle-line',
                 'is_dues' => true,
             ],
+            [
+                'label' => 'Payment settings',
+                'route_name' => 'admin.payment-settings.index',
+                'pattern' => ['admin.payment-settings.index'],
+                'icon' => 'ri-bank-card-line',
+            ],
         ],
         'Academics' => [
             [
