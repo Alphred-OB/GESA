@@ -154,14 +154,13 @@
                                     <div class="flex items-center gap-2">
                                         @if($due->payment_status === 'owing')
                                             @if(\App\Models\PaymentSetting::getValue('manual_payment_enabled', '0') === '1')
-                                                <a href="{{ route('admin.personal-dues.manual.show', $due) }}" class="flex h-12 items-center gap-2 rounded-2xl bg-slate-100 px-4 text-[10px] font-semibold uppercase tracking-widest text-slate-700 transition-all hover:-translate-y-0.5">
+                                                <a href="{{ route('admin.personal-dues.manual.show', $due) }}" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-slate-100 px-4 text-[10px] font-semibold uppercase tracking-widest text-slate-700 transition-all hover:-translate-y-0.5">
                                                     <x-heroicon-o-currency-dollar class="size-4" /> Manual
                                                 </a>
-                                            @endif
-                                            @if(\App\Models\PaymentSetting::getValue('rushpay_enabled', '0') === '1')
-                                                <form method="POST" action="{{ route('admin.personal-dues.rushpay.initialize', $due) }}" class="inline-block">
+                                            @else
+                                                <form method="POST" action="{{ route('admin.personal-dues.rushpay.initialize', $due) }}" class="inline-block w-full sm:w-auto">
                                                     @csrf
-                                                    <button type="submit" class="flex h-12 items-center gap-2 rounded-2xl bg-[#16136a] px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5">
+                                                    <button type="submit" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5">
                                                         <x-heroicon-o-shield-check class="size-4" /> RushPay
                                                     </button>
                                                 </form>
