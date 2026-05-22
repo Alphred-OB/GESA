@@ -38,7 +38,7 @@
                 @csrf
                 @method('PUT')
 
-                <section class="rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10 sm:p-8">
+                <section x-data="{ manualEnabled: '{{ $settings['manual_payment_enabled'] }}' }" class="rounded-3xl border border-[#16136a]/10 bg-white p-6 shadow-lg shadow-[#16136a]/10 sm:p-8">
                     <div class="space-y-8">
                         <div>
                             <h2 class="text-lg font-semibold text-[#16136a]">General Settings</h2>
@@ -47,18 +47,18 @@
 
                         <div class="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
                             <div class="space-y-1">
-                                <label for="manual_payment_enabled" class="font-semibold text-slate-700">Enable Manual Payment</label>
-                                <p class="text-xs text-slate-500">Allow students to upload proof of payment for manual verification.</p>
+                                <label for="manual_payment_enabled" class="font-semibold text-slate-700">Active Payment Method</label>
+                                <p class="text-xs text-slate-500">Choose how students should pay their dues (Manual vs Processor).</p>
                             </div>
-                            <div class="relative inline-block w-32 align-middle select-none transition duration-200 ease-in">
-                                <select name="manual_payment_enabled" id="manual_payment_enabled" class="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a]">
-                                    <option value="0" {{ $settings['manual_payment_enabled'] == '0' ? 'selected' : '' }}>Disabled</option>
-                                    <option value="1" {{ $settings['manual_payment_enabled'] == '1' ? 'selected' : '' }}>Enabled</option>
+                            <div class="relative inline-block w-48 align-middle select-none transition duration-200 ease-in">
+                                <select name="manual_payment_enabled" id="manual_payment_enabled" x-model="manualEnabled" class="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 shadow-sm focus:border-[#16136a] focus:ring-[#16136a]">
+                                    <option value="1">Manual Payment</option>
+                                    <option value="0">Payment Processor</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="space-y-6 pt-4 border-t border-slate-100">
+                        <div x-show="manualEnabled === '1'" class="space-y-6 pt-4 border-t border-slate-100">
                             <div>
                                 <h2 class="text-lg font-semibold text-[#16136a]">Merchant Account Details</h2>
                                 <p class="text-sm text-slate-500">Enter the unified Mobile Money merchant details where students should send payments.</p>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <div class="space-y-6 pt-4 border-t border-slate-100">
+                        <div x-show="manualEnabled === '1'" class="space-y-6 pt-4 border-t border-slate-100">
                             <div>
                                 <h2 class="text-lg font-semibold text-[#16136a]">Payment Instructions</h2>
                                 <p class="text-sm text-slate-500">Provide step-by-step instructions for each network. Students will select their network to see the relevant steps.</p>
