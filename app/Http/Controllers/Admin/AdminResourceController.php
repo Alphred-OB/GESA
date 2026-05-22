@@ -22,16 +22,33 @@ class AdminResourceController extends Controller
             $perPage = 10;
         }
 
+        $search = $request->input('search');
+        $contentType = $request->input('content_type');
+        $year = $request->input('year');
+        $targetClass = $request->input('class');
+
         $resources = SupportResource::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when($contentType, fn ($query) => $query->where('content_type', $contentType))
+            ->when($year, fn ($query) => $query->whereJsonContains('target_years', $year))
+            ->when($targetClass, fn ($query) => $query->whereJsonContains('target_classes', $targetClass))
             ->ordered()
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
+            ->withQueryString();
 
         return view('dashboards.admin.resources.index', [
             'title' => 'Academic resources',
             'resources' => $resources,
             'perPageOptions' => $perPageOptions,
             'currentPerPage' => $perPage,
+            'contentTypes' => SupportResource::CONTENT_TYPES,
+            'classOptions' => SupportResource::CLASSES,
+            'yearOptions' => SupportResource::YEARS,
         ]);
     }
 

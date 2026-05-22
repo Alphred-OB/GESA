@@ -64,28 +64,176 @@
             @endif
 
             {{-- Resource List --}}
-            <section class="space-y-6">
-                <div class="flex items-center justify-between px-4">
-                    <h2 class="text-sm font-semibold uppercase tracking-widest text-[#16136a]">Resource Library</h2>
-                    <form method="GET" class="flex items-center gap-3">
-                        <label class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Display</label>
-                        <select name="per_page" onchange="this.form.submit()" class="h-10 rounded-xl border-none bg-slate-100 px-3 text-xs font-semibold text-slate-600 outline-none focus:ring-2 focus:ring-[#16136a]/10">
-                            @foreach ($perPageOptions as $option)
-                                <option value="{{ $option }}" @if($option === $currentPerPage) selected @endif>{{ $option }} Rows</option>
+            <section class="space-y-6" x-data="{ viewMode: localStorage.getItem('resourceViewMode') || 'table' }" x-init="$watch('viewMode', val => localStorage.setItem('resourceViewMode', val))">
+                <form method="GET" class="flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm border border-slate-200/60 lg:flex-row lg:items-center lg:justify-between">
+                    {{-- Search & Filters --}}
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <div class="relative">
+                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search resources..." class="h-10 w-full min-w-[200px] rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm outline-none focus:border-[#16136a] focus:ring-1 focus:ring-[#16136a]">
+                        </div>
+                        <select name="content_type" onchange="this.form.submit()" class="h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:border-[#16136a] focus:ring-1 focus:ring-[#16136a]">
+                            <option value="">All Types</option>
+                            @foreach ($contentTypes as $type)
+                                <option value="{{ $type }}" @selected(request('content_type') === $type)>{{ Str::headline($type) }}</option>
                             @endforeach
                         </select>
-                    </form>
-                </div>
+                        <select name="year" onchange="this.form.submit()" class="h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:border-[#16136a] focus:ring-1 focus:ring-[#16136a]">
+                            <option value="">All Years</option>
+                            @foreach ($yearOptions as $year)
+                                <option value="{{ $year }}" @selected(request('year') == $year)>Year {{ $year }}</option>
+                            @endforeach
+                        </select>
+                        <select name="class" onchange="this.form.submit()" class="h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:border-[#16136a] focus:ring-1 focus:ring-[#16136a]">
+                            <option value="">All Classes</option>
+                            @foreach ($classOptions as $cls)
+                                <option value="{{ $cls }}" @selected(request('class') == $cls)>{{ $cls }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="hidden"></button>
+                    </div>
 
-                <div class="grid gap-6 md:grid-cols-2">
-                    @forelse ($resources as $resource)
-                        <article class="group relative overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/60">
-                            <div class="relative z-10 flex flex-col h-full">
-                                <header class="flex items-start justify-between gap-4">
+                    {{-- View Toggle & Display --}}
+                    <div class="flex items-center gap-3">
+                        <div class="flex rounded-xl bg-slate-100 p-1">
+                            <button type="button" @click="viewMode = 'table'" :class="{ 'bg-white shadow-sm text-[#16136a]': viewMode === 'table', 'text-slate-500 hover:text-slate-700': viewMode !== 'table' }" class="flex h-8 w-10 items-center justify-center rounded-lg transition-all">
+                                <i class="ri-list-check"></i>
+                            </button>
+                            <button type="button" @click="viewMode = 'grid'" :class="{ 'bg-white shadow-sm text-[#16136a]': viewMode === 'grid', 'text-slate-500 hover:text-slate-700': viewMode !== 'grid' }" class="flex h-8 w-10 items-center justify-center rounded-lg transition-all">
+                                <i class="ri-grid-fill"></i>
+                            </button>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200"></div>
+                        <select name="per_page" onchange="this.form.submit()" class="h-10 rounded-xl border-none bg-slate-100 px-3 text-xs font-semibold text-slate-600 outline-none focus:ring-2 focus:ring-[#16136a]/10">
+                            @foreach ($perPageOptions as $option)
+                                <option value="{{ $option }}" @selected($option === $currentPerPage)>{{ $option }} Rows</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
+
+                <div x-cloak>
+                    {{-- Table View --}}
+                    <div x-show="viewMode === 'table'" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-slate-600">
+                                <thead class="bg-slate-50 text-[10px] uppercase tracking-widest text-slate-400">
+                                    <tr>
+                                        <th class="px-6 py-4 font-semibold">Resource</th>
+                                        <th class="px-6 py-4 font-semibold">Type</th>
+                                        <th class="px-6 py-4 font-semibold">Audience</th>
+                                        <th class="px-6 py-4 font-semibold">Status</th>
+                                        <th class="px-6 py-4 text-right font-semibold">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    @forelse ($resources as $resource)
+                                        <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="px-6 py-4">
+                                                <div class="flex items-center gap-3">
+                                                    <div @class([
+                                                        'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-semibold',
+                                                        'bg-[#16136a]/10 text-[#16136a]' => $resource->resource_type === 'file',
+                                                        'bg-blue-50 text-blue-600' => $resource->resource_type !== 'file',
+                                                    ])>
+                                                        @php
+                                                            $icon = match($resource->content_type) {
+                                                                'video' => 'ri-play-circle-line',
+                                                                'lecture_slide' => 'ri-presentation-line',
+                                                                'past_question' => 'ri-question-answer-line',
+                                                                'handout' => 'ri-book-open-line',
+                                                                'guide' => 'ri-compass-3-line',
+                                                                'policy' => 'ri-scales-3-line',
+                                                                default => $resource->resource_type === 'file' ? 'ri-file-3-line' : 'ri-links-line'
+                                                            };
+                                                        @endphp
+                                                        <i class="{{ $icon }} text-lg"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="font-semibold text-slate-900">{{ $resource->title }}</p>
+                                                        <p class="text-xs text-slate-400 line-clamp-1 max-w-xs">{{ $resource->description }}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <span class="inline-flex rounded-lg bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                                                    {{ Str::headline($resource->content_type) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                @php
+                                                    $classes = (array) ($resource->target_classes ?? []);
+                                                    $years = (array) ($resource->target_years ?? []);
+                                                @endphp
+                                                @if (empty($classes) && empty($years))
+                                                    <span class="text-xs font-semibold text-emerald-600">Global</span>
+                                                @else
+                                                    <div class="flex flex-wrap gap-1">
+                                                        @foreach ($classes as $classItem)
+                                                            <span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">{{ $classItem }}</span>
+                                                        @endforeach
+                                                        @foreach ($years as $yearItem)
+                                                            <span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">Yr {{ $yearItem }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                @if($resource->visibility === 'student')
+                                                    <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-emerald-600">
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Live
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Draft
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4 text-right">
+                                                <div class="flex items-center justify-end gap-2">
+                                                    @if($resource->resource_type === 'file' && $resource->file_path)
+                                                        <a href="{{ $resource->download_url }}" target="_blank" class="p-2 text-slate-400 hover:text-[#16136a] transition-colors" title="Download">
+                                                            <i class="ri-download-cloud-2-line"></i>
+                                                        </a>
+                                                    @elseif($resource->cta_url)
+                                                        <a href="{{ $resource->cta_url }}" target="_blank" class="p-2 text-slate-400 hover:text-blue-600 transition-colors" title="External Link">
+                                                            <i class="ri-external-link-line"></i>
+                                                        </a>
+                                                    @endif
+                                                    <a href="{{ route('admin.resources.edit', $resource) }}" class="p-2 text-slate-400 hover:text-amber-500 transition-colors" title="Edit">
+                                                        <i class="ri-edit-line"></i>
+                                                    </a>
+                                                    <form method="POST" action="{{ route('admin.resources.destroy', $resource) }}" onsubmit="return confirm('Delete this resource permanentely?');" class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="p-2 text-slate-400 hover:text-rose-500 transition-colors" title="Delete">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-12 text-center text-slate-400">
+                                                No resources found matching your criteria.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{-- Grid View --}}
+                    <div x-show="viewMode === 'grid'" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        @forelse ($resources as $resource)
+                            <div class="group flex flex-col rounded-2xl border border-slate-200/60 bg-white p-5 transition-all hover:border-slate-300 hover:shadow-md">
+                                <div class="flex items-start justify-between gap-3">
                                     <div @class([
-                                        'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl font-semibold transition-transform group-hover:scale-110 shadow-lg',
-                                        'bg-[#16136a] text-white shadow-[#16136a]/20' => $resource->resource_type === 'file',
-                                        'bg-blue-500 text-white shadow-blue-500/20' => $resource->resource_type !== 'file',
+                                        'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl font-semibold',
+                                        'bg-[#16136a]/5 text-[#16136a]' => $resource->resource_type === 'file',
+                                        'bg-blue-50 text-blue-600' => $resource->resource_type !== 'file',
                                     ])>
                                         @php
                                             $icon = match($resource->content_type) {
@@ -98,99 +246,70 @@
                                                 default => $resource->resource_type === 'file' ? 'ri-file-3-line' : 'ri-links-line'
                                             };
                                         @endphp
-                                        <i class="{{ $icon }} text-2xl"></i>
+                                        <i class="{{ $icon }} text-xl"></i>
                                     </div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                                            {{ Str::headline($resource->content_type) }}
-                                        </span>
-                                        @if($resource->visibility === 'student')
-                                            <span class="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-emerald-600">
-                                                Live
-                                            </span>
-                                        @else
-                                            <span class="inline-flex items-center gap-1 rounded-lg bg-rose-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-rose-500">
-                                                Draft
-                                            </span>
-                                        @endif
-                                    </div>
-                                </header>
-
-                                <div class="mt-6 flex-1">
-                                    <h3 class="text-xl font-semibold text-slate-900 group-hover:text-[#16136a] transition-colors line-clamp-1">{{ $resource->title }}</h3>
-                                    <p class="mt-2 text-sm font-semibold text-slate-400 line-clamp-2 leading-relaxed">{{ $resource->description }}</p>
-                                    
-                                    <div class="mt-4 flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex rounded-lg bg-slate-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                                        {{ Str::headline($resource->content_type) }}
+                                    </span>
+                                </div>
+                                <div class="mt-4 flex-1">
+                                    <h3 class="font-semibold text-slate-900 line-clamp-2 leading-snug">{{ $resource->title }}</h3>
+                                    <div class="mt-2 flex flex-wrap gap-1">
                                         @php
                                             $classes = (array) ($resource->target_classes ?? []);
                                             $years = (array) ($resource->target_years ?? []);
                                         @endphp
-                                        
                                         @if (empty($classes) && empty($years))
-                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-emerald-700">
-                                                <i class="ri-global-line"></i> Global Audience
-                                            </span>
+                                            <span class="text-[10px] font-semibold text-emerald-600">Global Audience</span>
+                                        @else
+                                            @foreach (array_slice($classes, 0, 2) as $classItem)
+                                                <span class="text-[10px] font-medium text-slate-500 bg-slate-50 rounded px-1">{{ $classItem }}</span>
+                                            @endforeach
+                                            @foreach (array_slice($years, 0, 2) as $yearItem)
+                                                <span class="text-[10px] font-medium text-slate-500 bg-slate-50 rounded px-1">Yr {{ $yearItem }}</span>
+                                            @endforeach
                                         @endif
-
-                                        @foreach ($classes as $classItem)
-                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-[#16136a]/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#16136a]">
-                                                {{ $classItem }}
-                                            </span>
-                                        @endforeach
-
-                                        @foreach ($years as $yearItem)
-                                            <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-blue-600">
-                                                Year {{ $yearItem }}
-                                            </span>
-                                        @endforeach
                                     </div>
                                 </div>
-
-                                <footer class="mt-8 flex items-center justify-between gap-4 pt-6 border-t border-slate-50">
-                                    <div class="flex items-center gap-2">
-                                        <a href="{{ route('admin.resources.edit', $resource) }}" class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-400 transition-all hover:bg-[#16136a] hover:text-white">
-                                            <i class="ri-edit-line text-lg"></i>
+                                <div class="mt-4 flex items-center justify-between pt-4 border-t border-slate-50">
+                                    <div class="flex gap-1">
+                                        <a href="{{ route('admin.resources.edit', $resource) }}" class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-amber-500 transition-colors">
+                                            <i class="ri-edit-line"></i>
                                         </a>
-                                        <form method="POST" action="{{ route('admin.resources.destroy', $resource) }}" onsubmit="return confirm('Delete this resource permanentely?');">
+                                        <form method="POST" action="{{ route('admin.resources.destroy', $resource) }}" onsubmit="return confirm('Delete this resource permanentely?');" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-400 transition-all hover:bg-rose-500 hover:text-white">
-                                                <i class="ri-delete-bin-line text-lg"></i>
+                                            <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-rose-500 transition-colors">
+                                                <i class="ri-delete-bin-line"></i>
                                             </button>
                                         </form>
                                     </div>
                                     @if($resource->resource_type === 'file' && $resource->file_path)
-                                        <a href="{{ $resource->download_url }}" target="_blank" class="flex h-10 items-center gap-2 rounded-xl bg-emerald-500 px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-emerald-500/20 transition-transform hover:-translate-y-0.5">
-                                            <i class="ri-download-cloud-2-line"></i>
-                                            Get File
+                                        <a href="{{ $resource->download_url }}" target="_blank" class="text-xs font-semibold text-[#16136a] hover:underline">
+                                            Download &rarr;
                                         </a>
                                     @elseif($resource->cta_url)
-                                        <a href="{{ $resource->cta_url }}" target="_blank" class="flex h-10 items-center gap-2 rounded-xl bg-blue-500 px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg shadow-blue-500/20 transition-transform hover:-translate-y-0.5">
-                                            <i class="ri-external-link-line"></i>
-                                            {{ $resource->cta_label ?? 'View Link' }}
+                                        <a href="{{ $resource->cta_url }}" target="_blank" class="text-xs font-semibold text-blue-600 hover:underline">
+                                            Open Link &rarr;
                                         </a>
                                     @endif
-                                </footer>
+                                </div>
                             </div>
-                        </article>
-                    @empty
-                        <div class="md:col-span-2 rounded-[2.5rem] border border-dashed border-slate-300 p-20 text-center">
-                            <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 text-slate-200">
-                                <i class="ri-book-mark-line text-5xl"></i>
+                        @empty
+                            <div class="col-span-full rounded-2xl border border-dashed border-slate-300 p-12 text-center">
+                                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300">
+                                    <i class="ri-search-line text-3xl"></i>
+                                </div>
+                                <h3 class="mt-4 text-sm font-semibold text-slate-900">No resources found</h3>
+                                <p class="mt-1 text-xs text-slate-500">Try adjusting your filters.</p>
                             </div>
-                            <h3 class="mt-6 text-lg font-semibold text-slate-900">No Resources Found</h3>
-                            <p class="mt-2 text-sm font-semibold text-slate-400">Start building your academic library for students.</p>
-                            <a href="{{ route('admin.resources.create') }}" class="mt-8 inline-flex h-12 items-center gap-3 rounded-2xl bg-[#16136a] px-8 text-sm font-semibold text-white shadow-lg shadow-[#16136a]/20">
-                                <i class="ri-add-line text-lg"></i>
-                                Add First Resource
-                            </a>
-                        </div>
-                    @endforelse
+                        @endforelse
+                    </div>
                 </div>
 
                 {{-- Pagination --}}
                 @if($resources->hasPages())
-                    <div class="mt-8 rounded-[2rem] bg-slate-50 p-4 text-center">
+                    <div class="mt-6 rounded-2xl bg-white p-4 shadow-sm border border-slate-200/60">
                         {{ $resources->links() }}
                     </div>
                 @endif
