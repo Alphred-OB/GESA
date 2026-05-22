@@ -273,10 +273,10 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 
     Route::get('dues/payment-settings', [\App\Http\Controllers\Admin\AdminPaymentSettingController::class, 'index'])
         ->name('payment-settings.index')
-        ->middleware('admin.role:financial_secretary');
+        ->middleware('admin.role:financial_secretary,president');
     Route::put('dues/payment-settings', [\App\Http\Controllers\Admin\AdminPaymentSettingController::class, 'update'])
         ->name('payment-settings.update')
-        ->middleware('admin.role:financial_secretary');
+        ->middleware('admin.role:financial_secretary,president');
 
     Route::get('verify-payment/{due}', [AdminDueController::class, 'verify'])
         ->name('dues.verify-payment')
@@ -302,6 +302,10 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('personal-dues/{due}/manual', [AdminPersonalDueController::class, 'showManualPayment'])->name('personal-dues.manual.show');
     Route::post('personal-dues/{due}/manual', [AdminPersonalDueController::class, 'storeManualPayment'])->name('personal-dues.manual.store');
     Route::get('personal-dues/{due}/receipt', [AdminPersonalDueController::class, 'receipt'])->name('personal-dues.receipt');
+
+    Route::post('personal-dues/{due}/rushpay', [\App\Http\Controllers\Admin\AdminRushPayPaymentController::class, 'initialize'])->name('personal-dues.rushpay.initialize');
+    Route::get('personal-dues/rushpay/checkout/{reference}', [\App\Http\Controllers\Admin\AdminRushPayPaymentController::class, 'checkout'])->name('personal-dues.rushpay.checkout');
+    Route::get('personal-dues/rushpay/callback', [\App\Http\Controllers\Admin\AdminRushPayPaymentController::class, 'callback'])->name('personal-dues.rushpay.callback');
 
     Route::post('course-registrations/bulk', [AdminCourseRegistrationController::class, 'bulk'])->name('course-registrations.bulk');
     Route::resource('course-registrations', AdminCourseRegistrationController::class)->only(['index', 'show', 'update']);
