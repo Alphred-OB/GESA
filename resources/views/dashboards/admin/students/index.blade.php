@@ -183,8 +183,12 @@
                                 <tr class="transition-colors hover:bg-slate-50/50">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#16136a]/5 text-[15px] font-semibold text-[#16136a]">
-                                                {{ strtoupper(substr($student->fullname ?? $student->username, 0, 1)) }}
+                                            <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#16136a]/5 text-[15px] font-semibold text-[#16136a]">
+                                                @if($student->profile_picture)
+                                                    <img src="{{ Str::startsWith($student->profile_picture, ['http://', 'https://']) ? $student->profile_picture : asset('storage/' . $student->profile_picture) }}" alt="{{ $student->fullname ?? $student->username }}" class="h-full w-full object-cover">
+                                                @else
+                                                    {{ strtoupper(substr($student->fullname ?? $student->username, 0, 1)) }}
+                                                @endif
                                             </div>
                                             <div class="flex flex-col min-w-0">
                                                 <span class="truncate font-semibold text-slate-900">{{ $student->fullname ?? $student->username }}</span>
@@ -256,8 +260,12 @@
                         <article class="relative flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#16136a]/5 text-lg font-semibold text-[#16136a]">
-                                        {{ strtoupper(substr($student->fullname ?? $student->username, 0, 1)) }}
+                                    <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-[#16136a]/5 text-lg font-semibold text-[#16136a]">
+                                        @if($student->profile_picture)
+                                            <img src="{{ Str::startsWith($student->profile_picture, ['http://', 'https://']) ? $student->profile_picture : asset('storage/' . $student->profile_picture) }}" alt="{{ $student->fullname ?? $student->username }}" class="h-full w-full object-cover">
+                                        @else
+                                            {{ strtoupper(substr($student->fullname ?? $student->username, 0, 1)) }}
+                                        @endif
                                     </div>
                                     <div class="flex flex-col">
                                         <h3 class="font-semibold text-slate-900 leading-none">{{ $student->fullname ?? $student->username }}</h3>
