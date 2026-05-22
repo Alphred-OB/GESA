@@ -26,7 +26,7 @@
                     <span class="h-px w-8 bg-slate-100"></span>
                 </div>
                 <x-heroicon-o-chevron-down class="size-3.5 transition-transform duration-300"
-                    :class="{ 'rotate-180': openGroups['{{ $groupLabel }}'] }"
+                    x-bind:class="{ 'rotate-180': openGroups['{{ $groupLabel }}'] }"
                  />
             </button>
             
