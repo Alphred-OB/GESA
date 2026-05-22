@@ -34,7 +34,7 @@
                         <div class="mt-4">
                             <p class="text-4xl font-semibold tabular-nums tracking-tight text-slate-900">{{ number_format($registrationSummary['pending'] ?? 0) }}</p>
                             <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
-                                <p class="text-xs font-semibold text-slate-400">+{{ $registrationSummary['submitted_today'] ?? 0 }} today</p>
+                                <p class="text-xs font-semibold text-slate-400">+{{ $registrationSummary['submittedToday'] ?? 0 }} today</p>
                                 <a href="{{ route('admin.pending-registrations.index') }}" class="text-xs font-semibold text-[#16136a] hover:underline">Manage</a>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             </span>
                         </div>
                         <div class="mt-4">
-                            <p class="text-4xl font-semibold tabular-nums tracking-tight text-slate-900">{{ number_format($overviewCards[0]['value'] ?? 0) }}</p>
+                            <p class="text-4xl font-semibold tabular-nums tracking-tight text-slate-900">{{ $overviewCards[0]['value'] ?? 0 }}</p>
                             <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
                                 <p class="text-xs font-semibold text-slate-400">Total Enrollment</p>
                                 <a href="{{ route('admin.students.index') }}" class="text-xs font-semibold text-[#16136a] hover:underline">View All</a>
