@@ -56,7 +56,7 @@
                             'bg-white/10 text-white' => $isActive,
                             'bg-slate-50 text-slate-400 border border-slate-200/50 group-hover:bg-slate-200 group-hover:text-[#16136a]' => !$isActive,
                         ])>
-                            <i class="{{ $item['icon'] }} text-sm"></i>
+                            <x-dynamic-component :component="$item['icon']" class="size-4" />
                         </span>
                         
                         <span class="flex-1 tracking-tight">{{ $item['label'] }}</span>
