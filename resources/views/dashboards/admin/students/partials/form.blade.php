@@ -36,7 +36,7 @@
                 <label for="fullname" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Full Name</label>
                 <div class="group relative">
                     <i class="ri-user-3-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
-                    <input id="fullname" type="text" name="fullname" value="{{ old('fullname', $student->fullname) }}" required placeholder="e.g. John Doe" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                    <input id="fullname" type="text" name="fullname" value="{{ old('fullname', $student->fullname) }}" required placeholder="e.g. Emmanuel Osei" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
                 </div>
                 @error('fullname') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
             </div>
@@ -54,7 +54,7 @@
                 <label for="phone_number" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Phone Number</label>
                 <div class="group relative">
                     <i class="ri-phone-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
-                    <input id="phone_number" type="text" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}" placeholder="e.g. +233..." class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                    <input id="phone_number" type="text" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}" placeholder="e.g. 0244123456" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
                 </div>
                 @error('phone_number') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
             </div>
@@ -63,7 +63,7 @@
                 <label for="username" class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Username / ID</label>
                 <div class="group relative">
                     <i class="ri-at-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#16136a]"></i>
-                    <input id="username" type="text" name="username" value="{{ old('username', $student->username) }}" required placeholder="e.g. john_doe" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
+                    <input id="username" type="text" name="username" value="{{ old('username', $student->username) }}" required placeholder="e.g. emmanuel_o" class="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50/50 pl-11 pr-4 text-sm font-medium text-slate-700 outline-none transition-all focus:border-[#16136a] focus:bg-white focus:ring-4 focus:ring-[#16136a]/5">
                 </div>
                 @error('username') <p class="text-[10px] font-semibold text-rose-500">{{ $message }}</p> @enderror
             </div>
