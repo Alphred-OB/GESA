@@ -26,12 +26,34 @@ class AdminEventController extends Controller
             $perPage = 10;
         }
 
+        $search = request('search');
+        $status = request('status');
+        $now = now();
+
         $events = Event::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('location', 'like', "%{$search}%");
+                });
+            })
+            ->when($status, function ($query, $status) use ($now) {
+                if ($status === 'upcoming') {
+                    $query->where('start_at', '>', $now);
+                } elseif ($status === 'live') {
+                    $query->where('start_at', '<=', $now)
+                          ->where(function ($q) use ($now) {
+                              $q->whereNull('end_at')
+                                ->orWhere('end_at', '>', $now);
+                          });
+                } elseif ($status === 'past') {
+                    $query->whereNotNull('end_at')
+                          ->where('end_at', '<=', $now);
+                }
+            })
             ->orderByDesc('start_at')
             ->paginate($perPage)
-            ->appends([
-                'per_page' => $perPage,
-            ]);
+            ->withQueryString();
 
         return view('dashboards.admin.events.index', [
             'title' => 'Manage events',
