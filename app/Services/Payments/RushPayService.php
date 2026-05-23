@@ -108,7 +108,8 @@ class RushPayService
             if ($response->failed()) {
                 Log::error('RushPay OAuth Authentication failed', [
                     'status' => $response->status(),
-                    'body' => $response->json()
+                    'body' => $response->json(),
+                    'debug_client_id_used' => substr($clientId, 0, 15) . '...',
                 ]);
                 throw new \RuntimeException('Unable to authenticate with RushPay.');
             }
