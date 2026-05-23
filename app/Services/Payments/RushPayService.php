@@ -92,8 +92,8 @@ class RushPayService
     protected function getAccessToken(): string
     {
         return Cache::remember('rushpay_access_token', now()->addHours(11), function () {
-            $clientId = Config::get('rushpay.client_key');
-            $clientSecret = Config::get('rushpay.client_secret');
+            $clientId = trim(Config::get('rushpay.client_key'));
+            $clientSecret = trim(Config::get('rushpay.client_secret'));
 
             if (!$clientId || !$clientSecret) {
                 throw new \RuntimeException('RushPay OAuth credentials (Client Key/Secret) are not configured.');
@@ -109,7 +109,8 @@ class RushPayService
                 Log::error('RushPay OAuth Authentication failed', [
                     'status' => $response->status(),
                     'body' => $response->json(),
-                    'debug_client_id_used' => substr($clientId, 0, 15) . '...',
+                    'debug_client_id' => $clientId,
+                    'debug_secret_len' => strlen($clientSecret),
                 ]);
                 throw new \RuntimeException('Unable to authenticate with RushPay.');
             }
