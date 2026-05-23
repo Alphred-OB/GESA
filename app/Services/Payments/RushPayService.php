@@ -99,7 +99,7 @@ class RushPayService
                 throw new \RuntimeException('RushPay OAuth credentials (Client Key/Secret) are not configured.');
             }
 
-            $response = Http::asForm()->post($this->endpoint('/auth/login'), [
+            $response = Http::post($this->endpoint('/auth/login'), [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
                 'grant_type' => 'client_credentials'
