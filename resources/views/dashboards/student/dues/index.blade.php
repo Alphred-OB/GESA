@@ -98,6 +98,17 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="rounded-xl border border-red-200/50 bg-gradient-to-r from-red-50 to-white p-8 shadow-lg shadow-red-100/50 mt-4">
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                            <x-heroicon-s-x-circle class="size-6" />
+                        </div>
+                        <p class="text-sm font-semibold text-red-900">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
             {{-- Main Content area (Filter & List) --}}
             <div class="grid gap-10 lg:grid-cols-4">
                 <div class="lg:col-span-4 space-y-8">
@@ -223,14 +234,32 @@
                                                 </a>
                                             @else
                                                 @if($due->payment_method === 'rushpay' && $due->payment_reference)
-                                                    <a href="{{ route('student.payments.rushpay.callback', ['payment_reference' => $due->payment_reference]) }}" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-amber-700 transition-all hover:bg-amber-100">
-                                                        <x-heroicon-o-arrow-path class="size-5" />
-                                                        <span>Re-verify Payment</span>
-                                                    </a>
+                                                    <div class="flex w-full flex-col sm:w-auto sm:flex-row gap-2">
+                                                        <a href="{{ route('student.payments.rushpay.callback', ['payment_reference' => $due->payment_reference]) }}" class="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-6 text-[10px] font-semibold uppercase tracking-widest text-amber-700 transition-all hover:bg-amber-100">
+                                                            <x-heroicon-o-arrow-path class="size-5" />
+                                                            <span>Re-verify</span>
+                                                        </a>
+                                                        <form action="{{ route('student.payments.cancel', $due) }}" method="POST" class="flex-1">
+                                                            @csrf
+                                                            <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-50 border border-red-100 px-6 text-[10px] font-semibold uppercase tracking-widest text-red-700 transition-all hover:bg-red-100" onclick="return confirm('Are you sure you want to cancel this pending payment?')">
+                                                                <x-heroicon-o-x-circle class="size-5" />
+                                                                <span>Cancel</span>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 @else
-                                                    <div class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-amber-700 italic">
-                                                        <x-heroicon-o-clock class="size-5" />
-                                                        <span>Verifying Payment</span>
+                                                    <div class="flex w-full flex-col sm:w-auto sm:flex-row gap-2">
+                                                        <div class="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-6 text-[10px] font-semibold uppercase tracking-widest text-amber-700 italic">
+                                                            <x-heroicon-o-clock class="size-5" />
+                                                            <span>Verifying</span>
+                                                        </div>
+                                                        <form action="{{ route('student.payments.cancel', $due) }}" method="POST" class="flex-1">
+                                                            @csrf
+                                                            <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-red-50 border border-red-100 px-6 text-[10px] font-semibold uppercase tracking-widest text-red-700 transition-all hover:bg-red-100" onclick="return confirm('Are you sure you want to cancel this pending payment submission?')">
+                                                                <x-heroicon-o-x-circle class="size-5" />
+                                                                <span>Cancel</span>
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 @endif
                                             @endif

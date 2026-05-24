@@ -213,6 +213,10 @@ Route::get('/student/payments/rushpay/callback', [\App\Http\Controllers\Student\
     ->middleware('auth:student')
     ->name('student.payments.rushpay.callback');
 
+Route::post('/student/dues/{due}/cancel', [\App\Http\Controllers\Student\StudentDueController::class, 'cancel'])
+    ->middleware('auth:student')
+    ->name('student.payments.cancel');
+
 Route::get('/student/dues/{due}/manual', [\App\Http\Controllers\Student\StudentManualPaymentController::class, 'show'])
     ->middleware('auth:student')
     ->name('student.payments.manual.show');

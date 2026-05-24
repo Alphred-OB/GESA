@@ -40,4 +40,23 @@ class StudentDueController extends Controller
             'statusLabels' => StudentDueService::STATUS_LABELS,
         ]);
     }
+    public function cancel(\App\Models\Due $due, Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $student = $request->user('student');
+        if ($due->student_id !== $student->user_id && $due->student_id !== $student->id) {
+            abort(403);
+        }
+
+        if (in_array($due->payment_status, ['pending_verification', 'pending'])) {
+            $due->update([
+                'payment_status' => 'owing',
+                'payment_reference' => null,
+                'payment_method' => null,
+                'payment_proof' => null,
+            ]);
+            return redirect()->route('student.dues.index')->with('status', __('Payment cancelled successfully.'));
+        }
+
+        return redirect()->route('student.dues.index')->with('error', __('Cannot cancel this payment.'));
+    }
 }
