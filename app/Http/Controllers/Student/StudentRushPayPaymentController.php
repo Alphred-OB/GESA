@@ -153,6 +153,18 @@ class StudentRushPayPaymentController extends Controller
 
         } catch (\Exception $e) {
             Log::error('RushPay Callback Error', ['reference' => $reference, 'message' => $e->getMessage()]);
+
+            $due = Due::where('payment_reference', $reference)->first();
+            if ($due && str_contains($e->getMessage(), 'Payment not found')) {
+                $due->update([
+                    'payment_status' => 'owing',
+                    'payment_reference' => null,
+                    'payment_method' => null,
+                    'payment_notes' => null,
+                ]);
+                return redirect()->route('student.dues.index')->with('error', __('Payment was not completed. Please try paying again.'));
+            }
+
             return redirect()->route('student.dues.index')->with('error', __('Verification failed. Please contact support.'));
         }
     }
