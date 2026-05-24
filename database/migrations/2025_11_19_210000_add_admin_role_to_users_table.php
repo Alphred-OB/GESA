@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table): void {
-            $table->enum('admin_role', ['president', 'financial_secretary', 'general_secretary'])
-                ->nullable()
-                ->after('role');
-        });
+        if (!Schema::hasColumn('users', 'admin_role')) {
+            Schema::table('users', function (Blueprint $table): void {
+                $table->enum('admin_role', ['president', 'financial_secretary', 'general_secretary'])
+                    ->nullable()
+                    ->after('role');
+            });
+        }
     }
 
     /**
