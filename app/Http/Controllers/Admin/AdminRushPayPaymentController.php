@@ -22,7 +22,7 @@ class AdminRushPayPaymentController extends Controller
     /**
      * Initialize a RushPay transaction for an admin.
      */
-    public function initialize(Request $request, Due $due): RedirectResponse
+    public function initialize(Request $request, Due $due): \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $admin = $request->user('admin');
 

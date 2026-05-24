@@ -22,7 +22,7 @@ class StudentRushPayPaymentController extends Controller
     /**
      * Initialize a RushPay transaction.
      */
-    public function initialize(Request $request, Due $due): RedirectResponse
+    public function initialize(Request $request, Due $due): \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $student = $request->user('student');
 
