@@ -51,13 +51,21 @@
         </div>
     </div>
 
-    {{-- RushPay Widget Script --}}
-    <script src="https://api.rushpay.cash/widget.js"></script>
+    {{-- RushPay Widget Styles --}}
+    <link rel="stylesheet" href="https://api.rushpay.cash/widget/payment-widget.css">
+
+    {{-- Container for the Widget --}}
+    <div id="rushpay-payment-widget" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50"></div>
+
+    {{-- RushPay Widget Scripts --}}
+    <script>window.RUSHPAY_API_BASE = 'https://api.rushpay.cash/v1';</script>
+    <script src="https://api.rushpay.cash/widget/payment-widget.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const btn = document.getElementById('start-payment-btn');
             const btnText = document.getElementById('btn-text');
             const btnIcon = document.getElementById('btn-icon');
+            const widgetContainer = document.getElementById('rushpay-payment-widget');
 
             function startPayment() {
                 if (typeof RushPay === 'undefined') {
@@ -67,28 +75,16 @@
                 }
 
                 btnText.innerText = 'Opening Widget...';
+                
+                // Ensure the container is visible
+                widgetContainer.classList.remove('hidden');
 
-                const rushpay = new RushPay({
-                    token: '{{ $token }}',
-                    reference: '{{ $reference }}',
-                    onClose: function() {
-                        // User closed the widget
-                        window.location.reload();
-                    },
-                    onCompleted: function(response) {
-                        // Success! Redirect to callback
-                        const callbackUrl = new URL('{{ route("student.payments.rushpay.callback") }}');
-                        callbackUrl.searchParams.append('reference', '{{ $reference }}');
-                        window.location.href = callbackUrl.href;
-                    },
-                    onError: function(error) {
-                        console.error('RushPay Error:', error);
-                        alert('Payment failed: ' + (error.message || 'Unknown error'));
-                        window.location.href = '{{ route("student.dues.index") }}';
-                    }
+                RushPay.init({
+                    widgetSessionToken: '{{ $token }}',
+                    paymentReference: '{{ $reference }}',
+                    callbackUrl: '{{ $callbackUrl }}',
+                    description: '{{ addslashes($due->description) }}'
                 });
-
-                rushpay.open();
             }
 
             // Auto-start after a brief delay for effect
