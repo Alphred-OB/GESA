@@ -69,23 +69,6 @@ class StudentRushPayPaymentController extends Controller
                 'payment_notes' => __('Awaiting RushPay confirmation.'),
             ]);
 
-            if ($request->wantsJson()) {
-                $sessionResponse = $this->rushPay->generateWidgetSession($apiReference);
-                if (!Arr::get($sessionResponse, 'success')) {
-                    throw new \RuntimeException('Failed to generate widget session');
-                }
-                
-                $token = Arr::get($sessionResponse, 'data.token') ?? Arr::get($sessionResponse, 'data.widget_session_token');
-                
-                return response()->json([
-                    'success' => true,
-                    'reference' => $apiReference,
-                    'token' => $token,
-                    'callbackUrl' => route('student.payments.rushpay.callback', ['reference' => $apiReference]),
-                    'description' => $due->description
-                ]);
-            }
-
             return redirect()->route('student.payments.rushpay.checkout', ['reference' => $apiReference]);
 
         } catch (\Exception $e) {
@@ -93,10 +76,6 @@ class StudentRushPayPaymentController extends Controller
                 'due_id' => $due->due_id,
                 'message' => $e->getMessage()
             ]);
-
-            if ($request->wantsJson()) {
-                return response()->json(['success' => false, 'message' => __('Unable to start RushPay payment. Please try again later.')], 500);
-            }
 
             return redirect()
                 ->route('student.dues.index')
