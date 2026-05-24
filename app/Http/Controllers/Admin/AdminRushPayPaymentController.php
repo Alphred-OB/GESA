@@ -98,10 +98,11 @@ class AdminRushPayPaymentController extends Controller
             }
 
             return view('dashboards.student.payments.rushpay-checkout', [
-                'token' => Arr::get($sessionResponse, 'data.token'),
+                'token' => Arr::get($sessionResponse, 'data.token') ?? Arr::get($sessionResponse, 'data.widget_session_token'),
                 'reference' => $reference,
                 'due' => $due,
-                'returnRoute' => 'admin.personal-dues.index'
+                'returnRoute' => 'admin.personal-dues.index',
+                'callbackUrl' => route('admin.personal-dues.rushpay.callback', ['reference' => $reference])
             ]);
 
         } catch (\Exception $e) {
