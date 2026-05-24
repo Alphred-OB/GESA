@@ -58,15 +58,18 @@ class AdminRushPayPaymentController extends Controller
                 throw new \RuntimeException(Arr::get($response, 'message', 'Initialization failed'));
             }
 
+            // RushPay returns its own generated reference, overriding ours
+            $apiReference = Arr::get($response, 'data.payment_reference', $reference);
+
             // Update due with reference
             $due->update([
-                'payment_reference' => $reference,
+                'payment_reference' => $apiReference,
                 'payment_method' => 'rushpay',
                 'payment_status' => 'pending_verification',
                 'payment_notes' => __('Awaiting RushPay confirmation.'),
             ]);
 
-            return redirect()->route('admin.personal-dues.rushpay.checkout', ['reference' => $reference]);
+            return redirect()->route('admin.personal-dues.rushpay.checkout', ['reference' => $apiReference]);
 
         } catch (\Exception $e) {
             Log::error('RushPay Initialization Error (Admin)', [
