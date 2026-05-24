@@ -170,9 +170,15 @@
                                                 <x-heroicon-o-document-arrow-down class="size-5" /> Receipt
                                             </a>
                                         @else
-                                            <div class="flex h-12 items-center gap-3 rounded-2xl bg-amber-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-amber-600 italic">
-                                                <x-heroicon-o-clock class="size-5" /> Verifying...
-                                            </div>
+                                            @if($due->payment_method === 'rushpay' && $due->payment_reference)
+                                                <a href="{{ route('admin.personal-dues.rushpay.callback', ['payment_reference' => $due->payment_reference]) }}" class="flex h-12 items-center gap-3 rounded-2xl bg-amber-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-amber-600 transition-all hover:bg-amber-100">
+                                                    <x-heroicon-o-arrow-path class="size-5" /> Re-verify Payment
+                                                </a>
+                                            @else
+                                                <div class="flex h-12 items-center gap-3 rounded-2xl bg-amber-50 px-6 text-[10px] font-semibold uppercase tracking-widest text-amber-600 italic">
+                                                    <x-heroicon-o-clock class="size-5" /> Verifying...
+                                                </div>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>

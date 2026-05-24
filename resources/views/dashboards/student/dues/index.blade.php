@@ -222,10 +222,17 @@
                                                     <span>View Receipt</span>
                                                 </a>
                                             @else
-                                                <div class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-amber-700 italic">
-                                                    <x-heroicon-o-arrow-path class="animate-spin size-5" />
-                                                    <span>Verifying Payment</span>
-                                                </div>
+                                                @if($due->payment_method === 'rushpay' && $due->payment_reference)
+                                                    <a href="{{ route('student.payments.rushpay.callback', ['payment_reference' => $due->payment_reference]) }}" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-amber-700 transition-all hover:bg-amber-100">
+                                                        <x-heroicon-o-arrow-path class="size-5" />
+                                                        <span>Re-verify Payment</span>
+                                                    </a>
+                                                @else
+                                                    <div class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-amber-50 border border-amber-100 px-8 text-[10px] font-semibold uppercase tracking-widest text-amber-700 italic">
+                                                        <x-heroicon-o-clock class="size-5" />
+                                                        <span>Verifying Payment</span>
+                                                    </div>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
