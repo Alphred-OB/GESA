@@ -1,40 +1,22 @@
 @props(['navGroups'])
 
 <nav 
-    x-data="{ 
-        ...liveNavBadges(), 
-        openGroups: {
-            @foreach($navGroups as $groupLabel => $items)
-                '{{ $groupLabel }}': {{ collect($items)->contains('active', true) ? 'true' : 'false' }},
-            @endforeach
-        },
-        toggleGroup(label) {
-            this.openGroups[label] = !this.openGroups[label];
-        }
-    }"
+    x-data="liveNavBadges()"
     x-init="startPolling()"
-    {{ $attributes->class(['flex flex-col space-y-4']) }}
+    {{ $attributes->class(['flex flex-col space-y-6']) }}
 >
     @foreach ($navGroups as $groupLabel => $items)
-        <div class="space-y-1">
-            <button 
-                @click="toggleGroup('{{ $groupLabel }}')"
-                class="flex w-full items-center justify-between px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.25em] text-slate-400 transition-colors hover:text-[#16136a]"
+        <div class="space-y-2">
+            <div 
+                class="flex w-full items-center justify-between px-4 py-1 text-[10px] font-extrabold uppercase tracking-[0.25em] text-slate-400"
             >
                 <div class="flex items-center gap-2">
                     <span>{{ $groupLabel }}</span>
                     <span class="h-px w-8 bg-slate-100"></span>
                 </div>
-                <x-heroicon-o-chevron-down class="size-3.5 transition-transform duration-300"
-                    x-bind:class="{ 'rotate-180': openGroups['{{ $groupLabel }}'] }"
-                 />
-            </button>
+            </div>
             
-            <div 
-                x-show="openGroups['{{ $groupLabel }}']"
-                x-collapse
-                class="space-y-1"
-            >
+            <div class="space-y-1">
                 @foreach ($items as $item)
                     @php
                         $isActive = $item['active'];
