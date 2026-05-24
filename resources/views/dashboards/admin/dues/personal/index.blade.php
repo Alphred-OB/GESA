@@ -158,9 +158,9 @@
                                                     <x-heroicon-o-currency-dollar class="size-4" /> Manual
                                                 </a>
                                             @else
-                                                <form method="POST" action="{{ route('admin.personal-dues.rushpay.initialize', $due) }}" class="inline-block w-full sm:w-auto">
+                                                <form method="POST" action="{{ route('admin.personal-dues.rushpay.initialize', $due) }}" class="inline-block w-full sm:w-auto rushpay-form">
                                                     @csrf
-                                                    <button type="submit" class="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5">
+                                                    <button type="submit" class="rushpay-btn flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-[#16136a] px-4 text-[10px] font-semibold uppercase tracking-widest text-white shadow-xl shadow-[#16136a]/20 transition-all hover:-translate-y-0.5">
                                                         <x-heroicon-o-shield-check class="size-4" /> RushPay
                                                     </button>
                                                 </form>
@@ -216,4 +216,54 @@
             </section>
         </div>
     </div>
+
+    <div id="rushpay-payment-widget"></div>
+    <link rel="stylesheet" href="https://pay.rushpay.dev/payment-widget.css">
+    <script src="https://pay.rushpay.dev/payment-widget.js"></script>
+    <script>
+        document.querySelectorAll('.rushpay-form').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = form.querySelector('.rushpay-btn');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = 'Processing...';
+                btn.disabled = true;
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                            'Accept': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        btn.innerHTML = 'Opening Widget...';
+                        RushPay.init({
+                            paymentReference: data.reference,
+                            widgetSessionToken: data.token,
+                            callbackUrl: data.callbackUrl
+                        });
+                        
+                        // Fallback reload logic
+                        window.addEventListener('message', function(event) {
+                            if (event.data === 'rushpay-widget-closed') {
+                                window.location.reload();
+                            }
+                        });
+                    } else {
+                        alert(data.message || 'Failed to initialize payment');
+                        btn.innerHTML = originalHtml;
+                        btn.disabled = false;
+                    }
+                } catch (err) {
+                    alert('A network error occurred.');
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }
+            });
+        });
+    </script>
 </x-layouts.admin>
