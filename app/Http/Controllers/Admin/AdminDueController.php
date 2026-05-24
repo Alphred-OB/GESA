@@ -80,7 +80,7 @@ class AdminDueController extends Controller
      */
     public function pendingVerificationsApi(Request $request): \Illuminate\Http\JsonResponse
     {
-        $pendingDues = Due::with('student:id,username,email,fullname,class,year')
+        $pendingDues = Due::with('student:user_id,username,email,fullname,class,year')
             ->where('payment_status', 'pending_verification')
             ->orderBy('updated_at', 'desc')
             ->limit(50)
