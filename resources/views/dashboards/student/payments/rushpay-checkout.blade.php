@@ -55,7 +55,7 @@
     <link rel="stylesheet" href="https://api.rushpay.cash/widget/payment-widget.css">
 
     {{-- Container for the Widget --}}
-    <div id="rushpay-payment-widget" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/50 py-10 flex flex-col items-center"></div>
+    <div id="rushpay-payment-widget" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/50 p-4 pt-10 pb-10"></div>
 
     {{-- RushPay Widget Scripts --}}
     <script>window.RUSHPAY_API_BASE = 'https://api.rushpay.cash/v1';</script>
