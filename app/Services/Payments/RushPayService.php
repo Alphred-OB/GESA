@@ -37,13 +37,34 @@ class RushPayService
     }
 
     /**
+     * Build the authenticated HTTP client.
+     *
+     * Prefers the simpler X-API-Key header when RUSHPAY_API_KEY is set.
+     * Falls back to OAuth client-credentials flow otherwise.
+     */
+    protected function client()
+    {
+        $apiKey = trim((string) Config::get('rushpay.api_key'));
+
+        if ($apiKey !== '') {
+            return Http::withHeaders(['X-API-Key' => $apiKey])
+                ->acceptJson()
+                ->timeout(15);
+        }
+
+        return Http::withToken($this->getOAuthAccessToken())
+            ->acceptJson()
+            ->timeout(15);
+    }
+
+    /**
      * Make a GET request to RushPay.
      */
     protected function get(string $path): array
     {
         try {
             $response = $this->client()->get($this->endpoint($path));
-            
+
             if ($response->failed()) {
                 $this->handleErrorResponse($response);
             }
@@ -62,7 +83,7 @@ class RushPayService
     {
         try {
             $response = $this->client()->post($this->endpoint($path), $payload);
-            
+
             if ($response->failed()) {
                 $this->handleErrorResponse($response);
             }
@@ -75,34 +96,25 @@ class RushPayService
     }
 
     /**
-     * Get the HTTP client for RushPay with Bearer Token.
+     * Retrieve or refresh an OAuth access token via client-credentials grant.
      */
-    protected function client()
+    protected function getOAuthAccessToken(): string
     {
-        $token = $this->getAccessToken();
+        return Cache::remember('rushpay_access_token', now()->addMinutes(55), function () {
+            $clientId = trim((string) Config::get('rushpay.client_key'));
+            $clientSecret = trim((string) Config::get('rushpay.client_secret'));
 
-        return Http::withToken($token)
-            ->acceptJson()
-            ->timeout(15);
-    }
-
-    /**
-     * Retrieve or generate an OAuth access token.
-     */
-    protected function getAccessToken(): string
-    {
-        return Cache::remember('rushpay_access_token', now()->addHours(11), function () {
-            $clientId = trim(Config::get('rushpay.client_key'));
-            $clientSecret = trim(Config::get('rushpay.client_secret'));
-
-            if (!$clientId || !$clientSecret) {
-                throw new \RuntimeException('RushPay OAuth credentials (Client Key/Secret) are not configured.');
+            if ($clientId === '' || $clientSecret === '') {
+                throw new \RuntimeException(
+                    'RushPay credentials are not configured. '
+                    . 'Set RUSHPAY_API_KEY for API-key auth, or set both RUSHPAY_CLIENT_KEY and RUSHPAY_CLIENT_SECRET for OAuth.'
+                );
             }
 
-            $response = Http::post($this->endpoint('/auth/login'), [
+            $response = Http::acceptJson()->post($this->endpoint('/auth/login'), [
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'grant_type' => 'client_credentials'
+                'grant_type' => 'client_credentials',
             ]);
 
             if ($response->failed()) {
@@ -112,10 +124,11 @@ class RushPayService
                     'debug_client_id' => $clientId,
                     'debug_secret_len' => strlen($clientSecret),
                 ]);
-                throw new \RuntimeException('Unable to authenticate with RushPay.');
+                throw new \RuntimeException('Unable to authenticate with RushPay. Check RUSHPAY_CLIENT_KEY and RUSHPAY_CLIENT_SECRET.');
             }
 
-            $token = Arr::get($response->json(), 'data.access_token') ?? Arr::get($response->json(), 'access_token');
+            $token = Arr::get($response->json(), 'data.access_token')
+                  ?? Arr::get($response->json(), 'access_token');
 
             if (!$token) {
                 throw new \RuntimeException('RushPay authentication response did not contain an access token.');
